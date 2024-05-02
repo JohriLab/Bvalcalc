@@ -31,7 +31,7 @@ s_window_size = 100
 
 #Constants that we do not need from the user:
 pi_anc = 4*Nanc*u #(*Expected nucleotide diversity under neutrality*)
-#(*Now we define the boundaries of the fixed intervals over which we will integrate *)
+#(*Now we define the boundaries of the fixed intervals over which we will integrate. The number of bins can be a user parameter, if we like. *)
 t0 = 0.0
 t1 = h*(1/(2*Nanc))
 t1half = h*(gamma_cutoff/(2*Nanc)) #(* This is the cut-off value of 2Nes=5. This derivation assumes that all mutations with 2Nes<5 will not contribute to BGS *)
@@ -39,6 +39,7 @@ t2 = h*(10/(2*Nanc))
 t3 = h*(100/(2*Nanc))
 t4 = h*1.0
 
+#calculate the quantities "a" and "b" which are constants that depend on the recombination and gene conversion rate and also the distance between the focal site and the functional element.
 def calculate_a_and_b(posn):
     C = (1.0 - math.exp(-2.0*r*posn))/2.0
     if g==0:
@@ -55,6 +56,7 @@ def calculate_a_and_b(posn):
             b = g*tract_len + r*l + C
     return (a, b)
 
+#calculate the exponent using previously computed values of "a" and "b"
 def calculate_exponent(t_start, t_end, posn):
     t_tmp = calculate_a_and_b(posn)
     a = t_tmp[0]
@@ -64,6 +66,7 @@ def calculate_exponent(t_start, t_end, posn):
     E = E1 + E2
     return (E)
 
+#Calculate B due to a single functional element at the focal site. Here we sum over the DFE.
 def calculate_B(posn):
     E_f1 = calculate_exponent(t1half, t2, posn) 
     E_f2 = calculate_exponent(t2, t3, posn)
@@ -72,11 +75,12 @@ def calculate_B(posn):
     B = math.exp(-1.0*E_bar)
     return (B)
 
-
+#not being used right now
 def calculate_pi(posn):
     pi_posn = pi*calculate_B(posn)
     return (pi_posn)
 
+#not being used right now
 def calculate_pi_window(win_start, win_end):
     i=win_start
     pi_sum = 0.0
@@ -85,6 +89,7 @@ def calculate_pi_window(win_start, win_end):
         i = i + 1
     return(pi_sum/(win_end - win_start+1))
 
+#calculate an average B value over the window with coordinates win_start - win_end
 def calculate_Banc_window(win_start, win_end):
     i=win_start
     B_sum = 0.0
@@ -93,6 +98,8 @@ def calculate_Banc_window(win_start, win_end):
         i = i + 1
     return(B_sum/(win_end - win_start+1))
 
+#Gets the value of B in the current population as a function of B calcualted in the ancestral population (assumed to be in equilibrium).
+#As in, this is where we account for a simple single-size change in N
 def get_Bcur(Banc):
     R = float(Nanc)/float(Ncur)
     Bcur = (Banc*(1.0 + (R-1.0)*math.exp((-1.0*time_of_change)/Banc))) / (1 + (R-1.0)*math.exp(-1.0*time_of_change))
