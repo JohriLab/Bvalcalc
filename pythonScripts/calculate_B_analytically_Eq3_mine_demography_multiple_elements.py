@@ -1,5 +1,5 @@
-#This script is to get the slope of recovery of pi and the number of  base pairs that would lead to 50%, 75% and 90% recovery for a given recombination rate.
-#I'm here multiplying both the recombination and gene conversion rate by 0.5, just to see more of an effect of demography.
+#This script is to get B values across a genomic element with multiple functional elements.
+#Currently the output is in terms of an average of a sliding window
 
 import sys
 import math
@@ -10,14 +10,19 @@ out_folder="droso_single_exon_gc_10kb_decline10x"
 g = 0.5*1e-8 #1e-8 #rate of gene conversion
 tract_len=440 #mean tract length of gene conversion in base pairs
 r = 0.5*1.0*1e-8 #rate of recombination
-l = 10000.0 #(*Length of genomic element*)
 u = 3.0*1e-9 #(*Mutation rate*)
 U = l*u
+
+#Parameters of genome architecture:
+#!!!Read in a bed file with positions of functional elements and the last position (i.e., where the genome ends)
+last_position = 10000.0 #(*Full length of the chromosome; the last position*)
+
 #Parameters of instantaneous change in demographic history:
 Nanc = 1e6 #(Ancestral population size)
 Ncur = 1e5 #(Current population size)
 TIME="T_1" #T_0_1/T_0_5/T_1
 time_of_change=1.0 #0.1/0.5/1(This is the time of change in 2Ncur generations in the past.)
+
 #Parameters of the DFE:
 DFE="DFE3"
 f0 = 0.1 #(*Proportion of effectively neutral mutations with 0 <= |2Nes| < 1 *)
@@ -110,9 +115,7 @@ def get_Bcur(Banc):
 result = open("/work/users/p/j/pjohri/BGSCalculator/mytheory/" + out_folder + "/Bvalues_" + DFE + "_" + TIME + "_windowsize_" + str(s_window_size) + ".txt", 'w+')
 result.write("start" + '\t' + "end" + '\t' + "B" + '\n')
 posn_start = 1
-len_intergenic = 10000
-posn_start = 1
-while posn_start <= len_intergenic:
+while posn_start <= last_position:
     result.write(str(posn_start) + '\t' + str(posn_start+s_window_size) + '\t' + str(get_Bcur(calculate_Banc_window(posn_start, posn_start+s_window_size))) + '\n')
     posn_start = posn_start + s_window_size
 result.close()
