@@ -46,25 +46,25 @@ t3 = h*(100/(2*Nanc))
 t4 = h*1.0
 
 #calculate the quantities "a" and "b" which are constants that depend on the recombination and gene conversion rate and also the distance between the focal site and the functional element.
-def calculate_a_and_b(posn):
-    C = (1.0 - math.exp(-2.0*r*posn))/2.0
+def calculate_a_and_b(distance_to_element, length_of_element):
+    C = (1.0 - math.exp(-2.0*r*distance_to_element))/2.0
     if g==0:
         a = C
-        b = C + r*l
+        b = C + r*length_of_element
     elif g > 0:
-        if posn+l < 0.5*tract_len:#The 0.5 is currently aribtrary. It's just about when the approximation of 1-exp(-x)~x holds. 
+        if distance_to_element+length_of_element < 0.5*tract_len:#The 0.5 is currently aribtrary. It's just about when the approximation of 1-exp(-x)~x holds. 
             #print ("accounting for small-distance gene conversion")
-            a = (C + (g*posn))
-            b = (C + r*l + (g*(posn+l)))
+            a = (C + (g*distance_to_element))
+            b = (C + r*length_of_element + (g*(distance_to_element+length_of_element)))
         else:
             #print ("accounting for large-distance gene conversion")
             a = g*tract_len + C
-            b = g*tract_len + r*l + C
+            b = g*tract_len + r*length_of_element + C
     return (a, b)
 
 #calculate the exponent using previously computed values of "a" and "b"
-def calculate_exponent(t_start, t_end, posn):
-    t_tmp = calculate_a_and_b(posn)
+def calculate_exponent(t_start, t_end, distance_to_element, length_of_element):
+    t_tmp = calculate_a_and_b(distance_to_element, length_of_element)
     a = t_tmp[0]
     b = t_tmp[1]
     E1 = ((U*a)/((1-a)*(a-b)*(t_end-t_start))) * math.log((a+(t_end*(1-a)))/(a + (t_start*(1-a))))
@@ -73,27 +73,13 @@ def calculate_exponent(t_start, t_end, posn):
     return (E)
 
 #Calculate B due to a single functional element at the focal site. Here we sum over the DFE.
-def calculate_B(posn):
-    E_f1 = calculate_exponent(t1half, t2, posn) 
-    E_f2 = calculate_exponent(t2, t3, posn)
-    E_f3 = calculate_exponent(t3, t4, posn)
+def calculate_B(distance_to_element, length_of_element):
+    E_f1 = calculate_exponent(t1half, t2, distance_to_element, length_of_element) 
+    E_f2 = calculate_exponent(t2, t3, distance_to_element, length_of_element)
+    E_f3 = calculate_exponent(t3, t4, distance_to_element, length_of_element)
     E_bar = f0*0.0 + f1*((t1half-t1)/(t2-t1))*0.0 + f1*((t2-t1half)/(t2-t1))*E_f1 + f2*E_f2 + f3*E_f3
     B = math.exp(-1.0*E_bar)
     return (B)
-
-#not being used right now
-def calculate_pi(posn):
-    pi_posn = pi*calculate_B(posn)
-    return (pi_posn)
-
-#not being used right now
-def calculate_pi_window(win_start, win_end):
-    i=win_start
-    pi_sum = 0.0
-    while i <= win_end:
-        pi_sum = pi_sum + float(calculate_pi(i))
-        i = i + 1
-    return(pi_sum/(win_end - win_start+1))
 
 #calculate an average B value over the window with coordinates win_start - win_end
 def calculate_Banc_window(win_start, win_end):
@@ -102,7 +88,7 @@ def calculate_Banc_window(win_start, win_end):
     s_tot = 0
     while i <= win_end:
         if position i is a neutral site: #!!! Check if this site is neutral. Calculate B if it is neutral. Otherwise do not compute B.
-            B_sum = B_sum + float(calculate_B(i))
+            B_sum = B_sum + float(calculate_B(distance_to_element[i], length_of_element[i])) #!!! give the nearest distance from position i to the given element and the length of that element
             s_tot = s_tot + 1
         i = i + 1
     if s_tot > 0: 
