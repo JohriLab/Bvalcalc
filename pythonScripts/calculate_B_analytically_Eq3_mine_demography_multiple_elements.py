@@ -45,6 +45,9 @@ t2 = h*(10/(2*Nanc))
 t3 = h*(100/(2*Nanc))
 t4 = h*1.0
 
+def get_distance_to_functional_element (posn, element)#!!! there is some flexibility in how to write this part.
+    return()
+
 #calculate the quantities "a" and "b" which are constants that depend on the recombination and gene conversion rate and also the distance between the focal site and the functional element.
 def calculate_a_and_b(distance_to_element, length_of_element):
     C = (1.0 - math.exp(-2.0*r*distance_to_element))/2.0
