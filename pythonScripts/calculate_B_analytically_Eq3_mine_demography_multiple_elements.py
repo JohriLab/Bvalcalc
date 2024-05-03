@@ -14,8 +14,9 @@ u = 3.0*1e-9 #(*Mutation rate*)
 U = l*u
 
 #Parameters of genome architecture:
-#!!!Read in a bed file with positions of functional elements and the last position (i.e., where the genome ends)
-last_position = 10000.0 #(*Full length of the chromosome; the last position*)
+Read in a bed file with positions of functional elements and the last position (i.e., where the genome ends)#!!!
+Save in memory, the positions of the selected sites. #!!! No need to save the positions of the neutral sites (might take upp too much memory).
+last_position = 10000.0 #(*Full length of the chromosome; the last position. Get this from the user or the input file.!!!*)
 
 #Parameters of instantaneous change in demographic history:
 Nanc = 1e6 #(Ancestral population size)
@@ -98,10 +99,16 @@ def calculate_pi_window(win_start, win_end):
 def calculate_Banc_window(win_start, win_end):
     i=win_start
     B_sum = 0.0
+    s_tot = 0
     while i <= win_end:
-        B_sum = B_sum + float(calculate_B(i))
+        if position i is a neutral site: #!!! Check if this site is neutral. Calculate B if it is neutral. Otherwise do not compute B.
+            B_sum = B_sum + float(calculate_B(i))
+            s_tot = s_tot + 1
         i = i + 1
-    return(B_sum/(win_end - win_start+1))
+    if s_tot > 0: 
+        return(B_sum/s_tot)
+    else: #If all sites in this window are selected, then return NA.
+        return ("NA")
 
 #Gets the value of B in the current population as a function of B calcualted in the ancestral population (assumed to be in equilibrium).
 #As in, this is where we account for a simple single-size change in N
