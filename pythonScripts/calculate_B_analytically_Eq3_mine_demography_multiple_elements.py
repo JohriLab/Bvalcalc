@@ -88,7 +88,11 @@ def calculate_Banc_window(win_start, win_end):
     s_tot = 0
     while i <= win_end:
         if position i is a neutral site: #!!! Check if this site is neutral. Calculate B if it is neutral. Otherwise do not compute B.
-            B_sum = B_sum + float(calculate_B(distance_to_element[i], length_of_element[i])) #!!! give the nearest distance from position i to the given element and the length of that element
+            #calculating B at site i from all genomic elements:
+            B_i = 1.0
+            For each functional element in the genome: #!!!
+                B_i = B_i * float(calculate_B(distance_to_element[i], length_of_element[i])) #!!! give the nearest distance from position i to the given element and the length of that element
+            B_sum = B_sum + B_i
             s_tot = s_tot + 1
         i = i + 1
     if s_tot > 0: 
