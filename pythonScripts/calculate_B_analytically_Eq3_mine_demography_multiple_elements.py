@@ -11,11 +11,12 @@ g = 0.5*1e-8 #1e-8 #rate of gene conversion
 tract_len=440 #mean tract length of gene conversion in base pairs
 r = 0.5*1.0*1e-8 #rate of recombination
 u = 3.0*1e-9 #(*Mutation rate*)
+l = 10000
 U = l*u
 
 #Parameters of genome architecture:
-Read in a bed file with positions of functional elements and the last position (i.e., where the genome ends)#!!!
-Save in memory, the positions of the selected sites. #!!! No need to save the positions of the neutral sites (might take upp too much memory).
+#!!!Read in a bed file with positions of functional elements and the last position (i.e., where the genome ends)#!!!
+#!!!Save in memory, the positions of the selected sites. #!!! No need to save the positions of the neutral sites (might take upp too much memory).
 last_position = 10000.0 #(*Full length of the chromosome; the last position. Get this from the user or the input file.!!!*)
 
 #Parameters of instantaneous change in demographic history:
@@ -45,8 +46,8 @@ t2 = h*(10/(2*Nanc))
 t3 = h*(100/(2*Nanc))
 t4 = h*1.0
 
-def get_distance_to_functional_element (posn, element)#!!! there is some flexibility in how to write this part.
-    return()
+#!!!def get_distance_to_functional_element (posn, element)#!!! there is some flexibility in how to write this part.
+#!!!    return()
 
 #calculate the quantities "a" and "b" which are constants that depend on the recombination and gene conversion rate and also the distance between the focal site and the functional element.
 def calculate_a_and_b(distance_to_element, length_of_element):
@@ -90,13 +91,13 @@ def calculate_Banc_window(win_start, win_end):
     B_sum = 0.0
     s_tot = 0
     while i <= win_end:
-        if position i is a neutral site: #!!! Check if this site is neutral. Calculate B if it is neutral. Otherwise do not compute B.
+        #!!!if position i is a neutral site: #!!! Check if this site is neutral. Calculate B if it is neutral. Otherwise do not compute B.
             #calculating B at site i from all genomic elements:
-            B_i = 1.0
-            For each functional element in the genome: #!!!
-                B_i = B_i * float(calculate_B(distance_to_element[i], length_of_element[i])) #!!! give the nearest distance from position i to the given element and the length of that element
-            B_sum = B_sum + B_i
-            s_tot = s_tot + 1
+        #!!!    B_i = 1.0
+        #!!!    For each functional element in the genome: #!!!
+        #!!!        B_i = B_i * float(calculate_B(distance_to_element[i], length_of_element[i])) #!!! give the nearest distance from position i to the given element and the length of that element
+       #!!!     B_sum = B_sum + B_i
+        #!!!    s_tot = s_tot + 1
         i = i + 1
     if s_tot > 0: 
         return(B_sum/s_tot)
