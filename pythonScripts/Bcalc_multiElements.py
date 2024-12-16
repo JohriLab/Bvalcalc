@@ -5,6 +5,7 @@
 import sys
 import math
 import numpy as np
+import csv
 
 #Define variables and constants:
 out_folder="droso_single_exon_gc_10kb_decline10x"
@@ -14,11 +15,30 @@ r = 0.5*1.0*1e-8 #rate of recombination
 u = 3.0*1e-9 #(*Mutation rate*)
 l = 10000
 U = l*u
+chr_start = 1
+chr_end = 2200
+
+blockstart = []
+blockend = []
+
+with open('../exampleData/test.bed', 'r') as file:
+    reader = csv.reader(file)
+    for row in reader:
+        if len(row) >= 2:
+            blockstart.append(int(row[1]))
+            blockend.append(int(row[2]))
+
+print(blockend) #todelete
+
+blockstart = 1000 #todelete
+blockend = 2000 #todelete
+
+# blockstart = oneline
 
 #Parameters of genome architecture:
 #!!!Read in a bed file with positions of functional elements and the last position (i.e., where the genome ends)#!!!
-#!!!Save in memory, the positions of the selected sites. #!!! No need to save the positions of the neutral sites (might take upp too much memory).
-last_position = 10000.0 #(*Full length of the chromosome; the last position. Get this from the user or the input file.!!!*)
+# !!!Save in memory, the positions of the selected sites. #!!! No need to save the positions of the neutral sites (might take upp too much memory).
+# !!!last_position = 10000.0 #(*Full length of the chromosome; the last position. Get this from the user or the input file.!!!*)
 
 #Parameters of instantaneous change in demographic history:
 Nanc = 1e6 #(Ancestral population size)
@@ -46,6 +66,17 @@ t1half = h*(gamma_cutoff/(2*Nanc)) #(* This is the cut-off value of 2Nes=5. This
 t2 = h*(10/(2*Nanc))
 t3 = h*(100/(2*Nanc))
 t4 = h*1.0
+
+neu_sites = []
+for site in range(chr_start, chr_end + 1):
+    if not (blockstart <= site <= blockend):
+        neu_sites.append({
+            "pos": site,
+            "div1000": site / 1000
+        })
+
+print(neu_sites[-1])
+sys.exit()
 
 #!!!def get_distance_to_functional_element (posn, element)#!!! there is some flexibility in how to write this part.
 #!!!    return()
@@ -117,7 +148,7 @@ def get_Bcur(Banc):
 result = open("/work/users/p/j/pjohri/BGSCalculator/mytheory/" + out_folder + "/Bvalues_" + DFE + "_" + TIME + "_windowsize_" + str(s_window_size) + ".txt", 'w+')
 result.write("start" + '\t' + "end" + '\t' + "B" + '\n')
 posn_start = 1
-while posn_start <= last_position:
+while posn_start <= chr_end:
     result.write(str(posn_start) + '\t' + str(posn_start+s_window_size) + '\t' + str(get_Bcur(calculate_Banc_window(posn_start, posn_start+s_window_size))) + '\n')
     posn_start = posn_start + s_window_size
 result.close()
