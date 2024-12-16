@@ -1,3 +1,4 @@
+#calculate_B_analytically_Eq3_mine_demography_multiple_elements
 #This script is to get B values across a genomic element with multiple functional elements.
 #Currently the output is in terms of an average of a sliding window
 
