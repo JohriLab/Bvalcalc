@@ -15,8 +15,8 @@ r = 0.5*1.0*1e-8 #rate of recombination
 u = 3.0*1e-9 #(*Mutation rate*)
 l = 10000
 U = l*u
-chr_start = 1
-chr_end = 2200
+chr_start = 900
+chr_end = 200000
 
 blockstart = []
 blockend = []
@@ -28,10 +28,8 @@ with open('../exampleData/test.bed', 'r') as file:
             blockstart.append(int(row[1]))
             blockend.append(int(row[2]))
 
-print(blockend) #todelete
-
 blockstart = 1000 #todelete
-blockend = 2000 #todelete
+blockend = 1999 #todelete
 
 # blockstart = oneline
 
@@ -67,33 +65,40 @@ t2 = h*(10/(2*Nanc))
 t3 = h*(100/(2*Nanc))
 t4 = h*1.0
 
-neu_sites = []
-for site in range(chr_start, chr_end + 1):
-    if not (blockstart <= site <= blockend):
-        neu_sites.append({
-            "pos": site,
-            "div1000": site / 1000
-        })
-
-id_values = np.arange(chr_start, chr_end+1)
-pos_values = np.array([
-    site for site in range(chr_start, chr_end+1)
-    if not (blockstart <= site <= blockend)
-])
-div_thousand_values = pos_values / 1000.0
-
-neu_sites = [ 
-    {"pos": v1, "div1000": v2} 
-    for v1, v2 in zip(pos_values, div_thousand_values)
-]
-neu_sites_other = {
-    "pos": pos_values,
-    "div1000": div_thousand_values
-}
-neu_sites_other["pos"]
+# neu_sites = []
+# for site in range(chr_start, chr_end + 1):
+#     if not (blockstart <= site <= blockend):
+#         neu_sites.append({
+#             "pos": site,
+#             "div1000": site / 1000
+#         })
 
 
-print(neu_sites[-1])
+# id_values = np.arange(chr_start, chr_end+1)
+# neu_sites = np.array([
+#     site for site in range(chr_start, chr_end+1)
+#     if not (blockstart <= site <= blockend)
+# ])
+
+# div_thousand_values = neu_sites / 1000.0
+
+# neu_sites = np.array([ 
+#     {"pos": v1, "div1000": v2} 
+#     for v1, v2 in zip(neu_sites, div_thousand_values)
+# ])
+
+sites = np.zeros(chr_end - chr_start, dtype=[('position', 'i4'), ('value', 'f4')])  # i4 = int32, f4 = float32
+
+# Populating the array
+sites['position'] = np.arange(chr_start, chr_end)
+# Boolean mask: positions NOT between blockstart and blockend
+neu_positions = ~((sites['position'] >= blockstart) & (sites['position'] <= blockend))
+neu_sites = sites[neu_positions]
+neu_sites['value'] = 1
+
+print(sites.nbytes/1000000) # memory size (Mb)
+print(neu_sites.size) # memory size (Mb)
+
 sys.exit()
 
 #!!!def get_distance_to_functional_element (posn, element)#!!! there is some flexibility in how to write this part.
