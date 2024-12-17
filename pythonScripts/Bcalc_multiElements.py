@@ -75,6 +75,24 @@ for site in range(chr_start, chr_end + 1):
             "div1000": site / 1000
         })
 
+id_values = np.arange(chr_start, chr_end+1)
+pos_values = np.array([
+    site for site in range(chr_start, chr_end+1)
+    if not (blockstart <= site <= blockend)
+])
+div_thousand_values = pos_values / 1000.0
+
+neu_sites = [ 
+    {"pos": v1, "div1000": v2} 
+    for v1, v2 in zip(pos_values, div_thousand_values)
+]
+neu_sites_other = {
+    "pos": pos_values,
+    "div1000": div_thousand_values
+}
+neu_sites_other["pos"]
+
+
 print(neu_sites[-1])
 sys.exit()
 
