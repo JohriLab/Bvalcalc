@@ -6,6 +6,7 @@ import sys
 import math
 import numpy as np
 import csv
+import pandas as pd
 
 #Define variables and constants:
 out_folder="droso_single_exon_gc_10kb_decline10x"
@@ -21,7 +22,7 @@ chr_end = 200000
 blockstart = []
 blockend = []
 
-with open('../exampleData/test.bed', 'r') as file:
+with open('../exampleData/test.csv', 'r') as file:
     reader = csv.reader(file)
     for row in reader:
         if len(row) >= 2:
