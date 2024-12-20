@@ -6,7 +6,7 @@ import sys
 import math
 import numpy as np
 import csv
-import pandas as pd
+
 
 #Define variables and constants:
 out_folder="droso_single_exon_gc_10kb_decline10x"
@@ -17,25 +17,11 @@ u = 3.0*1e-9 #(*Mutation rate*)
 l = 10000
 U = l*u
 chr_start = 900
-chr_end = 200000
-
-blockstart = []
-blockend = []
-
-with open('../exampleData/test.csv', 'r') as file:
-    reader = csv.reader(file)
-    for row in reader:
-        if len(row) >= 2:
-            blockstart.append(int(row[1]))
-            blockend.append(int(row[2]))
-
-blockstart = 1000 #todelete
-blockend = 1999 #todelete
-
-# blockstart = oneline
+chr_end = 10000
+flank_len = 5
 
 #Parameters of genome architecture:
-#!!!Read in a bed file with positions of functional elements and the last position (i.e., where the genome ends)#!!!
+# !!!Read in a bed file with positions of functional elements and the last position (i.e., where the genome ends)#!!!
 # !!!Save in memory, the positions of the selected sites. #!!! No need to save the positions of the neutral sites (might take upp too much memory).
 # !!!last_position = 10000.0 #(*Full length of the chromosome; the last position. Get this from the user or the input file.!!!*)
 
@@ -65,45 +51,52 @@ t1half = h*(gamma_cutoff/(2*Nanc)) #(* This is the cut-off value of 2Nes=5. This
 t2 = h*(10/(2*Nanc))
 t3 = h*(100/(2*Nanc))
 t4 = h*1.0
+blockstart = []
+blockend = []
 
-# neu_sites = []
-# for site in range(chr_start, chr_end + 1):
-#     if not (blockstart <= site <= blockend):
-#         neu_sites.append({
-#             "pos": site,
-#             "div1000": site / 1000
-#         })
+## 1. PARSE INPUT OF BED CONSERVED REGIONS
+with open('../exampleData/test.csv', 'r') as file:
+    reader = csv.reader(file)
+    for row in reader:
+        if len(row) >= 2:
+            blockstart.append(int(row[1]))
+            blockend.append(int(row[2]))
 
+## 1a. CALCULATE MIDPOINT OF EACH ELEMENT
+blockstart = np.array(blockstart)
+blockend = np.array(blockend)
+blockmid = blockstart + 0.5*(blockend - blockstart)
 
-# id_values = np.arange(chr_start, chr_end+1)
-# neu_sites = np.array([
-#     site for site in range(chr_start, chr_end+1)
-#     if not (blockstart <= site <= blockend)
-# ])
+# 2. CREATE 2D ARRAY OF ALL NEUTRAL SITES (pos, B)
+sites = np.zeros(chr_end - chr_start, dtype=[('pos', 'i4'), ('B', 'f4')])
+sites['pos'] = np.arange(chr_start, chr_end)
 
-# div_thousand_values = neu_sites / 1000.0
+neu_positions = np.array([
+    site for site in sites['pos']
+    if not any(start <= site <= end for start, end in zip(blockstart, blockend))
+])
 
-# neu_sites = np.array([ 
-#     {"pos": v1, "div1000": v2} 
-#     for v1, v2 in zip(neu_sites, div_thousand_values)
-# ])
+neu_sites = np.zeros(len(neu_positions), dtype=[('pos', 'int32'), ('B', 'f4')])
+neu_sites["pos"] = neu_positions
+neu_sites["B"] = 1
 
-sites = np.zeros(chr_end - chr_start, dtype=[('position', 'i4'), ('value', 'f4')])  # i4 = int32, f4 = float32
+# 3. LOOP OVER CONSERVED REGIONS 
+# << FOR LOOP HERE << remove [1] with loop iterator
 
-# Populating the array
-sites['position'] = np.arange(chr_start, chr_end)
-# Boolean mask: positions NOT between blockstart and blockend
-neu_positions = ~((sites['position'] >= blockstart) & (sites['position'] <= blockend))
-neu_sites = sites[neu_positions]
-neu_sites['value'] = 1
+# 3a. EXTRACT POSITIONS 5KB DOWNSTREAM OF ELEMENT
+flank_sites = neu_sites[(neu_sites['pos'] < blockstart[1]) & (neu_sites['pos'] > blockstart[1] - flank_len)]
 
-print(sites.nbytes/1000000) # memory size (Mb)
-print(neu_sites.size) # memory size (Mb)
+flank_sites['B'] = 2
+print(flank_sites)
+# print(blockmid[1] - flank_sites['pos'])
 
-sys.exit()
+length_of_element = blockend[1] - blockstart[1]
+distance_to_element = blockstart[1] - flank_sites['pos']
+print(distance_to_element)
 
-#!!!def get_distance_to_functional_element (posn, element)#!!! there is some flexibility in how to write this part.
-#!!!    return()
+# calc_B = (distance_from_mid) => {
+
+# }
 
 #calculate the quantities "a" and "b" which are constants that depend on the recombination and gene conversion rate and also the distance between the focal site and the functional element.
 def calculate_a_and_b(distance_to_element, length_of_element):
@@ -140,6 +133,11 @@ def calculate_B(distance_to_element, length_of_element):
     E_bar = f0*0.0 + f1*((t1half-t1)/(t2-t1))*0.0 + f1*((t2-t1half)/(t2-t1))*E_f1 + f2*E_f2 + f3*E_f3
     B = math.exp(-1.0*E_bar)
     return (B)
+
+print(calculate_B(1, length_of_element))
+# Extend to loop over array
+
+sys.exit()
 
 #calculate an average B value over the window with coordinates win_start - win_end
 def calculate_Banc_window(win_start, win_end):

@@ -29,7 +29,7 @@ s_window_size = 100
 #Constants that we do not need from the user:
 U = l*u
 gamma_cutoff = 2.0
-pi_anc = 4*Nanc*u #(*Expected nucleotide diversity under neutrality*)
+pi = 4*Nanc*u #(*Expected nucleotide diversity under neutrality*)
 #(*Now we define the boundaries of the fixed intervals over which we will integrate *)
 t0 = 0.0
 t1 = h*(1/(2*Nanc))
