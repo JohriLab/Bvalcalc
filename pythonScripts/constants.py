@@ -1,0 +1,23 @@
+# Constants (make sure to define these in your script or pass them as needed)
+g = 0.5*1e-8 #1e-8 #rate of gene conversion
+tract_len=440 #mean tract length of gene conversion in base pairs
+r = 0.5*1.0*1e-8 #rate of recombination
+u = 3.0*1e-9 #(*Mutation rate*)
+l = 10000
+U = l*u
+
+Nanc = 1e6
+gamma_cutoff = 2.0 #5.0
+h=0.5
+t0 = 0.0
+t1 = h*(1/(2*Nanc))
+t1half = h*(gamma_cutoff/(2*Nanc)) #(* This is the cut-off value of 2Nes=5. This derivation assumes that all mutations with 2Nes<5 will not contribute to BGS *)
+t2 = h*(10/(2*Nanc))
+t3 = h*(100/(2*Nanc))
+t4 = h*1.0
+
+# t1half, t2, t3, t4 = 0.1, 0.2, 0.3, 0.4  # Time points
+f0 = 0.1 #(*Proportion of effectively neutral mutations with 0 <= |2Nes| < 1 *)
+f1 = 0.1 #(*Proportion of weakly deleterious mutations with 1 <= |2Nes| < 10 *)
+f2 = 0.1 #(*Proportion of moderately deleterious mutations with 10 <= |2Nes| < 100 *)
+f3 = 0.7 #(*Proportion of strongly deleterious mutations with |2Nes| >= 100 *)

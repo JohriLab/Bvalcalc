@@ -6,19 +6,15 @@ import sys
 import math
 import numpy as np
 import csv
-
+import timeit
+from Bcalc_function import calculate_B, vectorized_B
+from constants import g, tract_len, r, u, l, U, Nanc, gamma_cutoff, h, t0, t1, t1half, t2, t3, t4, f0, f1, f2, f3
 
 #Define variables and constants:
 out_folder="droso_single_exon_gc_10kb_decline10x"
-g = 0.5*1e-8 #1e-8 #rate of gene conversion
-tract_len=440 #mean tract length of gene conversion in base pairs
-r = 0.5*1.0*1e-8 #rate of recombination
-u = 3.0*1e-9 #(*Mutation rate*)
-l = 10000
-U = l*u
 chr_start = 900
 chr_end = 10000
-flank_len = 5
+flank_len = 10
 
 #Parameters of genome architecture:
 # !!!Read in a bed file with positions of functional elements and the last position (i.e., where the genome ends)#!!!
@@ -33,24 +29,10 @@ time_of_change=1.0 #0.1/0.5/1(This is the time of change in 2Ncur generations in
 
 #Parameters of the DFE:
 DFE="DFE3"
-f0 = 0.1 #(*Proportion of effectively neutral mutations with 0 <= |2Nes| < 1 *)
-f1 = 0.1 #(*Proportion of weakly deleterious mutations with 1 <= |2Nes| < 10 *)
-f2 = 0.1 #(*Proportion of moderately deleterious mutations with 10 <= |2Nes| < 100 *)
-f3 = 0.7 #(*Proportion of strongly deleterious mutations with |2Nes| >= 100 *)
-#(*Note that the number of classes can easily be increased to whatever is required to approximate the continuous DFE *)
-h = 0.5 #(* dominance coefficient *)
-gamma_cutoff = 2.0 #5.0
 s_window_size = 100
 
 #Constants that we do not need from the user:
 pi_anc = 4*Nanc*u #(*Expected nucleotide diversity under neutrality*)
-#(*Now we define the boundaries of the fixed intervals over which we will integrate. The number of bins can be a user parameter, if we like. *)
-t0 = 0.0
-t1 = h*(1/(2*Nanc))
-t1half = h*(gamma_cutoff/(2*Nanc)) #(* This is the cut-off value of 2Nes=5. This derivation assumes that all mutations with 2Nes<5 will not contribute to BGS *)
-t2 = h*(10/(2*Nanc))
-t3 = h*(100/(2*Nanc))
-t4 = h*1.0
 blockstart = []
 blockend = []
 
@@ -94,48 +76,20 @@ length_of_element = blockend[1] - blockstart[1]
 distance_to_element = blockstart[1] - flank_sites['pos']
 print(distance_to_element)
 
-# calc_B = (distance_from_mid) => {
-
-# }
-
-#calculate the quantities "a" and "b" which are constants that depend on the recombination and gene conversion rate and also the distance between the focal site and the functional element.
-def calculate_a_and_b(distance_to_element, length_of_element):
-    C = (1.0 - math.exp(-2.0*r*distance_to_element))/2.0
-    if g==0:
-        a = C
-        b = C + r*length_of_element
-    elif g > 0:
-        if distance_to_element+length_of_element < 0.5*tract_len:#The 0.5 is currently aribtrary. It's just about when the approximation of 1-exp(-x)~x holds. 
-            #print ("accounting for small-distance gene conversion")
-            a = (C + (g*distance_to_element))
-            b = (C + r*length_of_element + (g*(distance_to_element+length_of_element)))
-        else:
-            #print ("accounting for large-distance gene conversion")
-            a = g*tract_len + C
-            b = g*tract_len + r*length_of_element + C
-    return (a, b)
-
-#calculate the exponent using previously computed values of "a" and "b"
-def calculate_exponent(t_start, t_end, distance_to_element, length_of_element):
-    t_tmp = calculate_a_and_b(distance_to_element, length_of_element)
-    a = t_tmp[0]
-    b = t_tmp[1]
-    E1 = ((U*a)/((1-a)*(a-b)*(t_end-t_start))) * math.log((a+(t_end*(1-a)))/(a + (t_start*(1-a))))
-    E2 = -1.0*((U*b)/((1-b)*(a-b)*(t_end-t_start)))*math.log((b + ((1-b)*t_end))/(b + ((1-b)*t_start)))
-    E = E1 + E2
-    return (E)
-
-#Calculate B due to a single functional element at the focal site. Here we sum over the DFE.
-def calculate_B(distance_to_element, length_of_element):
-    E_f1 = calculate_exponent(t1half, t2, distance_to_element, length_of_element) 
-    E_f2 = calculate_exponent(t2, t3, distance_to_element, length_of_element)
-    E_f3 = calculate_exponent(t3, t4, distance_to_element, length_of_element)
-    E_bar = f0*0.0 + f1*((t1half-t1)/(t2-t1))*0.0 + f1*((t2-t1half)/(t2-t1))*E_f1 + f2*E_f2 + f3*E_f3
-    B = math.exp(-1.0*E_bar)
-    return (B)
-
 print(calculate_B(1, length_of_element))
 # Extend to loop over array
+
+vectorized_B = np.vectorize(calculate_B)
+time = timeit.timeit("vectorized_B(np.array(distance_to_element), length_of_element)",
+    setup=(
+        "import numpy as np; import math; "
+        "from __main__ import vectorized_B, distance_to_element, length_of_element"
+    ),
+    number=200)
+# time = timeit.timeit("3*3", number = 10)
+print(time)
+## Ask Brian for alternative!!!
+# Use 'where?'
 
 sys.exit()
 
