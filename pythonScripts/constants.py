@@ -7,6 +7,7 @@ l = 10000
 U = l*u
 
 Nanc = 1e6
+Ncur = 1e5 #(Current population size)
 gamma_cutoff = 2.0 #5.0
 h=0.5
 t0 = 0.0

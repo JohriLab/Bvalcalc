@@ -8,7 +8,7 @@ import numpy as np
 import csv
 import timeit
 from Bcalc_function import calculate_B, vectorized_B
-from constants import g, tract_len, r, u, l, U, Nanc, gamma_cutoff, h, t0, t1, t1half, t2, t3, t4, f0, f1, f2, f3
+from constants import g, tract_len, r, u, l, U, Ncur, Nanc, gamma_cutoff, h, t0, t1, t1half, t2, t3, t4, f0, f1, f2, f3
 
 #Define variables and constants:
 out_folder="droso_single_exon_gc_10kb_decline10x"
@@ -22,8 +22,7 @@ flank_len = 10
 # !!!last_position = 10000.0 #(*Full length of the chromosome; the last position. Get this from the user or the input file.!!!*)
 
 #Parameters of instantaneous change in demographic history:
-Nanc = 1e6 #(Ancestral population size)
-Ncur = 1e5 #(Current population size)
+
 TIME="T_1" #T_0_1/T_0_5/T_1
 time_of_change=1.0 #0.1/0.5/1(This is the time of change in 2Ncur generations in the past.)
 
