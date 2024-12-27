@@ -51,35 +51,20 @@ blockend = np.array(blockend)
 blockmid = blockstart + 0.5*(blockend - blockstart)
 
 # 2. CREATE 2D ARRAY OF ALL NEUTRAL SITES (pos, B)
-sites = np.zeros(chr_end - chr_start, dtype=[('pos', 'i4'), ('B', 'f4')])
+sites = np.zeros(chr_end - chr_start, dtype=[('pos', 'int32'), ('B', 'f4')])
 sites['pos'] = np.arange(chr_start, chr_end)
-
-# print(sites)
-
-neu_positions = np.array([
-    site for site in sites['pos']
-    if not any(start <= site <= end for start, end in zip(blockstart, blockend))
-])
-
-neu_sites = np.zeros(len(neu_positions), dtype=[('pos', 'int32'), ('B', 'f4')])
-neu_sites["pos"] = neu_positions
-neu_sites["B"] = 1
+sites["B"] = 1
 
 # 3. LOOP OVER CONSERVED REGIONS 
 # << FOR LOOP HERE << remove [1] with loop iterator
 
 # 3a. EXTRACT POSITIONS 5KB DOWNSTREAM OF ELEMENT
-flank_sites = neu_sites[(neu_sites['pos'] < blockstart[1]) & (neu_sites['pos'] > blockstart[1] - flank_len)]
-
+flank_sites = sites[(sites['pos'] < blockstart[1]) & (sites['pos'] > blockstart[1] - flank_len)]
 flank_sites['B'] = 2
-# print(flank_sites)
-# print(blockmid[1] - flank_sites['pos'])
 
 length_of_element = blockend[1] - blockstart[1]
 distance_to_element = blockstart[1] - flank_sites['pos']
-# print(distance_to_element)
 
-# print(calculate_B(1, length_of_element))
 # Extend to loop over array
 
 vectorized_B = np.vectorize(calculate_B)
@@ -89,32 +74,19 @@ time = timeit.timeit("vectorized_B(np.array(distance_to_element), length_of_elem
         "from __main__ import vectorized_B, distance_to_element, length_of_element"
     ),
     number=200)
-# time = timeit.timeit("3*3", number = 10)
 # print(time)
-## Ask Brian for alternative!!!
-# Use 'where?'
-new_B_array = vectorized_B(np.array(distance_to_element), length_of_element)
-# print(new_B_array)
+new_Bs = vectorized_B(np.array(distance_to_element), length_of_element) # Calculate B for flanking sites
+flank_sites['B'] = new_Bs*flank_sites['B'] # Update "B" in flanking sites array
+sites['B'][flank_sites['pos'] - sites['pos'][0]] = flank_sites['B'] # Update original array
 
-flank_sites['B'] = new_B_array*flank_sites['B']
-# print(flank_sites)
-
-# print(flank_sites['pos'])
-
-# print(np.sort(neu_sites, order=['B']))
-
-neu_sites['B'][flank_sites['pos'] - neu_sites['pos'][0]] = flank_sites['B']
-
-# print(np.sort(neu_sites, order=['B']))
-
-# print(np.where(neu_sites['pos'][]))
+print(flank_sites)
 
 
-# print(sites)
+for start, end in zip(blockstart, blockend):
+    sites['B'][start - sites['pos'][0]:end - sites['pos'][0]] = np.nan
 
 
-
-
+print(np.sort(sites[~np.isnan(sites['B'])], order=['B'])) # Removes gene sites
 sys.exit()
 
 #calculate an average B value over the window with coordinates win_start - win_end
@@ -156,3 +128,13 @@ result.close()
 print("done")
 
 
+
+# # Extracting neutral sites
+# neu_positions = np.array([
+#     site for site in sites['pos']
+#     if not any(start <= site <= end for start, end in zip(blockstart, blockend))
+# ])
+
+# neu_sites = np.zeros(len(neu_positions), dtype=[('pos', 'int32'), ('B', 'f4')])
+# neu_sites["pos"] = neu_positions
+# neu_sites["B"] = 1
