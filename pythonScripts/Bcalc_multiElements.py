@@ -5,10 +5,12 @@
 import sys
 import math
 import numpy as np
+from numpy.lib import recfunctions
 import csv
 import timeit
 from Bcalc_function import calculate_B, vectorized_B
 from constants import g, tract_len, r, u, l, U, Ncur, Nanc, gamma_cutoff, h, t0, t1, t1half, t2, t3, t4, f0, f1, f2, f3
+
 
 #Define variables and constants:
 out_folder="droso_single_exon_gc_10kb_decline10x"
@@ -52,6 +54,8 @@ blockmid = blockstart + 0.5*(blockend - blockstart)
 sites = np.zeros(chr_end - chr_start, dtype=[('pos', 'i4'), ('B', 'f4')])
 sites['pos'] = np.arange(chr_start, chr_end)
 
+# print(sites)
+
 neu_positions = np.array([
     site for site in sites['pos']
     if not any(start <= site <= end for start, end in zip(blockstart, blockend))
@@ -68,14 +72,14 @@ neu_sites["B"] = 1
 flank_sites = neu_sites[(neu_sites['pos'] < blockstart[1]) & (neu_sites['pos'] > blockstart[1] - flank_len)]
 
 flank_sites['B'] = 2
-print(flank_sites)
+# print(flank_sites)
 # print(blockmid[1] - flank_sites['pos'])
 
 length_of_element = blockend[1] - blockstart[1]
 distance_to_element = blockstart[1] - flank_sites['pos']
-print(distance_to_element)
+# print(distance_to_element)
 
-print(calculate_B(1, length_of_element))
+# print(calculate_B(1, length_of_element))
 # Extend to loop over array
 
 vectorized_B = np.vectorize(calculate_B)
@@ -86,9 +90,30 @@ time = timeit.timeit("vectorized_B(np.array(distance_to_element), length_of_elem
     ),
     number=200)
 # time = timeit.timeit("3*3", number = 10)
-print(time)
+# print(time)
 ## Ask Brian for alternative!!!
 # Use 'where?'
+new_B_array = vectorized_B(np.array(distance_to_element), length_of_element)
+# print(new_B_array)
+
+flank_sites['B'] = new_B_array*flank_sites['B']
+# print(flank_sites)
+
+# print(flank_sites['pos'])
+
+# print(np.sort(neu_sites, order=['B']))
+
+neu_sites['B'][flank_sites['pos'] - neu_sites['pos'][0]] = flank_sites['B']
+
+# print(np.sort(neu_sites, order=['B']))
+
+# print(np.where(neu_sites['pos'][]))
+
+
+# print(sites)
+
+
+
 
 sys.exit()
 
