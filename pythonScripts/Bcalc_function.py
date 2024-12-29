@@ -4,22 +4,27 @@ from constants import g, tract_len, r, u, l, U, Nanc, gamma_cutoff, h, t0, t1, t
 
 def calculate_B(distance_to_element, length_of_element):
     # Calculate "a" and "b"
-    C = (1.0 - math.exp(-2.0 * r * distance_to_element)) / 2.0
+    C = (1.0 - np.exp(-2.0 * r * distance_to_element)) / 2.0
     if g == 0:
         a = C
         b = C + r * length_of_element
     elif g > 0:
-        if distance_to_element + length_of_element < 0.5 * tract_len:  # Arbitrary threshold
-            a = C + (g * distance_to_element)
-            b = C + r * length_of_element + (g * (distance_to_element + length_of_element))
-        else:
-            a = g * tract_len + C
-            b = g * tract_len + r * length_of_element + C
+        threshold = distance_to_element + length_of_element < 0.5 * tract_len # Arbitrary threshold
+        a = np.where(
+            threshold, 
+            C + (g * distance_to_element), #If TRUE
+            g * tract_len + C #If FALSE
+        )
+        b = np.where(
+            threshold,
+            C + r * length_of_element + (g * (distance_to_element + length_of_element)),
+            g * tract_len + r * length_of_element + C
+        )
 
     # Helper to calculate exponent using "a" and "b"
     def calculate_exponent(t_start, t_end):
-        E1 = ((U * a) / ((1 - a) * (a - b) * (t_end - t_start))) * math.log((a + (t_end * (1 - a))) / (a + (t_start * (1 - a))))
-        E2 = -1.0 * ((U * b) / ((1 - b) * (a - b) * (t_end - t_start))) * math.log((b + ((1 - b) * t_end)) / (b + ((1 - b) * t_start)))
+        E1 = ((U * a) / ((1 - a) * (a - b) * (t_end - t_start))) * np.log((a + (t_end * (1 - a))) / (a + (t_start * (1 - a))))
+        E2 = -1.0 * ((U * b) / ((1 - b) * (a - b) * (t_end - t_start))) * np.log((b + ((1 - b) * t_end)) / (b + ((1 - b) * t_start)))
         return E1 + E2
 
     # Calculate exponents for different time intervals
@@ -30,14 +35,14 @@ def calculate_B(distance_to_element, length_of_element):
     # Calculate E_bar
     E_bar = (
         f0 * 0.0
-        + f1 * ((t1half - t1half) / (t2 - t1half)) * 0.0
+        + f1 * ((t1half - t1half) / (t2 - t1half)) * 0.0 ## @Parul is this supposed to be 0?
         + f1 * ((t2 - t1half) / (t2 - t1half)) * E_f1
         + f2 * E_f2
         + f3 * E_f3
     )
 
     # Return B
-    return math.exp(-1.0 * E_bar)
+    return np.exp(-1.0 * E_bar)
 
 # Vectorized version of calculate_B
 vectorized_B = np.vectorize(calculate_B)
