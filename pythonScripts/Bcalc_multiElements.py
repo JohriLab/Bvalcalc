@@ -105,7 +105,7 @@ flat_lengths = flat_lengths[:len(flat_distances)]  # Handle edge cases where len
 
 # print(flat_lengths)
 
-# print(calculate_B(2, 2))
+print(calculate_B(2, 2))
 
 # Calculate B for the flattened data
 flank_B = calculate_B(flat_distances, flat_lengths)
