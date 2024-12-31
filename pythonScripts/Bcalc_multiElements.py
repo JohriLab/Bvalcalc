@@ -45,10 +45,8 @@ with open('../exampleData/test.csv', 'r') as file:
             blockstart.append(int(row[1]))
             blockend.append(int(row[2]))
 
-## 1a. CALCULATE MIDPOINT OF EACH ELEMENT
 blockstart = np.array(blockstart)
 blockend = np.array(blockend)
-blockmid = blockstart + 0.5*(blockend - blockstart)
 
 # 2. CREATE 2D ARRAY OF ALL NEUTRAL SITES (pos, B)
 sites = np.zeros(chr_end - chr_start, dtype=[('pos', 'int32'), ('B', 'f4')])
