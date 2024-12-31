@@ -55,12 +55,7 @@ sites = np.zeros(chr_end - chr_start, dtype=[('pos', 'int32'), ('B', 'f4')])
 sites['pos'] = np.arange(chr_start, chr_end)
 sites["B"] = 1
 
-# 3. LOOP OVER CONSERVED REGIONS 
-# << FOR LOOP HERE << remove [1] with loop iterator
-
 # 3a. EXTRACT POSITIONS 5KB DOWNSTREAM OF ELEMENT
-
-#####
 
 # Convert blockstart, blockend, and sites['pos'] to NumPy arrays
 pos_array = sites['pos']
@@ -69,11 +64,21 @@ blockend_array = np.array(blockend)
 
 # Broadcast blockstart and blockend arrays to match the shape of pos_array
 lengths = blockend_array - blockstart_array
-distances = blockstart_array[:, None] - pos_array[None, :]
-print(distances)
-# Mask for flanking sites
-flanking_mask = (pos_array < blockstart_array[:, None]) & (pos_array > (blockstart_array[:, None] - flank_len))
+# Broadcast blockstart and blockend arrays to match the shape of pos_array
+distances_upstream = blockstart_array[:, None] - pos_array[None, :]
+distances_downstream = pos_array[None, :] - blockend_array[:, None]
+# Combine the distances into a single array
+# Masks for flanking sites
+upstream_mask = (pos_array < blockstart_array[:, None]) & (pos_array > (blockstart_array[:, None] - flank_len))
+downstream_mask = (pos_array > blockend_array[:, None]) & (pos_array < (blockend_array[:, None] + flank_len))
 
+# Combine the upstream and downstream masks
+flanking_mask = upstream_mask | downstream_mask
+
+# Combine the distances into a single array
+distances = np.where(flanking_mask, 
+                     np.where(upstream_mask, distances_upstream, distances_downstream), 
+                     0)
 
 # Flatten distances and flanking_mask to match the selected elements
 flat_distances = distances[flanking_mask]  # Select distances where mask is True
@@ -82,15 +87,12 @@ flat_lengths = flat_lengths[:len(flat_distances)]  # Handle edge cases where len
 
 # Calculate B for the flattened data
 flank_B = calculate_B(flat_distances, flat_lengths)
-
 # Flatten flanking_mask to get indices of True values
 true_indices = np.where(flanking_mask)
 
-print(true_indices[1])
 # Find unique indices and map each to its position in the unique list
 unique_indices, inverse_indices = np.unique(true_indices[1], return_inverse=True)
-# print(unique_indices)
-# print(inverse_indices)
+
 aggregated_B = np.ones_like(unique_indices, dtype=np.float64)
 
 np.multiply.at(aggregated_B, inverse_indices, flank_B)
@@ -98,16 +100,11 @@ np.multiply.at(aggregated_B, inverse_indices, flank_B)
 # Update 'B' values in the original NumPy array
 sites['B'][unique_indices] = aggregated_B
 
-#####
-
-# << END LOOP HERE << remove [1] with loop iterator
-# Extend to loop over array
-
-
+# Converts B at gene sites to 'nan'
 for start, end in zip(blockstart, blockend):
-    sites['B'][start - sites['pos'][0]:end - sites['pos'][0]] = np.nan # Converts B at gene sites to 'nan'
+    sites['B'][start - sites['pos'][0]:end - sites['pos'][0]] = np.nan 
 
-# print(np.sort(sites[~np.isnan(sites['B'])], order=['B'])) # Removes gene sites
+print(np.sort(sites[~np.isnan(sites['B'])], order=['B'])) # Removes gene sites and prints
 # print(sites)
 sys.exit()
 

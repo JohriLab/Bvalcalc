@@ -5,7 +5,7 @@ from constants import g, tract_len, r, u, l, U, Nanc, gamma_cutoff, h, t0, t1, t
 def calculate_B(distance_to_element, length_of_element):
     """
     Calculate the B value for a single functional element at the focal site,
-    summing over the DFE while consolidating the intermediate calculations.
+    summing over the DFE while consolidating the intermediate calculations. 0.10507559 * 0.09354638
     """
     # Calculate "a" and "b"
     C = (1.0 - np.exp(-2.0 * r * distance_to_element)) / 2.0
