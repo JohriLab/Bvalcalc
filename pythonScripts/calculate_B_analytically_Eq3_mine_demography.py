@@ -75,48 +75,6 @@ def calculate_B(posn):
     B = math.exp(-1.0*E_bar)
     return (B)
 
-#not being used right now
-def calculate_pi(posn):
-    pi_posn = pi*calculate_B(posn)
-    return (pi_posn)
-
-#not being used right now
-def calculate_pi_window(win_start, win_end):
-    i=win_start
-    pi_sum = 0.0
-    while i <= win_end:
-        pi_sum = pi_sum + float(calculate_pi(i))
-        i = i + 1
-    return(pi_sum/(win_end - win_start+1))
-
-#calculate an average B value over the window with coordinates win_start - win_end
-def calculate_Banc_window(win_start, win_end):
-    i=win_start
-    B_sum = 0.0
-    while i <= win_end:
-        B_sum = B_sum + float(calculate_B(i))
-        i = i + 1
-    return(B_sum/(win_end - win_start+1))
-
-#Gets the value of B in the current population as a function of B calcualted in the ancestral population (assumed to be in equilibrium).
-#As in, this is where we account for a simple single-size change in N
-def get_Bcur(Banc):
-    R = float(Nanc)/float(Ncur)
-    Bcur = (Banc*(1.0 + (R-1.0)*math.exp((-1.0*time_of_change)/Banc))) / (1 + (R-1.0)*math.exp(-1.0*time_of_change))
-    return (Bcur)
-
-                                                                                
-#Getting an average pi over a window:
-result = open("/work/users/p/j/pjohri/BGSCalculator/mytheory/" + out_folder + "/Bvalues_" + DFE + "_" + TIME + "_windowsize_" + str(s_window_size) + ".txt", 'w+')
-result.write("start" + '\t' + "end" + '\t' + "B" + '\n')
-posn_start = 1
-len_intergenic = 10000
-posn_start = 1
-while posn_start <= len_intergenic:
-    result.write(str(posn_start) + '\t' + str(posn_start+s_window_size) + '\t' + str(get_Bcur(calculate_Banc_window(posn_start, posn_start+s_window_size))) + '\n')
-    posn_start = posn_start + s_window_size
-result.close()
-
-print("done")
+print(calculate_B(2))
 
 

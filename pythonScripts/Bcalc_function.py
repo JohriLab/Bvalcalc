@@ -17,18 +17,22 @@ def calculate_B(distance_to_element, length_of_element):
         a = np.where(
             threshold, 
             C + (g * distance_to_element), #If TRUE
-            g * tract_len + C #If FALSE
+            C + g * tract_len #If FALSE
         )
         b = np.where(
             threshold,
-            C + r * length_of_element + (g * (distance_to_element + length_of_element)),
-            g * tract_len + r * length_of_element + C
+            C + r * length_of_element + (g * (distance_to_element + length_of_element)), #If TRUE
+            C + g * tract_len + r * length_of_element #If FALSE
         )
 
     # Helper to calculate the exponent using "a" and "b"
     def calculate_exponent(t_start, t_end):
-        E1 = ((U * a) / ((1 - a) * (a - b) * (t_end - t_start))) * np.log((a + (t_end * (1 - a))) / (a + (t_start * (1 - a))))
-        E2 = -1.0 * ((U * b) / ((1 - b) * (a - b) * (t_end - t_start))) * np.log((b + ((1 - b) * t_end)) / (b + ((1 - b) * t_start)))
+        E1 = ((U * a) 
+                / ((1 - a) * (a - b) * (t_end - t_start))) * np.log((a + (t_end * (1 - a))) 
+                / (a + (t_start * (1 - a))))
+        E2 = -1.0 * ((U * b) 
+                / ((1 - b) * (a - b) * (t_end - t_start))) * np.log((b + ((1 - b) * t_end)) 
+                / (b + ((1 - b) * t_start)))
         return E1 + E2 # = E
 
     # Calculate exponents for different time intervals

@@ -62,28 +62,6 @@ sites["B"] = 1
 
 #####
 
-# flank_sites = sites[(sites['pos'] < blockstart[1]) & (sites['pos'] > blockstart[1] - flank_len)]
-# flank_sites['B'] = 1
-
-# length_of_element = blockend[1] - blockstart[1]
-# distance_to_element = blockstart[1] - flank_sites['pos']
-
-
-# vectorized_B = np.vectorize(calculate_B)
-# time = timeit.timeit("vectorized_B(np.array(distance_to_element), length_of_element)",
-#     setup=(
-#         "import numpy as np; import math; "
-#         "from __main__ import vectorized_B, distance_to_element, length_of_element"
-#     ),
-#     number=200)
-# # print(time)
-# new_Bs = vectorized_B(np.array(distance_to_element), length_of_element) # Calculate B for flanking sites
-# flank_sites['B'] = new_Bs*flank_sites['B'] # Update "B" in flanking sites array
-# sites['B'][flank_sites['pos'] - sites['pos'][0]] = flank_sites['B'] # Update original array
-
-
-#####
-
 # Convert blockstart, blockend, and sites['pos'] to NumPy arrays
 pos_array = sites['pos']
 blockstart_array = np.array(blockstart)
@@ -92,20 +70,15 @@ blockend_array = np.array(blockend)
 # Broadcast blockstart and blockend arrays to match the shape of pos_array
 lengths = blockend_array - blockstart_array
 distances = blockstart_array[:, None] - pos_array[None, :]
+print(distances)
 # Mask for flanking sites
 flanking_mask = (pos_array < blockstart_array[:, None]) & (pos_array > (blockstart_array[:, None] - flank_len))
 
-# print(distances[flanking_mask])
-# Compute 'B' for flanking sites
 
 # Flatten distances and flanking_mask to match the selected elements
 flat_distances = distances[flanking_mask]  # Select distances where mask is True
 flat_lengths = np.repeat(lengths, flanking_mask.sum(axis=1))  # Repeat each length to match the mask
 flat_lengths = flat_lengths[:len(flat_distances)]  # Handle edge cases where lengths might overshoot
-
-# print(flat_lengths)
-
-print(calculate_B(2, 2))
 
 # Calculate B for the flattened data
 flank_B = calculate_B(flat_distances, flat_lengths)
@@ -113,26 +86,29 @@ flank_B = calculate_B(flat_distances, flat_lengths)
 # Flatten flanking_mask to get indices of True values
 true_indices = np.where(flanking_mask)
 
+print(true_indices[1])
+# Find unique indices and map each to its position in the unique list
+unique_indices, inverse_indices = np.unique(true_indices[1], return_inverse=True)
+# print(unique_indices)
+# print(inverse_indices)
+aggregated_B = np.ones_like(unique_indices, dtype=np.float64)
+
+np.multiply.at(aggregated_B, inverse_indices, flank_B)
+
 # Update 'B' values in the original NumPy array
-sites['B'][true_indices[1]] = flank_B
-print(sites)
-
-sys.exit()
-
-# [( 999, 0.7707896) ( 998, 0.7710552) ( 997, 0.7713202) ...
-#  (9996, 1.       ) (9997, 1.       ) (9999, 1.       )]
+sites['B'][unique_indices] = aggregated_B
 
 #####
 
 # << END LOOP HERE << remove [1] with loop iterator
-# print(flank_sites)
 # Extend to loop over array
 
 
 for start, end in zip(blockstart, blockend):
     sites['B'][start - sites['pos'][0]:end - sites['pos'][0]] = np.nan # Converts B at gene sites to 'nan'
 
-print(np.sort(sites[~np.isnan(sites['B'])], order=['B'])) # Removes gene sites
+# print(np.sort(sites[~np.isnan(sites['B'])], order=['B'])) # Removes gene sites
+# print(sites)
 sys.exit()
 
 #calculate an average B value over the window with coordinates win_start - win_end
