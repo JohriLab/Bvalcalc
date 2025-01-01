@@ -75,6 +75,6 @@ def calculate_B(posn):
     B = math.exp(-1.0*E_bar)
     return (B)
 
-print(calculate_B(2))
+print(calculate_B)
 
 

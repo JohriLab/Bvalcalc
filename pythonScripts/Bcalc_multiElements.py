@@ -1,7 +1,7 @@
 #calculate_B_analytically_Eq3_mine_demography_multiple_elements
 #This script is to get B values across a genomic element with multiple functional elements.
 #Currently the output is in terms of an average of a sliding window
-
+import tracemalloc
 import sys
 import math
 import numpy as np
@@ -9,14 +9,14 @@ from numpy.lib import recfunctions
 import csv
 import timeit
 from Bcalc_function import calculate_B, vectorized_B
-from constants import g, tract_len, r, u, l, U, Ncur, Nanc, gamma_cutoff, h, t0, t1, t1half, t2, t3, t4, f0, f1, f2, f3
+from constants import g, tract_len, r, u, Ncur, Nanc, gamma_cutoff, h, t0, t1, t1half, t2, t3, t4, f0, f1, f2, f3
 
 
 #Define variables and constants:
 out_folder="droso_single_exon_gc_10kb_decline10x"
-chr_start = 900
-chr_end = 10000
-flank_len = 10
+chr_start = 1
+chr_end = 252545#35 #end gene at: 25254535
+flank_len = 10000
 
 #Parameters of genome architecture:
 # !!!Read in a bed file with positions of functional elements and the last position (i.e., where the genome ends)#!!!
@@ -37,8 +37,13 @@ pi_anc = 4*Nanc*u #(*Expected nucleotide diversity under neutrality*)
 blockstart = []
 blockend = []
 
+
+
 ## 1. PARSE INPUT OF BED CONSERVED REGIONS
-with open('../exampleData/test.csv', 'r') as file:
+# filePath = '../exampleData/test.csv'
+filePath = '../exampleData/dmel6_2R_genes.csv'
+
+with open(filePath, 'r') as file:
     reader = csv.reader(file)
     for row in reader:
         if len(row) >= 2:
@@ -65,6 +70,7 @@ lengths = blockend_array - blockstart_array
 # Broadcast blockstart and blockend arrays to match the shape of pos_array
 distances_upstream = blockstart_array[:, None] - pos_array[None, :]
 distances_downstream = pos_array[None, :] - blockend_array[:, None]
+# print(distances_downstream.shape)
 # Combine the distances into a single array
 # Masks for flanking sites
 upstream_mask = (pos_array < blockstart_array[:, None]) & (pos_array > (blockstart_array[:, None] - flank_len))
@@ -82,6 +88,7 @@ distances = np.where(flanking_mask,
 flat_distances = distances[flanking_mask]  # Select distances where mask is True
 flat_lengths = np.repeat(lengths, flanking_mask.sum(axis=1))  # Repeat each length to match the mask
 flat_lengths = flat_lengths[:len(flat_distances)]  # Handle edge cases where lengths might overshoot
+sys.exit()
 
 # Calculate B for the flattened data
 flank_B = calculate_B(flat_distances, flat_lengths)
@@ -103,9 +110,7 @@ for start, end in zip(blockstart, blockend):
     sites['B'][start - sites['pos'][0]:end - sites['pos'][0]] = np.nan 
 
 nogene_sites = np.sort(sites[~np.isnan(sites['B'])], order=['B']) # Removes gene sites
-# print(nogene_sites)
-# print(sites)
-print(calculate_B(2,20000))
+print(nogene_sites)
 sys.exit()
 
 #calculate an average B value over the window with coordinates win_start - win_end
@@ -146,6 +151,15 @@ result.close()
 
 print("done")
 
+# Trace memory usage
+tracemalloc.start()
+def display_top(snapshot, key_type='lineno', limit=10):
+    stats = snapshot.statistics(key_type)
+    print("Top {} lines".format(limit))
+    for stat in stats[:limit]:
+        print(stat)
+snapshot = tracemalloc.take_snapshot()
+display_top(tracemalloc.take_snapshot())
 
 
 # # Extracting neutral sites
