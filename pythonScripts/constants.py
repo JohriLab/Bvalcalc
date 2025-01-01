@@ -3,8 +3,8 @@ g = 0.5*1e-8 #1e-8 #rate of gene conversion
 tract_len=440 #mean tract length of gene conversion in base pairs
 r = 0.5*1.0*1e-8 #rate of recombination
 u = 3.0*1e-9 #(*Mutation rate*)
-l = 10000
-U = l*u
+# l = 20000 length_of_element
+# U = l*u used for previous scripts' exponent calculation
 
 Nanc = 1e6
 Ncur = 1e5 #(Current population size)

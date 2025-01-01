@@ -102,8 +102,10 @@ sites['B'][unique_indices] = aggregated_B
 for start, end in zip(blockstart, blockend):
     sites['B'][start - sites['pos'][0]:end - sites['pos'][0]] = np.nan 
 
-print(np.sort(sites[~np.isnan(sites['B'])], order=['B'])) # Removes gene sites and prints
+nogene_sites = np.sort(sites[~np.isnan(sites['B'])], order=['B']) # Removes gene sites
+# print(nogene_sites)
 # print(sites)
+print(calculate_B(2,20000))
 sys.exit()
 
 #calculate an average B value over the window with coordinates win_start - win_end
