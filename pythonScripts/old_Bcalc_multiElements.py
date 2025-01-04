@@ -1,13 +1,16 @@
 #calculate_B_analytically_Eq3_mine_demography_multiple_elements
 #This script is to get B values across a genomic element with multiple functional elements.
 #Currently the output is in terms of an average of a sliding window
+import tracemalloc
 import sys
 import math
 import numpy as np
 from numpy.lib import recfunctions
 import csv
+import timeit
 from Bcalc_function import calculate_B, vectorized_B
 from constants import g, tract_len, r, u, Ncur, Nanc, gamma_cutoff, h, t0, t1, t1half, t2, t3, t4, f0, f1, f2, f3
+from memory_profiler import profile
 
 #Define variables and constants:
 out_folder="droso_single_exon_gc_10kb_decline10x"
