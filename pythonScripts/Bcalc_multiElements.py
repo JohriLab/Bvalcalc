@@ -15,8 +15,8 @@ from constants import g, tract_len, r, u, Ncur, Nanc, gamma_cutoff, h, t0, t1, t
 #Define variables and constants:
 out_folder="droso_single_exon_gc_10kb_decline10x"
 chr_start = 1
-chr_end = 252545#35 #end gene at: 25254535
-flank_len = 10000
+chr_end = 25254538 #end gene at: 25254535
+flank_len = 20000
 
 #Parameters of genome architecture:
 # !!!Read in a bed file with positions of functional elements and the last position (i.e., where the genome ends)#!!!
@@ -40,8 +40,15 @@ blockend = []
 
 
 ## 1. PARSE INPUT OF BED CONSERVED REGIONS
-# filePath = '../exampleData/test.csv'
 filePath = '../exampleData/dmel6_2R_genes.csv'
+# filePath = '../exampleData/test.csv'
+
+tracemalloc.start()
+def display_top(snapshot, key_type='lineno', limit=10):
+    stats = snapshot.statistics(key_type)
+    print("Top {} lines".format(limit))
+    for stat in stats[:limit]:
+        print(stat)
 
 with open(filePath, 'r') as file:
     reader = csv.reader(file)
@@ -52,58 +59,95 @@ with open(filePath, 'r') as file:
 
 blockstart = np.array(blockstart)
 blockend = np.array(blockend)
+lengths = blockend - blockstart #XX Need to extend for reverse orientation
 
 # 2. CREATE 2D ARRAY OF ALL NEUTRAL SITES (pos, B)
-sites = np.zeros(chr_end - chr_start, dtype=[('pos', 'int32'), ('B', 'f4')])
-sites['pos'] = np.arange(chr_start, chr_end)
-sites["B"] = 1
+# sites = np.zeros(chr_end - chr_start, dtype=[('pos', 'int32'), ('B', 'f4')])
+# sites['pos'] = np.arange(chr_start, chr_end)
+# sites["B"] = 1
+
+# Initialize the array for B values (all initially set to 1.0)
+b_values = np.ones(chr_end - chr_start, dtype=np.float64)
 
 # 3a. EXTRACT POSITIONS 5KB DOWNSTREAM OF ELEMENT
+##CHUNKING
+# Divide positions into chunks
+chunk_size = 100000
 
-# Convert blockstart, blockend, and sites['pos'] to NumPy arrays
-pos_array = sites['pos']
-blockstart_array = np.array(blockstart)
-blockend_array = np.array(blockend)
 
-# Broadcast blockstart and blockend arrays to match the shape of pos_array
-lengths = blockend_array - blockstart_array
-# Broadcast blockstart and blockend arrays to match the shape of pos_array
-distances_upstream = blockstart_array[:, None] - pos_array[None, :]
-distances_downstream = pos_array[None, :] - blockend_array[:, None]
-# print(distances_downstream.shape)
-# Combine the distances into a single array
-# Masks for flanking sites
-upstream_mask = (pos_array < blockstart_array[:, None]) & (pos_array > (blockstart_array[:, None] - flank_len))
-downstream_mask = (pos_array > blockend_array[:, None]) & (pos_array < (blockend_array[:, None] + flank_len))
+# pos_chunks = [
+#     np.arange(chr_start, chr_end)[i:i + chunk_size]
+#     for i in range(0, chr_end - chr_start, chunk_size)
+# ]
 
-# Combine the upstream and downstream masks
-flanking_mask = upstream_mask | downstream_mask
+def generate_chunks(array, chunk_size):
+    """Yields chunks of the array one at a time."""
+    for i in range(0, len(array), chunk_size):
+        yield array[i:i + chunk_size]
 
-# Combine the distances into a single array
-distances = np.where(flanking_mask, 
-                     np.where(upstream_mask, distances_upstream, distances_downstream), 
-                     0)
+# Generate chunks lazily
+pos_chunk_generator = generate_chunks(np.arange(chr_start, chr_end), chunk_size)
 
-# Flatten distances and flanking_mask to match the selected elements
-flat_distances = distances[flanking_mask]  # Select distances where mask is True
-flat_lengths = np.repeat(lengths, flanking_mask.sum(axis=1))  # Repeat each length to match the mask
-flat_lengths = flat_lengths[:len(flat_distances)]  # Handle edge cases where lengths might overshoot
+
+
+# Trace memory usage
+
+# print(pos_chunks)
+# Process a single chunk
+# pos_chunk = pos_chunks[10]  # Take sthe first chunk as an example
+for pos_chunk in pos_chunk_generator:
+
+    # Determine the range of positions relevant to this chunk
+    min_pos = pos_chunk.min() - flank_len
+    max_pos = pos_chunk.max() + flank_len
+
+    # Filter blockstart and blockend to relevant ranges
+    relevant_blockregion = (blockstart < max_pos) & (blockend > min_pos)
+    relevant_blockstart = blockstart[relevant_blockregion]
+    relevant_blockend = blockend[relevant_blockregion]
+
+    # Filter lengths to match the relevant blocks
+    relevant_lengths = lengths[relevant_blockregion]
+
+    # Calculate distances and masks for this chunk
+    distances_upstream = relevant_blockstart[:, None] - pos_chunk[None, :] 
+    distances_downstream = pos_chunk[None, :] - relevant_blockend[:, None] 
+
+    # Masks for flanking sites
+    upstream_mask = (pos_chunk < relevant_blockstart[:, None]) & \
+                    (pos_chunk > (relevant_blockstart[:, None] - flank_len))
+    downstream_mask = (pos_chunk > relevant_blockend[:, None]) & \
+                    (pos_chunk < (relevant_blockend[:, None] + flank_len))
+    flanking_mask = upstream_mask | downstream_mask
+    
+    # Combine the distances into a single array
+    distances = np.where(flanking_mask, 
+                        np.where(upstream_mask, distances_upstream, distances_downstream), 
+                        np.nan)
+    # Flatten distances and flanking_mask to match the selected elements
+    flat_distances = distances[flanking_mask]  # Select distances where mask is True
+    flat_lengths = np.repeat(relevant_lengths, flanking_mask.sum(axis=1))[:len(flat_distances)]  # Repeat each length to match the mask, handling edge cases where lengths overshoot
+    # Calculate B for the flattened data
+    flank_B = calculate_B(flat_distances, flat_lengths)
+    # Flatten flanking_mask to get indices of True values
+    true_indices = np.where(flanking_mask)
+    # Find unique indices and map each to its position in the unique list
+    unique_indices, inverse_indices = np.unique(true_indices[1], return_inverse=True)
+    # Find global indices for the current chunk
+    # Aggregate B values for unique indices
+    aggregated_B = np.ones_like(unique_indices, dtype=np.float64)
+    np.multiply.at(aggregated_B, inverse_indices, flank_B)
+    global_indices = pos_chunk[unique_indices] - chr_start  # Convert chunk indices to global indices
+    # Incrementally update the `B` values in the b_values array
+    # Memory-efficient multiplication updates
+    for idx, agg_B in zip(global_indices, aggregated_B):
+        b_values[idx] *= agg_B  # Direct multiplication
+
+    print(f"Processing chunk: {pos_chunk.min()} - {pos_chunk.max()}")
+    print(f"Number of relevant genes: {len(relevant_blockstart)}")
+    print(f"Relevant blocks: {relevant_blockstart}, {relevant_blockend}")
+
 sys.exit()
-
-# Calculate B for the flattened data
-flank_B = calculate_B(flat_distances, flat_lengths)
-# Flatten flanking_mask to get indices of True values
-true_indices = np.where(flanking_mask)
-
-# Find unique indices and map each to its position in the unique list
-unique_indices, inverse_indices = np.unique(true_indices[1], return_inverse=True)
-
-aggregated_B = np.ones_like(unique_indices, dtype=np.float64)
-
-np.multiply.at(aggregated_B, inverse_indices, flank_B)
-
-# Update 'B' values in the original NumPy array
-sites['B'][unique_indices] = aggregated_B
 
 # Converts B at gene sites to 'nan'
 for start, end in zip(blockstart, blockend):
@@ -151,15 +195,7 @@ result.close()
 
 print("done")
 
-# Trace memory usage
-tracemalloc.start()
-def display_top(snapshot, key_type='lineno', limit=10):
-    stats = snapshot.statistics(key_type)
-    print("Top {} lines".format(limit))
-    for stat in stats[:limit]:
-        print(stat)
-snapshot = tracemalloc.take_snapshot()
-display_top(tracemalloc.take_snapshot())
+
 
 
 # # Extracting neutral sites
