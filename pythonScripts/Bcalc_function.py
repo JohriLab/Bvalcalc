@@ -1,4 +1,3 @@
-import math
 import numpy as np
 from constants import g, tract_len, r, u, Nanc, gamma_cutoff, h, t0, t1, t1half, t2, t3, t4, f0, f1, f2, f3
 
@@ -52,6 +51,3 @@ def calculate_B(distance_to_element, length_of_element):
 
     # Return B
     return np.exp(-1.0 * E_bar)
-
-# Vectorized version of calculate_B
-vectorized_B = np.vectorize(calculate_B)

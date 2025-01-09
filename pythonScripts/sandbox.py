@@ -7,7 +7,7 @@ def compute(n):
 
 if __name__ == '__main__':
     # Define your input data
-    data = range(1,11)
+    data = range(1,10000)
 
     # Use a number of workers suitable for the system
     num_workers = os.cpu_count()  # Dynamically determine available cores

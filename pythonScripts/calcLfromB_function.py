@@ -1,0 +1,27 @@
+import math
+import numpy as np
+from constants import g, tract_len, r, u, Nanc, gamma_cutoff, h, t0, t1, t1half, t2, t3, t4, f0, f1, f2, f3
+from Bcalc_function import calculate_B
+from scipy.optimize import minimize_scalar
+
+def find_minimum_distance_binary(target_B, length_of_element, max_distance=1e6):
+    """
+    Find the minimum distance where B > target_B for a given element length,
+    or return max_distance if no such distance exists.
+    """
+    low, high = 0, max_distance
+    while low < high:
+        mid = (low + high) // 2
+        B = calculate_B(mid, length_of_element)
+        if B > target_B:
+            high = mid  # Narrow the search to smaller distances
+        else:
+            low = mid + 1  # Narrow the search to larger distances
+
+    # After exiting the loop, check if the condition is met
+    final_B = calculate_B(low, length_of_element)
+    if final_B > target_B:
+        return int(low)
+    else:
+        return int(max_distance)  # Return max_distance if no valid distance is found
+    
