@@ -50,7 +50,7 @@ def runBcalc(args):
             if len(row) >= 2:
                 start, end = int(row[1]), int(row[2])
                 if (start, end) not in seen_blocks:  # Check if the pair is unique
-                    seen_blocks.add((start, end))  # Mark this pair as seen
+                    seen_blocks.add((start, end))  # Mark this pair as seen to avoid duplicates
                     blockstart.append(start)
                     blockend.append(end)
     blockstart = np.array(blockstart)
@@ -58,7 +58,7 @@ def runBcalc(args):
     lengths = blockend - blockstart #XX Need to extend for reverse orientation
 
 
-# Calculate distances for each length
+# Calculate relevant flanking distances for each block (gene)
     flank_distances = np.zeros_like(lengths, dtype=np.int32)
     flank_blockstart = np.zeros_like(blockstart, dtype=np.int32)
     flank_blockend = np.zeros_like(blockend, dtype=np.int32)
