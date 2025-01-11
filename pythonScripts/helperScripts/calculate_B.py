@@ -1,6 +1,19 @@
 import numpy as np
 from constants import g, tract_len, r, u, Nanc, gamma_cutoff, h, t0, t1, t1half, t2, t3, t4, f0, f1, f2, f3
 
+
+def calculate_exponent(t_start, t_end, U, a, b):
+    """"
+    Helper to calculate the exponent using "a" and "b"
+    """
+    E1 = ((U * a) 
+            / ((1 - a) * (a - b) * (t_end - t_start))) * np.log((a + (t_end * (1 - a))) 
+            / (a + (t_start * (1 - a))))
+    E2 = -1.0 * ((U * b) 
+            / ((1 - b) * (a - b) * (t_end - t_start))) * np.log((b + ((1 - b) * t_end)) 
+            / (b + ((1 - b) * t_start)))
+    return E1 + E2 # = E
+
 def calculate_B(distance_to_element, length_of_element):
     """
     Calculate the B value for a single functional element at the focal site,
@@ -25,20 +38,10 @@ def calculate_B(distance_to_element, length_of_element):
             C + g * tract_len + r * length_of_element #If FALSE
         )
 
-    # Helper to calculate the exponent using "a" and "b"
-    def calculate_exponent(t_start, t_end):
-        E1 = ((U * a) 
-                / ((1 - a) * (a - b) * (t_end - t_start))) * np.log((a + (t_end * (1 - a))) 
-                / (a + (t_start * (1 - a))))
-        E2 = -1.0 * ((U * b) 
-                / ((1 - b) * (a - b) * (t_end - t_start))) * np.log((b + ((1 - b) * t_end)) 
-                / (b + ((1 - b) * t_start)))
-        return E1 + E2 # = E
-
     # Calculate exponents for different time intervals
-    E_f1 = calculate_exponent(t1half, t2)
-    E_f2 = calculate_exponent(t2, t3)
-    E_f3 = calculate_exponent(t3, t4)
+    E_f1 = calculate_exponent(t1half, t2, U, a, b)
+    E_f2 = calculate_exponent(t2, t3, U, a, b)
+    E_f3 = calculate_exponent(t3, t4, U, a, b)
 
     # Calculate E_bar (sum over DFE)
     E_bar = (
