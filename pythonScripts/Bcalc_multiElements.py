@@ -10,8 +10,9 @@ import math
 import numpy as np
 from numpy.lib import recfunctions
 import csv
-from helperScripts.calcLfromB_function import find_minimum_distance_binary
+from helperScripts.findFlankLen import findFlankLen
 from helperScripts.process_single_chunk import process_single_chunk
+from helperScripts.bedgffHandler import bedgffHandler
 from constants import g, tract_len, r, u, Ncur, Nanc, gamma_cutoff, h, t0, t1, t1half, t2, t3, t4, f0, f1, f2, f3
 import argparse
 from concurrent.futures import ProcessPoolExecutor, as_completed
@@ -36,8 +37,10 @@ def main():
     end_time = time.time()
     print(f"Script completed in {end_time - start_time:.2f} seconds.")
 
+
 #Main function
 def runBcalc(args):
+    
     #Define variables and constants:
     file_path = args.file_path #../exampleData/dmel6_2R_genes.csv #../exampleData/test.csv
     chr_start = args.chr_start # 1
@@ -46,32 +49,9 @@ def runBcalc(args):
     chunk_size = args.chunk_size # 100000
     out_folder="example_out"
 
-    ## 1. Read in BED input
-    blockstart = []
-    blockend = []
-    seen_blocks = set()
-
-    with open(file_path, 'r') as file:
-        reader = csv.reader(file)
-        for row in reader:
-            if len(row) >= 2:
-                start, end = int(row[1]), int(row[2])
-                if (start, end) not in seen_blocks:  # Check if the pair is unique
-                    seen_blocks.add((start, end))  # Mark this pair as seen to avoid duplicates
-                    blockstart.append(start)
-                    blockend.append(end)
-    blockstart = np.array(blockstart)
-    blockend = np.array(blockend)
-    lengths = blockend - blockstart #XX Need to extend for reverse orientation
-
-# Calculate relevant flanking distances for each block (gene)
-    flank_distances = np.zeros_like(lengths, dtype=np.int32)
-    flank_blockstart = np.zeros_like(blockstart, dtype=np.int32)
-    flank_blockend = np.zeros_like(blockend, dtype=np.int32)
-    for i, length in enumerate(lengths):
-        flank_distances[i] = find_minimum_distance_binary(0.998, length)
-        flank_blockstart[i] = blockstart[i] - flank_distances[i]
-        flank_blockend[i] = blockend[i] + flank_distances[i]
+    # Read BED/GFF and return genes and relevant flanking regions for calculating B
+    blockstart, blockend, lengths, flank_blockstart, flank_blockend =  \
+        bedgffHandler(file_path) 
 
     # Initialize the array for B values (all initially set to 1.0)
     b_values = np.ones(chr_end - chr_start, dtype=np.float64)

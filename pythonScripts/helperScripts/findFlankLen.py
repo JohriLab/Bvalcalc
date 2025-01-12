@@ -4,7 +4,7 @@ from constants import g, tract_len, r, u, Nanc, gamma_cutoff, h, t0, t1, t1half,
 from helperScripts.calculate_B import calculate_B
 from scipy.optimize import minimize_scalar
 
-def find_minimum_distance_binary(target_B, length_of_element, max_distance=1e6):
+def findFlankLen(target_B, length_of_element, max_distance=1e6):
     """
     Find the minimum distance where B > target_B for a given element length,
     or return max_distance if no such distance exists.
