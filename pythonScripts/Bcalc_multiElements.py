@@ -15,7 +15,7 @@ from helperScripts.process_single_chunk import process_single_chunk
 from helperScripts.bedgffHandler import bedgffHandler
 from constants import g, tract_len, r, u, Ncur, Nanc, gamma_cutoff, h, t0, t1, t1half, t2, t3, t4, f0, f1, f2, f3
 import argparse
-from concurrent.futures import ProcessPoolExecutor, as_completed
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor, as_completed
 import multiprocessing as mp
 import time
 
@@ -39,15 +39,8 @@ def main():
 
 
 #Main function
-def runBcalc(args):
-    
-    #Define variables and constants:
-    file_path = args.file_path #../exampleData/dmel6_2R_genes.csv #../exampleData/test.csv
-    chr_start = args.chr_start # 1
-    chr_end = args.chr_end # 25254535
-    flank_len = args.flank_len # 20000
-    chunk_size = args.chunk_size # 100000
-    out_folder="example_out"
+def runBcalc(args):    
+    file_path, chr_start, chr_end, chunk_size = args.file_path, args.chr_start, args.chr_end, args.chunk_size
 
     # Read BED/GFF and return genes and relevant flanking regions for calculating B
     blockstart, blockend, lengths, flank_blockstart, flank_blockend =  \
@@ -56,20 +49,19 @@ def runBcalc(args):
     # Initialize the array for B values (all initially set to 1.0)
     b_values = np.ones(chr_end - chr_start, dtype=np.float64)
 
-    # Divide positions into chunks
-    def generate_chunks(array, chunk_size):
-        """Yields chunks of the array one at a time."""
-        for i in range(0, len(array), chunk_size):
-            yield array[i:i + chunk_size]
+    # # Iterate over chunks, calculating B for all neutral sites
+    num_chunks = (chr_end - chr_start + chunk_size - 1) // chunk_size
+    for chunk_num in range(num_chunks):
+        b_values = \
+        process_single_chunk(chunk_num, chunk_size, flank_blockstart, flank_blockend, blockstart, blockend, lengths, chr_start, chr_end, b_values)
 
-    # Generate chunks lazily
-    pos_chunk_generator = generate_chunks(np.arange(chr_start, chr_end), chunk_size)
+    # pos_chunk_generator = list(generate_chunks(np.arange(chr_start, chr_end), chunk_size))
+    # psc_args = [pos_chunk_generator[0], flank_blockstart, flank_blockend, blockstart, blockend, lengths, chr_start, b_values]
+    # print(pos_chunk_generator[0])
+    # with ProcessPoolExecutor() as executor:
+    #     result = executor.map(process_single_chunk, psc_args)
 
-    # Iterate over chunks, calculating B for all neutral sites
-    for pos_chunk in pos_chunk_generator:
-        b_values = process_single_chunk(pos_chunk, flank_blockstart, flank_blockend, blockstart, blockend, lengths, chr_start, b_values)
-
-    print(min(b_values))
+    # print(result)
 
 if __name__ == "__main__":
     main()

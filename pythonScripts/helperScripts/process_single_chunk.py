@@ -1,7 +1,12 @@
 import numpy as np
 from helperScripts.calculate_B import calculate_B
 
-def process_single_chunk(pos_chunk, flank_blockstart, flank_blockend, blockstart, blockend, lengths, chr_start, b_values):
+def process_single_chunk(chunk_num, chunk_size, flank_blockstart, flank_blockend, blockstart, blockend, lengths, chr_start, chr_end, b_values):
+
+    # Generate positions for specified chunk
+    chunk_start = chr_start + chunk_num * chunk_size
+    chunk_end = min(chunk_start + chunk_size, chr_end)
+    pos_chunk = np.arange(chunk_start, chunk_end)
 
     # Filter blockstart and blockend to only include where flanking region overlaps with chunk
     relevant_blockregion = (pos_chunk.max() >= flank_blockstart) & (pos_chunk.min() <= flank_blockend)
