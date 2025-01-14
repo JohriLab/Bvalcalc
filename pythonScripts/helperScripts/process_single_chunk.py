@@ -1,5 +1,6 @@
 import numpy as np
 from helperScripts.calculate_B import calculate_B
+from multiprocessing import shared_memory
 
 def process_single_chunk(chunk_num, chunk_size, flank_blockstart, flank_blockend, blockstart, blockend, lengths, chr_start, chr_end, b_values):
 
@@ -47,10 +48,8 @@ def process_single_chunk(chunk_num, chunk_size, flank_blockstart, flank_blockend
     np.multiply.at(aggregated_B, inverse_indices, flank_B)
     # Find global indices for the current chunk
     global_indices = pos_chunk[unique_indices] - chr_start  # Convert chunk indices to global indices
-    # Incrementally update the `B` values in the b_values array
-    # Memory-efficient multiplication to update `B` in growing b_values array
-    for idx, agg_B in zip(global_indices, aggregated_B):
-        b_values[idx] *= agg_B
+    # Vectorized updates for the `B` values in the b_values array
+    b_values[global_indices] *= aggregated_B
 
     print(f"Processing chunk: {pos_chunk.min()} - {pos_chunk.max()}")
     print(f"Number of relevant genes: {len(relevant_blockstart)}")

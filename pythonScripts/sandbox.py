@@ -37,7 +37,6 @@ def main():
     end_time = time.time()
     print(f"Script completed in {end_time - start_time:.2f} seconds.")
 
-
 #Main function
 def runBcalc(args):    
     file_path, chr_start, chr_end, chunk_size = args.file_path, args.chr_start, args.chr_end, args.chunk_size
@@ -48,27 +47,13 @@ def runBcalc(args):
 
     # Initialize the array for B values (all initially set to 1.0)
     b_values = np.ones(chr_end - chr_start, dtype=np.float64)
+    
+    num_chunks = (chr_end - chr_start + chunk_size - 1) // chunk_size
 
-    # Divide positions into chunks
-    def generate_chunks(array, chunk_size):
-        """Yields chunks of the array one at a time."""
-        for i in range(0, len(array), chunk_size):
-            yield array[i:i + chunk_size]
-
-    # # Generate chunks lazily
-    pos_chunk_generator = generate_chunks(np.arange(chr_start, chr_end), chunk_size)
-    # # Iterate over chunks, calculating B for all neutral sites
-    for pos_chunk in pos_chunk_generator:
-        b_values = \
-        process_single_chunk(pos_chunk, flank_blockstart, flank_blockend, blockstart, blockend, lengths, chr_start, b_values)
-
-    # pos_chunk_generator = list(generate_chunks(np.arange(chr_start, chr_end), chunk_size))
-    # psc_args = [pos_chunk_generator[0], flank_blockstart, flank_blockend, blockstart, blockend, lengths, chr_start, b_values]
-    # print(pos_chunk_generator[0])
-    # with ProcessPoolExecutor() as executor:
-    #     result = executor.map(process_single_chunk, psc_args)
-
-    # print(result)
+    with ThreadPoolExecutor() as executor:
+        results = [executor.submit(process_single_chunk, x, chunk_size, flank_blockstart, flank_blockend,
+                blockstart, blockend, lengths, chr_start, chr_end, b_values)
+                for x in range(num_chunks)]
 
 if __name__ == "__main__":
     main()
