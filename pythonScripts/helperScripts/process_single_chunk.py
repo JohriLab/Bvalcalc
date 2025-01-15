@@ -4,6 +4,8 @@ from multiprocessing import shared_memory
 
 def process_single_chunk(chunk_num, chunk_size, flank_blockstart, flank_blockend, blockstart, blockend, lengths, chr_start, chr_end, b_values):
 
+    print(len(blockstart))
+
     # Generate positions for specified chunk
     chunk_start = chr_start + chunk_num * chunk_size
     chunk_end = min(chunk_start + chunk_size, chr_end)

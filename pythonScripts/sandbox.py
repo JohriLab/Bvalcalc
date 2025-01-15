@@ -13,11 +13,13 @@ import csv
 from helperScripts.findFlankLen import findFlankLen
 from helperScripts.process_single_chunk import process_single_chunk
 from helperScripts.bedgffHandler import bedgffHandler
-from constants import g, tract_len, r, u, Ncur, Nanc, gamma_cutoff, h, t0, t1, t1half, t2, t3, t4, f0, f1, f2, f3
+from constants import g, tract_len, r, u, Ncur, Nanc, gamma_cutoff, h, t0, t1, t1half, t2, t3, t4, f0, f1, f2, f3, time_of_change
 import argparse
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor, as_completed
 import multiprocessing as mp
 import time
+from collections import defaultdict
+from helperScripts.calculateLPerChunk import calculateLPerChunk
 
 #CLI handling
 def main():
@@ -44,16 +46,36 @@ def runBcalc(args):
     # Read BED/GFF and return genes and relevant flanking regions for calculating B
     blockstart, blockend, lengths, flank_blockstart, flank_blockend =  \
         bedgffHandler(file_path) 
+    
+    midpoints = (blockstart + blockend) / 2
+    lperchunk = calculateLPerChunk(chunk_size, flank_blockstart, flank_blockend, blockstart, blockend, chr_start, chr_end)
+
+    # print(midpoints)
+
+    sys.exit()
 
     # Initialize the array for B values (all initially set to 1.0)
     b_values = np.ones(chr_end - chr_start, dtype=np.float64)
-    
-    num_chunks = (chr_end - chr_start + chunk_size - 1) // chunk_size
 
-    with ThreadPoolExecutor() as executor:
-        results = [executor.submit(process_single_chunk, x, chunk_size, flank_blockstart, flank_blockend,
-                blockstart, blockend, lengths, chr_start, chr_end, b_values)
-                for x in range(num_chunks)]
+    # # Iterate over chunks, calculating B for all neutral sites
+    num_chunks = (chr_end - chr_start + chunk_size - 1) // chunk_size
+    # for chunk_num in range(num_chunks): #Iterate through each chunk (Old loop)
+        # b_values = \
+    process_single_chunk(10, chunk_size, flank_blockstart, flank_blockend, blockstart, blockend, lengths, chr_start, chr_end, b_values)
+
+    # with ThreadPoolExecutor() as executor:
+    #     results = [executor.submit(process_single_chunk, x, chunk_size, flank_blockstart, flank_blockend,
+    #         blockstart, blockend, lengths, chr_start, chr_end, b_values)
+    #         for x in range(num_chunks)]
+
+#     b_cur = get_Bcur(b_values)
+#     print(np.mean(b_cur))
+#     print(np.mean(b_values))
+
+# def get_Bcur(Banc):
+#     R = float(Nanc)/float(Ncur)
+#     Bcur = (Banc*(1.0 + (R-1.0)*np.exp((-1.0*time_of_change)/Banc))) / (1 + (R-1.0)*np.exp(-1.0*time_of_change)) ##Currently time_of_change is hardcoded, need to change to variable
+#     return (Bcur)
 
 if __name__ == "__main__":
     main()

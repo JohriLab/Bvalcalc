@@ -13,11 +13,13 @@ import csv
 from helperScripts.findFlankLen import findFlankLen
 from helperScripts.process_single_chunk import process_single_chunk
 from helperScripts.bedgffHandler import bedgffHandler
+from helperScripts.calculateLPerChunk import calculateLPerChunk
 from constants import g, tract_len, r, u, Ncur, Nanc, gamma_cutoff, h, t0, t1, t1half, t2, t3, t4, f0, f1, f2, f3, time_of_change
 import argparse
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor, as_completed
 import multiprocessing as mp
 import time
+
 
 #CLI handling
 def main():
@@ -50,6 +52,12 @@ def runBcalc(args):
 
     # # Iterate over chunks, calculating B for all neutral sites
     num_chunks = (chr_end - chr_start + chunk_size - 1) // chunk_size
+    
+    # Calculate cumulative conserved length in each chunk 
+    lperchunk = calculateLPerChunk(chunk_size, blockstart, blockend, chr_start, chr_end)
+    print(lperchunk)
+    sys.exit()
+
     # for chunk_num in range(num_chunks): #Iterate through each chunk (Old loop)
     #     b_values = \
     #     process_single_chunk(chunk_num, chunk_size, flank_blockstart, flank_blockend, blockstart, blockend, lengths, chr_start, chr_end, b_values)
