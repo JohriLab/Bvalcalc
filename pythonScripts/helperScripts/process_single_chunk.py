@@ -11,7 +11,6 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
     pos_chunk = np.arange(chunk_start, chunk_end)
 
     # Handle distant chunks for which l is combined
-    precise_chunks = 3 # Controls how many adjacent chunks to the focal chunk have B calculated precisely rather than combined for all genes
     B_from_distant_chunks = calcBFromChunks(chunk_num, chunk_size, blockstart, blockend, chr_start, chr_end, num_chunks, precise_chunks, lperchunk)
     precise_region_start = chr_start + (chunk_num - precise_chunks) * chunk_size
     precise_region_end = chr_start + (chunk_num + precise_chunks + 1) * chunk_size
