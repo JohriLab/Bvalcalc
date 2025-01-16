@@ -1,44 +1,47 @@
 import numpy as np
 from helperScripts.calculate_B import calculate_B
+from helperScripts.calcBFromChunks import calcBFromChunks
 from multiprocessing import shared_memory
 
-def process_single_chunk(chunk_num, chunk_size, flank_blockstart, flank_blockend, blockstart, blockend, lengths, chr_start, chr_end, b_values):
-
-    print(len(blockstart))
+def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start, chr_end, num_chunks, precise_chunks, lperchunk, b_values):
 
     # Generate positions for specified chunk
     chunk_start = chr_start + chunk_num * chunk_size
     chunk_end = min(chunk_start + chunk_size, chr_end)
     pos_chunk = np.arange(chunk_start, chunk_end)
 
-    # Filter blockstart and blockend to only include where flanking region overlaps with chunk
-    relevant_blockregion = (pos_chunk.max() >= flank_blockstart) & (pos_chunk.min() <= flank_blockend)
-    relevant_blockstart = blockstart[relevant_blockregion]
-    relevant_blockend = blockend[relevant_blockregion]
-    relevant_flank_blockstart = flank_blockstart[relevant_blockregion]
-    relevant_flank_blockend = flank_blockend[relevant_blockregion]
+    # Handle distant chunks for which l is combined
+    precise_chunks = 3 # Controls how many adjacent chunks to the focal chunk have B calculated precisely rather than combined for all genes
+    B_from_distant_chunks = calcBFromChunks(chunk_num, chunk_size, blockstart, blockend, chr_start, chr_end, num_chunks, precise_chunks, lperchunk)
+    precise_region_start = chr_start + (chunk_num - precise_chunks) * chunk_size
+    precise_region_end = chr_start + (chunk_num + precise_chunks + 1) * chunk_size
+
+    # Find blockregions where both are within precise_region range
+    precise_blockregion_mask = (precise_region_end >= blockstart) & (precise_region_start <= blockend)
+    precise_blockstart = np.clip(blockstart[precise_blockregion_mask], a_min=precise_region_start, a_max=precise_region_end)
+    precise_blockend = np.clip(blockend[precise_blockregion_mask], a_min=precise_region_start, a_max=precise_region_end)
 
     # Filter lengths to match the relevant blocks
-    relevant_lengths = lengths[relevant_blockregion]
+    precise_lengths = precise_blockend - precise_blockstart
 
     # Calculate distances and masks for this chunk
-    distances_upstream = relevant_blockstart[:, None] - pos_chunk[None, :] 
-    distances_downstream = pos_chunk[None, :] - relevant_blockend[:, None] 
+    distances_downstream = precise_blockstart[:, None] - pos_chunk[None, :] 
+    # print(distances_ups)
+    distances_upstream = pos_chunk[None, :] - precise_blockend[:, None] 
 
     # Masks for flanking sites
-    upstream_mask = (pos_chunk < relevant_blockstart[:, None]) & \
-                    (pos_chunk > (relevant_flank_blockstart[:, None]))
-    downstream_mask = (pos_chunk > relevant_blockend[:, None]) & \
-                    (pos_chunk < (relevant_flank_blockend[:, None]))
+    downstream_mask = (pos_chunk < precise_blockstart[:, None])
+    upstream_mask = (pos_chunk > precise_blockend[:, None])
     flanking_mask = upstream_mask | downstream_mask
 
     # Combine the distances into a single array
     distances = np.where(flanking_mask, 
                         np.where(upstream_mask, distances_upstream, distances_downstream), 
                         np.nan)
+
     # Flatten distances and flanking_mask to match the selected elements
     flat_distances = distances[flanking_mask]  # Select distances where mask is True
-    flat_lengths = np.repeat(relevant_lengths, flanking_mask.sum(axis=1))[:len(flat_distances)]  # Repeat each length to match the mask, handling edge cases where lengths overshoot
+    flat_lengths = np.repeat(precise_lengths, flanking_mask.sum(axis=1))[:len(flat_distances)]  # Repeat each length to match the mask, handling edge cases where lengths overshoot
     # Calculate B for the flattened data
     flank_B = calculate_B(flat_distances, flat_lengths)
     # Flatten flanking_mask to get indices of True values
@@ -51,11 +54,13 @@ def process_single_chunk(chunk_num, chunk_size, flank_blockstart, flank_blockend
     # Find global indices for the current chunk
     global_indices = pos_chunk[unique_indices] - chr_start  # Convert chunk indices to global indices
     # Vectorized updates for the `B` values in the b_values array
-    b_values[global_indices] *= aggregated_B
+    b_values[global_indices] *= aggregated_B * B_from_distant_chunks
+
 
     print(f"Processing chunk: {pos_chunk.min()} - {pos_chunk.max()}")
-    print(f"Number of relevant genes: {len(relevant_blockstart)}")
-    print(f"Relevant blocks: {relevant_blockstart}, {relevant_blockend}")
+    print(f"B from distant chunks: {B_from_distant_chunks}")
+    print(f"Number of relevant genes: {len(precise_blockstart)}")
+    print(f"Relevant blocks: {precise_blockstart}, {precise_blockend}")
     print(f"Aggregated B values for chunk: {aggregated_B}")
 
     return b_values

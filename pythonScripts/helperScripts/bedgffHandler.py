@@ -2,7 +2,7 @@ import csv
 import numpy as np
 from helperScripts.findFlankLen import findFlankLen 
 
-def bedgffHandler(file_path, ):
+def bedgffHandler(file_path):
 
         ## 1. Read in BED input
     blockstart = []
@@ -23,14 +23,15 @@ def bedgffHandler(file_path, ):
     lengths = blockend - blockstart #XX Need to extend for reverse orientation
 
 # Calculate relevant flanking distances for each block (gene)
-    flank_distances = np.zeros_like(lengths, dtype=np.int32)
-    flank_blockstart = np.zeros_like(blockstart, dtype=np.int32)
-    flank_blockend = np.zeros_like(blockend, dtype=np.int32)
-    for i, length in enumerate(lengths):
-        flank_distances[i] = findFlankLen(0.998, length)
-        flank_blockstart[i] = blockstart[i] - flank_distances[i]
-        flank_blockend[i] = blockend[i] + flank_distances[i]
+# (Old logic)
+    # flank_distances = np.zeros_like(lengths, dtype=np.int32)
+    # flank_blockstart = np.zeros_like(blockstart, dtype=np.int32)
+    # flank_blockend = np.zeros_like(blockend, dtype=np.int32)
+    # for i, length in enumerate(lengths):
+    #     flank_distances[i] = findFlankLen(0.998, length)
+    #     flank_blockstart[i] = blockstart[i] - flank_distances[i]
+    #     flank_blockend[i] = blockend[i] + flank_distances[i]
 
-    return blockstart, blockend, lengths, flank_blockstart, flank_blockend 
+    return blockstart, blockend#, lengths, flank_blockstart, flank_blockend 
 
 

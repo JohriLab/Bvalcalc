@@ -82,6 +82,6 @@ def calculateLPerChunk(
                     chunk_sums[c] += overlap_len
 
     # 2) Accumulate overlap within given chunk for genes
-    print(accumulate_overlaps(blockstart, blockend))
+    accumulate_overlaps(blockstart, blockend)
 
     return chunk_sums
