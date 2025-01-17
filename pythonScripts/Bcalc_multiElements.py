@@ -11,6 +11,7 @@ import numpy as np
 from helperScripts.process_single_chunk import process_single_chunk
 from helperScripts.bedgffHandler import bedgffHandler
 from helperScripts.calculateLPerChunk import calculateLPerChunk
+from helperScripts.parseArgs import parseArgs
 from constants import g, tract_len, r, u, Ncur, Nanc, gamma_cutoff, h, t0, t1, t1half, t2, t3, t4, f0, f1, f2, f3, time_of_change
 import argparse
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -20,20 +21,11 @@ import time
 def main():
     start_time = time.time()
 
-    parser = argparse.ArgumentParser(description="Calculates B for all neutral sites across given chromosome.")
-    parser.add_argument('--chr_start', type=int, required=True, help="Start of chromosome range.")
-    parser.add_argument('--chr_end', type=int, required=True, help="End of chromosome range.")
-    parser.add_argument('--chunk_size', type=int, default=10000, help="Size of chunks calculated simulataneously (bp), decrease if running out of memory, increase for performance. [100000]")
-    parser.add_argument('--flank_len', type=int, default=100000, help="Length of region adjacent to conserved element for which B is calculated (bp). [20000]")
-    parser.add_argument('--file_path', type=str, required=True, help="Path to input BED or GFF3 file with conserved regions (e.g. genes).")
-    parser.add_argument('--precise_chunks', type=int, default=3, help="Number of adjacent chunks to calculate B for precisely from elements rather than combined for each chunk")
-
-    args = parser.parse_args()
+    args = parseArgs() 
  
     runBcalc(args)
 
-    end_time = time.time()
-    print(f"Script completed in {end_time - start_time:.2f} seconds.")
+    print(f"Script completed in {time.time() - start_time:.2f} seconds.")
 
 #Main function
 def runBcalc(args):    
