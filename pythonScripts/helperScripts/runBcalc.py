@@ -21,16 +21,25 @@ def runBcalc(args):
     # Calculate cumulative conserved length in each chunk 
     lperchunk = calculateLPerChunk(chunk_size, blockstart, blockend, chr_start, chr_end)
 
+
     # # Iterate over chunks, calculating B for all neutral sites
     # for chunk_num in range(num_chunks): #Iterate through each chunk (Old loop)
     #     b_values = \
     #     process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start, chr_end, num_chunks, precise_chunks, lperchunk, b_values)
+    # For each (start, end) in the block arrays
+    for s, e in zip(blockstart, blockend):
+        # Convert genome coordinates to array indices
+        start_idx = s - chr_start
+        end_idx   = e - chr_start
+        b_values[start_idx : end_idx + 1] = np.nan # Set them to NaN
 
     with ThreadPoolExecutor() as executor:
         results = [executor.submit(process_single_chunk, x, chunk_size, blockstart, blockend, chr_start, 
                                    chr_end, num_chunks, precise_chunks, lperchunk, b_values)
             for x in range(num_chunks)]
         
+    print("Mean B (no nan sites):", b_values[~np.isnan(b_values)].mean())
+
     if args.pop_change:
         return get_Bcur(b_values)
     else:
