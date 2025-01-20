@@ -25,11 +25,6 @@ if __name__ == "__main__":
 sys.exit()
 
 
-
-# nogene_sites = np.sort(sites[~np.isnan(sites['B'])], order=['B']) # Removes gene sites
-# print(nogene_sites)
-# sys.exit()
-
 # #calculate an average B value over the window with coordinates win_start - win_end
 # def calculate_Banc_window(win_start, win_end):
 #     i=win_start
