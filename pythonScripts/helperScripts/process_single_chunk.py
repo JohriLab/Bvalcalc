@@ -86,6 +86,7 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
     # Put the updated (non-NaN) slice back into the original b_values
     # The NaNs remain untouched
     chunk_slice[not_nan_mask] = chunk_slice_clean
+    mean_chunk_b = np.nanmean(chunk_slice) # Mean B for chunk
 
     print(f"Processing chunk: {pos_chunk.min()} - {pos_chunk.max()}")
     print(f"B from distant chunks: {B_from_distant_chunks}")
@@ -93,5 +94,6 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
     print(f"Relevant blocks: {precise_blockstart}, {precise_blockend}")
     print(f"Number of NaN sites in chunk [{chunk_start}-{chunk_end}): {np.isnan(chunk_slice).sum()}")
     print(f"Aggregated B values for chunk: {aggregated_B}")
+    print(f"Mean B value for chunk: [{chunk_start}-{chunk_end}]: {mean_chunk_b}")
 
     return b_values

@@ -37,7 +37,7 @@ def runBcalc(args):
     print("Mean B (no nan sites):", b_values[~np.isnan(b_values)].mean())
 
     if args.pop_change:
-        return get_Bcur(b_values)
+        return b_values#get_Bcur(b_values)
     else:
         return b_values
     

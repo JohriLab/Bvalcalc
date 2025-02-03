@@ -8,6 +8,7 @@
 import sys
 from helperScripts.parseArgs import parseArgs
 from helperScripts.runBcalc import runBcalc
+from helperScripts.calculate_B import calculate_B
 import time
 
 #CLI handling
@@ -16,6 +17,8 @@ def main():
 
     args = parseArgs() 
     runBcalc(args)
+    # print(calculate_B(3000, 10000))
+
 
     print(f"Script completed in {time.time() - start_time:.2f} seconds.")
 
