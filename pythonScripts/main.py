@@ -8,6 +8,7 @@
 import sys
 from helperScripts.parseArgs import parseArgs
 from helperScripts.runBcalc import runBcalc
+from helperScripts.plotBasic import plotBasic
 from helperScripts.calculateB import calculateB
 import time
 
@@ -16,10 +17,10 @@ def main():
     start_time = time.time()
 
     args = parseArgs() 
-    runBcalc(args)
-    # plotBasic(args)
-    print("4k test", calculateB(4000, 10000))
-    print("1.25k test", calculateB(1250, 10000))
+    # runBcalc(args)
+    plotBasic(args)
+    # print("4k test", calculateB(4000, 10000))
+    # print("1.25k test", calculateB(1250, 10000))
     
 
     print(f"Script completed in {time.time() - start_time:.2f} seconds.")
