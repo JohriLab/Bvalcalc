@@ -23,7 +23,7 @@ def calcBFromChunks(chunk_index, chunk_size, blockstart, blockend, chr_start, ch
     relevant_upstream_psdc_distances = chunk_mids[chunk_index] - relevant_upstream_pseudoblockends
     relevant_downstream_psdc_distances = relevant_downstream_pseudoblockstarts - chunk_mids[chunk_index]
 
-    from helperScripts.calculate_B import calculate_B
+    from BvalueCalculator.pythonScripts.helperScripts.calculateB import calculate_B
     relevant_upstream_psdc_B = np.prod(calculate_B(relevant_upstream_psdc_distances, relevant_upstream_psdc_lengths))
     relevant_downstream_psdc_B = calculate_B(relevant_downstream_psdc_distances, relevant_downstream_psdc_lengths)
 

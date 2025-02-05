@@ -1,5 +1,5 @@
 import numpy as np
-from helperScripts.calculate_B import calculate_B
+from helperScripts.calculateB import calculateB
 from helperScripts.calcBFromChunks import calcBFromChunks
 from multiprocessing import shared_memory
 

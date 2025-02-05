@@ -1,7 +1,7 @@
 import math
 import numpy as np
 from constants import g, tract_len, r, u, Nanc, gamma_cutoff, h, t0, t1, t1half, t2, t3, t4, f0, f1, f2, f3
-from helperScripts.calculate_B import calculate_B
+from helperScripts.calculateB import calculateB
 from scipy.optimize import minimize_scalar
 
 def findFlankLen(target_B, length_of_element, max_distance=1e6):

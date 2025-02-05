@@ -14,7 +14,7 @@ def calculate_exponent(t_start, t_end, U, a, b):
             / (b + ((1 - b) * t_start)))
     return E1 + E2 # = E
 
-def calculate_B(distance_to_element, length_of_element):
+def calculateB(distance_to_element, length_of_element):
     """
     Calculate the B value for a single functional element at the focal site,
     summing over the DFE while consolidating the intermediate calculations.

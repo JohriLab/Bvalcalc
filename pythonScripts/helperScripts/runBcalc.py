@@ -35,6 +35,7 @@ def runBcalc(args):
             for x in range(num_chunks)]
         
     print("Mean B (no nan sites):", b_values[~np.isnan(b_values)].mean())
+    print("Total conserved length: ", int(sum(lperchunk)), round((sum(lperchunk)/(chr_end - chr_start))*100,2), "%" )
 
     if args.pop_change:
         return b_values#get_Bcur(b_values)
