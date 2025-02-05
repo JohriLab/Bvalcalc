@@ -1,8 +1,7 @@
-from helperScripts.process_single_chunk import process_single_chunk
-from helperScripts.bedgffHandler import bedgffHandler
-from helperScripts.calculateLPerChunk import calculateLPerChunk
-from helperScripts.demographyHelpers import get_Bcur
-from constants import g, tract_len, r, u, Ncur, Nanc, gamma_cutoff, h, t0, t1, t1half, t2, t3, t4, f0, f1, f2, f3, time_of_change
+from helperScripts.RunBCalcScripts.process_single_chunk import process_single_chunk
+from helperScripts.RunBCalcScripts.bedgffHandler import bedgffHandler
+from helperScripts.RunBCalcScripts.calculateLPerChunk import calculateLPerChunk
+from helperScripts.RunBCalcScripts.demographyHelpers import get_Bcur
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import numpy as np
 

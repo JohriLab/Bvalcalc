@@ -12,14 +12,14 @@ def findFlankLen(target_B, length_of_element, max_distance=1e6):
     low, high = 0, max_distance
     while low < high:
         mid = (low + high) // 2
-        B = calculate_B(mid, length_of_element)
+        B = calculateB(mid, length_of_element)
         if B > target_B:
             high = mid  # Narrow the search to smaller distances
         else:
             low = mid + 1  # Narrow the search to larger distances
 
     # After exiting the loop, check if the condition is met
-    final_B = calculate_B(low, length_of_element)
+    final_B = calculateB(low, length_of_element)
     if final_B > target_B:
         return int(low)
     else:

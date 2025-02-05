@@ -1,6 +1,5 @@
 import csv
 import numpy as np
-from helperScripts.findFlankLen import findFlankLen 
 
 def bedgffHandler(file_path):
 
@@ -24,6 +23,7 @@ def bedgffHandler(file_path):
 
 # Calculate relevant flanking distances for each block (gene)
 # (Old logic)
+# from BvalueCalculator.pythonScripts.sideScripts.findFlankLen import findFlankLen 
     # flank_distances = np.zeros_like(lengths, dtype=np.int32)
     # flank_blockstart = np.zeros_like(blockstart, dtype=np.int32)
     # flank_blockend = np.zeros_like(blockend, dtype=np.int32)

@@ -1,7 +1,6 @@
 import numpy as np
 from helperScripts.calculateB import calculateB
-from helperScripts.calcBFromChunks import calcBFromChunks
-from multiprocessing import shared_memory
+from helperScripts.RunBCalcScripts.calcBFromChunks import calcBFromChunks
 
 def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
                          chr_start, chr_end, num_chunks, precise_chunks,
@@ -69,7 +68,7 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
     flat_distances = distances[flanking_mask]
     flat_lengths   = np.repeat(precise_lengths, flanking_mask.sum(axis=1))
 
-    flank_B = calculate_B(flat_distances, flat_lengths)
+    flank_B = calculateB(flat_distances, flat_lengths)
 
     true_indices = np.where(flanking_mask)
     unique_indices, inverse_indices = np.unique(true_indices[1], return_inverse=True)

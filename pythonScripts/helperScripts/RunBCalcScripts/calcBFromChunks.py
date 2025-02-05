@@ -1,5 +1,4 @@
 import numpy as np
-from helperScripts.calculateLPerChunk import calculateLPerChunk
 
 def calcBFromChunks(chunk_index, chunk_size, blockstart, blockend, chr_start, chr_end, num_chunks, precise_chunks, lperchunk):
 
