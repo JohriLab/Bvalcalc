@@ -6,7 +6,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import numpy as np
 
 #Main function
-def runBcalc(args):    
+def regionBcalc(args):    
     file_path, chr_start, chr_end, chunk_size, precise_chunks = args.file_path, args.chr_start, args.chr_end, args.chunk_size, args.precise_chunks
     num_chunks = (chr_end - chr_start + chunk_size - 1) // chunk_size
 
@@ -17,8 +17,20 @@ def runBcalc(args):
     # Initialize the array for B values (all initially set to 1.0)
     b_values = np.ones(chr_end - chr_start, dtype=np.float64)
 
-    # Calculate cumulative conserved length in each chunk 
-    lperchunk = calculateLPerChunk(chunk_size, blockstart, blockend, chr_start, chr_end)
+    results = process_single_chunk(
+           chunk_num = 0, 
+           chunk_size = 50000, 
+           blockstart = 1,
+           blockend = 10000,
+           chr_start = 1, 
+           chr_end = 50000, 
+           num_chunks = 1, 
+           precise_chunks = 1,
+           lperchunk = 10000, 
+           b_values = b_values, 
+           caller="region")
+
+    return results
 
 
     # # Iterate over chunks, calculating B for all neutral sites

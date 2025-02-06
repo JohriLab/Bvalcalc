@@ -13,7 +13,7 @@ def calculateLPerChunk(
 
     Parameters
     ----------
-    chunk_size : int
+    chunk_size : intsss
         Size of each chunk.
     flank_blockstart : 1D array-like
         Start positions for the flank blocks.

@@ -7,7 +7,8 @@
 #Currently the output is in terms of an average of a sliding window
 import sys
 from helperScripts.parseArgs import parseArgs
-from helperScripts.runBcalc import runBcalc
+from helperScripts.genomeBcalc import genomeBcalc
+from helperScripts.regionBcalc import regionBcalc
 from helperScripts.plotBasic import plotBasic
 from helperScripts.calculateB import calculateB
 import time
@@ -17,8 +18,9 @@ def main():
     start_time = time.time()
 
     args = parseArgs() 
-    # runBcalc(args)
-    plotBasic(args)
+    # genomeBcalc(args)
+    regionBcalc(args)
+    # plotBasic(args)
     # print("4k test", calculateB(4000, 10000))
     # print("1.25k test", calculateB(1250, 10000))
     
