@@ -6,7 +6,8 @@
 #This script is to get B values across a genomic element with multiple functional elements.
 #Currently the output is in terms of an average of a sliding window
 import sys
-from helperScripts.parseArgs import parseArgs
+from helperScripts.parseArgs import parseGenomeArgs
+from helperScripts.parseArgs import parseRegionArgs
 from helperScripts.genomeBcalc import genomeBcalc
 from helperScripts.regionBcalc import regionBcalc
 from helperScripts.plotBasic import plotBasic
@@ -17,14 +18,14 @@ import time
 def main():
     start_time = time.time()
 
-    args = parseArgs() 
-    # genomeBcalc(args)
-    regionBcalc(args)
+    args = parseGenomeArgs() 
+    genomeBcalc(args)
+    # args = parseRegionArgs()
+    # regionBcalc(args)
     # plotBasic(args)
     # print("4k test", calculateB(4000, 10000))
     # print("1.25k test", calculateB(1250, 10000))
     
-
     print(f"Script completed in {time.time() - start_time:.2f} seconds.")
 
 if __name__ == "__main__":

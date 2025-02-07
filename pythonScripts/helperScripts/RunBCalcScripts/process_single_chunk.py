@@ -1,11 +1,10 @@
 import numpy as np
-import sys
 from helperScripts.calculateB import calculateB
 from helperScripts.RunBCalcScripts.calcBFromChunks import calcBFromChunks
 
 def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
                          chr_start, chr_end, num_chunks, precise_chunks,
-                         lperchunk, b_values, caller="genome"):
+                         lperchunk, b_values):
     # Compute chunk boundaries
     chunk_start = chr_start + chunk_num * chunk_size
     chunk_end   = min(chunk_start + chunk_size, chr_end)
@@ -29,13 +28,7 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
     pos_chunk_clean   = pos_chunk[not_nan_mask]
     chunk_slice_clean = chunk_slice[not_nan_mask]
 
-
     # == 1) If you rely on B_from_distant_chunks, compute that as usual ==
-    if caller == "region":
-        print("here at line 30 in process_single_chunk script. Need to try to figure out how to get to the end of the script making sense for single chunk!")
-        sys.exit()
-    else:
-        print("FOR A GENOME")
     B_from_distant_chunks = calcBFromChunks(
         chunk_num, chunk_size,
         blockstart, blockend,
@@ -43,7 +36,7 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
         num_chunks, precise_chunks,
         lperchunk
     )
-    
+
     # == 2) Identify blocks in the "precise region" (unchanged) ==
     precise_region_start = chr_start + (chunk_num - precise_chunks) * chunk_size
     precise_region_end   = chr_start + (chunk_num + precise_chunks + 1) * chunk_size

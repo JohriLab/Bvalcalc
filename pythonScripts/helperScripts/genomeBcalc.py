@@ -30,7 +30,7 @@ def genomeBcalc(args):
 
     with ThreadPoolExecutor() as executor:
         results = [executor.submit(process_single_chunk, x, chunk_size, blockstart, blockend, chr_start, 
-                                   chr_end, num_chunks, precise_chunks, lperchunk, b_values, caller="genome")
+                                   chr_end, num_chunks, precise_chunks, lperchunk, b_values)
             for x in range(num_chunks)]
         
     print("Mean B (no nan sites):", b_values[~np.isnan(b_values)].mean())
