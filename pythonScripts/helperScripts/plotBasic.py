@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import matplotlib as mpl
+import matplotlib.ticker as ticker
 
 def plotBasic(region_output, output_file='../../bin/plot.png'):
     print('====== P L O T T I N G . . . =======================')
@@ -13,10 +14,9 @@ def plotBasic(region_output, output_file='../../bin/plot.png'):
     else:
         print("'seaborn-whitegrid' style not found, using 'ggplot' as fallback.")
         plt.style.use('ggplot')
-        # Override ggplot's default backgrounds to white.
+        # Override ggplot's defaults and add grids
         mpl.rcParams['axes.facecolor'] = 'white'
         mpl.rcParams['figure.facecolor'] = 'white'
-        # Set grid properties to get a black grid.
         mpl.rcParams['grid.color'] = 'grey'
         mpl.rcParams['grid.linestyle'] = '--'
         mpl.rcParams['grid.linewidth'] = 0.5
@@ -27,10 +27,17 @@ def plotBasic(region_output, output_file='../../bin/plot.png'):
     # Create the plot.
     fig, ax = plt.subplots(figsize=(10, 6))
     ax.plot(region_output, color='black', lw=1.5)
-    ax.set_xlabel('Distance from selected element (bp)', fontsize=12)
-    ax.set_ylabel('Relative diversity (B)', fontsize=12)
-    ax.set_title('B recovery from single element', fontsize=14, fontweight='bold')
+    ax.set_xlabel('Distance from selected element', fontsize=13)
+    ax.set_ylabel('Relative diversity (B)', fontsize=13)
+    ax.set_title('B recovery from single element', fontsize=15, fontweight='bold')
     ax.tick_params(axis='both', which='major', labelsize=10)
+    
+    # Format the x-axis ticks:
+    ax.xaxis.set_major_formatter(
+        ticker.FuncFormatter(
+            lambda x, pos: f"{int(x)} bp" if x < 1000 else (f"{int(x/1e6)} Mb" if x >= 1000000 else f"{int(x/1000)} kb")
+        )
+    )
     
     plt.tight_layout()
     plt.savefig(output_file, dpi=300)
