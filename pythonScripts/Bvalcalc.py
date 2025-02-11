@@ -10,7 +10,6 @@ from helperScripts.parseArgs import parseGenomeArgs, parseRegionArgs
 from helperScripts.genomeBcalc import genomeBcalc
 from helperScripts.regionBcalc import regionBcalc
 from helperScripts.plotBasic import plotBasic
-from helperScripts.calculateB import calculateB
 import time
 
 import argparse
@@ -31,15 +30,18 @@ def main():
         genomeBcalc(args)
     elif known_args.region:
         args = parseRegionArgs(remaining_args)
-        regionBcalc(args)
+        # Capture the output from regionBcalc
+        region_output = regionBcalc(args)
+        # If the --plot_basic flag was provided, call plotBasic with regionBcalc's output.
+        if getattr(args, 'plotBasic', False):
+            plotBasic(region_output, output_file='../../bin/plot.png')
 
-    # plotBasic(args)
-    # print("4k test", calculateB(4000, 10000))
-    # print("1.25k test", calculateB(1250, 10000))
-    
     print(f"Script completed in {time.time() - start_time:.2f} seconds.")
 
 if __name__ == "__main__":
     main()
 
 sys.exit()
+
+    # plotBasic(args)
+    # siteBcalc(args)
