@@ -9,7 +9,7 @@ u = 3*1e-9*x #(*Mutation rate*)
 
 Nanc = 1e6/x
 Ncur = 1e6/x #(Current population size)
-gamma_cutoff = 2 #5.0
+gamma_cutoff = 5 #5.0
 h=0.5
 t0 = 0.0
 t1 = h*(1/(2*Nanc))
@@ -19,9 +19,9 @@ t3 = h*(100/(2*Nanc))
 t4 = h*1.0
 
 # t1half, t2, t3, t4 = 0.1, 0.2, 0.3, 0.4  # Time points
-f0 = 0.1 #(*Proportion of effectively neutral mutations with 0 <= |2Nes| < 1 *)
-f1 = 0.2 #(*Proportion of weakly deleterious mutations with 1 <= |2Nes| < 10 *) 0.6533
-f2 = 0.3 #(*Proportion of moderately deleterious mutations with 10 <= |2Nes| < 100 *) 0.0533
-f3 = 0.4 #(*Proportion of strongly deleterious mutations with |2Nes| >= 100 *) 0.2933
+f0 = 0 #(*Proportion of effectively neutral mutations with 0 <= |2Nes| < 1 *)
+f1 = 0 #(*Proportion of weakly deleterious mutations with 1 <= |2Nes| < 10 *) 0.6533
+f2 = 0 #(*Proportion of moderately deleterious mutations with 10 <= |2Nes| < 100 *) 0.0533
+f3 = 1 #(*Proportion of strongly deleterious mutations with |2Nes| >= 100 *) 0.2933
 
 time_of_change=1.0 #0.1/0.5/1(This is the time of change in 2Ncur generations in the past.)

@@ -36,7 +36,7 @@ def main():
         if getattr(args, 'plotBasic', False):
             plotBasic(region_output, output_file='../../bin/plot.png')
 
-    print(f"Script completed in {time.time() - start_time:.2f} seconds.")
+    print(f"= B value calculated in {time.time() - start_time:.2f} seconds. = = =")
 
 if __name__ == "__main__":
     main()
