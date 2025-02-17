@@ -4,7 +4,10 @@ from helperScripts.RunBCalcScripts.calcBFromChunks import calcBFromChunks
 
 def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
                          chr_start, chr_end, num_chunks, precise_chunks,
-                         lperchunk, b_values):
+                         lperchunk, b_values, rec_rate_per_chunk=None):
+    
+
+
     # Compute chunk boundaries
     chunk_start = chr_start + chunk_num * chunk_size
     chunk_end   = min(chunk_start + chunk_size, chr_end)
@@ -88,6 +91,12 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
     mean_chunk_b = np.nanmean(chunk_slice) # Mean B for chunk
 
     print(f"Processing chunk: {pos_chunk.min()} - {pos_chunk.max()}")
+            # Check if recombination rate data is provided and print it for the current chunk.
+    if rec_rate_per_chunk is not None:
+        rec_rate = rec_rate_per_chunk[chunk_num]
+        print(f"Chunk {chunk_num}: recombination rate = {rec_rate}")
+    else:
+        print(f"Chunk {chunk_num}: No recombination map provided.")
     print(f"B from distant chunks: {B_from_distant_chunks}")
     print(f"Number of relevant genes: {len(precise_blockstart)}")
     print(f"Relevant blocks: {precise_blockstart}, {precise_blockend}")

@@ -2,6 +2,7 @@ from helperScripts.RunBCalcScripts.process_single_chunk import process_single_ch
 from helperScripts.RunBCalcScripts.bedgffHandler import bedgffHandler
 from helperScripts.RunBCalcScripts.calculateLPerChunk import calculateLPerChunk
 from helperScripts.RunBCalcScripts.demographyHelpers import get_Bcur
+from helperScripts.RunBCalcScripts.recmapHandler import recmapHandler
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import numpy as np
 
@@ -13,10 +14,12 @@ def genomeBcalc(args):
 
     print(f"====== P A R A M E T E R S =========================")
     print(f"BED/GFF file for regions under selection: {file_path}")
-    print(f"First position in chromosssssssssssssome: {chr_start}")
+    print(f"First position in chromosome: {chr_start}")
     print(f"Last position in chromosome: {chr_end}")
     print(f"Size of chunks to calculate B in per iteration: {chunk_size}bp")
     print(f"Number of adjacent chunks to calculate B precisely for: {precise_chunks}bp")
+
+    
 
 
     num_chunks = (chr_end - chr_start + chunk_size - 1) // chunk_size
@@ -24,6 +27,13 @@ def genomeBcalc(args):
     # Read BED/GFF and return genes and relevant flanking regions for calculating B
     blockstart, blockend =  \
         bedgffHandler(file_path) 
+
+        # Process recombination map if provided
+    if args.rec_map:
+        print(f"Using recombination map from {args.rec_map}")
+        rec_rate_per_chunk = recmapHandler(args.rec_map, chr_start, chr_end, chunk_size)
+    else:
+        rec_rate_per_chunk = None
 
     # Initialize the array for B values (all initially set to 1.0)
     b_values = np.ones(chr_end - chr_start, dtype=np.float64)
@@ -42,12 +52,13 @@ def genomeBcalc(args):
     print(f"====== R E S U L T S == P E R == C H U N K =========")
     with ThreadPoolExecutor() as executor:
         results = [executor.submit(process_single_chunk, x, chunk_size, blockstart, blockend, chr_start, 
-                                   chr_end, num_chunks, precise_chunks, lperchunk, b_values)
+                                   chr_end, num_chunks, precise_chunks, lperchunk, b_values, rec_rate_per_chunk)
             for x in range(num_chunks)]
     
     print(f"====== R E S U L T S ====== S U M M A R Y ===========")
     print(f"Mean B of neutral sites across genome: {b_values[~np.isnan(b_values)].mean()}bp")
     print(f"Cumulative length of regions under selection: {int(sum(lperchunk))}bp ({round((sum(lperchunk)/(chr_end - chr_start))*100,2)}%)")
+
 
     if args.pop_change:
         return b_values#get_Bcur(b_values)
