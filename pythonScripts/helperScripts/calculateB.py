@@ -21,7 +21,7 @@ def calculateB(distance_to_element, length_of_element):
     """
     # Calculate "a" and "b"
     C = (1.0 - np.exp(-2.0 * r * distance_to_element)) / 2.0
-    U = length_of_element * 2 * u
+    U = length_of_element * u
     if g == 0:
         a = C
         b = C + r * length_of_element
