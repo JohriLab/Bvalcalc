@@ -1,9 +1,17 @@
 import csv
 
+import csv
+
 def recmapHandler(rec_map, chr_start, chr_end, chunk_size):
     """
     Processes the recombination map CSV file using the csv module and returns
-    the average recombination rate per chunk.
+    the average recombination rate per chunk, weighted by the proportion of each 
+    chunk that falls within a given recombination interval.
+    
+    The CSV file must have two columns with headers 'start' and 'rate'. 
+    Each row defines the recombination rate for positions starting at the given 
+    'start' until the next 'start' (or until chr_end for the last entry). If any 
+    region in the chromosome is not covered by the map, a default rate of 1.0 is used.
     
     Parameters:
         rec_map (str): Path to the recombination map CSV file.
@@ -18,10 +26,10 @@ def recmapHandler(rec_map, chr_start, chr_end, chunk_size):
         ValueError: If the CSV file does not have 'start' and 'rate' as headers,
                     or if any row has an invalid value for these columns.
     """
+    # Read and validate CSV data
     rec_map_data = []
     with open(rec_map, newline='') as csvfile:
         reader = csv.DictReader(csvfile)
-        # Check if header contains 'start' and 'rate'
         if reader.fieldnames is None or 'start' not in reader.fieldnames or 'rate' not in reader.fieldnames:
             raise ValueError("CSV file must have 'start' and 'rate' as header columns.")
         
@@ -34,17 +42,70 @@ def recmapHandler(rec_map, chr_start, chr_end, chunk_size):
                 rate_val = float(row['rate'])
             except ValueError:
                 raise ValueError(f"Column 'rate' value '{row['rate']}' is not a valid float.")
-            rec_map_data.append({
-                'start': start_val,
-                'rate': rate_val
+            rec_map_data.append({'start': start_val, 'rate': rate_val})
+    
+    # Ensure the data is sorted by start position.
+    rec_map_data.sort(key=lambda x: x['start'])
+    
+    # Build a list of intervals covering the entire region [chr_start, chr_end)
+    intervals = []
+    
+    # If the first map entry starts after chr_start, assign default rate 1 from chr_start up to that entry.
+    if rec_map_data and rec_map_data[0]['start'] > chr_start:
+        intervals.append({'start': chr_start, 'end': rec_map_data[0]['start'], 'rate': 1.0})
+    
+    # Create intervals for each recombination map entry.
+    for i, entry in enumerate(rec_map_data):
+        interval_start = entry['start']
+        # For non-last entries, the interval ends at the next entry's start.
+        if i < len(rec_map_data) - 1:
+            interval_end = rec_map_data[i+1]['start']
+        else:
+            # For the last entry, extend the interval to chr_end.
+            interval_end = chr_end
+        # Only add intervals that overlap the region of interest.
+        if interval_end > chr_start and interval_start < chr_end:
+            intervals.append({
+                'start': max(interval_start, chr_start),
+                'end': min(interval_end, chr_end),
+                'rate': entry['rate']
             })
-
+    
+    # If the last interval doesn't reach chr_end, fill in with default rate 1.
+    if intervals:
+        last_end = intervals[-1]['end']
+        if last_end < chr_end:
+            intervals.append({'start': last_end, 'end': chr_end, 'rate': 1.0})
+    else:
+        # If no intervals were added, cover the entire region with default rate 1.
+        intervals.append({'start': chr_start, 'end': chr_end, 'rate': 1.0})
+    
+    # Calculate the number of chunks over the region.
     num_chunks = (chr_end - chr_start + chunk_size - 1) // chunk_size
     rec_rates = []
+    
+    # For each chunk, compute the weighted average rate.
     for chunk in range(num_chunks):
         start_chunk = chr_start + chunk * chunk_size
         end_chunk = min(chr_end, start_chunk + chunk_size)
-        rates = [row['rate'] for row in rec_map_data if start_chunk <= row['start'] < end_chunk]
-        avg_rate = sum(rates) / len(rates) if rates else 1.0
+        chunk_length = end_chunk - start_chunk
+        
+        weighted_sum = 0.0
+        
+        # Calculate overlap between this chunk and each interval.
+        for interval in intervals:
+            overlap_start = max(start_chunk, interval['start'])
+            overlap_end = min(end_chunk, interval['end'])
+            if overlap_start < overlap_end:
+                overlap_length = overlap_end - overlap_start
+                weighted_sum += interval['rate'] * overlap_length
+        
+        # The average is the weighted sum divided by the chunk length.
+        avg_rate = weighted_sum / chunk_length if chunk_length > 0 else 1.0
         rec_rates.append(avg_rate)
+    
     return rec_rates
+
+
+def calcRLengths ():
+    print("calcing R lengths!")

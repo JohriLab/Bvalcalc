@@ -17,7 +17,7 @@ def genomeBcalc(args):
     print(f"First position in chromosome: {chr_start}")
     print(f"Last position in chromosome: {chr_end}")
     print(f"Size of chunks to calculate B in per iteration: {chunk_size}bp")
-    print(f"Number of adjacent chunks to calculate B precisely for: {precise_chunks}bp")
+    print(f"Number of adjacent chunks to calculate B precisely for: {precise_chunks}")
 
     
 
