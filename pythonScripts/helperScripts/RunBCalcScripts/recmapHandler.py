@@ -45,6 +45,6 @@ def recmapHandler(rec_map, chr_start, chr_end, chunk_size):
         start_chunk = chr_start + chunk * chunk_size
         end_chunk = min(chr_end, start_chunk + chunk_size)
         rates = [row['rate'] for row in rec_map_data if start_chunk <= row['start'] < end_chunk]
-        avg_rate = sum(rates) / len(rates) if rates else 0.0
+        avg_rate = sum(rates) / len(rates) if rates else 1.0
         rec_rates.append(avg_rate)
     return rec_rates

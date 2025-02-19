@@ -14,17 +14,17 @@ def calculate_exponent(t_start, t_end, U, a, b):
             / (b + ((1 - b) * t_start)))
     return E1 + E2 # = E
 
-def calculateB(distance_to_element, length_of_element):
+def calculateB(distance_to_element, length_of_element, rlength_of_element, rdistance_to_element):
     """
     Calculate the B value for a single functional element at the focal site,
     summing over the DFE while consolidating the intermediate calculations.
-    """
+    """    
     # Calculate "a" and "b"
-    C = (1.0 - np.exp(-2.0 * r * distance_to_element)) / 2.0
+    C = (1.0 - np.exp(-2.0 * r * distance_to_element)) / 2.0 # cM
     U = length_of_element * u
     if g == 0:
         a = C
-        b = C + r * length_of_element
+        b = C + r * length_of_element # cM
     elif g > 0:
         threshold = distance_to_element + length_of_element < 0.5 * tract_len # Arbitrary threshold
         a = np.where(

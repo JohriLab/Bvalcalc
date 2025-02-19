@@ -97,11 +97,11 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
         print(f"Chunk {chunk_num}: recombination rate = {rec_rate}")
     else:
         print(f"Chunk {chunk_num}: No recombination map provided.")
-    print(f"B from distant chunks: {B_from_distant_chunks}")
-    print(f"Number of relevant genes: {len(precise_blockstart)}")
-    print(f"Relevant blocks: {precise_blockstart}, {precise_blockend}")
-    print(f"Number of NaN sites in chunk [{chunk_start}-{chunk_end}): {np.isnan(chunk_slice).sum()}")
-    print(f"Aggregated B values for chunk: {aggregated_B}")
-    print(f"Mean B value for chunk: [{chunk_start}-{chunk_end}]: {mean_chunk_b}")
+    # print(f"B from distant chunks: {B_from_distant_chunks}")
+    # print(f"Number of relevant genes: {len(precise_blockstart)}")
+    # print(f"Relevant blocks: {precise_blockstart}, {precise_blockend}")
+    # print(f"Number of NaN sites in chunk [{chunk_start}-{chunk_end}): {np.isnan(chunk_slice).sum()}")
+    # print(f"Aggregated B values for chunk: {aggregated_B}")
+    # print(f"Mean B value for chunk: [{chunk_start}-{chunk_end}]: {mean_chunk_b}")
 
     return b_values
