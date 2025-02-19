@@ -23,7 +23,7 @@ def calcBFromChunks(chunk_index, chunk_size, blockstart, blockend, chr_start, ch
     relevant_upstream_psdc_distances = chunk_mids[chunk_index] - relevant_upstream_pseudoblockends
     relevant_downstream_psdc_distances = relevant_downstream_pseudoblockstarts - chunk_mids[chunk_index]
 
-    relevant_upstream_psdc_B = np.prod(calculateB(relevant_upstream_psdc_distances, relevant_upstream_psdc_lengths))
-    relevant_downstream_psdc_B = calculateB(relevant_downstream_psdc_distances, relevant_downstream_psdc_lengths)
+    relevant_upstream_psdc_B = np.prod(calculateB(relevant_upstream_psdc_distances, relevant_upstream_psdc_lengths, rdistance_to_element=None, rlength_of_element=None))
+    relevant_downstream_psdc_B = calculateB(relevant_downstream_psdc_distances, relevant_downstream_psdc_lengths, rdistance_to_element=None, rlength_of_element=None)
 
     return np.prod(relevant_downstream_psdc_B) * relevant_upstream_psdc_B # Return B that applies to all sites in a chunk

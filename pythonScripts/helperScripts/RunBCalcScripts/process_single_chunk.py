@@ -71,7 +71,7 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
     flat_distances = distances[flanking_mask]
     flat_lengths   = np.repeat(precise_lengths, flanking_mask.sum(axis=1))
 
-    flank_B = calculateB(flat_distances, flat_lengths)
+    flank_B = calculateB(flat_distances, flat_lengths, rdistance_to_element=None, rlength_of_element=None)
 
     true_indices = np.where(flanking_mask)
     unique_indices, inverse_indices = np.unique(true_indices[1], return_inverse=True)
