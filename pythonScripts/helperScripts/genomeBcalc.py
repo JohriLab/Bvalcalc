@@ -2,7 +2,7 @@ from helperScripts.RunBCalcScripts.process_single_chunk import process_single_ch
 from helperScripts.RunBCalcScripts.bedgffHandler import bedgffHandler
 from helperScripts.RunBCalcScripts.calculateLPerChunk import calculateLPerChunk
 from helperScripts.RunBCalcScripts.demographyHelpers import get_Bcur
-from helperScripts.RunBCalcScripts.recmapHandler import recmapHandler
+from helperScripts.RunBCalcScripts.recmapHandler import recmapHandler, calcRLengths
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import numpy as np
 
@@ -19,8 +19,6 @@ def genomeBcalc(args):
     print(f"Size of chunks to calculate B in per iteration: {chunk_size}bp")
     print(f"Number of adjacent chunks to calculate B precisely for: {precise_chunks}")
 
-    
-
 
     num_chunks = (chr_end - chr_start + chunk_size - 1) // chunk_size
 
@@ -34,6 +32,8 @@ def genomeBcalc(args):
         rec_rate_per_chunk = recmapHandler(args.rec_map, chr_start, chr_end, chunk_size)
     else:
         rec_rate_per_chunk = None
+
+    blockRLengths = calcRLengths(blockstart, blockend, rec_rate_per_chunk, chr_end, chr_start, chunk_size)
 
     # Initialize the array for B values (all initially set to 1.0)
     b_values = np.ones(chr_end - chr_start, dtype=np.float64)

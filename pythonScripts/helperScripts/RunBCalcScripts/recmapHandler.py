@@ -1,6 +1,5 @@
 import csv
-
-import csv
+import numpy as np
 
 def recmapHandler(rec_map, chr_start, chr_end, chunk_size):
     """
@@ -104,8 +103,38 @@ def recmapHandler(rec_map, chr_start, chr_end, chunk_size):
         avg_rate = weighted_sum / chunk_length if chunk_length > 0 else 1.0
         rec_rates.append(avg_rate)
     
-    return rec_rates
+    return np.array(rec_rates)
 
 
-def calcRLengths ():
-    print("calcing R lengths!")
+def calcRLengths(blockstart, blockend, rec_rate_per_chunk, chr_end, chr_start, chunk_size):
+    """
+    Calculates the weighted lengths of each conserved block (gene), so that for example if the mean 
+    recombination rate across the block is 0.5, this will return the length of the block multiplied by 0.5
+    """
+
+    # Number of chunks covering the chromosome
+    num_chunks = (chr_end - chr_start + chunk_size - 1) // chunk_size
+    chunk_starts = chr_start + np.arange(0, num_chunks) * chunk_size
+    
+    # Determine chunk indices for blockstart and blockend
+    blockstart_chunks = (blockstart - chr_start) // chunk_size
+    blockend_chunks = (blockend - chr_start) // chunk_size
+    block_chunk_overlaps = []
+    block_chunk_lengths = []
+    rec_rate_weighted_sums = []
+    
+    for i in range(len(blockstart)):
+        chunks = np.arange(blockstart_chunks[i], blockend_chunks[i] + 1)
+        block_chunk_overlaps.append(chunks)
+        
+        # Calculate the length of overlap for each chunk
+        chunk_lengths = np.minimum(blockend[i], chunk_starts[chunks] + chunk_size) - np.maximum(blockstart[i], chunk_starts[chunks])
+        block_chunk_lengths.append(chunk_lengths)
+        
+        # Compute sum of length * recombination rate for each block
+        weighted_sum = np.sum(chunk_lengths * rec_rate_per_chunk[chunks])
+        rec_rate_weighted_sums.append(weighted_sum)
+    
+    print("Weighted recombinant length (rate * length) for each block using map:", rec_rate_weighted_sums)
+    
+    return block_chunk_overlaps, block_chunk_lengths, rec_rate_weighted_sums
