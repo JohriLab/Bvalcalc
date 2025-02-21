@@ -41,7 +41,6 @@ def genomeBcalc(args):
     # Calculate cumulative conserved length in each chunk 
     lperchunk = calculateLPerChunk(chunk_size, blockstart, blockend, chr_start, chr_end)
 
-
     # # Iterate over chunks, calculating B for all neutral sites
     # for chunk_num in range(num_chunks): #Iterate through each chunk (Old loop)
     #     b_values = \

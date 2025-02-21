@@ -8,8 +8,6 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
                          chr_start, chr_end, num_chunks, precise_chunks,
                          lperchunk, b_values, rec_rate_per_chunk=None):
     
-
-
     # Compute chunk boundaries
     chunk_start = chr_start + chunk_num * chunk_size
     chunk_end   = min(chunk_start + chunk_size, chr_end)
@@ -25,12 +23,14 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
 
     # Make a mask for positions that are NOT NaN
     not_nan_mask = ~np.isnan(chunk_slice)
+    
     if not np.any(not_nan_mask):
         # Everything is already NaN in this chunk, no need to do anything
+        print(f"No neutral sites in chunk {chunk_num}: {chunk_start}-{chunk_end}")
         return b_values
     
     # Filter positions to skip pre-labeled NaNs
-    pos_chunk_clean   = pos_chunk[not_nan_mask]
+    pos_chunk_clean   = pos_chunk[not_nan_mask] # Positions of neutral sites
     chunk_slice_clean = chunk_slice[not_nan_mask]
 
     # == 1) If you rely on B_from_distant_chunks, compute that as usual ==
@@ -54,19 +54,19 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
                                  a_min=precise_region_start, a_max=precise_region_end)
     precise_blockend   = np.clip(blockend[precise_blockregion_mask],
                                  a_min=precise_region_start, a_max=precise_region_end)
-    precise_lengths = precise_blockend - precise_blockstart
 
     if rec_rate_per_chunk is not None:
         precise_rates = rec_rate_per_chunk[np.maximum(0, chunk_num - precise_chunks):np.minimum(num_chunks, chunk_num + precise_chunks + 1)]
-        if chunk_num is 3:
-            print("chunk num", chunk_num, np.array(precise_blockstart), np.array(precise_blockend), precise_rates, precise_region_start, precise_region_end, chunk_size)
         precise_lengths = calcRLengths(np.array(precise_blockstart), np.array(precise_blockend), precise_rates, precise_region_start, precise_region_end, chunk_size, chunk_num)
-        if chunk_num is 3:
-            print("it's 3 back in psc!! precise lengths:", precise_lengths)
     else:
         precise_lengths = precise_blockend - precise_blockstart
-
     
+    # if precise_lengths == [0]:
+    #     print(f"No neutral sites in chunk {chunk_num}: {chunk_start}-{chunk_end}")
+    #     b_values[:] = np.nan
+    #     print(b_values)
+    #     return b_values
+
     # == 3) Do distance calculations ONLY for non-NaN sites ==
     distances_downstream = precise_blockstart[:, None] - pos_chunk_clean[None, :]
 
@@ -84,12 +84,15 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
 
     flat_distances = distances[flanking_mask]
     flat_lengths   = np.repeat(precise_lengths, flanking_mask.sum(axis=1))
+    nonzero_mask = flat_lengths != 0 # Remove genes of length 0
+    flat_distances = flat_distances[nonzero_mask]
+    flat_lengths   = flat_lengths[nonzero_mask]
 
-    if rec_rate_per_chunk is not None:
-        flank_B = calculateB(flat_distances, flat_lengths, rdistance_to_element=None, rlength_of_element=None)
+    # If there are no elements left, default flank_B to 1
+    if flat_distances.size == 0 or flat_lengths.size == 0:
+        flank_B = 1
     else:
         flank_B = calculateB(flat_distances, flat_lengths, rdistance_to_element=None, rlength_of_element=None)
-
 
     true_indices = np.where(flanking_mask)
     unique_indices, inverse_indices = np.unique(true_indices[1], return_inverse=True)
@@ -116,7 +119,7 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
     print(f"B from distant chunks: {B_from_distant_chunks}")
     print(f"Number of relevant genes: {len(precise_blockstart)}")
     # print(f"Relevant blocks: {precise_blockstart}, {precise_blockend}")
-    print(f"Number of NaN sites in chunk [{chunk_start}-{chunk_end}): {np.isnan(chunk_slice).sum()}")
+    print(f"Number of neutral sites in chunk [{chunk_start}-{chunk_end}): {np.isnan(chunk_slice).sum()}")
     print(f"Aggregated B values for chunk: {aggregated_B}")
     print(f"Mean B value for chunk {chunk_num}: [{chunk_start}-{chunk_end}]: {mean_chunk_b}")
 
