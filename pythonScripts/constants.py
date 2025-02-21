@@ -19,9 +19,13 @@ t3 = h*(100/(2*Nanc))
 t4 = h*1.0
 
 # t1half, t2, t3, t4 = 0.1, 0.2, 0.3, 0.4  # Time points
-f0 = 0 #(*Proportion of effectively neutral mutations with 0 <= |2Nes| < 1 *)
-f1 = 1 #(*Proportion of weakly deleterious mutations with 1 <= |2Nes| < 10 *) 0.6533
-f2 = 0 #(*Proportion of moderately deleterious mutations with 10 <= |2Nes| < 100 *) 0.0533
-f3 = 0 #(*Proportion of strongly deleterious mutations with |2Nes| >= 100 *) 0.2933
+f0 = 0.1 #(*Proportion of effectively neutral mutations with 0 <= |2Nes| < 1 *)
+f1 = 0.2 #(*Proportion of weakly deleterious mutations with 1 <= |2Nes| < 10 *) 0.6533
+f2 = 0.3 #(*Proportion of moderately deleterious mutations with 10 <= |2Nes| < 100 *) 0.0533
+f3 = 0.4 #(*Proportion of strongly deleterious mutations with |2Nes| >= 100 *) 0.2933
 
 time_of_change=1.0 #0.1/0.5/1(This is the time of change in 2Ncur  in the past generations.)
+
+# 21 Feb
+# ./Bvalcalc.py --genome --chr_start 1 --chr_end 25000000 --chunk_size 11000 --precise_chunks 3  --file_path ../exampleData/dmel6_2R_genes.csv
+# 1 2 3 4 DFE: B = 0.8599819455425707
