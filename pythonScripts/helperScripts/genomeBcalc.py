@@ -33,7 +33,7 @@ def genomeBcalc(args):
     else:
         rec_rate_per_chunk = None
 
-    blockRLengths = calcRLengths(blockstart, blockend, rec_rate_per_chunk, chr_end, chr_start, chunk_size)
+    # blockRLengths = calcRLengths(blockstart, blockend, rec_rate_per_chunk, chr_end, chr_start, chunk_size)
 
     # Initialize the array for B values (all initially set to 1.0)
     b_values = np.ones(chr_end - chr_start, dtype=np.float64)
@@ -56,7 +56,7 @@ def genomeBcalc(args):
             for x in range(num_chunks)]
     
     print(f"====== R E S U L T S ====== S U M M A R Y ===========")
-    print(f"Mean B of neutral sites across genome: {b_values[~np.isnan(b_values)].mean()}bp")
+    print(f"Mean B of neutral sites across genome: {b_values[~np.isnan(b_values)].mean()}")
     print(f"Cumulative length of regions under selection: {int(sum(lperchunk))}bp ({round((sum(lperchunk)/(chr_end - chr_start))*100,2)}%)")
 
 

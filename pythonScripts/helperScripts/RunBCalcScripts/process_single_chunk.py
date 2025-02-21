@@ -1,6 +1,8 @@
+import sys
 import numpy as np
 from helperScripts.calculateB import calculateB
 from helperScripts.RunBCalcScripts.calcBFromChunks import calcBFromChunks
+from helperScripts.RunBCalcScripts.recmapHandler import calcRLengths
 
 def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
                          chr_start, chr_end, num_chunks, precise_chunks,
@@ -41,8 +43,8 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
     )
 
     # == 2) Identify blocks in the "precise region" (unchanged) ==
-    precise_region_start = chr_start + (chunk_num - precise_chunks) * chunk_size
-    precise_region_end   = chr_start + (chunk_num + precise_chunks + 1) * chunk_size
+    precise_region_start = np.maximum(chr_start, chr_start + (chunk_num - precise_chunks) * chunk_size)
+    precise_region_end   = np.minimum(chr_end, chr_start + (chunk_num + precise_chunks) * chunk_size)
 
     precise_blockregion_mask = (
         (precise_region_end   >= blockstart) &
@@ -54,8 +56,20 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
                                  a_min=precise_region_start, a_max=precise_region_end)
     precise_lengths = precise_blockend - precise_blockstart
 
+    if rec_rate_per_chunk is not None:
+        precise_rates = rec_rate_per_chunk[np.maximum(0, chunk_num - precise_chunks):np.minimum(num_chunks, chunk_num + precise_chunks + 1)]
+        if chunk_num is 3:
+            print("chunk num", chunk_num, np.array(precise_blockstart), np.array(precise_blockend), precise_rates, precise_region_start, precise_region_end, chunk_size)
+        precise_lengths = calcRLengths(np.array(precise_blockstart), np.array(precise_blockend), precise_rates, precise_region_start, precise_region_end, chunk_size, chunk_num)
+        if chunk_num is 3:
+            print("it's 3 back in psc!! precise lengths:", precise_lengths)
+    else:
+        precise_lengths = precise_blockend - precise_blockstart
+
+    
     # == 3) Do distance calculations ONLY for non-NaN sites ==
     distances_downstream = precise_blockstart[:, None] - pos_chunk_clean[None, :]
+
     distances_upstream   = pos_chunk_clean[None, :] - precise_blockend[:, None]
 
     downstream_mask = (pos_chunk_clean < precise_blockstart[:, None])
@@ -71,7 +85,11 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
     flat_distances = distances[flanking_mask]
     flat_lengths   = np.repeat(precise_lengths, flanking_mask.sum(axis=1))
 
-    flank_B = calculateB(flat_distances, flat_lengths, rdistance_to_element=None, rlength_of_element=None)
+    if rec_rate_per_chunk is not None:
+        flank_B = calculateB(flat_distances, flat_lengths, rdistance_to_element=None, rlength_of_element=None)
+    else:
+        flank_B = calculateB(flat_distances, flat_lengths, rdistance_to_element=None, rlength_of_element=None)
+
 
     true_indices = np.where(flanking_mask)
     unique_indices, inverse_indices = np.unique(true_indices[1], return_inverse=True)
@@ -90,18 +108,16 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
     chunk_slice[not_nan_mask] = chunk_slice_clean
     mean_chunk_b = np.nanmean(chunk_slice) # Mean B for chunk
 
-    print(f"Processing chunk: {pos_chunk.min()} - {pos_chunk.max()}")
+    # print(f"Processing chunk: {pos_chunk.min()} - {pos_chunk.max()}")
             # Check if recombination rate data is provided and print it for the current chunk.
     if rec_rate_per_chunk is not None:
         rec_rate = rec_rate_per_chunk[chunk_num]
         print(f"Chunk {chunk_num}: recombination rate = {rec_rate}")
-    else:
-        print(f"Chunk {chunk_num}: No recombination map provided.")
-    # print(f"B from distant chunks: {B_from_distant_chunks}")
-    # print(f"Number of relevant genes: {len(precise_blockstart)}")
+    print(f"B from distant chunks: {B_from_distant_chunks}")
+    print(f"Number of relevant genes: {len(precise_blockstart)}")
     # print(f"Relevant blocks: {precise_blockstart}, {precise_blockend}")
-    # print(f"Number of NaN sites in chunk [{chunk_start}-{chunk_end}): {np.isnan(chunk_slice).sum()}")
-    # print(f"Aggregated B values for chunk: {aggregated_B}")
-    # print(f"Mean B value for chunk: [{chunk_start}-{chunk_end}]: {mean_chunk_b}")
+    print(f"Number of NaN sites in chunk [{chunk_start}-{chunk_end}): {np.isnan(chunk_slice).sum()}")
+    print(f"Aggregated B values for chunk: {aggregated_B}")
+    print(f"Mean B value for chunk {chunk_num}: [{chunk_start}-{chunk_end}]: {mean_chunk_b}")
 
     return b_values
