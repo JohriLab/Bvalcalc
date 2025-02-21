@@ -14,17 +14,21 @@ def calculate_exponent(t_start, t_end, U, a, b):
             / (b + ((1 - b) * t_start)))
     return E1 + E2 # = E
 
-def calculateB(distance_to_element, length_of_element, rlength_of_element, rdistance_to_element):
+def calculateB(distance_to_element, length_of_element, rec_gene_modifier = None, rec_distance_modifier = None):
     """
     Calculate the B value for a single functional element at the focal site,
     summing over the DFE while consolidating the intermediate calculations.
     """    
+    rec = r # recombination rate 
+    if rec_gene_modifier is not None:
+        rec = r * rec_gene_modifier
+
     # Calculate "a" and "b"
-    C = (1.0 - np.exp(-2.0 * r * distance_to_element)) / 2.0 # cM
+    C = (1.0 - np.exp(-2.0 * rec * distance_to_element)) / 2.0 # cM
     U = length_of_element * u
     if g == 0:
         a = C
-        b = C + r * length_of_element # cM
+        b = C + rec * length_of_element # cM
     elif g > 0:
         threshold = distance_to_element + length_of_element < 0.5 * tract_len # Arbitrary threshold
         a = np.where(
@@ -34,8 +38,8 @@ def calculateB(distance_to_element, length_of_element, rlength_of_element, rdist
         )
         b = np.where(
             threshold,
-            C + r * length_of_element + (g * (distance_to_element + length_of_element)), #If TRUE
-            C + g * tract_len + r * length_of_element #If FALSE
+            C + rec * length_of_element + (g * (distance_to_element + length_of_element)), #If TRUE
+            C + g * tract_len + rec * length_of_element #If FALSE
         )
 
     # Calculate exponents for different time intervals

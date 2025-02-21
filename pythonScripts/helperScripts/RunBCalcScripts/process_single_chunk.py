@@ -39,7 +39,8 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
         blockstart, blockend,
         chr_start, chr_end,
         num_chunks, precise_chunks,
-        lperchunk
+        lperchunk,
+        rec_rate_per_chunk
     )
 
     # == 2) Identify blocks in the "precise region" (unchanged) ==
@@ -92,7 +93,7 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
     if flat_distances.size == 0 or flat_lengths.size == 0:
         flank_B = 1
     else:
-        flank_B = calculateB(flat_distances, flat_lengths, rdistance_to_element=None, rlength_of_element=None)
+        flank_B = calculateB(flat_distances, flat_lengths)
 
     true_indices = np.where(flanking_mask)
     unique_indices, inverse_indices = np.unique(true_indices[1], return_inverse=True)

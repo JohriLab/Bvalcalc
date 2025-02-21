@@ -1,7 +1,8 @@
 from helperScripts.calculateB import calculateB
 import numpy as np
 
-def calcBFromChunks(chunk_index, chunk_size, blockstart, blockend, chr_start, chr_end, num_chunks, precise_chunks, lperchunk):
+def calcBFromChunks(chunk_index, chunk_size, blockstart, blockend, chr_start, chr_end, num_chunks, precise_chunks, lperchunk, rec_rate_per_chunk):
+
 
     chunk_mids = chr_start + (np.arange(num_chunks) + 0.5) * chunk_size
     chunk_pseudoblockstart = chunk_mids - 0.5 * lperchunk
@@ -23,7 +24,20 @@ def calcBFromChunks(chunk_index, chunk_size, blockstart, blockend, chr_start, ch
     relevant_upstream_psdc_distances = chunk_mids[chunk_index] - relevant_upstream_pseudoblockends
     relevant_downstream_psdc_distances = relevant_downstream_pseudoblockstarts - chunk_mids[chunk_index]
 
-    relevant_upstream_psdc_B = np.prod(calculateB(relevant_upstream_psdc_distances, relevant_upstream_psdc_lengths, rdistance_to_element=None, rlength_of_element=None))
-    relevant_downstream_psdc_B = calculateB(relevant_downstream_psdc_distances, relevant_downstream_psdc_lengths, rdistance_to_element=None, rlength_of_element=None)
+    if rec_rate_per_chunk is not None:
+        # Get the indices for upstream and downstream pseudochunks
+        upstream_indices = np.nonzero(upstream_pseudochunk_mask)[0]
+        downstream_indices = np.nonzero(downstream_pseudochunk_mask)[0]
+
+        upstream_rec_rates = rec_rate_per_chunk[upstream_indices] # Relevant rec rates for pseudochunks upstream
+        downstream_rec_rates = rec_rate_per_chunk[downstream_indices] # Relevant rec rates for pseudochunks downstream
+
+        relevant_upstream_psdc_B = np.prod(calculateB(relevant_upstream_psdc_distances, relevant_upstream_psdc_lengths, rec_gene_modifier=upstream_rec_rates))
+        relevant_downstream_psdc_B = calculateB(relevant_downstream_psdc_distances, relevant_downstream_psdc_lengths, rec_gene_modifier=downstream_rec_rates)
+    else:
+        relevant_upstream_psdc_B = np.prod(calculateB(relevant_upstream_psdc_distances, relevant_upstream_psdc_lengths))
+        relevant_downstream_psdc_B = calculateB(relevant_downstream_psdc_distances, relevant_downstream_psdc_lengths)
+        
+
 
     return np.prod(relevant_downstream_psdc_B) * relevant_upstream_psdc_B # Return B that applies to all sites in a chunk
