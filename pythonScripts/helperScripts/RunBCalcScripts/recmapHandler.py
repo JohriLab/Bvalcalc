@@ -116,8 +116,8 @@ def calcRLengths(blockstart, blockend, rec_rate_per_chunk, chr_start, chr_end, c
 
     # print("In calcRLengths: ", chr_end, chr_start, chunk_size)
     # Number of chunks covering the chromosome
-    num_chunks = (chr_end - chr_start + chunk_size) // chunk_size
-    chunk_starts = chr_start + np.arange(0, num_chunks) * chunk_size
+    num_chunks = (chr_end - chr_start) // chunk_size
+    chunk_starts = chr_start + np.arange(0, num_chunks + 1) * chunk_size
     
     # Determine chunk indices for blockstart and blockend
     blockstart_chunks = (blockstart - chr_start) // chunk_size
@@ -136,4 +136,10 @@ def calcRLengths(blockstart, blockend, rec_rate_per_chunk, chr_start, chr_end, c
     
     print("Weighted recombinant length (rate * length) for each block using map:", rec_rate_weighted_sums)
     
+    print(chunk_num)
     return rec_rate_weighted_sums
+
+def calcRDistances(blockstart, blockend, rec_rate_per_chunk, chr_start, chr_end, chunk_size, chunk_num):
+
+    rec_distance_modifier = None; #gene_chunk_distance * gene_chunk_rec + chunk_size * local_rec + site_chunk_distance * chunk_rec
+    return rec_distance_modifier

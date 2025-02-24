@@ -19,12 +19,18 @@ def calculateB(distance_to_element, length_of_element, rec_gene_modifier = None,
     Calculate the B value for a single functional element at the focal site,
     summing over the DFE while consolidating the intermediate calculations.
     """    
-    rec = r # recombination rate 
     if rec_gene_modifier is not None:
         rec = r * rec_gene_modifier
+    else:
+        rec = r # recombination rate 
+
+    if rec_distance_modifier is not None:
+        rec_distance = r * rec_distance_modifier
+    else:
+        rec_distance = r * distance_to_element
 
     # Calculate "a" and "b"
-    C = (1.0 - np.exp(-2.0 * rec * distance_to_element)) / 2.0 # cM
+    C = (1.0 - np.exp(-2.0 * rec_distance)) / 2.0 # cM
     U = length_of_element * u
     if g == 0:
         a = C
