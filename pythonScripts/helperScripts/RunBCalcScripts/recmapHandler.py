@@ -150,22 +150,41 @@ def calcRDistances(precise_blockstart, precise_blockend, precise_rates, precise_
     blockstart_chunks = (precise_blockstart - precise_region_start) // chunk_size
     blockend_chunks = (precise_blockend - precise_region_start) // chunk_size
 
-    for block_idx in range(len(blockend_chunks)):
-        chunks = blockend_chunks[block_idx]
+    all_rec_distances = []
 
-        if chunk_num is 1:
-            if blockend_chunks[block_idx] == this_chunk_idx: # If block ends in focal chunk, calculate using this chunks rec rate
-                print("Here", blockend_chunks)
-                print("Calculate distance within same chunk for block ending:", precise_blockend[block_idx])
-                inchunk_distances = pos_chunk_clean-precise_blockend[block_idx]
-                print("Inblock distances:", inchunk_distances) # In-block distances pre-rec_rate scaling
-                rec_distance_inchunk = precise_rates[this_chunk_idx] * inchunk_distances
-                print("Rec_rate to collate", rec_distance_inchunk)
-            else if > 1 block away...:
-                print("bap", chunk_starts[blockend_chunks])
-                print("Need to calc overlapping chunks")
-            print(blockend_chunks, chunk_num)
-            print(precise_blockend)
+    for block_idx in range(len(blockend_chunks)):
+        if blockend_chunks[block_idx] == this_chunk_idx: # If block ends in focal chunk, calculate using this chunks rec rate
+            # print("Here", blockend_chunks)
+            inchunk_distances = pos_chunk_clean - precise_blockend[block_idx]
+            # print("Inblock distances:", inchunk_distances) # In-block distances pre-rec_rate scaling
+            total_rec_distances = np.array(precise_rates[this_chunk_idx] * inchunk_distances)
+            # print("Rec_rate to collate", total_rec_distances)
+        elif blockend_chunks[block_idx] < this_chunk_idx: #block is not in focal chunk, but is upstream
+            distances_edge_blocks_chunk = chunk_starts[blockend_chunks[block_idx] + 1] - 1
+            chunk_edge_distances = distances_edge_blocks_chunk - precise_blockend[block_idx]
+            rec_distance_blockchunk = chunk_edge_distances * precise_rates[blockend_chunks[block_idx]] # Rec_distance to end of block's chunk NOT spanned chunks
+            distance_focalchunk = pos_chunk_clean - chunk_start
+            rec_distance_focalchunk = distance_focalchunk * precise_rates[this_chunk_idx]
+            if this_chunk_idx - blockend_chunks[block_idx] > 1: #If the block is not in an adjacent chunk
+                overlapped_chunks = np.arange(blockend_chunks[block_idx] + 1, this_chunk_idx)
+                rec_distance_overlapped_chunk = precise_rates[overlapped_chunks] * chunk_size # Rec_distance in chunks that are overlapped
+                rec_distance_notinchunk = np.sum(rec_distance_overlapped_chunk)
+                total_rec_distances = np.array(rec_distance_focalchunk + rec_distance_blockchunk + rec_distance_notinchunk)
+            else:
+                total_rec_distances = np.array(rec_distance_focalchunk + rec_distance_blockchunk)
+        all_rec_distances.append(total_rec_distances)
+    print(np.array(all_rec_distances).shape, "chunknum", chunk_num)
+                
+                # else: 
+                # print("To collate", rec_distance_focalchunk + rec_distance_blockchunk, rec_distance_blockchunk)
+
+                
+                # print(chunk_edge_distances)
+                #IF MORE THAN ONE BLOCK AWAY, ADD INTERMEDIATE DISTANCE
+                # print("bap", blockend_chunks[block_idx])
+                # print("Need to calc overlapping chunks")
+            # print(blockend_chunks, chunk_num)
+            # print(precise_blockend)
 
 
 
