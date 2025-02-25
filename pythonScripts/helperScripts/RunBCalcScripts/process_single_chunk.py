@@ -60,8 +60,8 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
 
     if rec_rate_per_chunk is not None:
         precise_rates = rec_rate_per_chunk[np.maximum(0, chunk_num - precise_chunks):np.minimum(num_chunks, chunk_num + precise_chunks + 1)]
-        precise_lengths = calcRLengths(np.array(precise_blockstart), np.array(precise_blockend), precise_rates, precise_region_start, precise_region_end, chunk_size, chunk_num)
-        # precise_distances = calcRDistances()
+        precise_lengths = calcRLengths(precise_blockstart, precise_blockend, precise_rates, precise_region_start, precise_region_end, chunk_size, chunk_num)
+        precise_distances = calcRDistances(precise_blockstart, precise_blockend, precise_rates, precise_region_start, precise_region_end, chunk_size, pos_chunk_clean, chunk_num, chunk_start)
     else:
         precise_lengths = precise_blockend - precise_blockstart
 
@@ -81,8 +81,8 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
     )
 
     flat_distances = distances[flanking_mask]
-    if chunk_num == 5:
-        print("AAAAAAA", precise_chunks, chunk_start)#, chunk_end, precise_region_start, precise_region_end)
+    # if chunk_num == 1:
+    #     print("AAAAAAA", distances)#, chunk_end, precise_region_start, precise_region_end)
     flat_lengths   = np.repeat(precise_lengths, flanking_mask.sum(axis=1))
     # print(chunk_num)
     nonzero_mask = flat_lengths != 0 # Remove genes of length 0

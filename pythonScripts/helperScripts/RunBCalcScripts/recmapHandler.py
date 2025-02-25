@@ -134,12 +134,43 @@ def calcRLengths(blockstart, blockend, rec_rate_per_chunk, chr_start, chr_end, c
         weighted_sum = np.sum(chunk_lengths * rec_rate_per_chunk[chunks])
         rec_rate_weighted_sums.append(weighted_sum)
     
-    print("Weighted recombinant length (rate * length) for each block using map:", rec_rate_weighted_sums)
+    # print("Weighted recombinant length (rate * length) for each block using map:", rec_rate_weighted_sums)
     
-    print(chunk_num)
     return rec_rate_weighted_sums
 
-def calcRDistances(blockstart, blockend, rec_rate_per_chunk, chr_start, chr_end, chunk_size, chunk_num):
+def calcRDistances(precise_blockstart, precise_blockend, precise_rates, precise_region_start, precise_region_end, chunk_size, pos_chunk_clean, chunk_num, chunk_start):
+
+
+    distance_chunk_start = pos_chunk_clean - chunk_start
+
+    num_chunks = (precise_region_end - precise_region_start) // chunk_size
+    chunk_starts = precise_region_start + np.arange(0, num_chunks + 1) * chunk_size
+    this_chunk_idx = np.where(chunk_starts == chunk_start)[0] # The ID of this chunk in the chunk_starts array, e.g. if precise_chunks = 3, this will be [3] for chunk_num > 2
+
+    blockstart_chunks = (precise_blockstart - precise_region_start) // chunk_size
+    blockend_chunks = (precise_blockend - precise_region_start) // chunk_size
+
+    for block_idx in range(len(blockend_chunks)):
+        chunks = blockend_chunks[block_idx]
+
+        if chunk_num is 1:
+            if blockend_chunks[block_idx] == this_chunk_idx: # If block ends in focal chunk, calculate using this chunks rec rate
+                print("Here", blockend_chunks)
+                print("Calculate distance within same chunk for block ending:", precise_blockend[block_idx])
+                inchunk_distances = pos_chunk_clean-precise_blockend[block_idx]
+                print("Inblock distances:", inchunk_distances) # In-block distances pre-rec_rate scaling
+                rec_distance_inchunk = precise_rates[this_chunk_idx] * inchunk_distances
+                print("Rec_rate to collate", rec_distance_inchunk)
+            else if > 1 block away...:
+                print("bap", chunk_starts[blockend_chunks])
+                print("Need to calc overlapping chunks")
+            print(blockend_chunks, chunk_num)
+            print(precise_blockend)
+
+
+
+        # print("Distance to start of chunk!", distance_chunk_start)
+        # print("block_chunk_overlaps", blockend_chunks)
 
     rec_distance_modifier = None; #gene_chunk_distance * gene_chunk_rec + chunk_size * local_rec + site_chunk_distance * chunk_rec
     return rec_distance_modifier
