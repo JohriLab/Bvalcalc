@@ -108,88 +108,94 @@ def recmapHandler(rec_map, chr_start, chr_end, chunk_size):
     return np.array(rec_rates)
 
 
+# def calcRLengths(blockstart, blockend, rec_rate_per_chunk, chr_start, chr_end, chunk_size, chunk_num):
+#     """
+#     Calculates the weighted lengths of each conserved block (gene), so that for example if the mean 
+#     recombination rate across the block is 0.5, this will return the length of the block multiplied by 0.5
+#     """
+
+#     # print("In calcRLengths: ", chr_end, chr_start, chunk_size)
+#     # Number of chunks covering the chromosome
+#     num_chunks = (chr_end - chr_start) // chunk_size
+#     chunk_starts = chr_start + np.arange(0, num_chunks + 1) * chunk_size
+    
+#     # Determine chunk indices for blockstart and blockend
+#     blockstart_chunks = (blockstart - chr_start) // chunk_size
+#     blockend_chunks = (blockend - chr_start) // chunk_size
+#     block_chunk_overlaps = []
+#     block_chunk_lengths = []
+#     rec_rate_weighted_sums = []
+
+#     for block_idx in range(len(blockstart)):
+#         chunks = np.arange(blockstart_chunks[block_idx],  blockend_chunks[block_idx] + 1)
+#         block_chunk_overlaps.append(chunks)
+#         chunk_lengths = np.minimum(blockend[block_idx], chunk_starts[chunks] + chunk_size) - np.maximum(blockstart[block_idx], chunk_starts[chunks])
+#         block_chunk_lengths.append(chunk_lengths)
+#         weighted_sum = np.sum(chunk_lengths * rec_rate_per_chunk[chunks])
+#         rec_rate_weighted_sums.append(weighted_sum)
+    
+#     # print("Weighted recombinant length (rate * length) for each block using map:", rec_rate_weighted_sums)
+    
+#     return rec_rate_weighted_sums
+
+
 def calcRLengths(blockstart, blockend, rec_rate_per_chunk, chr_start, chr_end, chunk_size, chunk_num):
     """
     Calculates the weighted lengths of each conserved block (gene), so that for example if the mean 
     recombination rate across the block is 0.5, this will return the length of the block multiplied by 0.5
     """
-
-    # print("In calcRLengths: ", chr_end, chr_start, chunk_size)
-    # Number of chunks covering the chromosome
     num_chunks = (chr_end - chr_start) // chunk_size
+    # Build chunk boundaries (note: length = num_chunks + 1)
     chunk_starts = chr_start + np.arange(0, num_chunks + 1) * chunk_size
-    
-    # Determine chunk indices for blockstart and blockend
-    blockstart_chunks = (blockstart - chr_start) // chunk_size
-    blockend_chunks = (blockend - chr_start) // chunk_size
-    block_chunk_overlaps = []
-    block_chunk_lengths = []
-    rec_rate_weighted_sums = []
+    chunk_left  = chunk_starts           # shape: (num_chunks+1,)
+    chunk_right = chunk_starts + chunk_size  # shape: (num_chunks+1,)
 
-    for block_idx in range(len(blockstart)):
-        chunks = np.arange(blockstart_chunks[block_idx],  blockend_chunks[block_idx] + 1)
-        block_chunk_overlaps.append(chunks)
-        chunk_lengths = np.minimum(blockend[block_idx], chunk_starts[chunks] + chunk_size) - np.maximum(blockstart[block_idx], chunk_starts[chunks])
-        block_chunk_lengths.append(chunk_lengths)
-        weighted_sum = np.sum(chunk_lengths * rec_rate_per_chunk[chunks])
-        rec_rate_weighted_sums.append(weighted_sum)
+    # Ensure block boundaries are numpy arrays (and 1D)
+    blockstart = np.asarray(blockstart).flatten()
+    blockend   = np.asarray(blockend).flatten()
+
+    # Compute the overlap between each block and each chunk interval:
+    # For block i and chunk j, the overlap is:
+    #   max(0, min(blockend[i], chunk_right[j]) - max(blockstart[i], chunk_left[j]))
+    overlap = np.maximum(0, np.minimum(blockend[:, None], chunk_right[None, :]) -
+                           np.maximum(blockstart[:, None], chunk_left[None, :]))
+    weighted_overlap = overlap * rec_rate_per_chunk[None, :] # Multiply by the recombination rate for each chunk
+    weighted_sum = np.sum(weighted_overlap, axis=1) # Sum over the chunk intervals for each block
     
-    # print("Weighted recombinant length (rate * length) for each block using map:", rec_rate_weighted_sums)
-    
-    return rec_rate_weighted_sums
+    return weighted_sum
 
 def calcRDistances(precise_blockstart, precise_blockend, precise_rates, precise_region_start, precise_region_end, chunk_size, pos_chunk_clean, chunk_num, chunk_start):
-
 
     distance_chunk_start = pos_chunk_clean - chunk_start
 
     num_chunks = (precise_region_end - precise_region_start) // chunk_size
     chunk_starts = precise_region_start + np.arange(0, num_chunks + 1) * chunk_size
+    chunk_ends = chunk_starts + chunk_size
     this_chunk_idx = np.where(chunk_starts == chunk_start)[0] # The ID of this chunk in the chunk_starts array, e.g. if precise_chunks = 3, this will be [3] for chunk_num > 2
-
     blockstart_chunks = (precise_blockstart - precise_region_start) // chunk_size
     blockend_chunks = (precise_blockend - precise_region_start) // chunk_size
-
-    all_rec_distances = []
+    blockend_rec_distances = []
 
     for block_idx in range(len(blockend_chunks)):
-        if blockend_chunks[block_idx] == this_chunk_idx: # If block ends in focal chunk, calculate using this chunks rec rate
-            # print("Here", blockend_chunks)
-            inchunk_distances = pos_chunk_clean - precise_blockend[block_idx]
-            # print("Inblock distances:", inchunk_distances) # In-block distances pre-rec_rate scaling
-            total_rec_distances = np.array(precise_rates[this_chunk_idx] * inchunk_distances)
-            # print("Rec_rate to collate", total_rec_distances)
-        elif blockend_chunks[block_idx] < this_chunk_idx: #block is not in focal chunk, but is upstream
-            distances_edge_blocks_chunk = chunk_starts[blockend_chunks[block_idx] + 1] - 1
-            chunk_edge_distances = distances_edge_blocks_chunk - precise_blockend[block_idx]
-            rec_distance_blockchunk = chunk_edge_distances * precise_rates[blockend_chunks[block_idx]] # Rec_distance to end of block's chunk NOT spanned chunks
-            distance_focalchunk = pos_chunk_clean - chunk_start
-            rec_distance_focalchunk = distance_focalchunk * precise_rates[this_chunk_idx]
-            if this_chunk_idx - blockend_chunks[block_idx] > 1: #If the block is not in an adjacent chunk
-                overlapped_chunks = np.arange(blockend_chunks[block_idx] + 1, this_chunk_idx)
-                rec_distance_overlapped_chunk = precise_rates[overlapped_chunks] * chunk_size # Rec_distance in chunks that are overlapped
-                rec_distance_notinchunk = np.sum(rec_distance_overlapped_chunk)
-                total_rec_distances = np.array(rec_distance_focalchunk + rec_distance_blockchunk + rec_distance_notinchunk)
-            else:
-                total_rec_distances = np.array(rec_distance_focalchunk + rec_distance_blockchunk)
-        all_rec_distances.append(total_rec_distances)
-    print(np.array(all_rec_distances).shape, "chunknum", chunk_num)
-                
-                # else: 
-                # print("To collate", rec_distance_focalchunk + rec_distance_blockchunk, rec_distance_blockchunk)
+        rec_distance_overlapped, rec_distance_blockchunk = 0, 0 # Set to 0 to allow for sums even when not relevant
+        inchunk_distances = np.minimum(pos_chunk_clean - precise_blockend[block_idx], pos_chunk_clean - chunk_start) # To blockend if block is within same chunk, else to chunk start
+        rec_distance_focalchunk = inchunk_distances * precise_rates[this_chunk_idx]
+        isin_diffchunk = (blockend_chunks[block_idx] < this_chunk_idx) # 0 if in same chunk, 1 if in different chunk
 
-                
-                # print(chunk_edge_distances)
-                #IF MORE THAN ONE BLOCK AWAY, ADD INTERMEDIATE DISTANCE
-                # print("bap", blockend_chunks[block_idx])
-                # print("Need to calc overlapping chunks")
-            # print(blockend_chunks, chunk_num)
-            # print(precise_blockend)
+        distances_edge_blocks_chunk = chunk_starts[blockend_chunks[block_idx] + 1] - 1
+        chunk_edge_distances = distances_edge_blocks_chunk - precise_blockend[block_idx]
+        rec_distance_blockchunk = chunk_edge_distances * precise_rates[blockend_chunks[block_idx]] # Rec_distance to end of block's chunk NOT spanned chunks
+
+        overlapped_chunks = np.arange(blockend_chunks[block_idx] + 1, this_chunk_idx)
+        rec_distance_overlapped = np.sum(precise_rates[overlapped_chunks] * chunk_size) # Rec_distance in chunks that are overlapped
+
+        total_rec_distances = np.array(rec_distance_focalchunk + isin_diffchunk * (rec_distance_blockchunk + rec_distance_overlapped))
+                    
+        blockend_rec_distances.append(total_rec_distances)
+
+        if chunk_num == 3:
+            print("Here", total_rec_distances)
 
 
 
-        # print("Distance to start of chunk!", distance_chunk_start)
-        # print("block_chunk_overlaps", blockend_chunks)
-
-    rec_distance_modifier = None; #gene_chunk_distance * gene_chunk_rec + chunk_size * local_rec + site_chunk_distance * chunk_rec
-    return rec_distance_modifier
+    # return all_rec_distances

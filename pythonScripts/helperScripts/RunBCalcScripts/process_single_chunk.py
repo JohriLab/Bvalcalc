@@ -62,6 +62,7 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
         precise_rates = rec_rate_per_chunk[np.maximum(0, chunk_num - precise_chunks):np.minimum(num_chunks, chunk_num + precise_chunks + 1)]
         precise_lengths = calcRLengths(precise_blockstart, precise_blockend, precise_rates, precise_region_start, precise_region_end, chunk_size, chunk_num)
         precise_distances = calcRDistances(precise_blockstart, precise_blockend, precise_rates, precise_region_start, precise_region_end, chunk_size, pos_chunk_clean, chunk_num, chunk_start)
+        # print(precise_distances)
     else:
         precise_lengths = precise_blockend - precise_blockstart
 
