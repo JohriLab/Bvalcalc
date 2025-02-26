@@ -102,7 +102,7 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
 
     if rec_rate_per_chunk is not None: # IF REC_RATE MAP IS AVAILABLE 
         flank_B = calculateB_recmap(flat_distances, flat_lengths, flat_rec_distances, flat_rec_lengths)
-        # print(np.sum(flat_distances), np.sum(flat_lengths), np.sum(flat_rec_distances), np.sum(flat_rec_lengths))
+        print(np.sum(flat_distances), np.sum(flat_lengths), np.sum(flat_rec_distances), np.sum(flat_rec_lengths))
     else:
         flank_B = calculateB_linear(flat_distances, flat_lengths)
 

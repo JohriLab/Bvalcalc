@@ -34,13 +34,13 @@ def calcBFromChunks(chunk_index, chunk_size, blockstart, blockend, chr_start, ch
         downstream_rec_rates = rec_rate_per_chunk[downstream_indices] # Relevant rec rates for pseudochunks downstream
         downstream_rec_lengths = downstream_rec_rates * relevant_downstream_psdc_lengths
 
-
         relevant_upstream_psdc_B = np.prod(calculateB_recmap(relevant_upstream_psdc_distances, relevant_upstream_psdc_lengths, None, upstream_rec_lengths))
-        relevant_downstream_psdc_B = calculateB_recmap(relevant_downstream_psdc_distances, relevant_downstream_psdc_lengths, None, downstream_rec_lengths)
+        # print(relevant_upstream_psdc_lengths, upstream_rec_lengths)
+        relevant_downstream_psdc_B = np.prod(calculateB_recmap(relevant_downstream_psdc_distances, relevant_downstream_psdc_lengths, None, downstream_rec_lengths))
     else:
         relevant_upstream_psdc_B = np.prod(calculateB_linear(relevant_upstream_psdc_distances, relevant_upstream_psdc_lengths))
-        relevant_downstream_psdc_B = calculateB_linear(relevant_downstream_psdc_distances, relevant_downstream_psdc_lengths)
+        relevant_downstream_psdc_B = np.prod(calculateB_linear(relevant_downstream_psdc_distances, relevant_downstream_psdc_lengths))
         
 
 
-    return np.prod(relevant_downstream_psdc_B) * relevant_upstream_psdc_B # Return B that applies to all sites in a chunk
+    return relevant_downstream_psdc_B * relevant_upstream_psdc_B # Return B that applies to all sites in a chunk

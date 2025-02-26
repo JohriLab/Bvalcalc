@@ -66,16 +66,21 @@ def calculateB_recmap(distance_to_element, length_of_element, rec_distances = No
     Calculate the B value WITH REC MAP for a single functional element at the focal site,
     summing over the DFE while consolidating the intermediate calculations.
     """    
+    
+    # The length of the element * rec rate in region. 
+    # So for local_r = 0.1 * 10e-8, rec_adjusted = 0.1 * 10e-8
+    rec_adjusted_length_of_element = rec_lengths 
+    if rec_distances is not None: # If rec_distances provided in calling function
+        rec_adjusted_distance_to_element = rec_distances
+    else:
+        rec_adjusted_distance_to_element = distance_to_element
 
-    # if rec_gene_modifier is None: # If being called within process_single_chunk:
-    #     rec = r * rec_gene_modifier
-        
     # Calculate "a" and "b"
-    C = (1.0 - np.exp(-2.0 * r * distance_to_element)) / 2.0 # cM
+    C = (1.0 - np.exp(-2.0 * r * rec_adjusted_distance_to_element)) / 2.0 # cM
     U = length_of_element * u
     if g == 0:
         a = C
-        b = C + r * length_of_element # cM
+        b = C + r * rec_adjusted_length_of_element # cM
     elif g > 0:
         threshold = distance_to_element + length_of_element < 0.5 * tract_len # Arbitrary threshold
         a = np.where(
