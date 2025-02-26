@@ -58,49 +58,57 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
                                  a_min=precise_region_start, a_max=precise_region_end)
     # print(precise_blockend)
 
-    if rec_rate_per_chunk is not None: # IF REC_RATE MAP IS AVAILABLE 
-        precise_rates = rec_rate_per_chunk[np.maximum(0, chunk_num - precise_chunks):np.minimum(num_chunks, chunk_num + precise_chunks + 1)]
-        physical_lengths = precise_blockend - precise_blockstart
-        rec_lengths = calcRLengths(precise_blockstart, precise_blockend, precise_rates, precise_region_start, precise_region_end, chunk_size, chunk_num)
-        distances_upstream, distances_downstream = calcRDistances(precise_blockstart, precise_blockend, precise_rates, precise_region_start, precise_region_end, chunk_size, pos_chunk_clean, chunk_num, chunk_start)
-    else:
-        physical_lengths = precise_blockend - precise_blockstart
-        rec_lengths = physical_lengths
-        distances_downstream = precise_blockstart[:, None] - pos_chunk_clean[None, :]
-        distances_upstream   = pos_chunk_clean[None, :] - precise_blockend[:, None]
 
-    # == 3) Do distance calculations ONLY for non-NaN sites ==
 
-    # print(precise_distances_upstream, chunk_num)
-
+    # # == 3) Do distance calculations ONLY for non-NaN sites ==
     downstream_mask = (pos_chunk_clean < precise_blockstart[:, None])
     upstream_mask   = (pos_chunk_clean > precise_blockend[:, None])
     flanking_mask   = downstream_mask | upstream_mask
+    
+    if rec_rate_per_chunk is not None: # IF REC_RATE MAP IS AVAILABLE 
+        precise_rates = rec_rate_per_chunk[np.maximum(0, chunk_num - precise_chunks):np.minimum(num_chunks, chunk_num + precise_chunks + 1)]
+        rec_lengths = calcRLengths(precise_blockstart, precise_blockend, precise_rates, precise_region_start, precise_region_end, chunk_size, chunk_num)
+        rec_distances_upstream, rec_distances_downstream = calcRDistances(precise_blockstart, precise_blockend, precise_rates, precise_region_start, precise_region_end, chunk_size, pos_chunk_clean, chunk_num, chunk_start)
+        
+        rec_distances = np.where(
+            flanking_mask,
+            np.where(upstream_mask, rec_distances_upstream, rec_distances_downstream),
+            np.nan
+        )
+        flat_rec_distances = rec_distances[flanking_mask]
+        flat_rec_lengths   = np.repeat(rec_lengths, flanking_mask.sum(axis=1))
+        nonzero_rec_mask = flat_rec_lengths != 0 # Remove genes of length 0
+        flat_rec_distances = flat_rec_distances[nonzero_rec_mask]
+        flat_rec_lengths   = flat_rec_lengths[nonzero_rec_mask]
 
-    distances = np.where(
+    physical_distances_upstream   = pos_chunk_clean[None, :] - precise_blockend[:, None]
+    physical_distances_downstream = precise_blockstart[:, None] - pos_chunk_clean[None, :]
+    physical_distances = np.where(
         flanking_mask,
-        np.where(upstream_mask, distances_upstream, distances_downstream),
+        np.where(upstream_mask, physical_distances_upstream, physical_distances_downstream),
         np.nan
     )
 
-    flat_distances = distances[flanking_mask]
-    flat_lengths   = np.repeat(rec_lengths, flanking_mask.sum(axis=1))
+    flat_distances = physical_distances[flanking_mask]
 
+    physical_lengths = precise_blockend - precise_blockstart
+    flat_lengths   = np.repeat(physical_lengths, flanking_mask.sum(axis=1))
     nonzero_mask = flat_lengths != 0 # Remove genes of length 0
     flat_distances = flat_distances[nonzero_mask]
     flat_lengths   = flat_lengths[nonzero_mask]
+
+    if rec_rate_per_chunk is not None: # IF REC_RATE MAP IS AVAILABLE 
+        # if chunk_num == 12:
+        #     print((np.sum(flat_distances)), chunk_num)
+        flank_B = calculateB_recmap(flat_distances, flat_lengths, flat_rec_distances, flat_rec_lengths)
+        print(np.sum(flat_distances), np.sum(flat_lengths), np.sum(flat_rec_distances), np.sum(flat_rec_lengths))
+    else:
+        flank_B = calculateB_linear(flat_distances, flat_lengths)
 
     # If there are no elements left, default flank_B to 1
     if flat_distances.size == 0 or flat_lengths.size == 0:
         flank_B = 1
         print("No elements left 'process_single_chunk'")
-    elif rec_rate_per_chunk is not None: # IF REC_RATE MAP IS AVAILABLE 
-        # if chunk_num == 12:
-        #     print((np.sum(flat_distances)), chunk_num)
-        flank_B = calculateB_linear(flat_distances, flat_lengths)
-    else:
-        flank_B = calculateB_linear(flat_distances, flat_lengths)
-
 
     true_indices = np.where(flanking_mask)
     unique_indices, inverse_indices = np.unique(true_indices[1], return_inverse=True)

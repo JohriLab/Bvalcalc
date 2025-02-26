@@ -55,33 +55,25 @@ def calculateB_linear(distance_to_element, length_of_element):
         + f3 * E_f3
     )
 
-    print("Using calculateB_linear")
+    # print("Using calculateB_linear")
 
     # Return B
     return np.exp(-1.0 * E_bar)
 
 
-def calculateB_recmap(distance_to_element, length_of_element, rec_gene_modifier = None, rec_distance_modifier = None):
+def calculateB_recmap(distance_to_element, length_of_element, rec_gene_modifier = None, rec_distances = None, rec_lengths = None):
     """
     Calculate the B value WITH REC MAP for a single functional element at the focal site,
     summing over the DFE while consolidating the intermediate calculations.
     """    
-    if rec_gene_modifier is not None:
-        rec_gene = r * rec_gene_modifier
-    else:
-        rec_gene = r # recombination rate 
 
-    if rec_distance_modifier is not None:
-        rec_distance = r * rec_distance_modifier
-    else:
-        rec_distance = r * distance_to_element
 
     # Calculate "a" and "b"
-    C = (1.0 - np.exp(-2.0 * rec_distance)) / 2.0 # cM
+    C = (1.0 - np.exp(-2.0 * r * distance_to_element)) / 2.0 # cM
     U = length_of_element * u
     if g == 0:
         a = C
-        b = C + rec_gene * length_of_element # cM
+        b = C + r * length_of_element # cM
     elif g > 0:
         threshold = distance_to_element + length_of_element < 0.5 * tract_len # Arbitrary threshold
         a = np.where(
@@ -91,8 +83,8 @@ def calculateB_recmap(distance_to_element, length_of_element, rec_gene_modifier 
         )
         b = np.where(
             threshold,
-            C + rec_gene * length_of_element + (g * (distance_to_element + length_of_element)), #If TRUE
-            C + g * tract_len + rec_gene * length_of_element #If FALSE
+            C + r * length_of_element + (g * (distance_to_element + length_of_element)), #If TRUE
+            C + g * tract_len + r * length_of_element #If FALSE
         )
 
     # Calculate exponents for different time intervals
@@ -109,7 +101,7 @@ def calculateB_recmap(distance_to_element, length_of_element, rec_gene_modifier 
         + f3 * E_f3
     )
 
-    print("Using calculateB_recmap")
+    # print("Using calculateB_linear")
 
     # Return B
     return np.exp(-1.0 * E_bar)
