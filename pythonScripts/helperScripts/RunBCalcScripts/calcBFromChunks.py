@@ -1,4 +1,4 @@
-from helperScripts.calculateB import calculateB
+from helperScripts.calculateB import calculateB_linear, calculateB_recmap
 import numpy as np
 
 def calcBFromChunks(chunk_index, chunk_size, blockstart, blockend, chr_start, chr_end, num_chunks, precise_chunks, lperchunk, rec_rate_per_chunk):
@@ -24,7 +24,7 @@ def calcBFromChunks(chunk_index, chunk_size, blockstart, blockend, chr_start, ch
     relevant_upstream_psdc_distances = chunk_mids[chunk_index] - relevant_upstream_pseudoblockends
     relevant_downstream_psdc_distances = relevant_downstream_pseudoblockstarts - chunk_mids[chunk_index]
 
-    if rec_rate_per_chunk is not None:
+    if rec_rate_per_chunk is not None: # IF REC_RATE MAP IS AVAILABLE 
         # Get the indices for upstream and downstream pseudochunks
         upstream_indices = np.nonzero(upstream_pseudochunk_mask)[0]
         downstream_indices = np.nonzero(downstream_pseudochunk_mask)[0]
@@ -32,11 +32,11 @@ def calcBFromChunks(chunk_index, chunk_size, blockstart, blockend, chr_start, ch
         upstream_rec_rates = rec_rate_per_chunk[upstream_indices] # Relevant rec rates for pseudochunks upstream
         downstream_rec_rates = rec_rate_per_chunk[downstream_indices] # Relevant rec rates for pseudochunks downstream
 
-        relevant_upstream_psdc_B = np.prod(calculateB(relevant_upstream_psdc_distances, relevant_upstream_psdc_lengths, rec_gene_modifier=upstream_rec_rates))
-        relevant_downstream_psdc_B = calculateB(relevant_downstream_psdc_distances, relevant_downstream_psdc_lengths, rec_gene_modifier=downstream_rec_rates)
+        relevant_upstream_psdc_B = np.prod(calculateB_recmap(relevant_upstream_psdc_distances, relevant_upstream_psdc_lengths, rec_gene_modifier=upstream_rec_rates))
+        relevant_downstream_psdc_B = calculateB_recmap(relevant_downstream_psdc_distances, relevant_downstream_psdc_lengths, rec_gene_modifier=downstream_rec_rates)
     else:
-        relevant_upstream_psdc_B = np.prod(calculateB(relevant_upstream_psdc_distances, relevant_upstream_psdc_lengths))
-        relevant_downstream_psdc_B = calculateB(relevant_downstream_psdc_distances, relevant_downstream_psdc_lengths)
+        relevant_upstream_psdc_B = np.prod(calculateB_linear(relevant_upstream_psdc_distances, relevant_upstream_psdc_lengths))
+        relevant_downstream_psdc_B = calculateB_linear(relevant_downstream_psdc_distances, relevant_downstream_psdc_lengths)
         
 
 

@@ -1,6 +1,6 @@
 import sys
 import numpy as np
-from helperScripts.calculateB import calculateB
+from helperScripts.calculateB import calculateB_linear, calculateB_recmap
 from helperScripts.RunBCalcScripts.calcBFromChunks import calcBFromChunks
 from helperScripts.RunBCalcScripts.recmapHandler import calcRLengths
 from helperScripts.RunBCalcScripts.recmapHandler import calcRDistances
@@ -58,12 +58,14 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
                                  a_min=precise_region_start, a_max=precise_region_end)
     # print(precise_blockend)
 
-    if rec_rate_per_chunk is not None:
+    if rec_rate_per_chunk is not None: # IF REC_RATE MAP IS AVAILABLE 
         precise_rates = rec_rate_per_chunk[np.maximum(0, chunk_num - precise_chunks):np.minimum(num_chunks, chunk_num + precise_chunks + 1)]
-        precise_lengths = calcRLengths(precise_blockstart, precise_blockend, precise_rates, precise_region_start, precise_region_end, chunk_size, chunk_num)
+        physical_lengths = precise_blockend - precise_blockstart
+        rec_lengths = calcRLengths(precise_blockstart, precise_blockend, precise_rates, precise_region_start, precise_region_end, chunk_size, chunk_num)
         distances_upstream, distances_downstream = calcRDistances(precise_blockstart, precise_blockend, precise_rates, precise_region_start, precise_region_end, chunk_size, pos_chunk_clean, chunk_num, chunk_start)
     else:
-        precise_lengths = precise_blockend - precise_blockstart
+        physical_lengths = precise_blockend - precise_blockstart
+        rec_lengths = physical_lengths
         distances_downstream = precise_blockstart[:, None] - pos_chunk_clean[None, :]
         distances_upstream   = pos_chunk_clean[None, :] - precise_blockend[:, None]
 
@@ -82,7 +84,7 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
     )
 
     flat_distances = distances[flanking_mask]
-    flat_lengths   = np.repeat(precise_lengths, flanking_mask.sum(axis=1))
+    flat_lengths   = np.repeat(rec_lengths, flanking_mask.sum(axis=1))
 
     nonzero_mask = flat_lengths != 0 # Remove genes of length 0
     flat_distances = flat_distances[nonzero_mask]
@@ -91,10 +93,13 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
     # If there are no elements left, default flank_B to 1
     if flat_distances.size == 0 or flat_lengths.size == 0:
         flank_B = 1
-    else:
+        print("No elements left 'process_single_chunk'")
+    elif rec_rate_per_chunk is not None: # IF REC_RATE MAP IS AVAILABLE 
         # if chunk_num == 12:
         #     print((np.sum(flat_distances)), chunk_num)
-        flank_B = calculateB(flat_distances, flat_lengths)
+        flank_B = calculateB_linear(flat_distances, flat_lengths)
+    else:
+        flank_B = calculateB_linear(flat_distances, flat_lengths)
 
 
     true_indices = np.where(flanking_mask)
@@ -114,16 +119,16 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
     chunk_slice[not_nan_mask] = chunk_slice_clean
     mean_chunk_b = np.nanmean(chunk_slice) # Mean B for chunk
 
-    print(f"Processing chunk: {pos_chunk.min()} - {pos_chunk.max()}")
-            # Check if recombination rate data is provided and print it for the current chunk.
-    if rec_rate_per_chunk is not None:
-        rec_rate = rec_rate_per_chunk[chunk_num]
-        print(f"Chunk {chunk_num}: recombination rate = {rec_rate}")
-    print(f"B from distant chunks: {B_from_distant_chunks}")
-    print(f"Number of relevant genes: {len(precise_blockstart)}")
-    # print(f"Relevant blocks: {precise_blockstart}, {precise_blockend}")
-    print(f"Number of neutral sites in chunk [{chunk_start}-{chunk_end}): {np.isnan(chunk_slice).sum()}")
-    print(f"Aggregated B values for chunk: {aggregated_B}")
-    print(f"Mean B value for chunk {chunk_num}: [{chunk_start}-{chunk_end}]: {mean_chunk_b}")
+    # print(f"Processing chunk: {pos_chunk.min()} - {pos_chunk.max()}")
+    #         # Check if recombination rate data is provided and print it for the current chunk.
+    # if rec_rate_per_chunk is not None:
+    #     rec_rate = rec_rate_per_chunk[chunk_num]
+    #     print(f"Chunk {chunk_num}: recombination rate = {rec_rate}")
+    # print(f"B from distant chunks: {B_from_distant_chunks}")
+    # print(f"Number of relevant genes: {len(precise_blockstart)}")
+    # # print(f"Relevant blocks: {precise_blockstart}, {precise_blockend}")
+    # print(f"Number of neutral sites in chunk [{chunk_start}-{chunk_end}): {np.isnan(chunk_slice).sum()}")
+    # print(f"Aggregated B values for chunk: {aggregated_B}")
+    # print(f"Mean B value for chunk {chunk_num}: [{chunk_start}-{chunk_end}]: {mean_chunk_b}")
 
     return b_values

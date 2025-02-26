@@ -1,5 +1,5 @@
 from helperScripts.RunBCalcScripts.demographyHelpers import get_Bcur
-from helperScripts.calculateB import calculateB
+from helperScripts.calculateB import calculateB_linear
 import numpy as np
 import os
 
@@ -12,7 +12,7 @@ def regionBcalc(args):
     print(f"Length of region under selection: {gene_size}bp")
     print(f"Length of flanking neutral region: {flank_len}bp")
 
-    b_values = calculateB(np.arange(1, flank_len, 1, dtype = int), gene_size)
+    b_values = calculateB_linear(np.arange(1, flank_len, 1, dtype = int), gene_size)
 
     print(f"====== R E S U L T S ! =============================")
     print(f"B for adjacent site: {b_values[0]}")
