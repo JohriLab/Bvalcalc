@@ -170,20 +170,23 @@ def calcRDistances(precise_blockstart, precise_blockend, precise_rates, precise_
 
     num_chunks = (precise_region_end - precise_region_start) // chunk_size
     chunk_starts = precise_region_start + np.arange(0, num_chunks + 1) * chunk_size
-    chunk_ends = chunk_starts + chunk_size
-    this_chunk_idx = np.where(chunk_starts == chunk_start)[0] # The ID of this chunk in the chunk_starts array, e.g. if precise_chunks = 3, this will be [3] for chunk_num > 2
+    chunk_ends = np.minimum(chunk_starts + chunk_size, precise_region_end)
+    this_chunk_idx = np.where(chunk_starts == chunk_start)[0][0] # The ID of this chunk in the chunk_starts array, e.g. if precise_chunks = 3, this will be [3] for chunk_num > 2
+    chunk_end = chunk_ends[this_chunk_idx] # Focal chunk's end
     blockstart_chunks = (precise_blockstart - precise_region_start) // chunk_size
     blockend_chunks = (precise_blockend - precise_region_start) // chunk_size
     blockend_rec_distances = []
+    blockstart_rec_distances = []
 
-    for block_idx in range(len(blockend_chunks)):
+## FOR LOOP COULD BE IMPORVED BY USING NP ARRAY OPERATIONS INSTEAD!!!
+
+    for block_idx in range(len(blockend_chunks)): # For blockends (i.e. upstream genes)
         rec_distance_overlapped, rec_distance_blockchunk = 0, 0 # Set to 0 to allow for sums even when not relevant
         inchunk_distances = np.minimum(pos_chunk_clean - precise_blockend[block_idx], pos_chunk_clean - chunk_start) # To blockend if block is within same chunk, else to chunk start
         rec_distance_focalchunk = inchunk_distances * precise_rates[this_chunk_idx]
         isin_diffchunk = (blockend_chunks[block_idx] < this_chunk_idx) # 0 if in same chunk, 1 if in different chunk
 
-        distances_edge_blocks_chunk = chunk_starts[blockend_chunks[block_idx] + 1] - 1
-        chunk_edge_distances = distances_edge_blocks_chunk - precise_blockend[block_idx]
+        chunk_edge_distances = chunk_ends[blockend_chunks[block_idx]] - precise_blockend[block_idx]  # Distances from the end of the block to the end of its chunk
         rec_distance_blockchunk = chunk_edge_distances * precise_rates[blockend_chunks[block_idx]] # Rec_distance to end of block's chunk NOT spanned chunks
 
         overlapped_chunks = np.arange(blockend_chunks[block_idx] + 1, this_chunk_idx)
@@ -193,8 +196,23 @@ def calcRDistances(precise_blockstart, precise_blockend, precise_rates, precise_
                     
         blockend_rec_distances.append(total_rec_distances)
 
-        if chunk_num == 3:
-            print("Here", total_rec_distances)
+    for block_idx in range(len(blockstart_chunks)): # For blockstarts (i.e. downstream genes)
+        rec_distance_overlapped, rec_distance_blockchunk = 0, 0 # Set to 0 to allow for sums even when not relevant
+        inchunk_distances = np.minimum(precise_blockstart[block_idx] - pos_chunk_clean, chunk_end - pos_chunk_clean) # To blockstart if block is within same chunk, else to chunk start
+        rec_distance_focalchunk = inchunk_distances * precise_rates[this_chunk_idx]
+        isin_diffchunk = (blockstart_chunks[block_idx] > this_chunk_idx) # 0 if in same chunk, 1 if in different chunk
+
+        chunk_edge_distances = precise_blockstart[block_idx] - chunk_starts[blockstart_chunks[block_idx]]   # Distances from the start of the block to the start of its chunk
+        rec_distance_blockchunk = chunk_edge_distances * precise_rates[blockstart_chunks[block_idx]] # Rec_distance to start of block's chunk NOT spanned chunks
+
+        overlapped_chunks = np.arange(this_chunk_idx + 1, blockstart_chunks[block_idx])
+        rec_distance_overlapped = np.sum(precise_rates[overlapped_chunks] * chunk_size) # Rec_distance in chunks that are overlapped
+
+        total_rec_distances = np.array(rec_distance_focalchunk + isin_diffchunk * (rec_distance_blockchunk + rec_distance_overlapped))
+
+        blockstart_rec_distances.append(total_rec_distances)
+
+            # print("Here", chunk_starts, chunk_ends)#chunk_starts, this_chunk_idx)#, rec_distance_overlapped)
 
 
 
