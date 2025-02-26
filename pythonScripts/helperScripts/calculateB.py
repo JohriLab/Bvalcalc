@@ -61,13 +61,15 @@ def calculateB_linear(distance_to_element, length_of_element):
     return np.exp(-1.0 * E_bar)
 
 
-def calculateB_recmap(distance_to_element, length_of_element, rec_gene_modifier = None, rec_distances = None, rec_lengths = None):
+def calculateB_recmap(distance_to_element, length_of_element, rec_distances = None, rec_lengths = None):
     """
     Calculate the B value WITH REC MAP for a single functional element at the focal site,
     summing over the DFE while consolidating the intermediate calculations.
     """    
 
-
+    # if rec_gene_modifier is None: # If being called within process_single_chunk:
+    #     rec = r * rec_gene_modifier
+        
     # Calculate "a" and "b"
     C = (1.0 - np.exp(-2.0 * r * distance_to_element)) / 2.0 # cM
     U = length_of_element * u
