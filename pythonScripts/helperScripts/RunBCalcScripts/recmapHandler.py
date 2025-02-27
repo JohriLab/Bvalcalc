@@ -225,6 +225,7 @@ def calcRLengthsDistances_forchunks(upstream_indices, downstream_indices, rec_ra
     downstream_rec_lengths = downstream_rec_rates * relevant_downstream_psdc_lengths
 
     ## Calculate relevant upstream rec distances!
+    ## CURRENTLY TAKING A LONG TIME TO CALCULATE 
     mean_rec_distance_focalchunk = rec_rate_per_chunk[chunk_index] * chunk_size / 2 + 0.5 # Note that this is distance to middle of focal chunk. 0.5 is added because 1-based sites.
 
     upstream_distance_blockchunk = chunk_ends[upstream_indices] - relevant_upstream_pseudoblockends
@@ -236,8 +237,7 @@ def calcRLengthsDistances_forchunks(upstream_indices, downstream_indices, rec_ra
     upstream_rec_distances = mean_rec_distance_focalchunk + upstream_rec_distance_blockchunk + upstream_overlapped_rec_distances # Combined rec distance from middle of focal chunk to edge of pseudo"blocks" upstream
 
     ## Calculate downstream rec distances!
-
-
+    ## CURRENTLY TAKING A LONG TIME TO CALCULATE 
     downstream_distance_blockchunk = relevant_downstream_pseudoblockstarts - chunk_starts[downstream_indices]
     downstream_rec_distance_blockchunk = downstream_distance_blockchunk * rec_rate_per_chunk[downstream_indices] # This is rec distance from edge of pseudoblock to its chunk start
     
@@ -248,8 +248,3 @@ def calcRLengthsDistances_forchunks(upstream_indices, downstream_indices, rec_ra
 
 
     return upstream_rec_lengths, downstream_rec_lengths, upstream_rec_distances, downstream_rec_distances
-
-    # print(chunk_index, mean_rec_distance_focalchunk, rec_distance_blockchunk, overlapped_rec_distances, relevant_upstream_rec_distance)
-    print(chunk_index, relevant_upstream_psdc_distances, relevant_upstream_rec_distance)
-
-    ## Calculate downstream_rec_distances!
