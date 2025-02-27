@@ -40,6 +40,9 @@ def calcBFromChunks(chunk_index, chunk_size, blockstart, blockend, chr_start, ch
             chunk_index, chunk_size, relevant_upstream_pseudoblockends, relevant_downstream_pseudoblockstarts, 
             chunk_starts, chunk_ends, chunk_rec_distances, relevant_upstream_psdc_distances
             ) # Get local r * lengths for length of, and distances to pseudoblocks for each chunk
+        
+        if chunk_index == 5:
+            print("hai", chunk_mids[chunk_index], relevant_downstream_psdc_distances, downstream_rec_distances)
 
         relevant_upstream_psdc_B = np.prod(calculateB_recmap(relevant_upstream_psdc_distances, relevant_upstream_psdc_lengths, upstream_rec_distances, upstream_rec_lengths))
         relevant_downstream_psdc_B = np.prod(calculateB_recmap(relevant_downstream_psdc_distances, relevant_downstream_psdc_lengths, downstream_rec_distances, downstream_rec_lengths))

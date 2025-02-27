@@ -225,7 +225,7 @@ def calcRLengthsDistances_forchunks(upstream_indices, downstream_indices, rec_ra
     downstream_rec_lengths = downstream_rec_rates * relevant_downstream_psdc_lengths
 
     ## Calculate relevant upstream rec distances!
-    mean_rec_distance_focalchunk = rec_rate_per_chunk[chunk_index] * chunk_size / 2 # Note that this is distance to middle of focal chunk. STEP 1 DONE
+    mean_rec_distance_focalchunk = rec_rate_per_chunk[chunk_index] * chunk_size / 2 + 0.5 # Note that this is distance to middle of focal chunk. 0.5 is added because 1-based sites.
 
     upstream_distance_blockchunk = chunk_ends[upstream_indices] - relevant_upstream_pseudoblockends
     upstream_rec_distance_blockchunk = upstream_distance_blockchunk * rec_rate_per_chunk[upstream_indices] # This is rec distance from edge of pseudoblock to its chunk end
