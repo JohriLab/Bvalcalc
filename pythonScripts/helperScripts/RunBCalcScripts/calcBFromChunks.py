@@ -24,8 +24,8 @@ def calcBFromChunks(chunk_index, chunk_size, blockstart, blockend, chr_start, ch
 
     relevant_upstream_pseudoblockends = chunk_pseudoblockend[upstream_pseudochunk_mask]
     relevant_downstream_pseudoblockstarts = chunk_pseudoblockstart[downstream_pseudochunk_mask]
-    relevant_upstream_psdc_distances = chunk_mids[chunk_index] - relevant_upstream_pseudoblockends
-    relevant_downstream_psdc_distances = relevant_downstream_pseudoblockstarts - chunk_mids[chunk_index]
+    relevant_upstream_psdc_distances = chunk_mids[chunk_index] - relevant_upstream_pseudoblockends - 1
+    relevant_downstream_psdc_distances = relevant_downstream_pseudoblockstarts - chunk_mids[chunk_index] - 1
 
     if rec_rate_per_chunk is not None: # IF REC_RATE MAP IS AVAILABLE 
         # Get the indices for upstream and downstream pseudochunks
@@ -37,7 +37,7 @@ def calcBFromChunks(chunk_index, chunk_size, blockstart, blockend, chr_start, ch
             upstream_indices, downstream_indices, rec_rate_per_chunk, 
             relevant_upstream_psdc_lengths, relevant_downstream_psdc_lengths, 
             chunk_index, chunk_size, relevant_upstream_pseudoblockends, relevant_downstream_pseudoblockstarts, 
-            chunk_starts, chunk_ends, chunk_rec_distances, relevant_upstream_psdc_distances
+            chunk_starts, chunk_ends, chunk_rec_distances, num_chunks
             ) # Get local r * lengths for length of, and distances to pseudoblocks for each chunk
 
         relevant_upstream_psdc_B = np.prod(calculateB_recmap(relevant_upstream_psdc_distances, relevant_upstream_psdc_lengths, upstream_rec_distances, upstream_rec_lengths))

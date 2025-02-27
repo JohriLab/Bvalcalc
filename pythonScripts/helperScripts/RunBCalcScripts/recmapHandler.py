@@ -216,7 +216,7 @@ def calcRDistances(precise_blockstart, precise_blockend, precise_rates, precise_
 
     return blockend_rec_distances, blockstart_rec_distances
 
-def calcRLengthsDistances_forchunks(upstream_indices, downstream_indices, rec_rate_per_chunk, relevant_upstream_psdc_lengths, relevant_downstream_psdc_lengths, chunk_index, chunk_size, relevant_upstream_pseudoblockends, relevant_downstream_pseudoblockstarts, chunk_starts, chunk_ends, chunk_rec_distances, relevant_upstream_psdc_distances):
+def calcRLengthsDistances_forchunks(upstream_indices, downstream_indices, rec_rate_per_chunk, relevant_upstream_psdc_lengths, relevant_downstream_psdc_lengths, chunk_index, chunk_size, relevant_upstream_pseudoblockends, relevant_downstream_pseudoblockstarts, chunk_starts, chunk_ends, chunk_rec_distances, num_chunks):
 
     ## Calculate relevant upstream and downstream rec lengths of pseudoblocks
     upstream_rec_rates = rec_rate_per_chunk[upstream_indices] # Relevant rec rates for pseudochunks upstream
@@ -226,7 +226,11 @@ def calcRLengthsDistances_forchunks(upstream_indices, downstream_indices, rec_ra
 
     ## Calculate relevant upstream rec distances!
     ## CURRENTLY TAKING A LONG TIME TO CALCULATE 
-    mean_rec_distance_focalchunk = rec_rate_per_chunk[chunk_index] * chunk_size / 2 + 0.5 # Note that this is distance to middle of focal chunk. 0.5 is added because 1-based sites.
+    mean_rec_distance_focalchunk = rec_rate_per_chunk[chunk_index] * chunk_size / 2 - 0.5 # Note that this is distance to middle of focal chunk.
+
+    if chunk_index == num_chunks -1: # If it's the final chunk (which may be not be full chunk_size length)
+        end_focalchunk_distance = (chunk_ends[chunk_index] - chunk_starts[chunk_index])/2 # I think needs to be shifted by 1bp
+        mean_rec_distance_focalchunk = end_focalchunk_distance
 
     upstream_distance_blockchunk = chunk_ends[upstream_indices] - relevant_upstream_pseudoblockends
     upstream_rec_distance_blockchunk = upstream_distance_blockchunk * rec_rate_per_chunk[upstream_indices] # This is rec distance from edge of pseudoblock to its chunk end

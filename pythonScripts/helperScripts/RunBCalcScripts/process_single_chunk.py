@@ -27,7 +27,7 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
     
     if not np.any(not_nan_mask):
         # Everything is already NaN in this chunk, no need to do anything
-        print(f"No neutral sites in chunk {chunk_num}: {chunk_start}-{chunk_end}")
+        # print(f"No neutral sites in chunk {chunk_num}: {chunk_start}-{chunk_end}")
         return b_values
     
     # Filter positions to skip pre-labeled NaNs
@@ -106,7 +106,7 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
     # If there are no elements left, default flank_B to 1
     if flat_distances.size == 0 or flat_lengths.size == 0:
         flank_B = 1
-        print(f"No nearby sites under selection in flanking region for chunk:", chunk_num)
+        # print(f"No nearby sites under selection in flanking region for chunk:", chunk_num)
 
     true_indices = np.where(flanking_mask)
     unique_indices, inverse_indices = np.unique(true_indices[1], return_inverse=True)
@@ -125,16 +125,16 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
     chunk_slice[not_nan_mask] = chunk_slice_clean
     mean_chunk_b = np.nanmean(chunk_slice) # Mean B for chunk
 
-    print(f"Processing chunk: {pos_chunk.min()} - {pos_chunk.max()}")
-            # Check if recombination rate data is provided and print it for the current chunk.
-    if rec_rate_per_chunk is not None:
-        rec_rate = rec_rate_per_chunk[chunk_num]
-        print(f"Chunk {chunk_num}: recombination rate = {rec_rate}")
-    print(f"B from distant chunks: {B_from_distant_chunks}")
-    print(f"Number of relevant genes: {len(precise_blockstart)}")
-    # print(f"Relevant blocks: {precise_blockstart}, {precise_blockend}")
-    print(f"Number of neutral sites in chunk [{chunk_start}-{chunk_end}): {np.isnan(chunk_slice).sum()}")
-    print(f"Aggregated B values for chunk: {aggregated_B}")
-    print(f"Mean B value for chunk {chunk_num}: [{chunk_start}-{chunk_end}]: {mean_chunk_b}")
+    # print(f"Processing chunk: {pos_chunk.min()} - {pos_chunk.max()}")
+    #         # Check if recombination rate data is provided and print it for the current chunk.
+    # if rec_rate_per_chunk is not None:
+    #     rec_rate = rec_rate_per_chunk[chunk_num]
+    #     print(f"Chunk {chunk_num}: recombination rate = {rec_rate}")
+    # print(f"B from distant chunks: {B_from_distant_chunks}")
+    # print(f"Number of relevant genes: {len(precise_blockstart)}")
+    # # print(f"Relevant blocks: {precise_blockstart}, {precise_blockend}")
+    # print(f"Number of neutral sites in chunk [{chunk_start}-{chunk_end}): {np.isnan(chunk_slice).sum()}")
+    # print(f"Aggregated B values for chunk: {aggregated_B}")
+    # print(f"Mean B value for chunk {chunk_num}: [{chunk_start}-{chunk_end}]: {mean_chunk_b}")
 
     return b_values
