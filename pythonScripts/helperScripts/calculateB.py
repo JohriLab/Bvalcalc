@@ -61,7 +61,7 @@ def calculateB_linear(distance_to_element, length_of_element):
     return np.exp(-1.0 * E_bar)
 
 
-def calculateB_recmap(distance_to_element, length_of_element, rec_distances = None, rec_lengths = None):
+def calculateB_recmap(distance_to_element, length_of_element, rec_distances, rec_lengths):
     """
     Calculate the B value WITH REC MAP for a single functional element at the focal site,
     summing over the DFE while consolidating the intermediate calculations.
@@ -70,10 +70,7 @@ def calculateB_recmap(distance_to_element, length_of_element, rec_distances = No
     # The length of the element * rec rate in region. 
     # So for local_r = 0.1 * 10e-8, rec_adjusted = 0.1 * 10e-8
     rec_adjusted_length_of_element = rec_lengths 
-    if rec_distances is not None: # If rec_distances provided in calling function
-        rec_adjusted_distance_to_element = rec_distances
-    else:
-        rec_adjusted_distance_to_element = distance_to_element
+    rec_adjusted_distance_to_element = rec_distances
 
     # Calculate "a" and "b"
     C = (1.0 - np.exp(-2.0 * r * rec_adjusted_distance_to_element)) / 2.0 # cM

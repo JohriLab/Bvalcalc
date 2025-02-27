@@ -66,8 +66,8 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
     flanking_mask   = downstream_mask | upstream_mask
 
     physical_distances_upstream   = pos_chunk_clean[None, :] - precise_blockend[:, None]
-    if chunk_num == 12:
-        print("HERE1st", np.sum(physical_distances_upstream), chunk_num)
+    # if chunk_num == 12:
+    #     print("HERE1st", np.sum(physical_distances_upstream), chunk_num)
     physical_distances_downstream = precise_blockstart[:, None] - pos_chunk_clean[None, :]
     physical_distances = np.where(
         flanking_mask,
@@ -87,8 +87,8 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
         precise_rates = rec_rate_per_chunk[np.maximum(0, chunk_num - precise_chunks):np.minimum(num_chunks, chunk_num + precise_chunks + 1)]
         rec_lengths = calcRLengths(precise_blockstart, precise_blockend, precise_rates, precise_region_start, precise_region_end, chunk_size, chunk_num)
         rec_distances_upstream, rec_distances_downstream = calcRDistances(precise_blockstart, precise_blockend, precise_rates, precise_region_start, precise_region_end, chunk_size, pos_chunk_clean, chunk_num, chunk_start)
-        if chunk_num == 12:
-            print("HERE", np.sum(rec_distances_upstream), chunk_num)
+        # if chunk_num == 12:
+            # print("HERE", np.sum(rec_distances_upstream), chunk_num)
         rec_distances = np.where(
             flanking_mask,
             np.where(upstream_mask, rec_distances_upstream, rec_distances_downstream),
@@ -102,7 +102,7 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
 
     if rec_rate_per_chunk is not None: # IF REC_RATE MAP IS AVAILABLE 
         flank_B = calculateB_recmap(flat_distances, flat_lengths, flat_rec_distances, flat_rec_lengths)
-        print(np.sum(flat_distances), np.sum(flat_lengths), np.sum(flat_rec_distances), np.sum(flat_rec_lengths))
+        # print(np.sum(flat_distances), np.sum(flat_lengths), np.sum(flat_rec_distances), np.sum(flat_rec_lengths))
     else:
         flank_B = calculateB_linear(flat_distances, flat_lengths)
 

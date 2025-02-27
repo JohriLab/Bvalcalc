@@ -216,4 +216,40 @@ def calcRDistances(precise_blockstart, precise_blockend, precise_rates, precise_
 
     return blockend_rec_distances, blockstart_rec_distances
 
-    # return all_rec_distances
+def calcRLengthsDistances_forchunks(upstream_indices, downstream_indices, rec_rate_per_chunk, relevant_upstream_psdc_lengths, relevant_downstream_psdc_lengths, chunk_index, chunk_size, relevant_upstream_pseudoblockends, relevant_downstream_pseudoblockstarts, chunk_starts, chunk_ends, chunk_rec_distances, relevant_upstream_psdc_distances):
+
+    ## Calculate relevant upstream and downstream rec lengths of pseudoblocks
+    upstream_rec_rates = rec_rate_per_chunk[upstream_indices] # Relevant rec rates for pseudochunks upstream
+    upstream_rec_lengths = upstream_rec_rates * relevant_upstream_psdc_lengths
+    downstream_rec_rates = rec_rate_per_chunk[downstream_indices] # Relevant rec rates for pseudochunks downstream
+    downstream_rec_lengths = downstream_rec_rates * relevant_downstream_psdc_lengths
+
+    ## Calculate relevant upstream rec distances!
+    mean_rec_distance_focalchunk = rec_rate_per_chunk[chunk_index] * chunk_size / 2 # Note that this is distance to middle of focal chunk. STEP 1 DONE
+
+    upstream_distance_blockchunk = chunk_ends[upstream_indices] - relevant_upstream_pseudoblockends
+    upstream_rec_distance_blockchunk = upstream_distance_blockchunk * rec_rate_per_chunk[upstream_indices] # This is rec distance from edge of pseudoblock to its chunk end
+
+    upstream_overlapped_indices = [np.arange(u + 1, chunk_index) for u in upstream_indices]
+    upstream_overlapped_rec_distances = np.array([chunk_rec_distances[idx].sum() for idx in upstream_overlapped_indices]) # This is rec distance spanned in fully overlapped chunks
+
+    upstream_rec_distances = mean_rec_distance_focalchunk + upstream_rec_distance_blockchunk + upstream_overlapped_rec_distances # Combined rec distance from middle of focal chunk to edge of pseudo"blocks" upstream
+
+    ## Calculate downstream rec distances!
+
+
+    downstream_distance_blockchunk = relevant_downstream_pseudoblockstarts - chunk_starts[downstream_indices]
+    downstream_rec_distance_blockchunk = downstream_distance_blockchunk * rec_rate_per_chunk[downstream_indices] # This is rec distance from edge of pseudoblock to its chunk start
+    
+    downstream_overlapped_indices = [np.arange(chunk_index + 1, d) for d in downstream_indices]
+    downstream_overlapped_rec_distances = np.array([chunk_rec_distances[idx].sum() for idx in downstream_overlapped_indices]) # This is rec distance spanned in fully overlapped chunks
+
+    downstream_rec_distances = mean_rec_distance_focalchunk + downstream_rec_distance_blockchunk + downstream_overlapped_rec_distances # Combined rec distance from middle of focal chunk to edge of pseudo"blocks" upstream
+
+
+    return upstream_rec_lengths, downstream_rec_lengths, upstream_rec_distances, downstream_rec_distances
+
+    # print(chunk_index, mean_rec_distance_focalchunk, rec_distance_blockchunk, overlapped_rec_distances, relevant_upstream_rec_distance)
+    print(chunk_index, relevant_upstream_psdc_distances, relevant_upstream_rec_distance)
+
+    ## Calculate downstream_rec_distances!
