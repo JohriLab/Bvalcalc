@@ -19,6 +19,8 @@ def parseGenomeArgs(argv=None):
                         help="Optional path to output CSV file. If --out is specified but no file name is given, "
                              "'b_values.csv' will be used in the current directory. If --out is not specified, "
                              "no CSV will be saved.")
+    parser.add_argument('--silent', action='store_true', help="If set, silence prince statements.")
+
     
     args = parser.parse_args(argv)
     
@@ -39,4 +41,5 @@ def parseRegionArgs(argv=None):
                         help="Optional path to output CSV file. If --out is specified but no file name is given, "
                              "'b_values.csv' will be used in the current directory. If --out is not specified, "
                              "no CSV will be saved.")
+    parser.add_argument('--silent', action='store_true', help="If set, silence prince statements.")
     return parser.parse_args(argv)

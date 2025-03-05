@@ -6,7 +6,7 @@ import numpy as np
 
 def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
                          calc_start, calc_end, num_chunks, precise_chunks,
-                         lperchunk, b_values, rec_rate_per_chunk=None):
+                         lperchunk, b_values, rec_rate_per_chunk=None, silent=False):
 
     chunk_start = calc_start + chunk_num * chunk_size
     chunk_end   = min(chunk_start + chunk_size, calc_end)
@@ -15,7 +15,7 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
     not_nan_mask = ~np.isnan(chunk_slice) # Make a mask for positions that are NOT NaN
     
     if not np.any(not_nan_mask):
-        print(f"No neutral sites in chunk {chunk_num}: {chunk_start}-{chunk_end}")
+        if not silent: print(f"No neutral sites in chunk {chunk_num}: {chunk_start}-{chunk_end}")
         return b_values
     
     pos_chunk = np.arange(chunk_start, chunk_end) # Array of positions in this chunk
@@ -94,14 +94,15 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
     chunk_slice[not_nan_mask] = chunk_slice_clean # Put the updated (non-NaN) slice back into the original b_values
     mean_chunk_b = np.nanmean(chunk_slice) # Mean B for chunk
 
-    print(f"Processing chunk: {pos_chunk.min()} - {pos_chunk.max()}")
-    if rec_rate_per_chunk is not None:
-        rec_rate = rec_rate_per_chunk[chunk_num]
-        print(f"Chunk {chunk_num}: recombination rate = {rec_rate}")
-    print(f"B from distant chunks: {B_from_distant_chunks}")
-    print(f"Number of relevant genes: {len(precise_blockstart)}")
-    print(f"Number of neutral sites in chunk [{chunk_start}-{chunk_end}): {np.isnan(chunk_slice).sum()}")
-    print(f"Aggregated B values for chunk: {aggregated_B}")
-    print(f"Mean B value for chunk {chunk_num}: [{chunk_start}-{chunk_end}]: {mean_chunk_b}")
+    if not silent: 
+        print(f"Processing chunk: {pos_chunk.min()} - {pos_chunk.max()}")
+        if rec_rate_per_chunk is not None:
+            rec_rate = rec_rate_per_chunk[chunk_num]
+            print(f"Chunk {chunk_num}: recombination rate = {rec_rate}")
+        print(f"B from distant chunks: {B_from_distant_chunks}")
+        print(f"Number of relevant genes: {len(precise_blockstart)}")
+        print(f"Number of neutral sites in chunk [{chunk_start}-{chunk_end}): {np.isnan(chunk_slice).sum()}")
+        print(f"Aggregated B values for chunk: {aggregated_B}")
+        print(f"Mean B value for chunk {chunk_num}: [{chunk_start}-{chunk_end}]: {mean_chunk_b}")
 
     return b_values
