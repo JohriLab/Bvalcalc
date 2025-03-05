@@ -10,19 +10,18 @@ import os
 def genomeBcalc(args):    
     file_path, chr_start, chr_end, calc_start, calc_end, chunk_size, precise_chunks, out = args.bedgff_path, args.chr_start, args.chr_end, args.calc_start, args.calc_end, args.chunk_size, args.precise_chunks, args.out
 
-    # if not args.silent: 
-    print(f"Calculating relative diversity (B) for all neutral sites across the genome...")
-    print(f"====== P A R A M E T E R S =========================")
-    print(f"BED/GFF file for regions under selection: {file_path}")
-    print(f"First position in chromosome: {calc_start}")
-    print(f"Last position in chromosome: {calc_end}")
-    print(f"Size of chunks to calculate B in per iteration: {chunk_size}bp")
-    print(f"Number of adjacent chunks to calculate B precisely for: {precise_chunks}")
+    print(f"= Calculating relative diversity (B) for all neutral sites across the genome. = = =")
+    if not args.silent: 
+        print(f"====== P A R A M E T E R S =========================")
+        print(f"BED/GFF file for regions under selection: {file_path}")
+        print(f"First position in chromosome: {calc_start}")
+        print(f"Last position in chromosome: {calc_end}")
+        print(f"Size of chunks to calculate B in per iteration: {chunk_size}bp")
+        print(f"Number of adjacent chunks to calculate B precisely for: {precise_chunks}")
 
     blockstart, blockend = bedgffHandler(file_path) # Read BED/GFF, return start and end of conserved elements
-    
-    print(f"====== S T A R T I N G ===== C A L C================")
 
+    print(f"====== S T A R T I N G ===== C A L C ===============")
 
     b_values = np.ones(calc_end - calc_start, dtype=np.float64) # Initialize array of B values
     for s, e in zip(blockstart, blockend): # Converts gene sites to NaN
@@ -45,10 +44,11 @@ def genomeBcalc(args):
                                    calc_end, num_chunks, precise_chunks, lperchunk, b_values, rec_rate_per_chunk, silent = args.silent)
             for chunk_num in range(num_chunks)]
     
-    # if not args.silent: 
-    print(f"====== R E S U L T S ====== S U M M A R Y ==========")
-    print(f"Cumulative length of regions under selection: {int(sum(lperchunk))}bp ({round((sum(lperchunk)/(calc_end - calc_start))*100,2)}%)")
-    print(f"Mean B of neutral sites across genome: {b_values[~np.isnan(b_values)].mean()}")
+    print(f"====== F I N I S H E D ===== C A L C ===============")
+    if not args.silent: 
+        print(f"====== R E S U L T S ====== S U M M A R Y ==========")
+        print(f"Cumulative length of regions under selection: {int(sum(lperchunk))}bp ({round((sum(lperchunk)/(calc_end - calc_start))*100,2)}%)")
+        print(f"Mean B of neutral sites across genome: {b_values[~np.isnan(b_values)].mean()}")
 
     positions = np.arange(calc_start, calc_end)
     output_data = np.column_stack((positions, b_values))
