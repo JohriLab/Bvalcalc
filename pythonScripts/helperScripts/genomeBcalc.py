@@ -5,9 +5,10 @@ from helperScripts.RunBCalcScripts.demographyHelpers import get_Bcur
 from helperScripts.RunBCalcScripts.recmapHandler import recmapHandler
 from concurrent.futures import ThreadPoolExecutor
 import numpy as np
+import os
 
 def genomeBcalc(args):    
-    file_path, chr_start, chr_end, chunk_size, precise_chunks = args.file_path, args.chr_start, args.chr_end, args.chunk_size, args.precise_chunks
+    file_path, chr_start, chr_end, chunk_size, precise_chunks, out = args.bedgff_path, args.chr_start, args.chr_end, args.chunk_size, args.precise_chunks, args.out
 
     print(f"Calculating relative diversity (B) for all neutral sites across the genome...")
     print(f"====== P A R A M E T E R S =========================")
@@ -41,6 +42,26 @@ def genomeBcalc(args):
     print(f"====== R E S U L T S ====== S U M M A R Y ==========")
     print(f"Mean B of neutral sites across genome: {b_values[~np.isnan(b_values)].mean()}")
     print(f"Cumulative length of regions under selection: {int(sum(lperchunk))}bp ({round((sum(lperchunk)/(chr_end - chr_start))*100,2)}%)")
+
+    if args.out is not None:
+        csv_file = args.out  # This might be "b_values.csv" or a custom path
+
+        # Combine positions and b_values into two columns
+        positions = np.arange(1, 200000)
+        output_data = np.column_stack((positions, b_values))
+
+        # Write to CSV
+        np.savetxt(
+            csv_file, 
+            output_data,
+            delimiter=",", 
+            header="Position,B", 
+            fmt=("%d", "%.6f"),  # first column = integer, second = float w/ 6 decimals
+            comments=""
+)
+        print(f"Saved B values to: {os.path.abspath(csv_file)}")
+    else:
+        print("No output CSV requested; skipping save.")
 
     if args.pop_change:
         return get_Bcur(b_values)

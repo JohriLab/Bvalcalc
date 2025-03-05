@@ -1,0 +1,82 @@
+Calculating relative diversity (B) for all neutral sites across the genome...
+====== P A R A M E T E R S =========================
+BED/GFF file for regions under selection: ../exampleData/200kb_slimtest.csv
+First position in chromosome: 1
+Last position in chromosome: 200000
+Size of chunks to calculate B in per iteration: 10000bp
+Number of adjacent chunks to calculate B precisely for: 3
+====== R E S U L T S == P E R == C H U N K =========
+No neutral sites in chunk 1: 10001-20001
+No neutral sites in chunk 3: 30001-40001
+No neutral sites in chunk 5: 50001-60001
+No neutral sites in chunk 7: 70001-80001
+No neutral sites in chunk 9: 90001-100001
+No neutral sites in chunk 11: 110001-120001
+No neutral sites in chunk 15: 150001-160001
+No neutral sites in chunk 13: 130001-140001
+No neutral sites in chunk 17: 170001-180001
+No neutral sites in chunk 19: 190001-200000
+Processing chunk: 160001 - 170000
+B from distant chunks: 0.9712115760618829
+Number of relevant genes: 4
+Number of neutral sites in chunk [160001-170001): 0
+Aggregated B values for chunk: [0.76669967 0.76690713 0.76711375 ... 0.76711375 0.76690713 0.76669967]
+Mean B value for chunk 16: [160001-170001]: 0.8427031354212979
+Processing chunk: 180001 - 190000
+B from distant chunks: 0.9680624314671271
+Number of relevant genes: 3
+Number of neutral sites in chunk [180001-190001): 0
+Aggregated B values for chunk: [0.77421496 0.77442467 0.7746335  ... 0.77765006 0.77744107 0.7772312 ]
+Mean B value for chunk 18: [180001-190001]: 0.8496239616737453
+Processing chunk: 80001 - 90000
+B from distant chunks: 0.9658329554574884
+Number of relevant genes: 4
+Processing chunk: 60001 - 70000
+B from distant chunks: 0.9676086189650352
+Number of relevant genes: 4
+Number of neutral sites in chunk [80001-90001): 0
+Aggregated B values for chunk: [0.76669967 0.76690713 0.76711375 ... 0.76711375 0.76690713 0.76669967]
+Mean B value for chunk 8: [80001-90001]: 0.838036201295632
+Processing chunk: 20001 - 30000
+B from distant chunks: 0.9680624314671271
+Number of relevant genes: 3
+Number of neutral sites in chunk [20001-30001): 0
+Aggregated B values for chunk: [0.7772312  0.77744107 0.77765006 ... 0.7746335  0.77442467 0.77421496]
+Mean B value for chunk 2: [20001-30001]: 0.8496239616737452
+Number of neutral sites in chunk [60001-70001): 0
+Aggregated B values for chunk: [0.76669967 0.76690713 0.76711375 ... 0.76711375 0.76690713 0.76669967]
+Mean B value for chunk 6: [60001-70001]: 0.8395769131674268
+Processing chunk: 1 - 10000
+B from distant chunks: 0.9651263467057382
+Number of relevant genes: 2
+Number of neutral sites in chunk [1-10001): 0
+Processing chunk: 120001 - 130000
+B from distant chunks: 0.9658329554574884
+Number of relevant genes: 4
+Aggregated B values for chunk: [0.96559165 0.96558923 0.96558682 ... 0.79445342 0.79423746 0.79402061]
+Mean B value for chunk 0: [1-10001]: 0.899431032156698
+Number of neutral sites in chunk [120001-130001): 0
+Aggregated B values for chunk: [0.76669967 0.76690713 0.76711375 ... 0.76711375 0.76690713 0.76669967]
+Mean B value for chunk 12: [120001-130001]: 0.838036201295632
+Processing chunk: 140001 - 150000
+B from distant chunks: 0.9676086189650352
+Number of relevant genes: 4
+Number of neutral sites in chunk [140001-150001): 0
+Aggregated B values for chunk: [0.76669967 0.76690713 0.76711375 ... 0.76711375 0.76690713 0.76669967]
+Mean B value for chunk 14: [140001-150001]: 0.8395769131674268
+Processing chunk: 100001 - 110000
+B from distant chunks: 0.9652869917254842
+Number of relevant genes: 4
+Number of neutral sites in chunk [100001-110001): 0
+Aggregated B values for chunk: [0.76669967 0.76690713 0.76711375 ... 0.76711375 0.76690713 0.76669967]
+Mean B value for chunk 10: [100001-110001]: 0.8375624782057037
+Processing chunk: 40001 - 50000
+B from distant chunks: 0.9712115760618829
+Number of relevant genes: 4
+Number of neutral sites in chunk [40001-50001): 0
+Aggregated B values for chunk: [0.76669967 0.76690713 0.76711375 ... 0.76711375 0.76690713 0.76669967]
+Mean B value for chunk 4: [40001-50001]: 0.8427031354212979
+====== R E S U L T S ====== S U M M A R Y ==========
+Mean B of neutral sites across genome: 0.8476873933478606
+Cumulative length of regions under selection: 99990bp (50.0%)
+= B value calculated in 0.04 seconds. = = =
