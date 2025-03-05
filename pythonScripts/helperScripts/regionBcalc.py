@@ -14,6 +14,7 @@ def regionBcalc(args):
 
     print(f"====== S T A R T I N G ===== C A L C ===============")
     b_values = calculateB_linear(np.arange(1, flank_len, 1, dtype = int), gene_size)
+    print(f"====== F I N I S H E D ===== C A L C ===============")
 
     if not silent:
         print(f"====== R E S U L T S ! =============================")

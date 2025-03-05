@@ -22,10 +22,12 @@ def genomeBcalc(args):
     blockstart, blockend = bedgffHandler(file_path) # Read BED/GFF, return start and end of conserved elements
 
     print(f"====== S T A R T I N G ===== C A L C ===============")
+    print("chr_start, chr_end, calc_start, calc_end", chr_start, chr_end, calc_start, calc_end)
 
     b_values = np.ones(calc_end - calc_start, dtype=np.float64) # Initialize array of B values
     for s, e in zip(blockstart, blockend): # Converts gene sites to NaN
         b_values[s - calc_start : e - calc_start + 1] = np.nan
+
 
     lperchunk = calculateLPerChunk(chunk_size, blockstart, blockend, chr_start, chr_end) # Cumulative conserved length in each chunk
 
@@ -37,12 +39,17 @@ def genomeBcalc(args):
 
     if not args.silent: print(f"====== R E S U L T S == P E R == C H U N K =========")
 
-    num_chunks = (calc_end - calc_start + chunk_size - 1) // chunk_size
+    num_chunks = (chr_end - chr_start + chunk_size - 1) // chunk_size
+    calc_chunk_start = (calc_start - chr_start) // chunk_size
+    calc_chunk_end = (calc_end - chr_start) // chunk_size
+    calc_chunks = np.arange(calc_chunk_start,calc_chunk_end + 1)
+    print("calc_chunks", calc_chunks)
+
     with ThreadPoolExecutor() as executor:
         results = [executor.submit(process_single_chunk, chunk_num, 
-                                   chunk_size, blockstart, blockend, calc_start, 
+                                   chunk_size, blockstart, blockend, chr_start, chr_end, calc_start, 
                                    calc_end, num_chunks, precise_chunks, lperchunk, b_values, rec_rate_per_chunk, silent = args.silent)
-            for chunk_num in range(num_chunks)]
+            for chunk_num in calc_chunks]
     
     print(f"====== F I N I S H E D ===== C A L C ===============")
     if not args.silent: 

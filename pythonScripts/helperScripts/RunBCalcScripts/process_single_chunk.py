@@ -4,15 +4,17 @@ from helperScripts.RunBCalcScripts.recmapHandler import calcRLengths
 from helperScripts.RunBCalcScripts.recmapHandler import calcRDistances
 import numpy as np
 
-def process_single_chunk(chunk_num, chunk_size, blockstart, blockend,
+def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start, chr_end,
                          calc_start, calc_end, num_chunks, precise_chunks,
                          lperchunk, b_values, rec_rate_per_chunk=None, silent=False):
 
-    chunk_start = calc_start + chunk_num * chunk_size
+    chunk_start = chr_start + chunk_num * chunk_size
     chunk_end   = min(chunk_start + chunk_size, calc_end)
+
 
     chunk_slice = b_values[chunk_start - calc_start:chunk_end - calc_start] # Get b_values for this chunk
     not_nan_mask = ~np.isnan(chunk_slice) # Make a mask for positions that are NOT NaN
+    print("chunk_num, chunk_start, chunk_end, chunk_slice FIX chunk_slice IN process_single_chunk", chunk_num, chunk_start, chunk_end, chunk_slice)
     
     if not np.any(not_nan_mask):
         if not silent: print(f"No neutral sites in chunk {chunk_num}: {chunk_start}-{chunk_end}")
