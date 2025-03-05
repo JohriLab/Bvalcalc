@@ -8,7 +8,7 @@ import numpy as np
 import os
 
 def genomeBcalc(args):    
-    file_path, actual_chrstart, actual_chrend, calc_start, calc_end, chunk_size, precise_chunks, out = args.bedgff_path, args.calc_start, args.calc_end, args.chunk_size, args.precise_chunks, args.out
+    file_path, chr_start, chr_end, calc_start, calc_end, chunk_size, precise_chunks, out = args.bedgff_path, args.chr_start, args.chr_end, args.calc_start, args.calc_end, args.chunk_size, args.precise_chunks, args.out
 
     print(f"Calculating relative diversity (B) for all neutral sites across the genome...")
     print(f"====== P A R A M E T E R S =========================")

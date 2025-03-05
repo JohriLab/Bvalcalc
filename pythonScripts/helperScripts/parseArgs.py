@@ -2,24 +2,32 @@ import argparse
 
 def parseGenomeArgs(argv=None):
     parser = argparse.ArgumentParser(description="Calculates B for all neutral sites across given chromosome.")
-    parser.add_argument('--calc_start', type=int, required=True, help="Start of chromosome position.")
-    parser.add_argument('--calc_end', type=int, required=True, help="End of chromosome position.")
-    parser.add_argument('--calc_region_start', type=int, required=True, help="Start of region to calculate B [default calc_start]")
-    parser.add_argument('--calc_region_end', type=int, required=True, help="End of region to calculate B [default calc_end]")
+    parser.add_argument('--chr_start', type=int, required=True, help="Start of chromosome position.")
+    parser.add_argument('--chr_end', type=int, required=True, help="End of chromosome position.")
+    parser.add_argument('--calc_start', type=int, default=None, help="Start of region to calculate B [default: chr_start]") # See if statment below
+    parser.add_argument('--calc_end', type=int, default=None, help="End of region to calculate B [default: chr_end]") # See if statment below
     parser.add_argument('--chunk_size', type=int, default=20000, help="Size of chunks calculated simultaneously (bp). [100000]")
     parser.add_argument('--bedgff_path', type=str, required=True, help="Path to input BED or GFF3 file.")
     parser.add_argument('--precise_chunks', type=int, default=3, help="Number of adjacent chunks to calculate B precisely.")
     parser.add_argument('--pop_change', action='store_false', help="If set, B will reflect the current B after a step change in population size, rather than ancestral B.")
     parser.add_argument('--rec_map', nargs='?', const='../../bin/5Mb.map', default=None,
                         help="Optional recombination map input. Usage: --rec_map your.map, "
-                             "Format should be a two column csv with the header: 'start,rate'"
-                             "Note recombination rates will be averaged within each chunk")    
+                             "Format should be a two column csv with the header: 'start,rate'. "
+                             "Note recombination rates will be averaged within each chunk.")    
     parser.add_argument('--plotBasic', action='store_true', help="Generate a basic plot using `Bvalcalc.py --genome` output")
     parser.add_argument('--out', nargs='?', const='../../bin/b_values.csv', default=None,
                         help="Optional path to output CSV file. If --out is specified but no file name is given, "
                              "'b_values.csv' will be used in the current directory. If --out is not specified, "
                              "no CSV will be saved.")
-    return parser.parse_args(argv)
+    
+    args = parser.parse_args(argv)
+    
+    if args.calc_start is None: # Update calc_start and calc_end to default to chr_start and chr_end if not provided
+        args.calc_start = args.chr_start
+    if args.calc_end is None:
+        args.calc_end = args.chr_end
+        
+    return args
 
 def parseRegionArgs(argv=None):
     parser = argparse.ArgumentParser(description="Calculates B for neutral sites flanking a single region under selection.")
