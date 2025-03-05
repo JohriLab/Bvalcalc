@@ -12,6 +12,7 @@ def parseGenomeArgs(argv=None):
                         help="Optional recombination map input. Usage: --rec_map your.map, "
                              "Format should be a two column csv with the header: 'start,rate'"
                              "Note recombination rates will be averaged within each chunk")    
+    parser.add_argument('--plotBasic', action='store_true', help="Generate a basic plot using `Bvalcalc.py --genome` output")
     parser.add_argument('--out', nargs='?', const='../../bin/b_values.csv', default=None,
                         help="Optional path to output CSV file. If --out is specified but no file name is given, "
                              "'b_values.csv' will be used in the current directory. If --out is not specified, "

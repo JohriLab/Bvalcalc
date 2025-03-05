@@ -43,12 +43,13 @@ def genomeBcalc(args):
     print(f"Mean B of neutral sites across genome: {b_values[~np.isnan(b_values)].mean()}")
     print(f"Cumulative length of regions under selection: {int(sum(lperchunk))}bp ({round((sum(lperchunk)/(chr_end - chr_start))*100,2)}%)")
 
+    positions = np.arange(chr_start, chr_end)
+    output_data = np.column_stack((positions, b_values))
+
     if args.out is not None:
         csv_file = args.out  # This might be "b_values.csv" or a custom path
 
         # Combine positions and b_values into two columns
-        positions = np.arange(1, 200000)
-        output_data = np.column_stack((positions, b_values))
 
         # Write to CSV
         np.savetxt(
@@ -66,4 +67,4 @@ def genomeBcalc(args):
     if args.pop_change:
         return get_Bcur(b_values)
     else:
-        return b_values
+        return output_data
