@@ -1,7 +1,7 @@
 import csv
 import numpy as np
 
-def recmapHandler(rec_map, chr_start, chr_end, chunk_size):
+def recmapHandler(rec_map, calc_start, calc_end, chunk_size):
     """
     Processes the recombination map CSV file using the csv module and returns
     the average recombination rate per chunk, weighted by the proportion of each 
@@ -9,13 +9,13 @@ def recmapHandler(rec_map, chr_start, chr_end, chunk_size):
     
     The CSV file must have two columns with headers 'start' and 'rate'. 
     Each row defines the recombination rate for positions starting at the given 
-    'start' until the next 'start' (or until chr_end for the last entry). If any 
+    'start' until the next 'start' (or until calc_end for the last entry). If any 
     region in the chromosome is not covered by the map, a default rate of 1.0 is used.
     
     Parameters:
         rec_map (str): Path to the recombination map CSV file.
-        chr_start (int): Starting position of the chromosome.
-        chr_end (int): Ending position of the chromosome.
+        calc_start (int): Starting position of the chromosome.
+        calc_end (int): Ending position of the chromosome.
         chunk_size (int): Size of each chunk in base pairs.
     
     Returns:
@@ -46,12 +46,12 @@ def recmapHandler(rec_map, chr_start, chr_end, chunk_size):
     # Ensure the data is sorted by start position.
     rec_map_data.sort(key=lambda x: x['start'])
     
-    # Build a list of intervals covering the entire region [chr_start, chr_end)
+    # Build a list of intervals covering the entire region [calc_start, calc_end)
     intervals = []
     
-    # If the first map entry starts after chr_start, assign default rate 1 from chr_start up to that entry.
-    if rec_map_data and rec_map_data[0]['start'] > chr_start:
-        intervals.append({'start': chr_start, 'end': rec_map_data[0]['start'], 'rate': 1.0})
+    # If the first map entry starts after calc_start, assign default rate 1 from calc_start up to that entry.
+    if rec_map_data and rec_map_data[0]['start'] > calc_start:
+        intervals.append({'start': calc_start, 'end': rec_map_data[0]['start'], 'rate': 1.0})
     
     # Create intervals for each recombination map entry.
     for i, entry in enumerate(rec_map_data):
@@ -60,33 +60,33 @@ def recmapHandler(rec_map, chr_start, chr_end, chunk_size):
         if i < len(rec_map_data) - 1:
             interval_end = rec_map_data[i+1]['start']
         else:
-            # For the last entry, extend the interval to chr_end.
-            interval_end = chr_end
+            # For the last entry, extend the interval to calc_end.
+            interval_end = calc_end
         # Only add intervals that overlap the region of interest.
-        if interval_end > chr_start and interval_start < chr_end:
+        if interval_end > calc_start and interval_start < calc_end:
             intervals.append({
-                'start': max(interval_start, chr_start),
-                'end': min(interval_end, chr_end),
+                'start': max(interval_start, calc_start),
+                'end': min(interval_end, calc_end),
                 'rate': entry['rate']
             })
     
-    # If the last interval doesn't reach chr_end, fill in with default rate 1.
+    # If the last interval doesn't reach calc_end, fill in with default rate 1.
     if intervals:
         last_end = intervals[-1]['end']
-        if last_end < chr_end:
-            intervals.append({'start': last_end, 'end': chr_end, 'rate': 1.0})
+        if last_end < calc_end:
+            intervals.append({'start': last_end, 'end': calc_end, 'rate': 1.0})
     else:
         # If no intervals were added, cover the entire region with default rate 1.
-        intervals.append({'start': chr_start, 'end': chr_end, 'rate': 1.0})
+        intervals.append({'start': calc_start, 'end': calc_end, 'rate': 1.0})
     
     # Calculate the number of chunks over the region.
-    num_chunks = (chr_end - chr_start + chunk_size - 1) // chunk_size
+    num_chunks = (calc_end - calc_start + chunk_size - 1) // chunk_size
     rec_rates = []
     
     # For each chunk, compute the weighted average rate.
     for chunk in range(num_chunks):
-        start_chunk = chr_start + chunk * chunk_size
-        end_chunk = min(chr_end, start_chunk + chunk_size)
+        start_chunk = calc_start + chunk * chunk_size
+        end_chunk = min(calc_end, start_chunk + chunk_size)
         chunk_length = end_chunk - start_chunk
         
         weighted_sum = 0.0
@@ -108,20 +108,20 @@ def recmapHandler(rec_map, chr_start, chr_end, chunk_size):
     return np.array(rec_rates)
 
 
-# def calcRLengths(blockstart, blockend, rec_rate_per_chunk, chr_start, chr_end, chunk_size, chunk_num):
+# def calcRLengths(blockstart, blockend, rec_rate_per_chunk, calc_start, calc_end, chunk_size, chunk_num):
 #     """
 #     Calculates the weighted lengths of each conserved block (gene), so that for example if the mean 
 #     recombination rate across the block is 0.5, this will return the length of the block multiplied by 0.5
 #     """
 
-#     # print("In calcRLengths: ", chr_end, chr_start, chunk_size)
+#     # print("In calcRLengths: ", calc_end, calc_start, chunk_size)
 #     # Number of chunks covering the chromosome
-#     num_chunks = (chr_end - chr_start) // chunk_size
-#     chunk_starts = chr_start + np.arange(0, num_chunks + 1) * chunk_size
+#     num_chunks = (calc_end - calc_start) // chunk_size
+#     chunk_starts = calc_start + np.arange(0, num_chunks + 1) * chunk_size
     
 #     # Determine chunk indices for blockstart and blockend
-#     blockstart_chunks = (blockstart - chr_start) // chunk_size
-#     blockend_chunks = (blockend - chr_start) // chunk_size
+#     blockstart_chunks = (blockstart - calc_start) // chunk_size
+#     blockend_chunks = (blockend - calc_start) // chunk_size
 #     block_chunk_overlaps = []
 #     block_chunk_lengths = []
 #     rec_rate_weighted_sums = []
@@ -139,14 +139,14 @@ def recmapHandler(rec_map, chr_start, chr_end, chunk_size):
 #     return rec_rate_weighted_sums
 
 
-def calcRLengths(blockstart, blockend, rec_rate_per_chunk, chr_start, chr_end, chunk_size, chunk_num):
+def calcRLengths(blockstart, blockend, rec_rate_per_chunk, calc_start, calc_end, chunk_size, chunk_num):
     """
     Calculates the weighted lengths of each conserved block (gene), so that for example if the mean 
     recombination rate across the block is 0.5, this will return the length of the block multiplied by 0.5
     """
-    num_chunks = (chr_end - chr_start) // chunk_size
+    num_chunks = (calc_end - calc_start) // chunk_size
     # Build chunk boundaries (note: length = num_chunks + 1)
-    chunk_starts = chr_start + np.arange(0, num_chunks + 1) * chunk_size
+    chunk_starts = calc_start + np.arange(0, num_chunks + 1) * chunk_size
     chunk_left  = chunk_starts           # shape: (num_chunks+1,)
     chunk_right = chunk_starts + chunk_size  # shape: (num_chunks+1,)
 

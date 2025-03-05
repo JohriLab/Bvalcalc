@@ -27,5 +27,5 @@ f3 = 0.22 #(*Proportion of strongly deleterious mutations with |2Nes| >= 100 *) 
 time_of_change=1.0 #0.1/0.5/1(This is the time of change in 2Ncur  in the past generations.)
 
 # 21 Feb
-# ./Bvalcalc.py --genome --chr_start 1 --chr_end 25000000 --chunk_size 11000 --precise_chunks 3  --file_path ../exampleData/dmel6_2R_genes.csv
+# ./Bvalcalc.py --genome --calc_start 1 --calc_end 25000000 --chunk_size 11000 --precise_chunks 3  --file_path ../exampleData/dmel6_2R_genes.csv
 # 1 2 3 4 DFE: B = 0.8599819455425707

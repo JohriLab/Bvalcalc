@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# ./Bcalc_multiElements.py --chr_start 1 --chr_end 25254535 --file_path ../exampleData/dmel6_2R_genes.csv
+# ./Bcalc_multiElements.py --calc_start 1 --calc_end 25254535 --file_path ../exampleData/dmel6_2R_genes.csv
 
 #calculate_B_analytically_Eq3_mine_demography_multiple_elements
 #This script is to get B values across a genomic element with multiple functional elements.
