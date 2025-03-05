@@ -8,7 +8,7 @@ import numpy as np
 import os
 
 def genomeBcalc(args):    
-    file_path, chr_start, chr_end, chunk_size, precise_chunks, out = args.bedgff_path, args.chr_start, args.chr_end, args.chunk_size, args.precise_chunks, args.out
+    file_path, actual_chrstart, actual_chrend, chr_start, chr_end, chunk_size, precise_chunks, out = args.bedgff_path, args.chr_start, args.chr_end, args.chunk_size, args.precise_chunks, args.out
 
     print(f"Calculating relative diversity (B) for all neutral sites across the genome...")
     print(f"====== P A R A M E T E R S =========================")
@@ -35,9 +35,10 @@ def genomeBcalc(args):
 
     num_chunks = (chr_end - chr_start + chunk_size - 1) // chunk_size
     with ThreadPoolExecutor() as executor:
-        results = [executor.submit(process_single_chunk, x, chunk_size, blockstart, blockend, chr_start, 
+        results = [executor.submit(process_single_chunk, chunk_num, 
+                                   chunk_size, blockstart, blockend, chr_start, 
                                    chr_end, num_chunks, precise_chunks, lperchunk, b_values, rec_rate_per_chunk)
-            for x in range(num_chunks)]
+            for chunk_num in range(num_chunks)]
     
     print(f"====== R E S U L T S ====== S U M M A R Y ==========")
     print(f"Mean B of neutral sites across genome: {b_values[~np.isnan(b_values)].mean()}")

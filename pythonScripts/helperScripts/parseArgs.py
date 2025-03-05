@@ -2,8 +2,10 @@ import argparse
 
 def parseGenomeArgs(argv=None):
     parser = argparse.ArgumentParser(description="Calculates B for all neutral sites across given chromosome.")
-    parser.add_argument('--chr_start', type=int, required=True, help="Start of chromosome range.")
-    parser.add_argument('--chr_end', type=int, required=True, help="End of chromosome range.")
+    parser.add_argument('--chr_start', type=int, required=True, help="Start of chromosome position.")
+    parser.add_argument('--chr_end', type=int, required=True, help="End of chromosome position.")
+    parser.add_argument('--calc_region_start', type=int, required=True, help="Start of region to calculate B [default chr_start]")
+    parser.add_argument('--calc_region_end', type=int, required=True, help="End of region to calculate B [default chr_end]")
     parser.add_argument('--chunk_size', type=int, default=20000, help="Size of chunks calculated simultaneously (bp). [100000]")
     parser.add_argument('--bedgff_path', type=str, required=True, help="Path to input BED or GFF3 file.")
     parser.add_argument('--precise_chunks', type=int, default=3, help="Number of adjacent chunks to calculate B precisely.")
