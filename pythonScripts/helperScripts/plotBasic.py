@@ -27,7 +27,7 @@ def plotBasic(b_values_input, caller, output_file='../../bin/plot.png'):
     # Create the plot.
     fig, ax = plt.subplots(figsize=(10, 6))
     ax.plot(b_values_input, color='black', lw=1.5)
-    ax.set_ylabel('Relative diversity (B)', fontsize=13)
+    ax.set_ylabel('Expected diversity relative to neutral evolution (B)', fontsize=13)
     if caller == "genome":
         ax.set_title('B recovery across chromosomal region [200 kb]', fontsize=15, fontweight='bold')
         ax.set_xlabel('Chromosomal position (bp)', fontsize=13)
