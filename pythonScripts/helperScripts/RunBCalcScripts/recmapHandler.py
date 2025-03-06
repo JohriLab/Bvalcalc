@@ -107,38 +107,6 @@ def recmapHandler(rec_map, calc_start, calc_end, chunk_size):
     
     return np.array(rec_rates)
 
-
-# def calcRLengths(blockstart, blockend, rec_rate_per_chunk, calc_start, calc_end, chunk_size, chunk_num):
-#     """
-#     Calculates the weighted lengths of each conserved block (gene), so that for example if the mean 
-#     recombination rate across the block is 0.5, this will return the length of the block multiplied by 0.5
-#     """
-
-#     # print("In calcRLengths: ", calc_end, calc_start, chunk_size)
-#     # Number of chunks covering the chromosome
-#     num_chunks = (calc_end - calc_start) // chunk_size
-#     chunk_starts = calc_start + np.arange(0, num_chunks + 1) * chunk_size
-    
-#     # Determine chunk indices for blockstart and blockend
-#     blockstart_chunks = (blockstart - calc_start) // chunk_size
-#     blockend_chunks = (blockend - calc_start) // chunk_size
-#     block_chunk_overlaps = []
-#     block_chunk_lengths = []
-#     rec_rate_weighted_sums = []
-
-#     for block_idx in range(len(blockstart)):
-#         chunks = np.arange(blockstart_chunks[block_idx],  blockend_chunks[block_idx] + 1)
-#         block_chunk_overlaps.append(chunks)
-#         chunk_lengths = np.minimum(blockend[block_idx], chunk_starts[chunks] + chunk_size) - np.maximum(blockstart[block_idx], chunk_starts[chunks])
-#         block_chunk_lengths.append(chunk_lengths)
-#         weighted_sum = np.sum(chunk_lengths * rec_rate_per_chunk[chunks])
-#         rec_rate_weighted_sums.append(weighted_sum)
-    
-#     # print("Weighted recombinant length (rate * length) for each block using map:", rec_rate_weighted_sums)
-    
-#     return rec_rate_weighted_sums
-
-
 def calcRLengths(blockstart, blockend, rec_rate_per_chunk, calc_start, calc_end, chunk_size, chunk_num):
     """
     Calculates the weighted lengths of each conserved block (gene), so that for example if the mean 

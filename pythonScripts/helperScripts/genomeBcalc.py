@@ -8,7 +8,7 @@ import numpy as np
 import os
 
 def genomeBcalc(args):    
-    file_path, chr_start, chr_end, calc_start, calc_end, chunk_size, precise_chunks, out = args.bedgff_path, args.chr_start, args.chr_end, args.calc_start, args.calc_end, args.chunk_size, args.precise_chunks, args.out
+    file_path, chr_start, chr_end, calc_start, calc_end, chunk_size, precise_chunks, out, silent = args.bedgff_path, args.chr_start, args.chr_end, args.calc_start, args.calc_end, args.chunk_size, args.precise_chunks, args.out, args.silent
 
     print(f"= Calculating relative diversity (B) for all neutral sites across the genome. = = =")
     if not args.silent: 
@@ -21,13 +21,11 @@ def genomeBcalc(args):
 
     blockstart, blockend = bedgffHandler(file_path) # Read BED/GFF, return start and end of conserved elements
 
-    print(f"====== S T A R T I N G ===== C A L C ===============")
+    if not silent: print(f"====== S T A R T I N G ===== C A L C ===============")
 
     b_values = np.ones(calc_end + 1 - calc_start, dtype=np.float64) # Initialize array of B values
     for s, e in zip(blockstart, blockend): # Converts gene sites to NaN
         b_values[s - calc_start : e - calc_start + 1] = np.nan
-    print("chr_start, chr_end, calc_start, calc_end", chr_start, chr_end, calc_start, calc_end)
-
 
     lperchunk = calculateLPerChunk(chunk_size, blockstart, blockend, chr_start, chr_end) # Cumulative conserved length in each chunk
 
@@ -37,22 +35,21 @@ def genomeBcalc(args):
     else:
         rec_rate_per_chunk = None
 
-    if not args.silent: print(f"====== R E S U L T S == P E R == C H U N K =========")
+    if not silent: print(f"====== R E S U L T S == P E R == C H U N K =========")
 
     num_chunks = (chr_end - chr_start + chunk_size - 1) // chunk_size
     calc_chunk_start = (calc_start - chr_start) // chunk_size
     calc_chunk_end = (calc_end - chr_start) // chunk_size
-    calc_chunks = np.arange(calc_chunk_start,calc_chunk_end + 1)
-    print("calc_chunks", calc_chunks)
+    calc_chunks = np.arange(calc_chunk_start,calc_chunk_end + 1) # Relevant chunks to calculate B for based on calc_start and calc_end
 
     with ThreadPoolExecutor() as executor:
         results = [executor.submit(process_single_chunk, chunk_num, 
                                    chunk_size, blockstart, blockend, chr_start, chr_end, calc_start, 
-                                   calc_end, num_chunks, precise_chunks, lperchunk, b_values, rec_rate_per_chunk, silent = args.silent)
+                                   calc_end, num_chunks, precise_chunks, lperchunk, b_values, rec_rate_per_chunk, silent)
             for chunk_num in calc_chunks]
     
-    print(f"====== F I N I S H E D ===== C A L C ===============")
-    if not args.silent: 
+    if not silent: 
+        print(f"====== F I N I S H E D ===== C A L C ===============")
         print(f"====== R E S U L T S ====== S U M M A R Y ==========")
         print(f"Cumulative length of regions under selection: {int(sum(lperchunk))}bp ({round((sum(lperchunk)/(calc_end - calc_start))*100,2)}%)")
         print(f"Mean B of neutral sites across genome: {b_values[~np.isnan(b_values)].mean()}")
@@ -60,16 +57,12 @@ def genomeBcalc(args):
     positions = np.arange(calc_start, calc_end + 1)
     if args.pop_change:
         b_values = get_Bcur(b_values)
-        print("Demographic change applied to B-calculation")
+        if not silent: print("Demographic change applied to B-calculation")
     output_data = np.column_stack((positions, b_values))
 
     if args.out is not None:
         csv_file = args.out  # This might be "b_values.csv" or a custom path
-
-        # Combine positions and b_values into two columns
-
-        # Write to CSV
-        np.savetxt(
+        np.savetxt(         # Write to CSV
             csv_file, 
             output_data,
             delimiter=",", 
@@ -77,7 +70,7 @@ def genomeBcalc(args):
             fmt=("%d", "%.6f"),  # first column = integer, second = float w/ 6 decimals
             comments=""
 )
-        if not args.silent: print(f"Saved B values to: {os.path.abspath(csv_file)}")
+        print(f"Saved B values to: {os.path.abspath(csv_file)}")
     else:
         if not args.silent: print("No output CSV requested; skipping save.")
 

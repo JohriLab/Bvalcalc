@@ -90,7 +90,7 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
 
     if flat_distances.size == 0 or flat_lengths.size == 0:
         flank_B = 1
-        print(f"No nearby sites under selection in flanking region for chunk:", chunk_num)
+        if not silent: print(f"No nearby sites under selection in flanking region for chunk:", chunk_num)
 
     unique_indices, inverse_indices = np.unique(np.where(flanking_mask)[1], return_inverse=True)
     aggregated_B = np.ones_like(unique_indices, dtype=np.float64)
@@ -103,7 +103,6 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
         chunk_slice[not_nan_mask] = chunk_slice_clean # Put the updated (non-NaN) slice back into the original b_values
 
     mean_chunk_b = np.nanmean(chunk_slice) # Mean B for chunk
-
 
     if not silent: 
         print(f"Processing chunk: {pos_chunk.min()} - {pos_chunk.max()}")
