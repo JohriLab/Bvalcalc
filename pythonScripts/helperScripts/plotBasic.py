@@ -46,7 +46,7 @@ def plotBasic(b_values_input, caller, output_file='../../bin/plot.png'):
     # Format the x-axis ticks:
     ax.xaxis.set_major_formatter(
         ticker.FuncFormatter(
-            lambda x, pos: f"{int(x)} bp" if x < 1000 else (f"{int(x/1e6)} Mb" if x >= 1000000 else f"{int(x/1000)} kb")
+            lambda x, pos: f"{int(x)} bp" if x < 1000 else (f"{x/1e6:.2f} Mb" if x >= 1000000 else f"{int(x/1000)} kb")
         )
     )
     

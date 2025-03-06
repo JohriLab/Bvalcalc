@@ -96,9 +96,14 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
     aggregated_B = np.ones_like(unique_indices, dtype=np.float64)
     np.multiply.at(aggregated_B, inverse_indices, flank_B) # Multiplicative sum of B calculated at a given site from multiple elements
 
-    chunk_slice_clean[unique_indices] *= (aggregated_B * B_from_distant_chunks) # Update chunk slice and combine flank_B with B from distant chunks
-    chunk_slice[not_nan_mask] = chunk_slice_clean # Put the updated (non-NaN) slice back into the original b_values
+    if unique_indices.size == 0: # If there are no nearby sites under selection
+        chunk_slice[not_nan_mask] = B_from_distant_chunks
+    else:
+        chunk_slice_clean[unique_indices] *= (aggregated_B * B_from_distant_chunks) # Update chunk slice and combine flank_B with B from distant chunks
+        chunk_slice[not_nan_mask] = chunk_slice_clean # Put the updated (non-NaN) slice back into the original b_values
+
     mean_chunk_b = np.nanmean(chunk_slice) # Mean B for chunk
+
 
     if not silent: 
         print(f"Processing chunk: {pos_chunk.min()} - {pos_chunk.max()}")
