@@ -14,7 +14,6 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
 
     chunk_slice = b_values[chunk_start - calc_start:chunk_end - calc_start] # Get b_values for this chunk
     not_nan_mask = ~np.isnan(chunk_slice) # Make a mask for positions that are NOT NaN
-    print("chunk_num, chunk_start, chunk_end, chunk_slice FIX chunk_slice IN process_single_chunk", chunk_num, chunk_start, chunk_end, chunk_slice)
     
     if not np.any(not_nan_mask):
         if not silent: print(f"No neutral sites in chunk {chunk_num}: {chunk_start}-{chunk_end}")
@@ -27,6 +26,7 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
     B_from_distant_chunks = calcBFromChunks( # Compute B from distant chunks in non-precise region
         chunk_num, chunk_size,
         blockstart, blockend,
+        chr_start, chr_end,
         calc_start, calc_end,
         num_chunks, precise_chunks,
         lperchunk,
@@ -34,11 +34,11 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
     )
 
     # Identify blocks in the "precise region"
-    precise_region_start = np.maximum(calc_start, calc_start + (chunk_num - precise_chunks) * chunk_size)
-    precise_region_end   = np.minimum(calc_end, calc_start + (chunk_num + 1 + precise_chunks) * chunk_size - 1)
+    precise_region_start = np.maximum(chr_start, chr_start + (chunk_num - precise_chunks) * chunk_size)
+    precise_region_end   = np.minimum(chr_end, chr_start + (chunk_num + 1 + precise_chunks) * chunk_size - 1)
     precise_blockregion_mask = (
-        (precise_region_end   >= blockstart) &
-        (precise_region_start <= blockend)
+        (precise_region_end   > blockstart) &
+        (precise_region_start < blockend)
     )
     precise_blockstart = np.clip(blockstart[precise_blockregion_mask],
                                  a_min=precise_region_start, a_max=precise_region_end)
@@ -49,8 +49,12 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
     physical_distances_downstream = precise_blockstart[:, None] - pos_chunk_clean[None, :] # All distances to blockstarts (upstream and downstream)
 
     downstream_mask = (pos_chunk_clean < precise_blockstart[:, None])
+
     upstream_mask   = (pos_chunk_clean > precise_blockend[:, None])
     flanking_mask   = downstream_mask | upstream_mask
+    unique_indices, inverse_indices = np.unique(np.where(flanking_mask)[1], return_inverse=True)
+
+
     physical_distances = np.where( # Filter so only distances to blockends upstream and blockstarts downstream kept
         flanking_mask,
         np.where(upstream_mask, physical_distances_upstream, physical_distances_downstream),

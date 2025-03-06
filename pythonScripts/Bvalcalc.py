@@ -11,6 +11,7 @@ from helperScripts.genomeBcalc import genomeBcalc
 from helperScripts.regionBcalc import regionBcalc
 from helperScripts.plotBasic import plotBasic
 import time
+import numpy as np
 
 import argparse
 

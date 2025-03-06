@@ -2,10 +2,12 @@ from helperScripts.calculateB import calculateB_linear, calculateB_recmap
 from helperScripts.RunBCalcScripts.recmapHandler import calcRLengthsDistances_forchunks
 import numpy as np
 
-def calcBFromChunks(chunk_index, chunk_size, blockstart, blockend, calc_start, calc_end, num_chunks, precise_chunks, lperchunk, rec_rate_per_chunk):
+def calcBFromChunks(chunk_index, chunk_size, blockstart, blockend, chr_start, chr_end, calc_start, calc_end, num_chunks, precise_chunks, lperchunk, rec_rate_per_chunk):
 
-    chunk_starts = calc_start + np.arange(num_chunks) * chunk_size
-    chunk_ends = np.minimum(chunk_starts + chunk_size - 1, calc_end)
+
+
+    chunk_starts = chr_start + np.arange(num_chunks) * chunk_size
+    chunk_ends = np.minimum(chunk_starts + chunk_size - 1, chr_end)
     chunk_mids = (chunk_ends + chunk_starts) / 2
 
     chunk_pseudoblockstart = chunk_mids - 0.5 * lperchunk

@@ -22,18 +22,18 @@ def genomeBcalc(args):
     blockstart, blockend = bedgffHandler(file_path) # Read BED/GFF, return start and end of conserved elements
 
     print(f"====== S T A R T I N G ===== C A L C ===============")
-    print("chr_start, chr_end, calc_start, calc_end", chr_start, chr_end, calc_start, calc_end)
 
-    b_values = np.ones(calc_end - calc_start, dtype=np.float64) # Initialize array of B values
+    b_values = np.ones(calc_end + 1 - calc_start, dtype=np.float64) # Initialize array of B values
     for s, e in zip(blockstart, blockend): # Converts gene sites to NaN
         b_values[s - calc_start : e - calc_start + 1] = np.nan
+    print("chr_start, chr_end, calc_start, calc_end", chr_start, chr_end, calc_start, calc_end)
 
 
     lperchunk = calculateLPerChunk(chunk_size, blockstart, blockend, chr_start, chr_end) # Cumulative conserved length in each chunk
 
     if args.rec_map: # Process recombination map if provided
         print(f"Using recombination map from {args.rec_map}")
-        rec_rate_per_chunk = recmapHandler(args.rec_map, calc_start, calc_end, chunk_size)
+        rec_rate_per_chunk = recmapHandler(args.rec_map, chr_start, chr_end, chunk_size)
     else:
         rec_rate_per_chunk = None
 
@@ -57,7 +57,10 @@ def genomeBcalc(args):
         print(f"Cumulative length of regions under selection: {int(sum(lperchunk))}bp ({round((sum(lperchunk)/(calc_end - calc_start))*100,2)}%)")
         print(f"Mean B of neutral sites across genome: {b_values[~np.isnan(b_values)].mean()}")
 
-    positions = np.arange(calc_start, calc_end)
+    positions = np.arange(calc_start, calc_end + 1)
+    if args.pop_change:
+        b_values = get_Bcur(b_values)
+        print("Demographic change applied to B-calculation")
     output_data = np.column_stack((positions, b_values))
 
     if args.out is not None:
@@ -78,7 +81,4 @@ def genomeBcalc(args):
     else:
         if not args.silent: print("No output CSV requested; skipping save.")
 
-    if args.pop_change:
-        return get_Bcur(b_values)
-    else:
-        return output_data
+    return output_data
