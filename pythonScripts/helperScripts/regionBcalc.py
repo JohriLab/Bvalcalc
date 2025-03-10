@@ -22,11 +22,15 @@ def regionBcalc(args):
         print(f"Mean B for flanking region: {b_values.mean()}")
         print(f"B at start and end of the neutral region: {b_values}")
 
+    if args.pop_change:
+        b_values = get_Bcur(b_values)
+        if not silent: print("Demographic change applied to B-calculation")
+    output_data = np.column_stack((np.arange(1, flank_len, 1, dtype = int), b_values))
+
     if args.out is not None:
         csv_file = args.out  # This might be "b_values.csv" or a custom path
 
         # Combine positions and b_values into two columns
-        output_data = np.column_stack((np.arange(1, flank_len, 1, dtype = int), b_values))
 
         # Write to CSV
         np.savetxt(
@@ -41,8 +45,5 @@ def regionBcalc(args):
     else:
         if not silent:
             print("No output CSV requested; skipping save.")
-
-    if args.pop_change:
-        return get_Bcur(b_values)
-    else:
-        return b_values
+    
+    return output_data
