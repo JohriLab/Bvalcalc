@@ -14,9 +14,6 @@ def calculate_exponent(t_start, t_end, U, a, b):
             / (b + ((1 - b) * t_start)))
     return E1 + E2 # = E
 
-
-
-
 def calculateB_linear(distance_to_element, length_of_element):
     """
     Calculate the B value for a single functional element at the focal site,

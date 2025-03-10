@@ -1,6 +1,6 @@
 # Constants (make sure to define these in your script or pass them as needed)
 x = 100
-g = 1*1e-8 #1e-8 #rate of gene conversion
+g = 1*1e-8*x #1e-8 #rate of gene conversion
 tract_len=440 #mean tract length of gene conversion in base pairs
 r = 0.5*1e-8*x #rate of recombination
 u = 3*1e-9*x #(*Mutation rate*)

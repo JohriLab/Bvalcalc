@@ -53,6 +53,8 @@ def genomeBcalc(args):
         print(f"====== R E S U L T S ====== S U M M A R Y ==========")
         print(f"Cumulative length of regions under selection: {int(sum(lperchunk))}bp ({round((sum(lperchunk)/(calc_end - calc_start))*100,2)}%)")
         print(f"Mean B of neutral sites across genome: {b_values[~np.isnan(b_values)].mean()}")
+        if args.rec_map: # Process recombination map if provided
+            print(f"Calculated using recombination map, with rates averaged within {chunk_size}bp chunks")
 
     positions = np.arange(calc_start, calc_end + 1)
     if args.pop_change:

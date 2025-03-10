@@ -102,8 +102,6 @@ def recmapHandler(rec_map, calc_start, calc_end, chunk_size):
         # The average is the weighted sum divided by the chunk length.
         avg_rate = weighted_sum / chunk_length if chunk_length > 0 else 1.0
         rec_rates.append(avg_rate)
-
-    print("rates", avg_rate)
     
     return np.array(rec_rates)
 
