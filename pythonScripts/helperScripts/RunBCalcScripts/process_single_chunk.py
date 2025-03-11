@@ -6,7 +6,8 @@ import numpy as np
 
 def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start, chr_end,
                          calc_start, calc_end, num_chunks, precise_chunks,
-                         lperchunk, b_values, rec_rate_per_chunk=None, silent=False):
+                         lperchunk, b_values, gc_rate_per_chunk=None, rec_rate_per_chunk=None, 
+                         silent=False):
 
     chunk_start = chr_start + chunk_num * chunk_size
     chunk_end   = min(chunk_start + chunk_size, calc_end)
@@ -30,7 +31,8 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
         calc_start, calc_end,
         num_chunks, precise_chunks,
         lperchunk,
-        rec_rate_per_chunk
+        rec_rate_per_chunk,
+        gc_rate_per_chunk
     )
 
     # Identify blocks in the "precise region"

@@ -11,9 +11,13 @@ def parseGenomeArgs(argv=None):
     parser.add_argument('--precise_chunks', type=int, default=3, help="Number of adjacent chunks to calculate B precisely.")
     parser.add_argument('--pop_change', action='store_true', help="If set, B will reflect the current B after a step change in population size, rather than ancestral B.")
     parser.add_argument('--rec_map', nargs='?', const='../../bin/5Mb.map', default=None,
-                        help="Optional recombination map input. Usage: --rec_map your.map, "
+                        help="Optional recombination (crossover) map input. Usage: --rec_map your.map, "
                              "Format should be a two column csv with the header: 'start,rate'. "
-                             "Note recombination rates will be averaged within each chunk.")    
+                             "Note that recombination rates will be averaged within each chunk.")    
+    parser.add_argument('--gc_map', nargs='?', default=None,
+                        help="Optional gene conversion (non-crossover) map input. Usage: --gc_map your.map, "
+                             "Format should be a two column csv with the header: 'start,rate'. "
+                             "Note that gene conversion rates will be averaged within each chunk.")    
     parser.add_argument('--plotBasic', action='store_true', help="Generate a basic plot using `Bvalcalc.py --genome` output")
     parser.add_argument('--out', nargs='?', const='../../bin/b_values.csv', default=None,
                         help="Optional path to output CSV file. If --out is specified but no file name is given, "
