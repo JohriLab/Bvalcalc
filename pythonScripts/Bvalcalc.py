@@ -30,7 +30,6 @@ def main():
         args = parseGenomeArgs(remaining_args)
         genome_output = genomeBcalc(args)
         if getattr(args, 'plot_output', True):
-            print("hio")
             plotBasic(b_values_input=genome_output, caller="genome", output_path=args.plot_output, silent=args.silent)
     elif known_args.region:
         args = parseRegionArgs(remaining_args)

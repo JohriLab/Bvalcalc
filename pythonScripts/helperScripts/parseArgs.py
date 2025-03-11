@@ -20,9 +20,9 @@ def parseGenomeArgs(argv=None):
                              "Note that gene conversion rates will be averaged within each chunk.")    
     parser.add_argument('--plot_output', nargs='?', default=None, 
                         help="Generate a basic plot using `Bvalcalc.py --genome` output"
-                            "Provide path to plot output ")
+                            "Provide path to plot output.")
     parser.add_argument('--out', nargs='?', default=None,
-                        help="Optional path to output CSV file. If --out is specified but no file name is given, "
+                        help="Required path to output CSV file. If --out is specified but no file name is given, "
                              "'b_values.csv' will be used in the current directory. If --out is not specified, "
                              "no CSV will be saved.")
     parser.add_argument('--silent', action='store_true', help="If set, silence prince statements.")

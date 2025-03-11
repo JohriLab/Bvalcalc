@@ -4,7 +4,6 @@ import matplotlib.ticker as ticker
 
 def plotBasic(b_values_input, caller, output_path, silent):
     if not silent: print('====== P L O T T I N G . . . =======================')
-    print("hiii")
     
     # Set the font family with a fallback list.
     mpl.rcParams['font.family'] = ['Helvetica', 'DejaVu Sans', 'Arial']
@@ -47,9 +46,7 @@ def plotBasic(b_values_input, caller, output_path, silent):
     # Format the x-axis ticks:
     ax.xaxis.set_major_formatter(
         ticker.FuncFormatter(
-            lambda x, pos: f"{int(x)} bp" if x < 1000 else (f"{x/1e6:.2f} Mb" if x >= 1000000 else f"{int(x/1000)} kb")
-        )
-    )
+            lambda x, pos: f"{int(x)} bp" if x < 1000 else (f"{x/1e6:.2f} Mb" if x >= 1000000 else f"{int(x/1000)} kb")))
     
     plt.tight_layout()
     plt.savefig(output_path, dpi=300)
