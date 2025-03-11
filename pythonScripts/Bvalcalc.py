@@ -29,15 +29,14 @@ def main():
     if known_args.genome:
         args = parseGenomeArgs(remaining_args)
         genome_output = genomeBcalc(args)
-        if getattr(args, 'plotBasic', False):
-            plotBasic(b_values_input=genome_output, caller="genome", silent=args.silent, output_file='../../bin/plotGenome.png')
+        if getattr(args, 'plot_output', True):
+            print("hio")
+            plotBasic(b_values_input=genome_output, caller="genome", output_path=args.plot_output, silent=args.silent)
     elif known_args.region:
         args = parseRegionArgs(remaining_args)
-        # Capture the output from regionBcalc
-        region_output = regionBcalc(args)
-        # If the --plot_basic flag was provided, call plotBasic with regionBcalc's output.
-        if getattr(args, 'plotBasic', False):
-                plotBasic(b_values_input=region_output, caller="region", silent=args.silent, output_file='../../bin/plotRegion.png')
+        region_output = regionBcalc(args) # Capture the output from regionBcalc
+        if getattr(args, 'plot_output', False): # If the --plot_basic flag was provided, call plotBasic with regionBcalc's output.
+                plotBasic(b_values_input=region_output, caller="region", output_path=args.plot_output, silent=args.silent)
 
     print(f"= B value calculated in {time.time() - start_time:.2f} seconds. = = =")
 

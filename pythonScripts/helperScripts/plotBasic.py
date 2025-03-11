@@ -2,8 +2,9 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import matplotlib.ticker as ticker
 
-def plotBasic(b_values_input, caller, silent, output_file='../../bin/plot.png'):
+def plotBasic(b_values_input, caller, output_path, silent):
     if not silent: print('====== P L O T T I N G . . . =======================')
+    print("hiii")
     
     # Set the font family with a fallback list.
     mpl.rcParams['font.family'] = ['Helvetica', 'DejaVu Sans', 'Arial']
@@ -51,5 +52,5 @@ def plotBasic(b_values_input, caller, silent, output_file='../../bin/plot.png'):
     )
     
     plt.tight_layout()
-    plt.savefig(output_file, dpi=300)
-    print(f"Plot saved to {output_file}")
+    plt.savefig(output_path, dpi=300)
+    print(f"Plot saved to {output_path}")
