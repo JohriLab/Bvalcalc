@@ -7,8 +7,6 @@ def calcBFromChunks(chunk_index, chunk_size, blockstart, blockend,
                     num_chunks, precise_chunks, 
                     lperchunk, rec_rate_per_chunk, gc_rate_per_chunk):
 
-
-
     chunk_starts = chr_start + np.arange(num_chunks) * chunk_size
     chunk_ends = np.minimum(chunk_starts + chunk_size - 1, chr_end)
     chunk_mids = (chunk_ends + chunk_starts) / 2
@@ -44,11 +42,48 @@ def calcBFromChunks(chunk_index, chunk_size, blockstart, blockend,
             chunk_index, chunk_size, relevant_upstream_pseudoblockends, relevant_downstream_pseudoblockstarts, 
             chunk_starts, chunk_ends, chunk_rec_distances, num_chunks
             ) # Get local r * lengths for length of, and distances to pseudoblocks for each chunk
+        
+    if gc_rate_per_chunk is not None: # IF GC_RATE MAP IS AVAILABLE 
+        # Get the indices for upstream and downstream pseudochunks
+        chunk_gc_distances = (chunk_ends - chunk_starts + 1) * gc_rate_per_chunk
+        upstream_indices = np.nonzero(upstream_pseudochunk_mask)[0]
+        downstream_indices = np.nonzero(downstream_pseudochunk_mask)[0]
 
-        relevant_upstream_psdc_B = np.prod(calculateB_recmap(relevant_upstream_psdc_distances, relevant_upstream_psdc_lengths, upstream_rec_distances, upstream_rec_lengths))
-        relevant_downstream_psdc_B = np.prod(calculateB_recmap(relevant_downstream_psdc_distances, relevant_downstream_psdc_lengths, downstream_rec_distances, downstream_rec_lengths))
+        upstream_gc_lengths, downstream_gc_lengths, upstream_gc_distances, downstream_gc_distances = calcRLengthsDistances_forchunks(
+            upstream_indices, downstream_indices, gc_rate_per_chunk, 
+            relevant_upstream_psdc_lengths, relevant_downstream_psdc_lengths, 
+            chunk_index, chunk_size, relevant_upstream_pseudoblockends, relevant_downstream_pseudoblockstarts, 
+            chunk_starts, chunk_ends, chunk_gc_distances, num_chunks
+            ) # Get local r * lengths for length of, and distances to pseudoblocks for each chunk
 
-    else:
+
+    #Run calculateBs
+
+    if rec_rate_per_chunk is not None and gc_rate_per_chunk is not None: # IF REC_RATE MAP IS AVAILABLE and GC IS AVAILABLE
+        relevant_upstream_psdc_B = np.prod(calculateB_recmap(distance_to_element=relevant_upstream_psdc_distances, length_of_element=relevant_upstream_psdc_lengths, 
+                                                             rec_distances=upstream_rec_distances, rec_lengths=upstream_rec_lengths, 
+                                                               gc_distances=upstream_gc_distances, gc_lengths=upstream_gc_lengths))
+        relevant_downstream_psdc_B = np.prod(calculateB_recmap(distance_to_element=relevant_downstream_psdc_distances, length_of_element=relevant_downstream_psdc_lengths, 
+                                                               rec_distances=downstream_rec_distances, rec_lengths=downstream_rec_lengths, 
+                                                               gc_distances=downstream_gc_distances, gc_lengths=downstream_gc_lengths))
+
+    elif rec_rate_per_chunk is not None and gc_rate_per_chunk is None: # IF REC_RATE MAP IS AVAILABLE and GC NOT AVAILABLE
+        relevant_upstream_psdc_B = np.prod(calculateB_recmap(distance_to_element=relevant_upstream_psdc_distances, length_of_element=relevant_upstream_psdc_lengths, 
+                                                             rec_distances=upstream_rec_distances, rec_lengths=upstream_rec_lengths, 
+                                                               gc_distances=None, gc_lengths=None))
+        relevant_downstream_psdc_B = np.prod(calculateB_recmap(distance_to_element=relevant_downstream_psdc_distances, length_of_element=relevant_downstream_psdc_lengths, 
+                                                               rec_distances=downstream_rec_distances, rec_lengths=downstream_rec_lengths, 
+                                                               gc_distances=None, gc_lengths=None))
+
+    elif rec_rate_per_chunk is None and gc_rate_per_chunk is not None: # IF REC_RATE MAP NOT AVAILABLE and GC IS AVAILALBE
+        relevant_upstream_psdc_B = np.prod(calculateB_recmap(distance_to_element=relevant_upstream_psdc_distances, length_of_element=relevant_upstream_psdc_lengths, 
+                                                             rec_distances=None, rec_lengths=None, 
+                                                               gc_distances=upstream_gc_distances, gc_lengths=upstream_gc_lengths))
+        relevant_downstream_psdc_B = np.prod(calculateB_recmap(distance_to_element=relevant_downstream_psdc_distances, length_of_element=relevant_downstream_psdc_lengths, 
+                                                               rec_distances=None, rec_lengths=None, 
+                                                               gc_distances=downstream_gc_distances, gc_lengths=downstream_gc_lengths))
+
+    else: # NEITHER REC_MAP NOR GC_MAP AVAILABLE
         relevant_upstream_psdc_B = np.prod(calculateB_linear(relevant_upstream_psdc_distances, relevant_upstream_psdc_lengths))
         relevant_downstream_psdc_B = np.prod(calculateB_linear(relevant_downstream_psdc_distances, relevant_downstream_psdc_lengths))
 
