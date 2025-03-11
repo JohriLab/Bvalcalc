@@ -76,9 +76,11 @@ def calculateB_recmap(distance_to_element, length_of_element, rec_distances = No
     if gc_distances is not None:
         gc_adjusted_length_of_element = gc_lengths 
         gc_adjusted_distance_to_element = gc_distances
+        g_tract_len = (gc_lengths / length_of_element) * g * tract_len
     else:
         gc_adjusted_length_of_element = length_of_element
         gc_adjusted_distance_to_element = distance_to_element
+        g_tract_len = g * tract_len
         
     # Calculate "a" and "b"
     C = (1.0 - np.exp(-2.0 * r * rec_adjusted_distance_to_element)) / 2.0 # cM
@@ -91,12 +93,12 @@ def calculateB_recmap(distance_to_element, length_of_element, rec_distances = No
         a = np.where(
             threshold, 
             C + (g * gc_adjusted_distance_to_element), #If TRUE
-            C + g * tract_len #If FALSE
+            C + g_tract_len #If FALSE
         )
         b = np.where(
             threshold,
             C + r * rec_adjusted_length_of_element + (g * (gc_adjusted_distance_to_element + gc_adjusted_length_of_element)), #If TRUE
-            C + g * tract_len + r * rec_adjusted_length_of_element #If FALSE
+            C + g_tract_len + r * rec_adjusted_length_of_element #If FALSE
         )
 
     # Calculate exponents for different time intervals

@@ -101,9 +101,17 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
         flat_gc_distances = flat_gc_distances[nonzero_gc_mask]
         flat_gc_lengths   = flat_gc_lengths[nonzero_gc_mask]
 
-    if rec_rate_per_chunk is not None: # IF REC_RATE MAP IS AVAILABLE 
-        flank_B = calculateB_recmap(flat_distances, flat_lengths, flat_rec_distances, flat_rec_lengths)
-        # flank_B = calculateB_recmap(flat_distances, flat_lengths, flat_rec_distances, flat_rec_lengths, flat_gc_distances, flat_gc_lengths)
+    if rec_rate_per_chunk is not None and gc_rate_per_chunk is not None: # IF REC_RATE MAP IS AVAILABLE and GC IS AVAILABLE
+        flank_B = calculateB_recmap(distance_to_element=flat_distances, length_of_element=flat_lengths, rec_distances=flat_rec_distances, 
+                                    rec_lengths=flat_rec_lengths, gc_distances=flat_gc_distances, gc_lengths=flat_gc_lengths)
+
+    elif rec_rate_per_chunk is not None and gc_rate_per_chunk is None: # IF REC_RATE MAP IS AVAILABLE and GC NOT AVAILABLE
+        flank_B = calculateB_recmap(distance_to_element=flat_distances, length_of_element=flat_lengths, 
+                                    rec_distances=flat_rec_distances, rec_lengths=flat_rec_lengths)
+
+    elif rec_rate_per_chunk is None and gc_rate_per_chunk is not None: # IF REC_RATE MAP NOT AVAILABLE and GC IS AVAILALBE
+        flank_B = calculateB_recmap(distance_to_element=flat_distances, length_of_element=flat_lengths, 
+                                    rec_distances=None, rec_lengths=None, gc_distances=flat_gc_distances, gc_lengths=flat_gc_lengths)
     else:
         flank_B = calculateB_linear(flat_distances, flat_lengths)
 
