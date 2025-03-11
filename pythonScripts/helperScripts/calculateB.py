@@ -58,7 +58,7 @@ def calculateB_linear(distance_to_element, length_of_element):
     return np.exp(-1.0 * E_bar)
 
 
-def calculateB_recmap(distance_to_element, length_of_element, rec_distances, rec_lengths):
+def calculateB_recmap(distance_to_element, length_of_element, rec_distances = None, rec_lengths = None, gc_distances = None, gc_lengths = None):
     """
     Calculate the B value WITH REC MAP for a single functional element at the focal site,
     summing over the DFE while consolidating the intermediate calculations.
@@ -66,9 +66,20 @@ def calculateB_recmap(distance_to_element, length_of_element, rec_distances, rec
     
     # The length of the element * rec rate in region. 
     # So for local_r = 0.1 * 10e-8, rec_adjusted = 0.1 * 10e-8
-    rec_adjusted_length_of_element = rec_lengths 
-    rec_adjusted_distance_to_element = rec_distances
-
+    if rec_distances is not None:
+        rec_adjusted_length_of_element = rec_lengths 
+        rec_adjusted_distance_to_element = rec_distances
+    else:
+        rec_adjusted_length_of_element = length_of_element
+        rec_adjusted_distance_to_element = distance_to_element
+    
+    if gc_distances is not None:
+        gc_adjusted_length_of_element = gc_lengths 
+        gc_adjusted_distance_to_element = gc_distances
+    else:
+        gc_adjusted_length_of_element = length_of_element
+        gc_adjusted_distance_to_element = distance_to_element
+        
     # Calculate "a" and "b"
     C = (1.0 - np.exp(-2.0 * r * rec_adjusted_distance_to_element)) / 2.0 # cM
     U = length_of_element * u
@@ -76,16 +87,16 @@ def calculateB_recmap(distance_to_element, length_of_element, rec_distances, rec
         a = C
         b = C + r * rec_adjusted_length_of_element # cM
     elif g > 0:
-        threshold = distance_to_element + length_of_element < 0.5 * tract_len # Arbitrary threshold
+        threshold = gc_adjusted_distance_to_element + gc_adjusted_length_of_element < 0.5 * tract_len # Arbitrary threshold
         a = np.where(
             threshold, 
-            C + (g * distance_to_element), #If TRUE
+            C + (g * gc_adjusted_distance_to_element), #If TRUE
             C + g * tract_len #If FALSE
         )
         b = np.where(
             threshold,
-            C + r * length_of_element + (g * (distance_to_element + length_of_element)), #If TRUE
-            C + g * tract_len + r * length_of_element #If FALSE
+            C + r * rec_adjusted_length_of_element + (g * (gc_adjusted_distance_to_element + gc_adjusted_length_of_element)), #If TRUE
+            C + g * tract_len + r * rec_adjusted_length_of_element #If FALSE
         )
 
     # Calculate exponents for different time intervals
