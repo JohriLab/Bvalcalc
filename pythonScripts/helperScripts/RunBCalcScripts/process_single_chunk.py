@@ -6,8 +6,9 @@ import numpy as np
 
 def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start, chr_end,
                          calc_start, calc_end, num_chunks, precise_chunks,
-                         lperchunk, b_values, gc_rate_per_chunk=None, rec_rate_per_chunk=None, 
+                         lperchunk, b_values, rec_rate_per_chunk=None, gc_rate_per_chunk=None, 
                          silent=False):
+    
 
     chunk_start = chr_start + chunk_num * chunk_size
     chunk_end   = min(chunk_start + chunk_size, calc_end)
@@ -85,8 +86,24 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
         flat_rec_distances = flat_rec_distances[nonzero_rec_mask]
         flat_rec_lengths   = flat_rec_lengths[nonzero_rec_mask]
 
+    if gc_rate_per_chunk is not None: # IF GC_RATE MAP IS AVAILABLE 
+        precise_gc_rates = gc_rate_per_chunk[np.maximum(0, chunk_num - precise_chunks):np.minimum(num_chunks, chunk_num + precise_chunks + 1)]
+        gc_lengths = calcRLengths(precise_blockstart, precise_blockend, precise_gc_rates, precise_region_start, precise_region_end, chunk_size, chunk_num)
+        gc_distances_upstream, gc_distances_downstream = calcRDistances(precise_blockstart, precise_blockend, precise_gc_rates, precise_region_start, precise_region_end, chunk_size, pos_chunk_clean, chunk_num, chunk_start)
+        gc_distances = np.where(
+            flanking_mask,
+            np.where(upstream_mask, gc_distances_upstream, gc_distances_downstream),
+            np.nan
+        )
+        flat_gc_distances = gc_distances[flanking_mask]
+        flat_gc_lengths   = np.repeat(gc_lengths, flanking_mask.sum(axis=1))
+        nonzero_gc_mask = flat_gc_lengths != 0 # Remove genes of length 0
+        flat_gc_distances = flat_gc_distances[nonzero_gc_mask]
+        flat_gc_lengths   = flat_gc_lengths[nonzero_gc_mask]
+
     if rec_rate_per_chunk is not None: # IF REC_RATE MAP IS AVAILABLE 
         flank_B = calculateB_recmap(flat_distances, flat_lengths, flat_rec_distances, flat_rec_lengths)
+        # flank_B = calculateB_recmap(flat_distances, flat_lengths, flat_rec_distances, flat_rec_lengths, flat_gc_distances, flat_gc_lengths)
     else:
         flank_B = calculateB_linear(flat_distances, flat_lengths)
 
@@ -109,8 +126,9 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
     if not silent: 
         print(f"Processing chunk: {pos_chunk.min()} - {pos_chunk.max()}")
         if rec_rate_per_chunk is not None:
-            rec_rate = rec_rate_per_chunk[chunk_num]
-            print(f"Chunk {chunk_num}: recombination rate = {rec_rate}")
+            print(f"Chunk {chunk_num}: recombination rate = {rec_rate_per_chunk[chunk_num]}")
+        if gc_rate_per_chunk is not None:
+            print(f"Chunk {chunk_num}: recombination rate = {gc_rate_per_chunk[chunk_num]}")
         print(f"B from distant chunks: {B_from_distant_chunks}")
         print(f"Number of relevant genes: {len(precise_blockstart)}")
         print(f"Number of neutral sites in chunk [{chunk_start}-{chunk_end}): {np.isnan(chunk_slice).sum()}")
