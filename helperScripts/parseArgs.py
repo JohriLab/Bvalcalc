@@ -10,7 +10,7 @@ def parseGenomeArgs(argv=None):
     parser.add_argument('--bedgff_path', type=str, required=True, help="Path to input BED or GFF3 file.")
     parser.add_argument('--precise_chunks', type=int, default=3, help="Number of adjacent chunks to calculate B precisely.")
     parser.add_argument('--pop_change', action='store_true', help="If set, B will reflect the current B after a step change in population size, rather than ancestral B.")
-    parser.add_argument('--rec_map', nargs='?', const='../../bin/5Mb.map', default=None,
+    parser.add_argument('--rec_map', nargs='?', default=None,
                         help="Optional recombination (crossover) map input. Usage: --rec_map your.map, "
                              "Format should be a two column csv with the header: 'start,rate'. "
                              "Note that recombination rates will be averaged within each chunk.")    
