@@ -32,6 +32,7 @@ def plotBasic(b_values_input, caller, output_path, silent):
 
     ax.plot(x, y, color='black', lw=1.5)
     ax.set_xlim(x.min() - 1, x.max())
+    ax.set_ylim(y.min() - 0.02, 1)
 
     ax.set_ylabel('Expected diversity relative to neutral evolution (B)', fontsize=13)
     if caller == "genome":
