@@ -24,7 +24,7 @@ def calculateB_linear(distance_to_element, length_of_element):
     U = length_of_element * u
     if g == 0:
         a = C
-        b = C + r * length_of_element # cM
+        b = C + (r * length_of_element) # cM
     elif g > 0:
         threshold = distance_to_element + length_of_element < 0.5 * tract_len # Arbitrary threshold
         a = np.where(
@@ -34,8 +34,8 @@ def calculateB_linear(distance_to_element, length_of_element):
         )
         b = np.where(
             threshold,
-            C + r * length_of_element + (g * (distance_to_element + length_of_element)), #If TRUE
-            C + g * tract_len + r * length_of_element #If FALSE
+            C + (r * length_of_element) + (g * (distance_to_element + length_of_element)), #If TRUE
+            C + (r * length_of_element) + (g * tract_len) #If FALSE
         )
 
     # Calculate exponents for different time intervals
