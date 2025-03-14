@@ -1,7 +1,6 @@
 from helperScripts.RunBCalcScripts.demographyHelpers import get_Bcur
 from helperScripts.calculateB import calculateB_linear
 import numpy as np
-import os
 
 def regionBcalc(args):    
     gene_size, flank_len, silent = args.gene_size, args.flank_len, args.silent
@@ -26,24 +25,5 @@ def regionBcalc(args):
         b_values = get_Bcur(b_values)
         if not silent: print("Demographic change applied to B-calculation")
     output_data = np.column_stack((np.arange(1, flank_len, 1, dtype = int), b_values))
-
-    if args.out is not None:
-        csv_file = args.out  # This might be "b_values.csv" or a custom path
-
-        # Combine positions and b_values into two columns
-
-        # Write to CSV
-        np.savetxt(
-            csv_file, 
-            output_data,
-            delimiter=",", 
-            header="Distance,B", 
-            fmt=("%d", "%.6f"),  # first column = integer, second = float w/ 6 decimals
-            comments=""
-)
-        print(f"Saved B values to: {os.path.abspath(csv_file)}")
-    else:
-        if not silent:
-            print("No output CSV requested; skipping save.")
     
     return output_data

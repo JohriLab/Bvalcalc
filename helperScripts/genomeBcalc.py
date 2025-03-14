@@ -8,7 +8,7 @@ import numpy as np
 import os
 
 def genomeBcalc(args):    
-    file_path, chr_start, chr_end, calc_start, calc_end, chunk_size, precise_chunks, out, silent = args.bedgff_path, args.chr_start, args.chr_end, args.calc_start, args.calc_end, args.chunk_size, args.precise_chunks, args.out, args.silent
+    file_path, chr_start, chr_end, calc_start, calc_end, chunk_size, precise_chunks, silent = args.bedgff_path, args.chr_start, args.chr_end, args.calc_start, args.calc_end, args.chunk_size, args.precise_chunks, args.silent
 
     print(f"= Calculating relative diversity (B) for all neutral sites across the genome. = = =")
     if not args.silent: 
@@ -69,19 +69,5 @@ def genomeBcalc(args):
         b_values = get_Bcur(b_values)
         if not silent: print("Demographic change applied to B-calculation")
     output_data = np.column_stack((positions, b_values))
-
-    if args.out is not None:
-        csv_file = args.out  # This might be "b_values.csv" or a custom path
-        np.savetxt(         # Write to CSV
-            csv_file, 
-            output_data,
-            delimiter=",", 
-            header="Position,B", 
-            fmt=("%d", "%.6f"),  # first column = integer, second = float w/ 6 decimals
-            comments=""
-)
-        print(f"Saved B values to: {os.path.abspath(csv_file)}")
-    else:
-        if not args.silent: print("No output CSV requested; skipping save.")
 
     return output_data
