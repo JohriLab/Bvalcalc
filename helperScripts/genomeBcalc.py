@@ -5,7 +5,6 @@ from helperScripts.RunBCalcScripts.demographyHelpers import get_Bcur
 from helperScripts.RunBCalcScripts.recmapHandler import recmapHandler
 from concurrent.futures import ThreadPoolExecutor
 import numpy as np
-import os
 
 def genomeBcalc(args):    
     file_path, chr_start, chr_end, calc_start, calc_end, chunk_size, precise_chunks, silent = args.bedgff_path, args.chr_start, args.chr_end, args.calc_start, args.calc_end, args.chunk_size, args.precise_chunks, args.silent

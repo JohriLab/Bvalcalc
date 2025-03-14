@@ -9,10 +9,8 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
                          lperchunk, b_values, rec_rate_per_chunk=None, gc_rate_per_chunk=None, 
                          silent=False):
     
-
     chunk_start = chr_start + chunk_num * chunk_size
     chunk_end   = min(chunk_start + chunk_size, calc_end)
-
 
     chunk_slice = b_values[chunk_start - calc_start:chunk_end - calc_start] # Get b_values for this chunk
     not_nan_mask = ~np.isnan(chunk_slice) # Make a mask for positions that are NOT NaN
@@ -26,15 +24,8 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
     chunk_slice_clean = chunk_slice[not_nan_mask]
 
     B_from_distant_chunks = calcBFromChunks( # Compute B from distant chunks in non-precise region
-        chunk_num, chunk_size,
-        blockstart, blockend,
-        chr_start, chr_end,
-        calc_start, calc_end,
-        num_chunks, precise_chunks,
-        lperchunk,
-        rec_rate_per_chunk,
-        gc_rate_per_chunk
-    )
+        chunk_num, chunk_size, chr_start, chr_end, num_chunks, 
+        precise_chunks, lperchunk, rec_rate_per_chunk, gc_rate_per_chunk)
 
     # Identify blocks in the "precise region"
     precise_region_start = np.maximum(chr_start, chr_start + (chunk_num - precise_chunks) * chunk_size)
@@ -78,8 +69,7 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
         rec_distances = np.where(
             flanking_mask,
             np.where(upstream_mask, rec_distances_upstream, rec_distances_downstream),
-            np.nan
-        )
+            np.nan)
         flat_rec_distances = rec_distances[flanking_mask]
         flat_rec_lengths   = np.repeat(rec_lengths, flanking_mask.sum(axis=1))
         nonzero_rec_mask = flat_rec_lengths != 0 # Remove genes of length 0
@@ -93,29 +83,27 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
         gc_distances = np.where(
             flanking_mask,
             np.where(upstream_mask, gc_distances_upstream, gc_distances_downstream),
-            np.nan
-        )
+            np.nan)
         flat_gc_distances = gc_distances[flanking_mask]
         flat_gc_lengths   = np.repeat(gc_lengths, flanking_mask.sum(axis=1))
         nonzero_gc_mask = flat_gc_lengths != 0 # Remove genes of length 0
         flat_gc_distances = flat_gc_distances[nonzero_gc_mask]
         flat_gc_lengths   = flat_gc_lengths[nonzero_gc_mask]
 
+    # Calculate B!!! 
     if rec_rate_per_chunk is not None and gc_rate_per_chunk is not None: # IF REC_RATE MAP IS AVAILABLE and GC IS AVAILABLE
         flank_B = calculateB_recmap(distance_to_element=flat_distances, length_of_element=flat_lengths, rec_distances=flat_rec_distances, 
                                     rec_lengths=flat_rec_lengths, gc_distances=flat_gc_distances, gc_lengths=flat_gc_lengths)
-
     elif rec_rate_per_chunk is not None and gc_rate_per_chunk is None: # IF REC_RATE MAP IS AVAILABLE and GC NOT AVAILABLE
         flank_B = calculateB_recmap(distance_to_element=flat_distances, length_of_element=flat_lengths, 
                                     rec_distances=flat_rec_distances, rec_lengths=flat_rec_lengths)
-
     elif rec_rate_per_chunk is None and gc_rate_per_chunk is not None: # IF REC_RATE MAP NOT AVAILABLE and GC IS AVAILALBE
         flank_B = calculateB_recmap(distance_to_element=flat_distances, length_of_element=flat_lengths, 
                                     rec_distances=None, rec_lengths=None, gc_distances=flat_gc_distances, gc_lengths=flat_gc_lengths)
     else:
         flank_B = calculateB_linear(flat_distances, flat_lengths)
 
-    if flat_distances.size == 0 or flat_lengths.size == 0:
+    if flat_distances.size == 0 or flat_lengths.size == 0: # If no selected sites in precise region
         flank_B = 1
         if not silent: print(f"No nearby sites under selection in flanking region for chunk:", chunk_num)
 
@@ -131,7 +119,7 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
 
     mean_chunk_b = np.nanmean(chunk_slice) # Mean B for chunk
 
-    if not silent: 
+    if not silent: # Per-chunk summaries
         print(f"Processing chunk: {pos_chunk.min()} - {pos_chunk.max()}")
         if rec_rate_per_chunk is not None:
             print(f"Chunk {chunk_num}: recombination rate = {rec_rate_per_chunk[chunk_num]}")
