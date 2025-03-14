@@ -9,7 +9,7 @@ def calcBFromChunks(chunk_index, chunk_size, chr_start, chr_end, num_chunks,
     chunk_ends = np.minimum(chunk_starts + chunk_size - 1, chr_end)
     chunk_mids = (chunk_ends + chunk_starts) / 2
 
-    chunk_pseudoblockstart = chunk_mids - 0.5 * lperchunk
+    chunk_pseudoblockstart = chunk_mids - 0.5 * lperchunk # Pseudoblocks are the combined selected regions in each chunk, which are combined into a single central "pseudoblock" aka single selected region
     chunk_pseudoblockend = chunk_mids + 0.5 * lperchunk
 
     upstream_pseudochunk_mask = np.ones(num_chunks, dtype=bool)
@@ -56,7 +56,6 @@ def calcBFromChunks(chunk_index, chunk_size, chr_start, chr_end, num_chunks,
 
 
     #Run calculateBs
-
     if rec_rate_per_chunk is not None and gc_rate_per_chunk is not None: # IF REC_RATE MAP IS AVAILABLE and GC IS AVAILABLE
         relevant_upstream_psdc_B = np.prod(calculateB_recmap(distance_to_element=relevant_upstream_psdc_distances, length_of_element=relevant_upstream_psdc_lengths, 
                                                              rec_distances=upstream_rec_distances, rec_lengths=upstream_rec_lengths, 
@@ -64,7 +63,6 @@ def calcBFromChunks(chunk_index, chunk_size, chr_start, chr_end, num_chunks,
         relevant_downstream_psdc_B = np.prod(calculateB_recmap(distance_to_element=relevant_downstream_psdc_distances, length_of_element=relevant_downstream_psdc_lengths, 
                                                                rec_distances=downstream_rec_distances, rec_lengths=downstream_rec_lengths, 
                                                                gc_distances=downstream_gc_distances, gc_lengths=downstream_gc_lengths))
-
     elif rec_rate_per_chunk is not None and gc_rate_per_chunk is None: # IF REC_RATE MAP IS AVAILABLE and GC NOT AVAILABLE
         relevant_upstream_psdc_B = np.prod(calculateB_recmap(distance_to_element=relevant_upstream_psdc_distances, length_of_element=relevant_upstream_psdc_lengths, 
                                                              rec_distances=upstream_rec_distances, rec_lengths=upstream_rec_lengths, 
@@ -72,7 +70,6 @@ def calcBFromChunks(chunk_index, chunk_size, chr_start, chr_end, num_chunks,
         relevant_downstream_psdc_B = np.prod(calculateB_recmap(distance_to_element=relevant_downstream_psdc_distances, length_of_element=relevant_downstream_psdc_lengths, 
                                                                rec_distances=downstream_rec_distances, rec_lengths=downstream_rec_lengths, 
                                                                gc_distances=None, gc_lengths=None))
-
     elif rec_rate_per_chunk is None and gc_rate_per_chunk is not None: # IF REC_RATE MAP NOT AVAILABLE and GC IS AVAILALBE
         relevant_upstream_psdc_B = np.prod(calculateB_recmap(distance_to_element=relevant_upstream_psdc_distances, length_of_element=relevant_upstream_psdc_lengths, 
                                                              rec_distances=None, rec_lengths=None, 
@@ -80,9 +77,8 @@ def calcBFromChunks(chunk_index, chunk_size, chr_start, chr_end, num_chunks,
         relevant_downstream_psdc_B = np.prod(calculateB_recmap(distance_to_element=relevant_downstream_psdc_distances, length_of_element=relevant_downstream_psdc_lengths, 
                                                                rec_distances=None, rec_lengths=None, 
                                                                gc_distances=downstream_gc_distances, gc_lengths=downstream_gc_lengths))
-
     else: # NEITHER REC_MAP NOR GC_MAP AVAILABLE
         relevant_upstream_psdc_B = np.prod(calculateB_linear(relevant_upstream_psdc_distances, relevant_upstream_psdc_lengths))
         relevant_downstream_psdc_B = np.prod(calculateB_linear(relevant_downstream_psdc_distances, relevant_downstream_psdc_lengths))
 
-    return relevant_downstream_psdc_B * relevant_upstream_psdc_B # Return B that applies to all sites in focal chunk
+    return relevant_downstream_psdc_B * relevant_upstream_psdc_B # Return a single B value that applies to all sites in focal chunk

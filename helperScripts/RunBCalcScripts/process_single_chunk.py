@@ -5,9 +5,8 @@ from helperScripts.RunBCalcScripts.recmapHandler import calcRDistances
 import numpy as np
 
 def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start, chr_end,
-                         calc_start, calc_end, num_chunks, precise_chunks,
-                         lperchunk, b_values, rec_rate_per_chunk=None, gc_rate_per_chunk=None, 
-                         silent=False):
+                         calc_start, calc_end, num_chunks, precise_chunks,lperchunk, 
+                         b_values, rec_rate_per_chunk=None, gc_rate_per_chunk=None, silent=False):
     
     chunk_start = chr_start + chunk_num * chunk_size
     chunk_end   = min(chunk_start + chunk_size, calc_end)
@@ -32,8 +31,7 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
     precise_region_end   = np.minimum(chr_end, chr_start + (chunk_num + 1 + precise_chunks) * chunk_size - 1)
     precise_blockregion_mask = (
         (precise_region_end   > blockstart) &
-        (precise_region_start < blockend)
-    )
+        (precise_region_start < blockend))
     precise_blockstart = np.clip(blockstart[precise_blockregion_mask],
                                  a_min=precise_region_start, a_max=precise_region_end)
     precise_blockend   = np.clip(blockend[precise_blockregion_mask],
