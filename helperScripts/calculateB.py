@@ -1,5 +1,6 @@
 import numpy as np
 from constants import g, tract_len, r, u, t1, t1half, t2, t3, t4, f0, f1, f2, f3
+import sys
 
 def calculate_exponent(t_start, t_end, U, a, b):
     """"
@@ -21,20 +22,19 @@ def calculateB_linear(distance_to_element, length_of_element):
     C = (1.0 - np.exp(-2.0 * r * distance_to_element)) / 2.0 # cM
     U = length_of_element * u
     if g == 0:
-        a = C
-        b = C + (r * length_of_element) # cM
+        a = C # RECOMBINATION IN Y
+        b = C + (r * length_of_element) # RECOMBINATION IN X
     elif g > 0:
-        threshold = distance_to_element + length_of_element < 0.5 * tract_len # Arbitrary threshold
-        a = np.where(
-            threshold, 
-            C + (g * distance_to_element), #If TRUE
-            C + g * tract_len #If FALSE
-        )
-        b = np.where(
-            threshold,
-            C + (r * length_of_element) + (g * (distance_to_element + length_of_element)), #If TRUE
-            C + (r * length_of_element) + (g * tract_len) #If FALSE
-        )
+        proportion_nogc = 1/(2*tract_len) * np.maximum(tract_len-distance_to_element+1,0) * np.maximum(tract_len - distance_to_element, 0) / length_of_element
+        print("prop_nogc", proportion_nogc, "result")
+
+        a = np.where(tract_len < 2 * distance_to_element,
+            C + (g * tract_len), # WHAT ABOUT THE PROPORTION OF g outside the element??
+            C + (g * (distance_to_element) + # Probability gc is in neutral but doesn't include any of element
+                 0.5 * g * (tract_len - distance_to_element) * (1-(0.5*(tract_len-distance_to_element))/length_of_element) # Probability gc is in neutral and includes some element * probability in only local part of X * tract_len
+        ))
+        b = C + (r * length_of_element) + (g * tract_len) * (1 -  proportion_nogc) #* prop tract_len out
+        # C + (r * length_of_element) + (g * (distance_to_element + length_of_element)), #If TRUE
 
     E_f1 = calculate_exponent(t1half, t2, U, a, b)
     E_f2 = calculate_exponent(t2, t3, U, a, b)
@@ -90,6 +90,42 @@ def calculateB_recmap(distance_to_element, length_of_element,
             threshold,
             C + r * rec_adjusted_length_of_element + (g * (gc_adjusted_distance_to_element + gc_adjusted_length_of_element)), #If TRUE
             C + g_tract_len + r * rec_adjusted_length_of_element #If FALSE
+        )
+
+    E_f1 = calculate_exponent(t1half, t2, U, a, b)
+    E_f2 = calculate_exponent(t2, t3, U, a, b)
+    E_f3 = calculate_exponent(t3, t4, U, a, b)
+
+    E_bar = ( # Sum over the DFE
+        f0 * 0.0
+        + f1 * ((t1half - t1) / (t2 - t1)) * 0.0
+        + f1 * ((t2 - t1half) / (t2 - t1)) * E_f1
+        + f2 * E_f2
+        + f3 * E_f3)
+
+    return np.exp(-1.0 * E_bar) # Return B
+
+def calculateB_linear2(distance_to_element, length_of_element):
+    """
+    Calculate the B value for a single functional element at the focal site,
+    summing over the DFE while consolidating the intermediate calculations.
+    """    
+    C = (1.0 - np.exp(-2.0 * r * distance_to_element)) / 2.0 # cM
+    U = length_of_element * u
+    if g == 0:
+        a = C
+        b = C + (r * length_of_element) # cM
+    elif g > 0:
+        threshold = distance_to_element + length_of_element < 0.5 * tract_len # Arbitrary threshold
+        a = np.where(
+            threshold, 
+            C + (g * distance_to_element), #pGC happens outside the element to BREAK linkage, lowers because sometimes both GC
+            C + g * tract_len #pGC happens outside element to BREAK linkage
+            ) 
+        b = np.where(
+            threshold,
+            C + (r * length_of_element) + (g * (distance_to_element + length_of_element)), #pGC happens within element to BREAK linkage, IS IT LOWER???
+            C + (r * length_of_element) + (g * tract_len) #pGC happens within element to BREAK linkage,
         )
 
     E_f1 = calculate_exponent(t1half, t2, U, a, b)
