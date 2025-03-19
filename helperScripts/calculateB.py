@@ -28,7 +28,7 @@ def calculateB_linear(distance_to_element, length_of_element):
         proportion_nogc = 1/(2*tract_len) * np.maximum(tract_len-distance_to_element+1,0) * np.maximum(tract_len - distance_to_element, 0) / length_of_element
         print("prop_nogc", proportion_nogc, "result")
 
-        a = np.where(tract_len < 2 * distance_to_element,
+        a = np.where(tract_len < distance_to_element,
             C + (g * tract_len), # WHAT ABOUT THE PROPORTION OF g outside the element??
             C + (g * (distance_to_element) + # Probability gc is in neutral but doesn't include any of element
                  0.5 * g * (tract_len - distance_to_element) * (1-(0.5*(tract_len-distance_to_element))/length_of_element) # Probability gc is in neutral and includes some element * probability in only local part of X * tract_len
