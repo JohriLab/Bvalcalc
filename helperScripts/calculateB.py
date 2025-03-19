@@ -25,15 +25,23 @@ def calculateB_linear(distance_to_element, length_of_element):
         a = C # RECOMBINATION IN Y
         b = C + (r * length_of_element) # RECOMBINATION IN X
     elif g > 0:
-        proportion_nogc = 1/(2*tract_len) * np.maximum(tract_len-distance_to_element+1,0) * np.maximum(tract_len - distance_to_element, 0) / length_of_element
-        print("prop_nogc", proportion_nogc, "result")
+        proportion_nogc_b = np.where(tract_len < distance_to_element + length_of_element, # If GC can happen in 
+                                   1/(2*tract_len) * np.maximum(tract_len-distance_to_element+1,0) * np.maximum(tract_len - distance_to_element, 0) / length_of_element,
+                                   (tract_len - distance_to_element - 0.5 * length_of_element) / tract_len)
+        
+        proportion_nogc_a = np.where(tract_len < distance_to_element + length_of_element,
+                                    1-(0.5*(tract_len-distance_to_element))/length_of_element,
+                                    1 - ((distance_to_element) * (2 * tract_len - (distance_to_element + length_of_element)))/(2 * tract_len * distance_to_element)
+                                    )
+        print("prop_nogc", proportion_nogc_a, proportion_nogc_b, "result")
 
-        a = np.where(tract_len < distance_to_element,
-            C + (g * tract_len), # WHAT ABOUT THE PROPORTION OF g outside the element??
-            C + (g * (distance_to_element) + # Probability gc is in neutral but doesn't include any of element
-                 0.5 * g * (tract_len - distance_to_element) * (1-(0.5*(tract_len-distance_to_element))/length_of_element) # Probability gc is in neutral and includes some element * probability in only local part of X * tract_len
+        a = np.where(tract_len < distance_to_element, 
+            C + (2 * g * tract_len), # Probabiliity of GC on neutral site, where overlap with element not possible
+            C + (2 * g * (distance_to_element) + # When overlap possible this is probability gc is in neutral but doesn't include any of element
+                g * (tract_len - distance_to_element) * # Probability gc is in neutral and includes some element (remaining probability from above)
+                proportion_nogc_a # Proportion of gene that gc breaks linkage with when it includes some element
         ))
-        b = C + (r * length_of_element) + (g * tract_len) * (1 -  proportion_nogc) #* prop tract_len out
+        b = C + (r * length_of_element) + (2 * g * tract_len) * (1 -  proportion_nogc_b) #* prop tract_len out
         # C + (r * length_of_element) + (g * (distance_to_element + length_of_element)), #If TRUE
 
     E_f1 = calculate_exponent(t1half, t2, U, a, b)

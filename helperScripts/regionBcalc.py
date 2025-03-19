@@ -22,8 +22,9 @@ def regionBcalc(args):
         print(f"B at start and end of the neutral region: {b_values}")
 
     if args.pop_change:
+        if not silent: print("Demographic change prior to B-calculation", b_values)
         b_values = get_Bcur(b_values)
-        if not silent: print("Demographic change applied to B-calculation")
+        if not silent: print("Demographic change applied to B-calculation", b_values)
     output_data = np.column_stack((np.arange(1, flank_len, 1, dtype = int), b_values))
     
     return output_data
