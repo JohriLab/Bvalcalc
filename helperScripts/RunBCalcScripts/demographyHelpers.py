@@ -1,5 +1,5 @@
 import numpy as np
-from constants import Nanc, Ncur, time_of_change
+from ExampleParams import Nanc, Ncur, time_of_change
 
 # #Gets the value of B in the current population as a function of B calcualted in the ancestral population (assumed to be in equilibrium).
 # #As in, this is where we account for a simple single-size change in N

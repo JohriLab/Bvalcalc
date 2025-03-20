@@ -1,6 +1,5 @@
 import numpy as np
-from constants import g, tract_len, r, u, t1, t1half, t2, t3, t4, f0, f1, f2, f3
-import sys
+from ExampleParams import g, k, r, u, t1, t1half, t2, t3, t4, f0, f1, f2, f3
 
 def calculate_exponent(t_start, t_end, U, a, b):
     """"
@@ -15,22 +14,22 @@ def calculate_exponent(t_start, t_end, U, a, b):
     return E1 + E2 # = E
 
 def get_a_b_with_GC(C, distance_to_element, length_of_element):
-        proportion_nogc_b = np.where(tract_len < distance_to_element + length_of_element, # When GC includes gene site, this is probability the tract includes neutral site of interest 
-                                   1/(2*tract_len) * np.maximum(tract_len-distance_to_element+1,0) * np.maximum(tract_len - distance_to_element, 0) / length_of_element,
-                                   (tract_len - distance_to_element - 0.5 * length_of_element) / tract_len)
+        proportion_nogc_b = np.where(k < distance_to_element + length_of_element, # When GC includes gene site, this is probability the tract includes neutral site of interest 
+                                   1/(2*k) * np.maximum(k-distance_to_element+1,0) * np.maximum(k - distance_to_element, 0) / length_of_element,
+                                   (k - distance_to_element - 0.5 * length_of_element) / k)
         
-        proportion_nogc_a = np.where(tract_len < distance_to_element + length_of_element, # When GC includes neutral site, this is proportion of the gene it includes
-                                    np.maximum((0.5*(tract_len-distance_to_element)/length_of_element), 0),
-                                    ((distance_to_element) * (2 * tract_len - (distance_to_element + length_of_element)))/(2 * tract_len * distance_to_element)
+        proportion_nogc_a = np.where(k < distance_to_element + length_of_element, # When GC includes neutral site, this is proportion of the gene it includes
+                                    np.maximum((0.5*(k-distance_to_element)/length_of_element), 0),
+                                    ((distance_to_element) * (2 * k - (distance_to_element + length_of_element)))/(2 * k * distance_to_element)
                                     )
 
-        a = np.where(tract_len < distance_to_element, 
-            C + (2 * g * tract_len), # Probabiliity of GC on neutral site, where overlap with element not possible
+        a = np.where(k < distance_to_element, 
+            C + (2 * g * k), # Probabiliity of GC on neutral site, where overlap with element not possible
             C + (2 * g * (distance_to_element) + # When overlap possible this is probability gc is in neutral but doesn't include any of element
-                g * (tract_len - distance_to_element) * # Probability gc is in neutral and includes some element (remaining probability from above)
+                g * (k - distance_to_element) * # Probability gc is in neutral and includes some element (remaining probability from above)
                 (1 - proportion_nogc_a) # Proportion of gene that gc breaks linkage with when it includes some element
         ))
-        b = C + (r * length_of_element) + (2 * g * tract_len) * (1 -  proportion_nogc_b) #* prop tract_len out
+        b = C + (r * length_of_element) + (2 * g * k) * (1 -  proportion_nogc_b) #* prop k out
 
         return a, b
 
@@ -79,11 +78,11 @@ def calculateB_recmap(distance_to_element, length_of_element,
     if gc_distances is not None:
         gc_adjusted_length_of_element = gc_lengths 
         gc_adjusted_distance_to_element = gc_distances
-        g_tract_len = (gc_lengths / length_of_element) * g * tract_len
+        g_k = (gc_lengths / length_of_element) * g * k
     else:
         gc_adjusted_length_of_element = length_of_element
         gc_adjusted_distance_to_element = distance_to_element
-        g_tract_len = g * tract_len
+        g_k = g * k
         
     C = (1.0 - np.exp(-2.0 * r * rec_adjusted_distance_to_element)) / 2.0 # cM
     U = length_of_element * u
@@ -91,16 +90,16 @@ def calculateB_recmap(distance_to_element, length_of_element,
         a = C
         b = C + r * rec_adjusted_length_of_element # cM
     elif g > 0:
-        threshold = gc_adjusted_distance_to_element + gc_adjusted_length_of_element < 0.5 * tract_len # Arbitrary threshold
+        threshold = gc_adjusted_distance_to_element + gc_adjusted_length_of_element < 0.5 * k # Arbitrary threshold
         a = np.where(
             threshold, 
             C + (g * gc_adjusted_distance_to_element), #If TRUE
-            C + g_tract_len #If FALSE
+            C + g_k #If FALSE
         )
         b = np.where(
             threshold,
             C + r * rec_adjusted_length_of_element + (g * (gc_adjusted_distance_to_element + gc_adjusted_length_of_element)), #If TRUE
-            C + g_tract_len + r * rec_adjusted_length_of_element #If FALSE
+            C + g_k + r * rec_adjusted_length_of_element #If FALSE
         )
 
     E_f1 = calculate_exponent(t1half, t2, U, a, b)
@@ -116,10 +115,10 @@ def calculateB_recmap(distance_to_element, length_of_element,
 
     return np.exp(-1.0 * E_bar) # Return B
 
-def calculateB_linear2(distance_to_element, length_of_element):
+def calculateB_linear_oldGC(distance_to_element, length_of_element):
     """
-    Calculate the B value for a single functional element at the focal site,
-    summing over the DFE while consolidating the intermediate calculations.
+        Not currently used in main Bvalcalc function, 
+        Here for reference, Parul's gene conversion equation.
     """    
     C = (1.0 - np.exp(-2.0 * r * distance_to_element)) / 2.0 # cM
     U = length_of_element * u
@@ -127,16 +126,16 @@ def calculateB_linear2(distance_to_element, length_of_element):
         a = C
         b = C + (r * length_of_element) # cM
     elif g > 0:
-        threshold = distance_to_element + length_of_element < 0.5 * tract_len # Arbitrary threshold
+        threshold = distance_to_element + length_of_element < 0.5 * k # Arbitrary threshold
         a = np.where(
             threshold, 
             C + (g * distance_to_element), #pGC happens outside the element to BREAK linkage, lowers because sometimes both GC
-            C + g * tract_len #pGC happens outside element to BREAK linkage
+            C + g * k #pGC happens outside element to BREAK linkage
             ) 
         b = np.where(
             threshold,
             C + (r * length_of_element) + (g * (distance_to_element + length_of_element)), #pGC happens within element to BREAK linkage, IS IT LOWER???
-            C + (r * length_of_element) + (g * tract_len) #pGC happens within element to BREAK linkage,
+            C + (r * length_of_element) + (g * k) #pGC happens within element to BREAK linkage,
         )
 
     E_f1 = calculate_exponent(t1half, t2, U, a, b)

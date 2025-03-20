@@ -1,7 +1,12 @@
-# Constants (make sure to define these in your script or pass them as needed)
-x = 100 # Scaling factor to rescale N, u, r
-g = 1*1e-8*x #1e-8 #rate of gene conversion
-tract_len=440 #mean tract length of gene conversion in base pairs
+## Population genetic parameters for the simulated or empirical population
+## Accurate estimation requires accurate and appropriate parameters
+##
+## Usage: ./Bvalcalc --region --pop_params ExampleParams.py
+##        ./Bvalcalc --genome --pop_params ExampleParams.py
+
+x = 100 # Scaling Factor (N,u,r), keep as [1] unless calculating for rescaled simulations
+g = 1*1e-8*x # Gene conversion initiation rate per bp, per generation
+k = 440 # Gene conversion tract length (bp)
 r = 0.5*1e-8*x #rate of recombination
 u = 3*1e-9*x #(*Mutation rate*)
 
