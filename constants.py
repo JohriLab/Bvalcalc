@@ -6,7 +6,7 @@ r = 0.5*1e-8*x #rate of recombination
 u = 3*1e-9*x #(*Mutation rate*)
 
 Nanc = 1e6/x #(Ancestral population size)
-Ncur = 1e5/x #(Current population size)
+Ncur = 1e6/x #(Current population size)
 gamma_cutoff = 5 #5.0
 h=0.5
 t0 = 0.0
