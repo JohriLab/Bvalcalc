@@ -2,7 +2,7 @@ import argparse
 
 def parseGenomeArgs(argv=None):
     parser = argparse.ArgumentParser(description="Calculates B for all neutral sites across given chromosome.")
-    parser.add_argument('--pop_params', type=int, required=True, help="Path to file providing popgen parameters specific to modelled population (empirical or simulated).")
+    # parser.add_argument('--pop_params', type=int, required=True, help="Path to file providing popgen parameters specific to modelled population (empirical or simulated).")
     parser.add_argument('--bedgff_path', type=str, required=True, help="Path to input BED or GFF3 file.")
     parser.add_argument('--chr_start', type=int, required=True, help="Start of chromosome position.")
     parser.add_argument('--chr_end', type=int, required=True, help="End of chromosome position.")

@@ -2,8 +2,9 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import matplotlib.ticker as ticker
 
-def plotBasic(b_values_input, caller, output_path, silent):
+def plotBasic(b_values_input, caller, output_path, silent, genes = None):
     if not silent: print('====== P L O T T I N G . . . =======================')
+    print("gottem", b_values_input, genes)
     
     # Set the font family with a fallback list.
     mpl.rcParams['font.family'] = ['Helvetica', 'DejaVu Sans', 'Arial']
@@ -32,8 +33,7 @@ def plotBasic(b_values_input, caller, output_path, silent):
 
     ax.plot(x, y, color='black', lw=1.5)
     ax.set_xlim(x.min() - 1, x.max())
-    ax.set_ylim(y.min() - 0.02, 1)
-
+    
     ax.set_ylabel('Expected diversity relative to neutral evolution (B)', fontsize=13)
     if caller == "genome":
         ax.set_title('B recovery across chromosomal region [200 kb]', fontsize=15, fontweight='bold')

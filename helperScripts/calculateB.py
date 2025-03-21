@@ -14,17 +14,17 @@ def calculate_exponent(t_start, t_end, U, a, b):
     return E1 + E2 # = E
 
 def get_a_b_with_GC(C, y, l):
-        proportion_nogc_b = np.where(k < y + l, # When GC includes gene site, this is probability the tract includes neutral site of interest 
-                                   1/(2*k) * np.maximum(k-y+1,0) * np.maximum(k - y, 0) / l,
-                                   (k - y - 0.5 * l) / k)
-        
         proportion_nogc_a = np.where(k < y + l, # When GC includes neutral site, this is proportion of the gene it includes
                                     np.maximum((0.5*(k-y)/l), 0),
                                     ((y) * (2 * k - (y + l)))/(2 * k * y)
                                     )
 
+        proportion_nogc_b = np.where(k < y + l, # When GC includes gene site, this is probability the tract includes neutral site of interest 
+                                   1/(2*k) * np.maximum(k-y+1,0) * np.maximum(k - y, 0) / l,
+                                   (k - y - 0.5 * l) / k)
+        
         a = np.where(k < y, 
-            C + (2 * g * k), # Probabiliity of GC on neutral site, where overlap with element not possible
+            C + (2 * g * k), # Probability of GC on neutral site, where overlap with element not possible
             C + (2 * g * (y) + # When overlap possible this is probability gc is in neutral but doesn't include any of element
                 g * (k - y) * # Probability gc is in neutral and includes some element (remaining probability from above)
                 (1 - proportion_nogc_a) # Proportion of gene that gc breaks linkage with when it includes some element
