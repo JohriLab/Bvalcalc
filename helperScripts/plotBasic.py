@@ -46,8 +46,16 @@ def plotBasic(b_values_input, caller, output_path, silent, genes = None):
 
         # If gene annotations are provided, add them as horizontal bars
     if genes is not None and len(genes) > 0:
+        # Get current y-limits so we can draw below the axis
+        ymin, ymax = ax.get_ylim()
+        bar_y = ymin - (ymax - ymin) * 0.05  # 5% below the axis
+        
+        # Expand the y-limits to make space for bars
+        ax.set_ylim(bar_y, ymax)
+        
         for start, end in genes:
-            ax.hlines(y=0.01, xmin=start, xmax=end, colors='black', linewidth=10)
+            ax.hlines(y=bar_y, xmin=start, xmax=end, colors='black', linewidth=30)
+
 
     # Format the x-axis ticks:
     ax.xaxis.set_major_formatter(
