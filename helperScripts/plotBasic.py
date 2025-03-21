@@ -43,7 +43,12 @@ def plotBasic(b_values_input, caller, output_path, silent, genes = None):
         ax.set_title('B recovery from single element', fontsize=15, fontweight='bold')
 
     ax.tick_params(axis='both', which='major', labelsize=10)
-    
+
+        # If gene annotations are provided, add them as horizontal bars
+    if genes is not None and len(genes) > 0:
+        for start, end in genes:
+            ax.hlines(y=0.01, xmin=start, xmax=end, colors='black', linewidth=10)
+
     # Format the x-axis ticks:
     ax.xaxis.set_major_formatter(
         ticker.FuncFormatter(

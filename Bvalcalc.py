@@ -20,9 +20,9 @@ def main():
 
     if known_args.genome: # Run genome Bcalc
         args = parseGenomeArgs(remaining_args)
-        output_data = genomeBcalc(args)
+        output_data, block_ranges = genomeBcalc(args)
         if getattr(args, 'plot_output', True):
-            plotBasic(b_values_input=output_data, caller="genome", output_path=args.plot_output, silent=args.silent)
+            plotBasic(b_values_input=output_data, caller="genome", output_path=args.plot_output, silent=args.silent, genes=block_ranges)
     elif known_args.region: # Run region Bcalc
         args = parseRegionArgs(remaining_args)
         output_data = regionBcalc(args) # Capture the output from regionBcalc

@@ -68,5 +68,5 @@ def genomeBcalc(args):
         b_values = get_Bcur(b_values)
         if not silent: print("Demographic change applied to B-calculation")
     output_data = np.column_stack((positions, b_values))
-
-    return output_data
+    block_ranges = np.column_stack((blockstart, blockend))
+    return output_data, block_ranges
