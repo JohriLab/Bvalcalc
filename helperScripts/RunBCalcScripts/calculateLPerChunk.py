@@ -9,7 +9,7 @@ def calculateLPerChunk(
 ):
     """
     Loop-based calculation of how much each set of blocks (flank blocks + main blocks)
-    overlaps with each chunk in [calc_start, calc_end).
+    overlaps with each chunk in [chr_start, chr_end).
 
     """
 
