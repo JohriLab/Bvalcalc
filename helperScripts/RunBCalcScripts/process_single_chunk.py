@@ -2,6 +2,7 @@ from helperScripts.calculateB import calculateB_linear, calculateB_recmap
 from helperScripts.RunBCalcScripts.calcBFromChunks import calcBFromChunks
 from helperScripts.RunBCalcScripts.recmapHandler import calcRLengths
 from helperScripts.RunBCalcScripts.recmapHandler import calcRDistances
+from helperScripts.RunBCalcScripts.calcBInGenes import calcBInGenes
 import numpy as np
 
 def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start, chr_end,
@@ -45,7 +46,7 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
     downstream_mask = (pos_chunk < precise_blockstart[:, None]) # True when position is less than blockstart (gene is downstream) 
 
     upstream_mask   = (pos_chunk > precise_blockend[:, None]) # True when position is more than blockend (gene is upstream)
-    flanking_mask   = downstream_mask | upstream_mask
+    flanking_mask   = downstream_mask | upstream_mask 
     unique_indices, inverse_indices = np.unique(np.where(flanking_mask)[1], return_inverse=True)
 
 
@@ -55,16 +56,22 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
         np.nan
     )
     flat_distances = physical_distances[flanking_mask] # Flatten array
-    if chunk_num == 3:
-        print("chunk_num:", chunk_num, np.sum((gpos_chunk_clean < precise_blockstart[:, None] | (gpos_chunk_clean > precise_blockend[:, None])), axis=1), "Here need to filter to remove the specific gene sites are in")
 
     physical_lengths = precise_blockend - precise_blockstart
     flat_lengths   = np.repeat(physical_lengths, flanking_mask.sum(axis=1))
     nonzero_mask = flat_lengths != 0 # Remove genes of length 0
     flat_distances = flat_distances[nonzero_mask]
     flat_lengths   = flat_lengths[nonzero_mask]
-    if chunk_num == 3:
-        print("chunk_num:", chunk_num, np.shape(flat_lengths), np.shape(flat_distances), "Here need to filter to remove the specific gene sites are in")
+
+
+    ## CALCULATE B FOR SITES WITHIN GENES
+
+    gene_mask = ~flanking_mask
+    calcBInGenes(chunk_num, chunk_size, chr_start, chr_end, num_chunks, 
+                    precise_chunks, lperchunk, gene_mask, rec_rate_per_chunk, gc_rate_per_chunk)
+    
+
+
     
     if rec_rate_per_chunk is not None: # IF REC_RATE MAP IS AVAILABLE 
         precise_rates = rec_rate_per_chunk[np.maximum(0, chunk_num - precise_chunks):np.minimum(num_chunks, chunk_num + precise_chunks + 1)]
