@@ -25,6 +25,7 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
     B_from_distant_chunks = calcBFromChunks( # Compute B from distant chunks in non-precise region
         chunk_num, chunk_size, chr_start, chr_end, num_chunks, 
         precise_chunks, lperchunk, rec_rate_per_chunk, gc_rate_per_chunk)
+    
 
     # Identify blocks in the "precise region"
     precise_region_start = np.maximum(chr_start, chr_start + (chunk_num - precise_chunks) * chunk_size)
@@ -53,6 +54,7 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
         np.nan
     )
     flat_distances = physical_distances[flanking_mask] # Flatten array
+    print("chunk_num:", chunk_num, np.shape(physical_distances_upstream), "Here need to filter to remove the specific gene gene sites are in")
 
     physical_lengths = precise_blockend - precise_blockstart
     flat_lengths   = np.repeat(physical_lengths, flanking_mask.sum(axis=1))
