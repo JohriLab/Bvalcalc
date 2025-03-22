@@ -20,6 +20,7 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
     
     pos_chunk = np.arange(chunk_start, chunk_end) # Array of positions in this chunk
     pos_chunk_clean   = pos_chunk[not_nan_mask] # Positions of neutral sites
+    gpos_chunk_clean = pos_chunk[np.isnan(chunk_slice)] # Positions of genic sites
     chunk_slice_clean = chunk_slice[not_nan_mask]
 
     B_from_distant_chunks = calcBFromChunks( # Compute B from distant chunks in non-precise region
@@ -41,9 +42,12 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
     physical_distances_upstream   = pos_chunk_clean[None, :] - precise_blockend[:, None] # All distances to blockends (upstream and downstream)
     physical_distances_downstream = precise_blockstart[:, None] - pos_chunk_clean[None, :] # All distances to blockstarts (upstream and downstream)
 
-    downstream_mask = (pos_chunk_clean < precise_blockstart[:, None])
+    gphysical_distances_upstream   = gpos_chunk_clean[None, :] - precise_blockend[:, None] # Gene site distances to b-ends
+    gphysical_distances_downstream = precise_blockstart[:, None] - gpos_chunk_clean[None, :] # Gene site distances to b-starts
 
-    upstream_mask   = (pos_chunk_clean > precise_blockend[:, None])
+    downstream_mask = (pos_chunk_clean < precise_blockstart[:, None]) # True when position is less than blockstart (gene is downstream) 
+
+    upstream_mask   = (pos_chunk_clean > precise_blockend[:, None]) # True when position is more than blockend (gene is upstream)
     flanking_mask   = downstream_mask | upstream_mask
     unique_indices, inverse_indices = np.unique(np.where(flanking_mask)[1], return_inverse=True)
 
@@ -54,7 +58,7 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
         np.nan
     )
     flat_distances = physical_distances[flanking_mask] # Flatten array
-    print("chunk_num:", chunk_num, np.shape(physical_distances_upstream), "Here need to filter to remove the specific gene gene sites are in")
+    print("chunk_num:", chunk_num, np.shape(gphysical_distances_upstream), "Here need to filter to remove the specific gene gene sites are in")
 
     physical_lengths = precise_blockend - precise_blockstart
     flat_lengths   = np.repeat(physical_lengths, flanking_mask.sum(axis=1))
