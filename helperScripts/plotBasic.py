@@ -1,9 +1,11 @@
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import matplotlib.ticker as ticker
+import numpy as np
 
-def plotBasic(b_values_input, caller, output_path, silent, genes = None):
-    if not silent: print('====== P L O T T I N G . . . =======================')
+def plotBasic(b_values_input, caller, output_path, silent, genes=None):
+    if not silent: 
+        print('====== P L O T T I N G . . . =======================')
     
     # Set the font family with a fallback list.
     mpl.rcParams['font.family'] = ['Helvetica', 'DejaVu Sans', 'Arial']
@@ -30,7 +32,8 @@ def plotBasic(b_values_input, caller, output_path, silent, genes = None):
     x = b_values_input[:, 0]  # x-values (positions)
     y = b_values_input[:, 1]  # y-values (corresponding values)
 
-    ax.plot(x, y, color='black', lw=1.5)
+    # Plot the entire B line as a solid black line.
+    ax.plot(x, y, color='blue', lw=1.5, alpha=0.8)
     ax.set_xlim(x.min() - 1, x.max())
     
     ax.set_ylabel('Expected diversity relative to neutral evolution (B)', fontsize=13)
@@ -43,23 +46,37 @@ def plotBasic(b_values_input, caller, output_path, silent, genes = None):
 
     ax.tick_params(axis='both', which='major', labelsize=10)
 
-        # If gene annotations are provided, add them as horizontal bars
+    # If gene annotations are provided, add them as horizontal bars.
     if genes is not None and len(genes) > 0:
-        # Get current y-limits so we can draw below the axis
+        # Get current y-limits so we can draw below the axis.
         ymin, ymax = ax.get_ylim()
         bar_y = ymin - (ymax - ymin) * 0.05  # 5% below the axis
-        
-        # Expand the y-limits to make space for bars
+        # Expand the y-limits to make space for bars.
         ax.set_ylim(bar_y, ymax)
-        
         for start, end in genes:
             ax.hlines(y=bar_y, xmin=start, xmax=end, colors='black', linewidth=30)
+        
+        # When caller is "genome", overlay red line segments for gene regions.
+        if caller == "genome":
+            # Create a boolean mask for x-values within any gene interval.
+            gene_mask = np.zeros_like(x, dtype=bool)
+            for start, end in genes:
+                gene_mask |= ((x >= start) & (x <= end))
+            # Find indices where gene_mask is True.
+            idx = np.where(gene_mask)[0]
+            if len(idx) > 0:
+                # Split the indices into contiguous segments.
+                segments = np.split(idx, np.where(np.diff(idx) != 1)[0] + 1)
+                for seg in segments:
+                    ax.plot(x[seg], y[seg], color='black', lw=1.5)
 
-
-    # Format the x-axis ticks:
+    # Format the x-axis ticks.
     ax.xaxis.set_major_formatter(
         ticker.FuncFormatter(
-            lambda x, pos: f"{int(x)} bp" if x < 1000 else (f"{x/1e6:.2f} Mb" if x >= 1000000 else f"{int(x/1000)} kb")))
+            lambda x_val, pos: f"{int(x_val)} bp" if x_val < 1000 
+            else (f"{x_val/1e6:.2f} Mb" if x_val >= 1000000 else f"{int(x_val/1000)} kb")
+        )
+    )
     
     plt.tight_layout()
     plt.savefig(output_path, dpi=300)

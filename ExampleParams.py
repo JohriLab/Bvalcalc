@@ -5,7 +5,7 @@
 ##        ./Bvalcalc --genome --pop_params ExampleParams.py
 
 x = 100 # Scaling Factor (N,u,r), keep as [1] unless calculating for rescaled simulations
-g = 1*1e-8*x # Gene conversion initiation rate per bp, per generation
+g = 0*1e-8*x # Gene conversion initiation rate per bp, per generation
 k = 440 # Gene conversion tract length (bp)
 r = 0.5*1e-8*x #rate of recombination
 u = 3*1e-9*x #(*Mutation rate*)

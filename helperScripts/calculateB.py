@@ -39,27 +39,29 @@ def calculateB_linear(distance_to_element, length_of_element):
     Calculate the B value for a single functional element at the focal site,
     summing over the DFE while consolidating the intermediate calculations.
     """    
+    with np.errstate(divide='ignore', invalid='ignore'):
+        C = (1.0 - np.exp(-2.0 * r * distance_to_element)) / 2.0 # cM
+        U = length_of_element * u
+        if g == 0:
+            a = C # RECOMBINATION IN Y
+            b = C + (r * length_of_element) # RECOMBINATION IN X
+        elif g > 0:
+            a, b = get_a_b_with_GC(C, distance_to_element, length_of_element)
 
-    C = (1.0 - np.exp(-2.0 * r * distance_to_element)) / 2.0 # cM
-    U = length_of_element * u
-    if g == 0:
-        a = C # RECOMBINATION IN Y
-        b = C + (r * length_of_element) # RECOMBINATION IN X
-    elif g > 0:
-        a, b = get_a_b_with_GC(C, distance_to_element, length_of_element)
+        E_f1 = calculate_exponent(t1half, t2, U, a, b)
+        E_f2 = calculate_exponent(t2, t3, U, a, b)
+        E_f3 = calculate_exponent(t3, t4, U, a, b)
 
-    E_f1 = calculate_exponent(t1half, t2, U, a, b)
-    E_f2 = calculate_exponent(t2, t3, U, a, b)
-    E_f3 = calculate_exponent(t3, t4, U, a, b)
+        E_bar = ( # Sum over the DFE
+            f0 * 0.0
+            + f1 * ((t1half - t1) / (t2 - t1)) * 0.0
+            + f1 * ((t2 - t1half) / (t2 - t1)) * E_f1
+            + f2 * E_f2
+            + f3 * E_f3)
 
-    E_bar = ( # Sum over the DFE
-        f0 * 0.0
-        + f1 * ((t1half - t1) / (t2 - t1)) * 0.0
-        + f1 * ((t2 - t1half) / (t2 - t1)) * E_f1
-        + f2 * E_f2
-        + f3 * E_f3)
-
-    return np.exp(-1.0 * E_bar) # Return B
+        B = np.exp(-1.0 * E_bar)
+        
+    return np.where(length_of_element == 0, 1.0, B)
 
 
 def calculateB_recmap(distance_to_element, length_of_element, 
