@@ -51,15 +51,14 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
                                             a_min=chunk_start, a_max=chunk_end-1)
     
 
-    agg_gene_B = np.ones_like(np.arange(0,chunk_size), dtype=np.float64)
+    agg_gene_B = np.ones_like(np.arange(chunk_start,chunk_end), dtype=np.float64)
     for gene_idx in np.arange(len(this_chunk_blockstart_inchunk)):
+        if chunk_num == 9:
+            print("heii", genes_in_this_chunk_mask)
         gene_blockstart = this_chunk_blockstart[gene_idx]
         gene_blockend = this_chunk_blockend[gene_idx]
         gpos_in_chunk = np.arange(this_chunk_blockstart_inchunk[gene_idx],this_chunk_blockend_inchunk[gene_idx]+1)
         left_block_lengths =  gpos_in_chunk - gene_blockstart
-        if chunk_num == 6:
-            print("heii", this_chunk_blockstart_inchunk[gene_idx],this_chunk_blockend_inchunk[gene_idx])
-            print("heii", np.arange(this_chunk_blockstart_inchunk[gene_idx],this_chunk_blockend_inchunk[gene_idx]))
         right_block_lengths = gene_blockend - gpos_in_chunk
         left_block_B = calculateB_linear(distance_to_element = 1, length_of_element = left_block_lengths)
         right_block_B = calculateB_linear(distance_to_element = 1, length_of_element = right_block_lengths)
