@@ -46,24 +46,25 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
     this_chunk_blockend = precise_blockend[genes_in_this_chunk_mask]
 
     this_chunk_blockstart_inchunk = np.clip(this_chunk_blockstart, 
-                                            a_min=chunk_start, a_max=chunk_end)
+                                            a_min=chunk_start, a_max=chunk_end-1)
     this_chunk_blockend_inchunk = np.clip(this_chunk_blockend,
-                                            a_min=chunk_start, a_max=chunk_end)
+                                            a_min=chunk_start, a_max=chunk_end-1)
     
 
     agg_gene_B = np.ones_like(np.arange(0,chunk_size), dtype=np.float64)
     for gene_idx in np.arange(len(this_chunk_blockstart_inchunk)):
         gene_blockstart = this_chunk_blockstart[gene_idx]
         gene_blockend = this_chunk_blockend[gene_idx]
-        gpos_in_chunk = np.arange(this_chunk_blockstart_inchunk[gene_idx],this_chunk_blockend_inchunk[gene_idx])
+        gpos_in_chunk = np.arange(this_chunk_blockstart_inchunk[gene_idx],this_chunk_blockend_inchunk[gene_idx]+1)
         left_block_lengths =  gpos_in_chunk - gene_blockstart
+        if chunk_num == 6:
+            print("heii", this_chunk_blockstart_inchunk[gene_idx],this_chunk_blockend_inchunk[gene_idx])
+            print("heii", np.arange(this_chunk_blockstart_inchunk[gene_idx],this_chunk_blockend_inchunk[gene_idx]))
         right_block_lengths = gene_blockend - gpos_in_chunk
         left_block_B = calculateB_linear(distance_to_element = 1, length_of_element = left_block_lengths)
         right_block_B = calculateB_linear(distance_to_element = 1, length_of_element = right_block_lengths)
         gene_sites = gpos_in_chunk-chunk_start
         # print("G2", gene_sites)
-        if chunk_num == 6:
-            print("heii", agg_gene_B, len(gene_sites), len(left_block_B))
         np.multiply.at(agg_gene_B, gene_sites, left_block_B)
         np.multiply.at(agg_gene_B, gene_sites, right_block_B)
 
