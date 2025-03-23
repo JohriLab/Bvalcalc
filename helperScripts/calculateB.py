@@ -14,14 +14,15 @@ def calculate_exponent(t_start, t_end, U, a, b):
     return E1 + E2 # = E
 
 def get_a_b_with_GC(C, y, l):
-        proportion_nogc_a = np.where(k < y + l, # When GC includes neutral site, this is proportion of the gene it includes
-                                    np.maximum((0.5*(k-y)/l), 0),
-                                    ((y) * (2 * k - (y + l)))/(2 * k * y)
-                                    )
+        with np.errstate(divide='ignore', invalid='ignore'):
+            proportion_nogc_a = np.where(k < y + l, # When GC includes neutral site, this is proportion of the gene it includes
+                                        np.maximum((0.5*(k-y)/l), 0),
+                                        ((y) * (2 * k - (y + l)))/(2 * k * y)
+                                        )
 
-        proportion_nogc_b = np.where(k < y + l, # When GC includes gene site, this is probability the tract includes neutral site of interest 
-                                   1/(2*k) * np.maximum(k-y+1,0) * np.maximum(k - y, 0) / l,
-                                   (k - y - 0.5 * l) / k)
+            proportion_nogc_b = np.where(k < y + l, # When GC includes gene site, this is probability the tract includes neutral site of interest 
+                                    1/(2*k) * np.maximum(k-y+1,0) * np.maximum(k - y, 0) / l,
+                                    (k - y - 0.5 * l) / k)
         
         a = np.where(k < y, 
             C + (2 * g * k), # Probability of GC on neutral site, where overlap with element not possible
@@ -38,6 +39,7 @@ def calculateB_linear(distance_to_element, length_of_element):
     Calculate the B value for a single functional element at the focal site,
     summing over the DFE while consolidating the intermediate calculations.
     """    
+
     C = (1.0 - np.exp(-2.0 * r * distance_to_element)) / 2.0 # cM
     U = length_of_element * u
     if g == 0:

@@ -21,7 +21,6 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
     
     pos_chunk = np.arange(chunk_start, chunk_end) # Array of positions in this chunk
     pos_chunk_clean   = pos_chunk[not_nan_mask] # Positions of neutral sites
-    gpos_chunk_clean = pos_chunk[np.isnan(chunk_slice)] # Positions of genic sites
     chunk_slice_clean = chunk_slice[not_nan_mask]
 
     B_from_distant_chunks = calcBFromChunks( # Compute B from distant chunks in non-precise region
@@ -39,6 +38,35 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
                                  a_min=precise_region_start, a_max=precise_region_end)
     precise_blockend   = np.clip(blockend[precise_blockregion_mask],
                                  a_min=precise_region_start, a_max=precise_region_end)
+    
+
+    if chunk_num == 3:
+        print("precise_blocks", precise_blockstart, precise_blockend)
+        print("chunk start and end", chunk_start, chunk_end)
+        genes_in_this_chunk_mask = np.logical_and(precise_blockstart < chunk_end, precise_blockend > chunk_start)
+        this_chunk_blockstart = precise_blockstart[genes_in_this_chunk_mask]
+        this_chunk_blockend = precise_blockend[genes_in_this_chunk_mask]
+
+        this_chunk_blockstart_inchunk = np.clip(this_chunk_blockstart, 
+                                                a_min=chunk_start, a_max=chunk_end)
+        this_chunk_blockend_inchunk = np.clip(this_chunk_blockend,
+                                              a_min=chunk_start, a_max=chunk_end)
+        print("H$", this_chunk_blockstart_inchunk, this_chunk_blockend_inchunk)
+        print("H$2", this_chunk_blockstart_inchunk)
+        for gene_idx in np.arange(len(this_chunk_blockstart_inchunk)):
+            gene_blockstart = this_chunk_blockstart[gene_idx]
+            gene_blockend = this_chunk_blockend[gene_idx]
+            gpos_in_chunk = np.arange(this_chunk_blockstart_inchunk[gene_idx],this_chunk_blockend_inchunk[gene_idx]+1)
+            left_block_lengths =  gpos_in_chunk - gene_blockstart
+            right_block_lengths = gene_blockend - gpos_in_chunk
+            left_block_B = calculateB_linear(distance_to_element = 1, length_of_element = left_block_lengths)
+            right_block_B = calculateB_linear(distance_to_element = 1, length_of_element = right_block_lengths)
+            print(len(left_block_B), len(right_block_B), left_block_B, right_block_B, "hai")
+
+
+        
+
+
 
     physical_distances_upstream   = pos_chunk[None, :] - precise_blockend[:, None] # All distances to blockends (upstream and downstream)
     physical_distances_downstream = precise_blockstart[:, None] - pos_chunk[None, :] # All distances to blockstarts (upstream and downstream)
