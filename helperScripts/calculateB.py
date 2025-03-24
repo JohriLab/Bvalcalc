@@ -34,6 +34,27 @@ def get_a_b_with_GC(C, y, l):
 
         return a, b
 
+def get_a_b_with_GC_andMaps(C, y, l, rec_y, rec_l, gc_y, gc_l):
+        with np.errstate(divide='ignore', invalid='ignore'):
+            proportion_nogc_a = np.where(k < y + l, # When GC includes neutral site, this is proportion of the gene it includes
+                                        np.maximum((0.5*(k-y)/l), 0),
+                                        ((y) * (2 * k - (y + l)))/(2 * k * y)
+                                        )
+
+            proportion_nogc_b = np.where(k < y + l, # When GC includes gene site, this is probability the tract includes neutral site of interest 
+                                    1/(2*k) * np.maximum(k-y+1,0) * np.maximum(k - y, 0) / l,
+                                    (k - y - 0.5 * l) / k)
+        
+        a = np.where(k < y, 
+            C + (2 * g * k), # Probability of GC on neutral site, where overlap with element not possible
+            C + (2 * g * (y) + # When overlap possible this is probability gc is in neutral but doesn't include any of element
+                g * (k - y) * # Probability gc is in neutral and includes some element (remaining probability from above)
+                (1 - proportion_nogc_a) # Proportion of gene that gc breaks linkage with when it includes some element
+        ))
+        b = C + (r * l) + (2 * g * k) * (1 -  proportion_nogc_b) #* prop k out
+
+        return a, b
+
 def calculateB_linear(distance_to_element, length_of_element):
     """
     Calculate the B value for a single functional element at the focal site,
@@ -73,6 +94,7 @@ def calculateB_recmap(distance_to_element, length_of_element,
     """    
     with np.errstate(divide='ignore', invalid='ignore'):
         # rec_distances is the length of the element * rec rate in each spanned region. 
+        
         if rec_distances is not None:
             rec_adjusted_length_of_element = rec_lengths 
             rec_adjusted_distance_to_element = rec_distances
@@ -95,17 +117,19 @@ def calculateB_recmap(distance_to_element, length_of_element,
             a = C
             b = C + r * rec_adjusted_length_of_element # cM
         elif g > 0:
-            threshold = gc_adjusted_distance_to_element + gc_adjusted_length_of_element < 0.5 * k # Arbitrary threshold
-            a = np.where(
-                threshold, 
-                C + (g * gc_adjusted_distance_to_element), #If TRUE
-                C + g_k #If FALSE
-            )
-            b = np.where(
-                threshold,
-                C + r * rec_adjusted_length_of_element + (g * (gc_adjusted_distance_to_element + gc_adjusted_length_of_element)), #If TRUE
-                C + g_k + r * rec_adjusted_length_of_element #If FALSE
-            )
+            a, b = get_a_b_with_GC_andMaps(C, y=distance_to_element, l=length_of_element, rec_y=rec_adjusted_distance_to_element, rec_l=rec_adjusted_length_of_element, gc_y=gc_adjusted_distance_to_element, gc_l=gc_adjusted_length_of_element)
+        # elif g > 0:
+        #     threshold = gc_adjusted_distance_to_element + gc_adjusted_length_of_element < 0.5 * k # Arbitrary threshold
+        #     a = np.where(
+        #         threshold, 
+        #         C + (g * gc_adjusted_distance_to_element), #If TRUE
+        #         C + g_k #If FALSE
+        #     )
+        #     b = np.where(
+        #         threshold,
+        #         C + r * rec_adjusted_length_of_element + (g * (gc_adjusted_distance_to_element + gc_adjusted_length_of_element)), #If TRUE
+        #         C + g_k + r * rec_adjusted_length_of_element #If FALSE
+        #     )
 
         E_f1 = calculate_exponent(t1half, t2, U, a, b)
         E_f2 = calculate_exponent(t2, t3, U, a, b)
