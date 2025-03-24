@@ -108,53 +108,11 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
 
 
 #>>> GENE NONSENSE <<< 
-    genes_in_this_chunk_mask = np.logical_and(precise_blockstart < chunk_end, precise_blockend >= chunk_start)
-    this_chunk_blockstart = precise_blockstart[genes_in_this_chunk_mask]
-    this_chunk_blockend = precise_blockend[genes_in_this_chunk_mask]
+    if rec_rate_per_chunk is not None:
+        agg_gene_B = calcBInGenes(chunk_size, num_chunks, precise_chunks, precise_blockstart, precise_blockend, chunk_start, chunk_end, rec_lengths, physical_lengths, precise_region_start, chunk_num, rec_rate_per_chunk)
+    else:
+        agg_gene_B = calcBInGenes(chunk_size, num_chunks, precise_chunks, precise_blockstart, precise_blockend, chunk_start, chunk_end, physical_lengths, physical_lengths, precise_region_start, chunk_num, rec_rate_per_chunk)
 
-    this_chunk_blockstart_inchunk = np.clip(this_chunk_blockstart, 
-                                            a_min=chunk_start, a_max=chunk_end-1)
-    this_chunk_blockend_inchunk = np.clip(this_chunk_blockend,
-                                            a_min=chunk_start, a_max=chunk_end-1)
-    
-    
-    all_gene_sites = []
-
-    agg_gene_B = np.ones_like(np.arange(chunk_start,chunk_end), dtype=np.float64)
-    for gene_idx in np.arange(len(this_chunk_blockstart_inchunk)):
-        gene_blockstart = this_chunk_blockstart[gene_idx]
-        gene_blockend = this_chunk_blockend[gene_idx]
-        gpos_in_chunk = np.arange(this_chunk_blockstart_inchunk[gene_idx],this_chunk_blockend_inchunk[gene_idx]+1)
-        left_block_lengths =  gpos_in_chunk - gene_blockstart
-        right_block_lengths = gene_blockend - gpos_in_chunk
-        if rec_rate_per_chunk is not None:
-            this_chunk_reclengths = rec_lengths[genes_in_this_chunk_mask]
-            this_chunk_physlengths = physical_lengths[genes_in_this_chunk_mask]
-            focal_block_reclength = this_chunk_reclengths[gene_idx]
-            focal_block_physlength = this_chunk_physlengths[gene_idx]
-            left_chunk_reclengths = left_block_lengths * (focal_block_reclength/focal_block_physlength)
-            right_chunk_reclengths = right_block_lengths * (focal_block_reclength/focal_block_physlength)
-
-
-            ### GET DISTANCE TO ELsMENTS
-            chunk_starts = precise_region_start + np.arange(0, num_chunks + 1) * chunk_size
-            this_chunk_idx = np.where(chunk_starts == chunk_start)[0][0] # The ID of this chunk in the chunk_starts array, e.g. if precise_chunks = 3, this will be [3] for chunk_num > 2
-            precise_rates = rec_rate_per_chunk[np.maximum(0, chunk_num - precise_chunks):np.minimum(num_chunks, chunk_num + precise_chunks + 1)]
-            # if chunk_num == 6:
-            #     print("gbs", chunk_start, chunk_end, precise_rates, np.maximum(0, chunk_num - precise_chunks), np.minimum(num_chunks, chunk_num + precise_chunks + 1))
-            rec_bp_to_element = 1 * precise_rates[this_chunk_idx] # The ID of this chunk in the chunk_starts array, e.g. if precise_chunks = 3, this will be [3] for chunk_num > 2
-
-            left_block_B = calculateB_recmap(distance_to_element = 1, length_of_element = left_block_lengths, rec_distances=rec_bp_to_element, rec_lengths=left_chunk_reclengths)
-            right_block_B = calculateB_recmap(distance_to_element = 1, length_of_element = right_block_lengths, rec_distances=rec_bp_to_element, rec_lengths=right_chunk_reclengths)
-            
-
-        else:
-            left_block_B = calculateB_linear(distance_to_element = 1, length_of_element = left_block_lengths)
-            right_block_B = calculateB_linear(distance_to_element = 1, length_of_element = right_block_lengths)
-        gene_sites = gpos_in_chunk-chunk_start
-        np.append(agg_gene_B, gene_sites)
-        np.multiply.at(agg_gene_B, gene_sites, left_block_B)
-        np.multiply.at(agg_gene_B, gene_sites, right_block_B)
 #>>> GENE NONSENSE <<< 
 
 
