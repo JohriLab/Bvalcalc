@@ -41,7 +41,7 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
     
 
 
-    genes_in_this_chunk_mask = np.logical_and(precise_blockstart <= chunk_end, precise_blockend >= chunk_start)
+    genes_in_this_chunk_mask = np.logical_and(precise_blockstart < chunk_end, precise_blockend >= chunk_start)
     this_chunk_blockstart = precise_blockstart[genes_in_this_chunk_mask]
     this_chunk_blockend = precise_blockend[genes_in_this_chunk_mask]
 
@@ -53,8 +53,6 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
 
     agg_gene_B = np.ones_like(np.arange(chunk_start,chunk_end), dtype=np.float64)
     for gene_idx in np.arange(len(this_chunk_blockstart_inchunk)):
-        if chunk_num == 9:
-            print("heii", genes_in_this_chunk_mask)
         gene_blockstart = this_chunk_blockstart[gene_idx]
         gene_blockend = this_chunk_blockend[gene_idx]
         gpos_in_chunk = np.arange(this_chunk_blockstart_inchunk[gene_idx],this_chunk_blockend_inchunk[gene_idx]+1)
@@ -162,7 +160,7 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
         if not silent: print(f"No nearby sites under selection in flanking region for chunk:", chunk_num)
 
     unique_indices, inverse_indices = np.unique(np.where(flanking_mask)[1], return_inverse=True)
-    aggregated_B = np.ones_like(unique_indices, dtype=np.float64)
+    aggregated_B = np.ones_like(np.ones_like(np.arange(chunk_start,chunk_end), dtype=np.float64), dtype=np.float64)
     # np.multiply(aggregated_B, )
 
 
@@ -170,7 +168,7 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
     np.multiply.at(aggregated_B, inverse_indices, flank_B) # Multiplicative sum of B calculated at a given site from multiple elements
 
     if unique_indices.size == 0: # If there are no nearby sites under selection
-        chunk_slice[not_nan_mask] = B_from_distant_chunks
+        chunk_slice *= (B_from_distant_chunks * agg_gene_B)
     else:
         chunk_slice_clean[unique_indices] *= (aggregated_B * B_from_distant_chunks * agg_gene_B) # Update chunk slice and combine flank_B with B from distant chunks
         chunk_slice[not_nan_mask] = chunk_slice_clean # Put the updated (non-NaN) slice back into the original b_values
