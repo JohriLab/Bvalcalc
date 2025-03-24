@@ -130,22 +130,23 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
         if rec_rate_per_chunk is not None:
             this_chunk_reclengths = rec_lengths[genes_in_this_chunk_mask]
             this_chunk_physlengths = physical_lengths[genes_in_this_chunk_mask]
-            left_chunk_reclengths = left_block_lengths * (this_chunk_reclengths/this_chunk_physlengths)
-            right_chunk_reclengths = right_block_lengths * (this_chunk_reclengths/this_chunk_physlengths)
+            focal_block_reclength = this_chunk_reclengths[gene_idx]
+            focal_block_physlength = this_chunk_physlengths[gene_idx]
+            left_chunk_reclengths = left_block_lengths * (focal_block_reclength/focal_block_physlength)
+            right_chunk_reclengths = right_block_lengths * (focal_block_reclength/focal_block_physlength)
 
 
             ### GET DISTANCE TO ELsMENTS
-            num_chunks = (precise_region_end - precise_region_start) // chunk_size
             chunk_starts = precise_region_start + np.arange(0, num_chunks + 1) * chunk_size
             this_chunk_idx = np.where(chunk_starts == chunk_start)[0][0] # The ID of this chunk in the chunk_starts array, e.g. if precise_chunks = 3, this will be [3] for chunk_num > 2
             precise_rates = rec_rate_per_chunk[np.maximum(0, chunk_num - precise_chunks):np.minimum(num_chunks, chunk_num + precise_chunks + 1)]
+            # if chunk_num == 6:
+            #     print("gbs", chunk_start, chunk_end, precise_rates, np.maximum(0, chunk_num - precise_chunks), np.minimum(num_chunks, chunk_num + precise_chunks + 1))
             rec_bp_to_element = 1 * precise_rates[this_chunk_idx] # The ID of this chunk in the chunk_starts array, e.g. if precise_chunks = 3, this will be [3] for chunk_num > 2
 
             left_block_B = calculateB_recmap(distance_to_element = 1, length_of_element = left_block_lengths, rec_distances=rec_bp_to_element, rec_lengths=left_chunk_reclengths)
             right_block_B = calculateB_recmap(distance_to_element = 1, length_of_element = right_block_lengths, rec_distances=rec_bp_to_element, rec_lengths=right_chunk_reclengths)
-            # if chunk_num == 5:
-            #     print("gbs", chunk_start, chunk_end, gene_blockstart)
-            #     print("leftBs", right_block_B)
+            
 
         else:
             left_block_B = calculateB_linear(distance_to_element = 1, length_of_element = left_block_lengths)
