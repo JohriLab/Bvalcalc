@@ -196,3 +196,18 @@ def calcRLengthsDistances_forchunks(upstream_indices, downstream_indices, rec_ra
 
 
     return upstream_rec_lengths, downstream_rec_lengths, upstream_rec_distances, downstream_rec_distances
+
+
+def calcRLengthsDistances_forGenes(this_chunk_blockstart, this_chunk_blockend, precise_rates, precise_region_start, precise_region_end, chunk_size, chunk_num, chunk_start, precise_chunks):
+    num_chunks = (precise_region_end - precise_region_start) // chunk_size
+    chunk_starts = precise_region_start + np.arange(0, num_chunks + 1) * chunk_size
+    chunk_ends = np.minimum(chunk_starts + chunk_size, precise_region_end)
+    this_chunk_idx = np.where(chunk_starts == chunk_start)[0][0] # The ID of this chunk in the chunk_starts array, e.g. if precise_chunks = 3, this will be [3] for chunk_num > 2
+    right_rec_distances = 1 * precise_rates[this_chunk_idx]
+    left_rec_distances = 1 * precise_rates[this_chunk_idx]
+
+    
+    print("in recmaphandler", precise_rates)
+    right_rec_lengths = 3
+
+    return right_rec_lengths, right_rec_distances, left_rec_distances

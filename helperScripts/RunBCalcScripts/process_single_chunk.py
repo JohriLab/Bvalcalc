@@ -41,46 +41,6 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
     
 
 
-    genes_in_this_chunk_mask = np.logical_and(precise_blockstart < chunk_end, precise_blockend >= chunk_start)
-    this_chunk_blockstart = precise_blockstart[genes_in_this_chunk_mask]
-    this_chunk_blockend = precise_blockend[genes_in_this_chunk_mask]
-
-    this_chunk_blockstart_inchunk = np.clip(this_chunk_blockstart, 
-                                            a_min=chunk_start, a_max=chunk_end-1)
-    this_chunk_blockend_inchunk = np.clip(this_chunk_blockend,
-                                            a_min=chunk_start, a_max=chunk_end-1)
-    
-    
-    all_gene_sites = []
-
-    agg_gene_B = np.ones_like(np.arange(chunk_start,chunk_end), dtype=np.float64)
-    for gene_idx in np.arange(len(this_chunk_blockstart_inchunk)):
-        gene_blockstart = this_chunk_blockstart[gene_idx]
-        gene_blockend = this_chunk_blockend[gene_idx]
-        gpos_in_chunk = np.arange(this_chunk_blockstart_inchunk[gene_idx],this_chunk_blockend_inchunk[gene_idx]+1)
-        left_block_lengths =  gpos_in_chunk - gene_blockstart
-        right_block_lengths = gene_blockend - gpos_in_chunk
-        left_block_B = calculateB_linear(distance_to_element = 1, length_of_element = left_block_lengths)
-        right_block_B = calculateB_linear(distance_to_element = 1, length_of_element = right_block_lengths)
-        gene_sites = gpos_in_chunk-chunk_start
-        np.append(agg_gene_B, gene_sites)
-        # print("G2", gene_sites)
-        np.multiply.at(agg_gene_B, gene_sites, left_block_B)
-        np.multiply.at(agg_gene_B, gene_sites, right_block_B)
-
-
-
-            # print("gene_sites", len(gene_sites))
-            # print("beevals2", gpos_in_chunk)
-
-            
-
-            # gene_b_vals = np.multiply.at(gpos_in_chunk, 1, left_block_B, right_block_B)
-
-    #             aggregated_B = np.ones_like(unique_indices, dtype=np.float64)
-    # print("Haii", unique_indices)
-    # np.multiply.at(aggregated_B, gene_sites, in_gene_sites_B)
-
 
 
 
@@ -144,6 +104,63 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
         nonzero_gc_mask = flat_gc_lengths != 0 # Remove genes of length 0
         flat_gc_distances = flat_gc_distances[nonzero_gc_mask]
         flat_gc_lengths   = flat_gc_lengths[nonzero_gc_mask]
+
+
+
+#>>> GENE NONSENSE <<< 
+    genes_in_this_chunk_mask = np.logical_and(precise_blockstart < chunk_end, precise_blockend >= chunk_start)
+    this_chunk_blockstart = precise_blockstart[genes_in_this_chunk_mask]
+    this_chunk_blockend = precise_blockend[genes_in_this_chunk_mask]
+
+    this_chunk_blockstart_inchunk = np.clip(this_chunk_blockstart, 
+                                            a_min=chunk_start, a_max=chunk_end-1)
+    this_chunk_blockend_inchunk = np.clip(this_chunk_blockend,
+                                            a_min=chunk_start, a_max=chunk_end-1)
+    
+    
+    all_gene_sites = []
+
+    agg_gene_B = np.ones_like(np.arange(chunk_start,chunk_end), dtype=np.float64)
+    for gene_idx in np.arange(len(this_chunk_blockstart_inchunk)):
+        gene_blockstart = this_chunk_blockstart[gene_idx]
+        gene_blockend = this_chunk_blockend[gene_idx]
+        gpos_in_chunk = np.arange(this_chunk_blockstart_inchunk[gene_idx],this_chunk_blockend_inchunk[gene_idx]+1)
+        left_block_lengths =  gpos_in_chunk - gene_blockstart
+        right_block_lengths = gene_blockend - gpos_in_chunk
+        if rec_rate_per_chunk is not None:
+            this_chunk_reclengths = rec_lengths[genes_in_this_chunk_mask]
+            this_chunk_physlengths = physical_lengths[genes_in_this_chunk_mask]
+            left_chunk_reclengths = left_block_lengths * (this_chunk_reclengths/this_chunk_physlengths)
+            right_chunk_reclengths = right_block_lengths * (this_chunk_reclengths/this_chunk_physlengths)
+            
+
+
+            ### GET DISTANCE TO ELsMENTS
+            num_chunks = (precise_region_end - precise_region_start) // chunk_size
+            chunk_starts = precise_region_start + np.arange(0, num_chunks + 1) * chunk_size
+            this_chunk_idx = np.where(chunk_starts == chunk_start)[0][0] # The ID of this chunk in the chunk_starts array, e.g. if precise_chunks = 3, this will be [3] for chunk_num > 2
+            precise_rates = rec_rate_per_chunk[np.maximum(0, chunk_num - precise_chunks):np.minimum(num_chunks, chunk_num + precise_chunks + 1)]
+            distance_to_element = 1 * precise_rates[this_chunk_idx] # The ID of this chunk in the chunk_starts array, e.g. if precise_chunks = 3, this will be [3] for chunk_num > 2
+            ### NOW, GET LENGTHS OF LEFT and RIGHT blocks
+            if chunk_num == 5:
+                print("gbs", chunk_start, chunk_end, gene_blockstart)
+                print("reclengths", rec_lengths, precise_blockstart, genes_in_this_chunk_mask, this_chunk_reclengths, this_chunk_physlengths, left_block_lengths, left_chunk_reclengths, right_chunk_reclengths)
+
+
+
+
+
+
+        left_block_B = calculateB_linear(distance_to_element = 1, length_of_element = left_block_lengths)
+        right_block_B = calculateB_linear(distance_to_element = 1, length_of_element = right_block_lengths)
+        gene_sites = gpos_in_chunk-chunk_start
+        np.append(agg_gene_B, gene_sites)
+        np.multiply.at(agg_gene_B, gene_sites, left_block_B)
+        np.multiply.at(agg_gene_B, gene_sites, right_block_B)
+#>>> GENE NONSENSE <<< 
+
+
+
 
     # Calculate B!!! 
     if rec_rate_per_chunk is not None and gc_rate_per_chunk is not None: # IF REC_RATE MAP IS AVAILABLE and GC IS AVAILABLE
