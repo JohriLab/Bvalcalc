@@ -108,10 +108,14 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
 
 
 #>>> GENE NONSENSE <<< 
-    if rec_rate_per_chunk is not None:
-        agg_gene_B = calcBInGenes(chunk_size, num_chunks, precise_chunks, precise_blockstart, precise_blockend, chunk_start, chunk_end, rec_lengths, physical_lengths, precise_region_start, chunk_num, rec_rate_per_chunk)
+    if rec_rate_per_chunk is not None and gc_rate_per_chunk is not None: # IF REC_RATE MAP IS AVAILABLE and GC IS AVAILABLE
+        agg_gene_B = calcBInGenes(chunk_size, num_chunks, precise_chunks, precise_blockstart, precise_blockend, chunk_start, chunk_end, physical_lengths, precise_region_start, chunk_num, rec_rate_per_chunk = rec_rate_per_chunk, gc_rate_per_chunk = gc_rate_per_chunk, rec_lengths = rec_lengths, gc_lengths = gc_lengths)
+    elif rec_rate_per_chunk is not None and gc_rate_per_chunk is None: # IF REC_RATE MAP IS AVAILABLE and GC NOT AVAILABLE
+        agg_gene_B = calcBInGenes(chunk_size, num_chunks, precise_chunks, precise_blockstart, precise_blockend, chunk_start, chunk_end, physical_lengths, precise_region_start, chunk_num, rec_rate_per_chunk = rec_rate_per_chunk, gc_rate_per_chunk = None, rec_lengths = rec_lengths, gc_lengths = None)
+    elif rec_rate_per_chunk is None and gc_rate_per_chunk is not None: # IF REC_RATE MAP NOT AVAILABLE and GC IS AVAILALBE
+        agg_gene_B = calcBInGenes(chunk_size, num_chunks, precise_chunks, precise_blockstart, precise_blockend, chunk_start, chunk_end, physical_lengths, precise_region_start, chunk_num, rec_rate_per_chunk = None, gc_rate_per_chunk = gc_rate_per_chunk, rec_lengths = None, gc_lengths = gc_lengths)
     else:
-        agg_gene_B = calcBInGenes(chunk_size, num_chunks, precise_chunks, precise_blockstart, precise_blockend, chunk_start, chunk_end, physical_lengths, physical_lengths, precise_region_start, chunk_num, rec_rate_per_chunk)
+        agg_gene_B = calcBInGenes(chunk_size, num_chunks, precise_chunks, precise_blockstart, precise_blockend, chunk_start, chunk_end, physical_lengths, precise_region_start, chunk_num, rec_rate_per_chunk = None, gc_rate_per_chunk = None, rec_lengths = None, gc_lengths = None)
 
 #>>> GENE NONSENSE <<< 
 
