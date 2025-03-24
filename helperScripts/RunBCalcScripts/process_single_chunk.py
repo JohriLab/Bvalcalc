@@ -50,6 +50,8 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
     this_chunk_blockend_inchunk = np.clip(this_chunk_blockend,
                                             a_min=chunk_start, a_max=chunk_end-1)
     
+    
+    all_gene_sites = []
 
     agg_gene_B = np.ones_like(np.arange(chunk_start,chunk_end), dtype=np.float64)
     for gene_idx in np.arange(len(this_chunk_blockstart_inchunk)):
@@ -61,9 +63,11 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
         left_block_B = calculateB_linear(distance_to_element = 1, length_of_element = left_block_lengths)
         right_block_B = calculateB_linear(distance_to_element = 1, length_of_element = right_block_lengths)
         gene_sites = gpos_in_chunk-chunk_start
+        np.append(agg_gene_B, gene_sites)
         # print("G2", gene_sites)
         np.multiply.at(agg_gene_B, gene_sites, left_block_B)
         np.multiply.at(agg_gene_B, gene_sites, right_block_B)
+
 
 
             # print("gene_sites", len(gene_sites))
@@ -89,7 +93,6 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
 
     upstream_mask   = (pos_chunk > precise_blockend[:, None]) # True when position is more than blockend (gene is upstream)
     flanking_mask   = downstream_mask | upstream_mask 
-    unique_indices, inverse_indices = np.unique(np.where(flanking_mask)[1], return_inverse=True)
 
     physical_distances = np.where( # Filter so only distances to blockends upstream and blockstarts downstream kept
         flanking_mask,
@@ -155,22 +158,19 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
     else:
         flank_B = calculateB_linear(flat_distances, flat_lengths)
 
-    if flat_distances.size == 0 or flat_lengths.size == 0: # If no selected sites in precise region
-        flank_B = 1
-        if not silent: print(f"No nearby sites under selection in flanking region for chunk:", chunk_num)
+    safe_flank_B = np.concatenate((np.ones(chunk_end - chunk_start, dtype=float), flank_B)) # Add an array of flank_B where all sites are B = 1, to account for sites with no flanking genes
+    new_flanking_mask = np.concatenate((np.ones((1, chunk_end - chunk_start), dtype=bool), flanking_mask), axis=0)
 
-    unique_indices, inverse_indices = np.unique(np.where(flanking_mask)[1], return_inverse=True)
+    unique_indices, inverse_indices = np.unique(np.where(new_flanking_mask)[1], return_inverse=True)
+
     aggregated_B = np.ones_like(np.ones_like(np.arange(chunk_start,chunk_end), dtype=np.float64), dtype=np.float64)
-    # np.multiply(aggregated_B, )
 
-
-    # np.multiply.at(aggregated_B, gene_sites, in_gene_sites_B)
-    np.multiply.at(aggregated_B, inverse_indices, flank_B) # Multiplicative sum of B calculated at a given site from multiple elements
+    np.multiply.at(aggregated_B, inverse_indices, safe_flank_B) # Multiplicative sum of B calculated at a given site from multiple elements
 
     if unique_indices.size == 0: # If there are no nearby sites under selection
         chunk_slice *= (B_from_distant_chunks * agg_gene_B)
     else:
-        chunk_slice_clean[unique_indices] *= (aggregated_B * B_from_distant_chunks * agg_gene_B) # Update chunk slice and combine flank_B with B from distant chunks
+        chunk_slice_clean *= (aggregated_B * B_from_distant_chunks * agg_gene_B) # Update chunk slice and combine flank_B with B from distant chunks
         chunk_slice[not_nan_mask] = chunk_slice_clean # Put the updated (non-NaN) slice back into the original b_values
 
     mean_chunk_b = np.nanmean(chunk_slice) # Mean B for chunk
