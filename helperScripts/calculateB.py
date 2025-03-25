@@ -34,7 +34,28 @@ def get_a_b_with_GC(C, y, l):
 
         return a, b
 
-def get_a_b_with_GC_andMaps(C, y, l, rec_l, gc_y, g_l_k, g_y_k): ## WORK ON AS YOU WRITE UP EQUATION
+def get_a_b_with_GC_andMaps(C, y, l, local_g): ## WORK ON AS YOU WRITE UP EQUATION
+        with np.errstate(divide='ignore', invalid='ignore'):
+            proportion_nogc_a = np.where(k < y + l, # When GC includes neutral site, this is proportion of the gene it includes
+                                        np.maximum((0.5*(k-y)/l), 0),
+                                        ((y) * (2 * k - (y + l)))/(2 * k * y)
+                                        )
+
+            proportion_nogc_b = np.where(k < y + l, # When GC includes gene site, this is probability the tract includes neutral site of interest 
+                                    1/(2*k) * np.maximum(k-y+1,0) * np.maximum(k - y, 0) / l,
+                                    (k - y - 0.5 * l) / k)
+        
+        a = np.where(k < y, 
+            C + (2 * local_g * k), # Probability of GC on neutral site, where overlap with element not possible
+            C + (2 * local_g * (y) + # When overlap possible this is probability gc is in neutral but doesn't include any of element
+                local_g * (k - y) * # Probability gc is in neutral and includes some element (remaining probability from above)
+                (1 - proportion_nogc_a) # Proportion of gene that gc breaks linkage with when it includes some element
+        ))
+        b = C + (r * l) + (2 * local_g * k) * (1 -  proportion_nogc_b) #* prop k out
+
+        return a, b
+
+def get_a_b_with_GC_andMaps2(C, y, l, rec_l, gc_y, g_l_k, g_y_k): ## WORK ON AS YOU WRITE UP EQUATION
         with np.errstate(divide='ignore', invalid='ignore'):
             proportion_nogc_a = np.where(k < y + l, # When GC includes neutral site, this is proportion of the gene it includes
                                         np.maximum((0.5*(k-y)/l), 0),
@@ -106,10 +127,12 @@ def calculateB_recmap(distance_to_element, length_of_element,
             gc_adjusted_distance_to_element = gc_distances
             g_l_k = (gc_lengths / length_of_element) * g * k
             g_y_k = (gc_distances / distance_to_element) * g * k
+            local_g = (gc_lengths + gc_distances)/(length_of_element + distance_to_element) * g
         else:
             gc_adjusted_distance_to_element = distance_to_element
             g_l_k = g * k
             g_y_k = g * k
+            local_g = g
             
         C = (1.0 - np.exp(-2.0 * r * rec_adjusted_distance_to_element)) / 2.0 # cM
         U = length_of_element * u
@@ -117,10 +140,11 @@ def calculateB_recmap(distance_to_element, length_of_element,
             a = C
             b = C + r * rec_adjusted_length_of_element # cM
         elif g > 0:
-            a, b = get_a_b_with_GC_andMaps(C, y=distance_to_element, l=length_of_element, 
-                                           rec_l=rec_adjusted_length_of_element, 
-                                           gc_y=gc_adjusted_distance_to_element, 
-                                           g_l_k=g_l_k, g_y_k=g_y_k)
+             a, b = get_a_b_with_GC_andMaps(C, y=distance_to_element, l=length_of_element, local_g = local_g)
+            # a, b = get_a_b_with_GC_andMaps(C, y=distance_to_element, l=length_of_element, 
+            #                                rec_l=rec_adjusted_length_of_element, 
+            #                                gc_y=gc_adjusted_distance_to_element, 
+            #                                g_l_k=g_l_k, g_y_k=g_y_k)
 
         E_f1 = calculate_exponent(t1half, t2, U, a, b)
         E_f2 = calculate_exponent(t2, t3, U, a, b)
