@@ -77,10 +77,14 @@ def calcBInGenes(chunk_size, num_chunks, precise_chunks, precise_blockstart, pre
             this_chunk_idx = np.where(chunk_starts == chunk_start)[0][0] # The ID of this chunk in the chunk_starts array, e.g. if precise_chunks = 3, this will be [3] for chunk_num > 2
             precise_gc_rates = gc_rate_per_chunk[np.maximum(0, chunk_num - precise_chunks):np.minimum(num_chunks, chunk_num + precise_chunks + 1)]
             gc_bp_to_element = 1 * precise_gc_rates[this_chunk_idx]  # calculateB recdistances input
-            print("LAA ", left_chunk_gclengths)
+
 
             left_block_B = calculateB_recmap(distance_to_element = 1, length_of_element = left_block_lengths, rec_distances=None, rec_lengths=None, gc_distances=gc_bp_to_element, gc_lengths=left_chunk_gclengths)
             right_block_B = calculateB_recmap(distance_to_element = 1, length_of_element = right_block_lengths, rec_distances=None, rec_lengths=None, gc_distances=gc_bp_to_element, gc_lengths=right_chunk_gclengths)
+            
+            if chunk_num == 0:
+                print("aye", left_block_B[200:250], left_block_lengths[200:250], left_chunk_gclengths[200:250], gc_bp_to_element)
+
             
 
         else:

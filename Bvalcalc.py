@@ -8,6 +8,7 @@ from helperScripts.parseArgs import parseGenomeArgs, parseRegionArgs
 from helperScripts.genomeBcalc import genomeBcalc
 from helperScripts.regionBcalc import regionBcalc
 from helperScripts.plotBasic import plotBasic
+from helperScripts.calculateB import calculateB_linear
 
 def main():
     start_time = time.time()
@@ -16,6 +17,7 @@ def main():
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('--genome', action='store_true', help="Compute B values genome-wide")
     group.add_argument('--region', action='store_true', help="Compute B values for a region")
+    group.add_argument('--site', action='store_true', help="Compute B values for a single site")
     known_args, remaining_args = parser.parse_known_args()
 
     if known_args.genome: # Run genome Bcalc
@@ -28,6 +30,15 @@ def main():
         output_data = regionBcalc(args) # Capture the output from regionBcalc
         if getattr(args, 'plot_output', False): # If the --plot_basic flag was provided, call plotBasic with regionBcalc's output.
             plotBasic(b_values_input=output_data, caller="region", output_path=args.plot_output, silent=args.silent)
+    elif known_args.site:
+        B = calculateB_linear(1, 200)
+        B2 = calculateB_linear(1, 400)
+        B3 = calculateB_linear(1, 800)
+        print("B", B)
+        print("B2", B2)
+        print("B3", B3)
+        sys.exit()
+                
 
     if args.out is not None: # Write to CSV
         np.savetxt(args.out, # This might be "b_values.csv" or a custom path

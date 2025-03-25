@@ -117,6 +117,8 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
     else:
         agg_gene_B = calcBInGenes(chunk_size, num_chunks, precise_chunks, precise_blockstart, precise_blockend, chunk_start, chunk_end, physical_lengths, precise_region_start, chunk_num, rec_rate_per_chunk = None, gc_rate_per_chunk = None, rec_lengths = None, gc_lengths = None)
 
+    # if chunk_num == 0:
+    #     print(agg_gene_B[:450])
 #>>> GENE NONSENSE <<< 
 
 
