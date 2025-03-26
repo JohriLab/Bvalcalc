@@ -9,6 +9,7 @@ from helperScripts.genomeBcalc import genomeBcalc
 from helperScripts.regionBcalc import regionBcalc
 from helperScripts.plotBasic import plotBasic
 from helperScripts.calculateB import calculateB_linear
+import cProfile
 
 def main():
     start_time = time.time()
