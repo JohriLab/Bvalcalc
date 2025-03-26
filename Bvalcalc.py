@@ -31,7 +31,7 @@ def main():
         output_data = regionBcalc(args) # Capture the output from regionBcalc
         if getattr(args, 'plot_output', False): # If the --plot_basic flag was provided, call plotBasic with regionBcalc's output.
             plotBasic(b_values_input=output_data, caller="region", output_path=args.plot_output, silent=args.silent)
-    elif known_args.site:
+    elif known_args.site: # Run single site Bcalc
         args = parseSiteArgs(remaining_args)
         siteBcalc(args)
         sys.exit()

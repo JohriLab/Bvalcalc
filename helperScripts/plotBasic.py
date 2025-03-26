@@ -48,10 +48,10 @@ def plotBasic(b_values_input, caller, output_path, silent, genes=None):
     
     ax.set_ylabel('Expected diversity relative to neutral evolution (B)', fontsize=13)
     if caller == "genome":
-        ax.set_title('B recovery across chromosomal region [200 kb]', fontsize=15, fontweight='bold')
+        ax.set_title('B recovery across chromosomal region', fontsize=15, fontweight='bold')
         ax.set_xlabel('Chromosomal position (bp)', fontsize=13)
     elif caller == "region":
-        ax.set_xlabel('Distance from single selected element of size [40 kb]', fontsize=13)
+        ax.set_xlabel('Distance from single selected element of size', fontsize=13)
         ax.set_title('B recovery from single element', fontsize=15, fontweight='bold')
 
     ax.tick_params(axis='both', which='major', labelsize=10)

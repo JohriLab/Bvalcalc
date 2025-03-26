@@ -56,7 +56,7 @@ def parseRegionArgs(argv=None):
 def parseSiteArgs(argv=None):
     parser = argparse.ArgumentParser(description="Calculates B for a single neutral site given a distance from a single selected region and prints to console.")
     parser.add_argument('--gene_size', type=int, default=10000, help="Length of single region (e.g. gene) under selection. [5000]")
-    parser.add_argument('--distance', type=int, default=10000, help="Length of single region (e.g. gene) under selection. [5000]")
+    parser.add_argument('--distance', type=int, default=1, help="Length of single region (e.g. gene) under selection. [5000]")
     parser.add_argument('--pop_change', action='store_true', help="If set, B will reflect the current B after a step change in population size, rather than ancestral B.")
     parser.add_argument('--silent', action='store_true', help="If set, silence print statements.")
     return parser.parse_args(argv)
