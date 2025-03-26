@@ -1,18 +1,15 @@
-import importlib.util
 import os
 import numpy as np
+import importlib.util
+from typing import TYPE_CHECKING
 
-def _load_pop_params(): # Load popgen parameters
-    path = os.environ.get("BCALC_POP_PARAMS")
-    if not path:
-        raise RuntimeError("BCALC_POP_PARAMS environment variable not set.")
-    spec = importlib.util.spec_from_file_location("pop_params", path)
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
-_pop = _load_pop_params() 
-for var in ['g', 'k', 'r', 'u', 't1', 't1half', 't2', 't3', 't4', 'f0', 'f1', 'f2', 'f3']: 
-    globals()[var] = getattr(_pop, var) # Unpack popgen variables into the local namespace
+## Get popgen parameters from input file
+if TYPE_CHECKING:
+    g: float; k: int; r: float; u: float; t1: float; t1half: float; t2: float; 
+    t3: float; t4: float; f0: float; f1: float; f2: float; f3: float
+spec = importlib.util.spec_from_file_location("pop_params", os.environ["BCALC_POP_PARAMS"])
+_pop = importlib.util.module_from_spec(spec); spec.loader.exec_module(_pop)
+for v in ['g','k','r','u','t1','t1half','t2','t3','t4','f0','f1','f2','f3']: globals()[v] = getattr(_pop, v)
 
 def calculate_exponent(t_start, t_end, U, a, b):
     """"
