@@ -1,0 +1,6 @@
+__pycache__/ExampleParams.cpython-310.pyc
+helperScripts/__pycache__/calculateB.cpython-310.pyc
+helperScripts/__pycache__/genomeBcalc.cpython-310.pyc
+helperScripts/__pycache__/plotBasic.cpython-310.pyc
+helperScripts/RunBCalcScripts/__pycache__/calcBInGenes.cpython-310.pyc
+helperScripts/RunBCalcScripts/__pycache__/process_single_chunk.cpython-310.pyc
