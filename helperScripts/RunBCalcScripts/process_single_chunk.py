@@ -11,16 +11,8 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
     
     chunk_start = chr_start + chunk_num * chunk_size
     chunk_end   = min(chunk_start + chunk_size, calc_end)
-
     chunk_slice = b_values[chunk_start - calc_start:chunk_end - calc_start] # Get b_values for this chunk
-    not_nan_mask = ~np.isnan(chunk_slice) # Make a mask for positions that are NOT NaN
-    if not np.any(not_nan_mask): # Bail out if no neutral sites 
-        if not silent: print(f"No neutral sites in chunk {chunk_num}: {chunk_start}-{chunk_end}")
-        return b_values
-    
     pos_chunk = np.arange(chunk_start, chunk_end) # Array of positions in this chunk
-    pos_chunk_clean   = pos_chunk[not_nan_mask] # Positions of neutral sites
-    chunk_slice_clean = chunk_slice[not_nan_mask]
     
     # Identify blocks in the "precise region"
     precise_region_start = np.maximum(chr_start, chr_start + (chunk_num - precise_chunks) * chunk_size)
@@ -54,7 +46,7 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
     if rec_rate_per_chunk is not None: # IF REC_RATE MAP IS AVAILABLE 
         precise_rates = rec_rate_per_chunk[np.maximum(0, chunk_num - precise_chunks):np.minimum(num_chunks, chunk_num + precise_chunks + 1)]
         rec_lengths = calcRLengths(precise_blockstart, precise_blockend, precise_rates, precise_region_start, precise_region_end, chunk_size, chunk_num)
-        rec_distances_upstream, rec_distances_downstream = calcRDistances(precise_blockstart, precise_blockend, precise_rates, precise_region_start, precise_region_end, chunk_size, pos_chunk_clean, chunk_num, chunk_start)
+        rec_distances_upstream, rec_distances_downstream = calcRDistances(precise_blockstart, precise_blockend, precise_rates, precise_region_start, precise_region_end, chunk_size, pos_chunk, chunk_num, chunk_start)
         rec_distances = np.where(
             flanking_mask,
             np.where(upstream_mask, rec_distances_upstream, rec_distances_downstream),
@@ -68,7 +60,7 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
     if gc_rate_per_chunk is not None: # IF GC_RATE MAP IS AVAILABLE 
         precise_gc_rates = gc_rate_per_chunk[np.maximum(0, chunk_num - precise_chunks):np.minimum(num_chunks, chunk_num + precise_chunks + 1)]
         gc_lengths = calcRLengths(precise_blockstart, precise_blockend, precise_gc_rates, precise_region_start, precise_region_end, chunk_size, chunk_num)
-        gc_distances_upstream, gc_distances_downstream = calcRDistances(precise_blockstart, precise_blockend, precise_gc_rates, precise_region_start, precise_region_end, chunk_size, pos_chunk_clean, chunk_num, chunk_start)
+        gc_distances_upstream, gc_distances_downstream = calcRDistances(precise_blockstart, precise_blockend, precise_gc_rates, precise_region_start, precise_region_end, chunk_size, pos_chunk, chunk_num, chunk_start)
         gc_distances = np.where(
             flanking_mask,
             np.where(upstream_mask, gc_distances_upstream, gc_distances_downstream),
@@ -109,8 +101,7 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
     if unique_indices.size == 0: # If there are no nearby sites under selection
         chunk_slice *= (B_from_distant_chunks * within_gene_B)
     else:
-        chunk_slice_clean *= (aggregated_B * B_from_distant_chunks * within_gene_B) # Update chunk slice and combine flank_B with B from distant chunks
-        chunk_slice[not_nan_mask] = chunk_slice_clean # Put the updated (non-NaN) slice back into the original b_values
+        chunk_slice *= (aggregated_B * B_from_distant_chunks * within_gene_B) # Update chunk slice and combine flank_B with B from distant chunks
 
     mean_chunk_b = np.nanmean(chunk_slice) # Mean B for chunk
 

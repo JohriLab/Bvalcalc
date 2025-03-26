@@ -23,8 +23,6 @@ def genomeBcalc(args):
     if not silent: print(f"====== S T A R T I N G ===== C A L C ===============")
 
     b_values = np.ones(calc_end + 1 - calc_start, dtype=np.float64) # Initialize array of B values
-    # for s, e in zip(blockstart, blockend): # Converts gene sites to NaN
-    #     b_values[s - calc_start : e - calc_start + 1] = np.nan
 
     lperchunk = calculateLPerChunk(chunk_size, blockstart, blockend, chr_start, chr_end) # Cumulative conserved length in each chunk
 
