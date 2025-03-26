@@ -5,11 +5,11 @@
 ##        ./Bvalcalc --genome --pop_params ExampleParams.py
 
 ## Core parameters
-x = 1 # Scaling factor (N,u,r), keep as 1 unless calculating for rescaled simulations
+x = 100 # Scaling factor (N,u,r), keep as 1 unless calculating for rescaled simulations
 Nanc = 1e6/x # Ancestral population size
 r = 0.5*1e-8*x # Recombination (crossover) rate per bp, per generation
 u = 3*1e-9*x # Mutation rate (all types) per bp, per generation
-g = 1*1e-8*x # Gene conversion initiation rate per bp, per generation
+g = 0*1e-8*x # Gene conversion initiation rate per bp, per generation
 k = 440 # Gene conversion tract length (bp)
 
 ## Demography parameters
