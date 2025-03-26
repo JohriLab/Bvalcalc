@@ -1,8 +1,4 @@
-import math
-import numpy as np
-from ExampleParams import g, tract_len, r, u, Nanc, gamma_cutoff, h, t0, t1, t1half, t2, t3, t4, f0, f1, f2, f3
-from helperScripts.calculateB import calculateB
-from scipy.optimize import minimize_scalar
+from helperScripts.calculateB import calculateB_linear
 
 def findFlankLen(target_B, length_of_element, max_distance=1e6):
     """
@@ -12,14 +8,14 @@ def findFlankLen(target_B, length_of_element, max_distance=1e6):
     low, high = 0, max_distance
     while low < high:
         mid = (low + high) // 2
-        B = calculateB(mid, length_of_element)
+        B = calculateB_linear(mid, length_of_element)
         if B > target_B:
             high = mid  # Narrow the search to smaller distances
         else:
             low = mid + 1  # Narrow the search to larger distances
 
     # After exiting the loop, check if the condition is met
-    final_B = calculateB(low, length_of_element)
+    final_B = calculateB_linear(low, length_of_element)
     if final_B > target_B:
         return int(low)
     else:

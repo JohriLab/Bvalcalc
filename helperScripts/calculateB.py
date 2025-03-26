@@ -1,5 +1,18 @@
+import importlib.util
+import os
 import numpy as np
-from ExampleParams import g, k, r, u, t1, t1half, t2, t3, t4, f0, f1, f2, f3
+
+def _load_pop_params(): # Load popgen parameters
+    path = os.environ.get("BCALC_POP_PARAMS")
+    if not path:
+        raise RuntimeError("BCALC_POP_PARAMS environment variable not set.")
+    spec = importlib.util.spec_from_file_location("pop_params", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+_pop = _load_pop_params() 
+for var in ['g', 'k', 'r', 'u', 't1', 't1half', 't2', 't3', 't4', 'f0', 'f1', 'f2', 'f3']: 
+    globals()[var] = getattr(_pop, var) # Unpack popgen variables into the local namespace
 
 def calculate_exponent(t_start, t_end, U, a, b):
     """"
