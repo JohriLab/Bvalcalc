@@ -21,8 +21,8 @@ def get_a_b_with_GC(C, y, l):
                                         )
 
             proportion_nogc_b = np.where(k < y + l, # When GC includes gene site, this is probability the tract includes neutral site of interest 
-                                    1/(2*k) * np.maximum(k-y+1,0) * np.maximum(k - y, 0) / l,
-                                    (k - y - 0.5 * l) / k)
+                                    1/(2*k) * np.maximum(k-y+1,0) * np.maximum(k - y, 0) / l, # When overshooting not possible
+                                    (k - y - 0.5 * l) / k) # When overshooting possible
             
         
         a = np.where(k < y, 
@@ -31,8 +31,7 @@ def get_a_b_with_GC(C, y, l):
                 g * (k - y) * # Probability gc is in neutral and includes some element (remaining probability from above)
                 (1 - proportion_nogc_a) # Proportion of gene that gc breaks linkage with when it includes some element
         ))
-        b = C + (r * l) + (2 * g * k) * (1 -  (1-proportion_nogc_a)*proportion_nogc_b) #* prop k out
-        print("props", l, proportion_nogc_a)
+        b = C + (r * l) + (2 * g * k) * (1 - (1-proportion_nogc_a)*proportion_nogc_b) #* prop k out
 
         return a, b
 
@@ -53,7 +52,7 @@ def get_a_b_with_GC_andMaps(C, y, l, rec_l, local_g):
                 local_g * (k - y) * # Probability gc is in neutral and includes some element (remaining probability from above)
                 (1 - proportion_nogc_a) # Proportion of gene that gc breaks linkage with when it includes some element
         ))
-        b = C + (r * rec_l) + (2 * local_g * k) * (1 - proportion_nogc_b) #* prop k out
+        b = C + (r * rec_l) + (2 * local_g * k) * (1 - (1-proportion_nogc_a)*proportion_nogc_b) #* prop k out
 
         return a, b
 

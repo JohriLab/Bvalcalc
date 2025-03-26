@@ -160,10 +160,10 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
             print(f"Chunk {chunk_num}: recombination rate = {rec_rate_per_chunk[chunk_num]}")
         if gc_rate_per_chunk is not None:
             print(f"Chunk {chunk_num}: recombination rate = {gc_rate_per_chunk[chunk_num]}")
-        print(f"B from distant chunks: {B_from_distant_chunks}")
+        # print(f"B from distant chunks: {B_from_distant_chunks}")
         print(f"Number of relevant genes: {len(precise_blockstart)}")
         print(f"Number of neutral sites in chunk [{chunk_start}-{chunk_end}): {np.isnan(chunk_slice).sum()}")
-        print(f"Aggregated B values for chunk: {aggregated_B}")
+        # print(f"Aggregated B values for chunk: {aggregated_B}")
         print(f"Mean B value for chunk {chunk_num}: [{chunk_start}-{chunk_end}]: {mean_chunk_b}")
 
     return b_values
