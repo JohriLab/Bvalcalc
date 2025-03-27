@@ -4,7 +4,7 @@ import matplotlib.ticker as ticker
 import numpy as np
 from matplotlib.collections import LineCollection
 
-def plotB(b_values_input, caller, output_path, silent, genes=None):
+def plotB(b_values_input, caller, output_path, silent, gene_ranges=None):
     if not silent: 
         print('====== P L O T T I N G . . . =======================')
     
@@ -60,7 +60,7 @@ def plotB(b_values_input, caller, output_path, silent, genes=None):
     ax.tick_params(axis='both', which='major', labelsize=10)
 
     # If gene annotations are provided, add them using LineCollection for efficiency.
-    if genes is not None and len(genes) > 0:
+    if gene_ranges is not None and len(gene_ranges) > 0:
         # Get current y-limits so we can draw below the axis.
         ymin, ymax = ax.get_ylim()
         bar_y = ymin - (ymax - ymin) * 0.05  # 5% below the axis
@@ -69,7 +69,7 @@ def plotB(b_values_input, caller, output_path, silent, genes=None):
         ax.set_ylim(bar_y, ymax)
         
         # Create segments for horizontal bars.
-        segments = [((start, bar_y), (end, bar_y)) for start, end in genes]
+        segments = [((start, bar_y), (end, bar_y)) for start, end in gene_ranges]
         lc = LineCollection(segments, colors='black', linewidths=30)
         ax.add_collection(lc)
         
@@ -77,7 +77,7 @@ def plotB(b_values_input, caller, output_path, silent, genes=None):
         if caller == "genome":
             # Create a boolean mask for x-values that fall within any gene interval.
             gene_mask = np.zeros_like(x, dtype=bool)
-            for start, end in genes:
+            for start, end in gene_ranges:
                 gene_mask |= ((x >= start) & (x <= end))
             idx = np.where(gene_mask)[0]
             if len(idx) > 0:
