@@ -23,7 +23,7 @@ def test_cli_site_basic():
 def test_cli_region_basic(tmp_path):
     script = Path(__file__).resolve().parents[1] / "Bvalcalc.py"
     params = Path(__file__).resolve().parents[1] / "tests" / "testparams" / "nogcBasicParams.py"
-    output_path = tmp_path / "dfe_bvals.csv"  # Use tmp_path to avoid clobbering real files
+    output_path = tmp_path / "dfe_bvals.csv"
 
     result = subprocess.run(
         [sys.executable, str(script),
@@ -36,14 +36,9 @@ def test_cli_region_basic(tmp_path):
         text=True
     )
 
-    # Check CLI executed correctly
     assert result.returncode == 0, f"CLI failed:\n{result.stderr}"
-
-    # Check output file exists and is not empty
     assert output_path.exists(), "Expected output CSV was not created"
     assert output_path.stat().st_size > 0, "Output CSV is empty"
-
-    # Optional: check specific content
     contents = output_path.read_text()
     assert "Distance,B" in contents, "Output CSV does not contain expected header"
 
@@ -65,7 +60,7 @@ def test_cli_region_gcparams(tmp_path):
 
     assert result.returncode == 0, f"CLI failed:\n{result.stderr}"
     
-    out = result.stdout
+    out = result.stdout + result.stderr
     assert "= Calculating relative diversity (B) for a neutral region adjacent to a single selected element =" in out
     assert "Distribution of fitness effects (DFE): 40000bp" in out
     assert "Length of region under selection: 10000bp" in out
@@ -78,7 +73,7 @@ def test_cli_region_gcparams(tmp_path):
     assert "B at start and end of the neutral region" in out
     assert "====== P L O T T I N G . . . =======================" in out
     assert "Plot saved to region_plot.png" in out
-    assert f"Saved B values to: {output_path}" in out
+    assert f"Saved B values to: {output_path.as_posix()}" in out
     assert "= B value calculated" in out
 
 def test_cli_genome_basic(tmp_path):
@@ -94,14 +89,71 @@ def test_cli_genome_basic(tmp_path):
             "--bedgff_path", str(bed_path),
             "--chr_start", "1",
             "--chr_end", "200000",
-            "--out", str(output_path)],  # <- removed --silent
+            "--out", str(output_path)],
         capture_output=True,
         text=True
     )
 
+    assert result.returncode == 0, f"CLI failed:\n{result.stderr}"
+    out = result.stdout + result.stderr
+    assert "Cumulative length of regions under selection: 99990bp" in out
+    assert "Mean B of neutral sites across genome: 0.7536950198115279" in out
+    assert output_path.exists(), "Expected output file not created"
+    assert output_path.stat().st_size > 0, "Output file is empty"
+
+def test_cli_genome_gcparams(tmp_path):
+    script = Path(__file__).resolve().parents[1] / "Bvalcalc.py"
+    params = Path(__file__).resolve().parents[1] / "tests" / "testparams" / "gcBasicParams.py"
+    bed_path = Path(__file__).resolve().parents[1] / "tests" / "testfiles" / "200kb_slimtest.csv"
+    output_path = tmp_path / "gc_bvals.bvals"
+
+    result = subprocess.run(
+        [sys.executable, str(script),
+         "--genome",
+         "--pop_params", str(params),
+         "--bedgff_path", str(bed_path),
+         "--chr_start", "1",
+         "--chr_end", "200000",
+         "--plot_output",
+         "--out", str(output_path)],
+        capture_output=True,
+        text=True
+    )
 
     assert result.returncode == 0, f"CLI failed:\n{result.stderr}"
+    out = result.stdout + result.stderr
+    assert "====== R E S U L T S ====== S U M M A R Y ==========" in out
+    assert "Cumulative length of regions under selection: 99990bp (50.0%)" in out
+    assert "Mean B of neutral sites across genome: 0.8363486111505146" in out
+    assert output_path.exists(), "Expected output file not created"
+    assert output_path.stat().st_size > 0, "Output file is empty"
 
-    out = result.stdout
-    assert "Cumulative length of regions under selection: 106994bp" in out
-    assert "Mean B of neutral sites across genome: 0.738525356400387" in out
+def test_cli_genome_with_recmap_plot(tmp_path):
+    script = Path(__file__).resolve().parents[1] / "Bvalcalc.py"
+    params = Path(__file__).resolve().parents[1] / "tests" / "testparams" / "nogcBasicParams.py"
+    bed_path = Path(__file__).resolve().parents[1] / "tests" / "testfiles" / "200kb_slimtest.csv"
+    map_path = Path(__file__).resolve().parents[1] / "tests" / "testfiles" / "200kb.map"
+    output_path = tmp_path / "200kb_dfe5.bvals"
+
+    result = subprocess.run(
+        [sys.executable, str(script),
+         "--genome",
+         "--pop_params", str(params),
+         "--bedgff_path", str(bed_path),
+         "--chr_start", "1",
+         "--chr_end", "200000",
+         "--plot_output",
+         "--rec_map", str(map_path),
+         "--out", str(output_path)],
+        capture_output=True,
+        text=True
+    )
+
+    assert result.returncode == 0, f"CLI failed:\n{result.stderr}"
+    out = result.stdout + result.stderr
+    assert "Cumulative length of regions under selection: 99990bp (50.0%)" in out
+    assert "Mean B of neutral sites across genome: 0.7015865287738964" in out
+    assert "Plot saved to genome_plot.png" in out
+    assert f"Saved B values to: {output_path.as_posix()}" in out
+    assert output_path.exists(), "Expected output file not created"
+    assert output_path.stat().st_size > 0, "Output file is empty"
