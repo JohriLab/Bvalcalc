@@ -1,0 +1,69 @@
+= Calculating relative diversity (B) for all neutral sites across the genome. = = =
+====== P A R A M E T E R S =========================
+BED/GFF file for regions under selection: exampleData/200kb_slimtest.csv
+First position in chromosome: 1
+Last position in chromosome: 200000
+Size of chunks to calculate B in per iteration: 20000bp
+Number of adjacent chunks to calculate B precisely for: 3
+====== S T A R T I N G ===== C A L C ===============
+Using recombination (crossover) map from tests/testfiles/200kb.map
+====== R E S U L T S == P E R == C H U N K =========
+Processing chunk: 1 - 20000
+Chunk 0: recombination rate = 1.0
+Number of relevant genes: 4
+Number of neutral sites in chunk [1-20001): 0
+Mean B value for chunk 0: [1-20001]: 0.6614274154883718
+Processing chunk: 20001 - 40000
+Chunk 1: recombination rate = 1.0
+Number of relevant genes: 5
+Processing chunk: 180001 - 199999
+Chunk 9: recombination rate = 1.0
+Number of relevant genes: 4
+Number of neutral sites in chunk [180001-200000): 0
+Mean B value for chunk 9: [180001-200000]: 0.6150936953127094
+Number of neutral sites in chunk [20001-40001): 0
+Mean B value for chunk 1: [20001-40001]: 0.6038295396360278
+Processing chunk: 160001 - 180000
+Chunk 8: recombination rate = 1.0
+Number of relevant genes: 5
+Number of neutral sites in chunk [160001-180001): 0
+Mean B value for chunk 8: [160001-180001]: 0.5985879914143247
+Processing chunk: 120001 - 140000
+Chunk 6: recombination rate = 1.0
+Number of relevant genes: 7
+Number of neutral sites in chunk [120001-140001): 0
+Mean B value for chunk 6: [120001-140001]: 0.5898796540977467
+Processing chunk: 140001 - 160000
+Chunk 7: recombination rate = 1.0
+Number of relevant genes: 6
+Number of neutral sites in chunk [140001-160001): 0
+Mean B value for chunk 7: [140001-160001]: 0.5926629796535898
+Processing chunk: 60001 - 80000
+Chunk 3: recombination rate = 1.0
+Number of relevant genes: 7
+Number of neutral sites in chunk [60001-80001): 0
+Mean B value for chunk 3: [60001-80001]: 0.5898796540977467
+Processing chunk: 80001 - 100000
+Chunk 4: recombination rate = 1.0
+Number of relevant genes: 7
+Number of neutral sites in chunk [80001-100001): 0
+Mean B value for chunk 4: [80001-100001]: 0.5884988873117737
+Processing chunk: 40001 - 60000
+Chunk 2: recombination rate = 1.0
+Number of relevant genes: 6
+Number of neutral sites in chunk [40001-60001): 0
+Mean B value for chunk 2: [40001-60001]: 0.5939913132501845
+Processing chunk: 100001 - 120000
+Chunk 5: recombination rate = 1.0
+Number of relevant genes: 7
+Number of neutral sites in chunk [100001-120001): 0
+Mean B value for chunk 5: [100001-120001]: 0.5884988873117737
+====== F I N I S H E D ===== C A L C ===============
+====== R E S U L T S ====== S U M M A R Y ==========
+Cumulative length of regions under selection: 99990bp (50.0%)
+Mean B of neutral sites across genome: 0.6022369262889484
+Calculated using recombination (crossover) map, with rates averaged within 20000bp chunks
+====== P L O T T I N G . . . =======================
+Plot saved to genome_plot.png
+No output CSV requested; skipping save.
+= B value calculated in 0.55 seconds. = = =

@@ -1,6 +1,5 @@
 import numpy as np
 
-
 def calc_R_lengths(blockstart, blockend, rec_rate_per_chunk, calc_start, calc_end, chunk_size, chunk_num):
     """
     Calculates the weighted lengths of each conserved block (gene), so that for example if the mean 
@@ -12,10 +11,6 @@ def calc_R_lengths(blockstart, blockend, rec_rate_per_chunk, calc_start, calc_en
     chunk_left  = chunk_starts           # shape: (num_chunks+1,)
     chunk_right = chunk_starts + chunk_size  # shape: (num_chunks+1,)
 
-    # Ensure block boundaries are numpy arrays (and 1D)
-    blockstart = np.asarray(blockstart).flatten()
-    blockend   = np.asarray(blockend).flatten()
-
     # Compute the overlap between each block and each chunk interval:
     # For block i and chunk j, the overlap is:
     #   max(0, min(blockend[i], chunk_right[j]) - max(blockstart[i], chunk_left[j]))
@@ -26,17 +21,19 @@ def calc_R_lengths(blockstart, blockend, rec_rate_per_chunk, calc_start, calc_en
     
     return weighted_sum
 
-def calc_R_distances(precise_blockstart, precise_blockend, precise_rates, precise_region_start, precise_region_end, chunk_size, pos_chunk_clean, chunk_num, chunk_start):
+def calc_R_distances_old(precise_blockstart, precise_blockend, precise_rates, precise_region_start, precise_region_end, chunk_size, pos_chunk_clean, chunk_num, chunk_start):
 
     num_chunks = (precise_region_end - precise_region_start) // chunk_size
     chunk_starts = precise_region_start + np.arange(0, num_chunks + 1) * chunk_size
     chunk_ends = np.minimum(chunk_starts + chunk_size, precise_region_end)
     this_chunk_idx = np.where(chunk_starts == chunk_start)[0][0] # The ID of this chunk in the chunk_starts array, e.g. if precise_chunks = 3, this will be [3] for chunk_num > 2
     chunk_end = chunk_ends[this_chunk_idx] # Focal chunk's end
-    blockstart_chunks = (precise_blockstart - precise_region_start) // chunk_size
+    blockstart_chunks = (precise_blockstart - precise_region_start) // chunk_size  # Tells us what chunk index the blocks in the precise region are in 
     blockend_chunks = (precise_blockend - precise_region_start) // chunk_size
-    blockend_rec_distances = np.empty((len(blockend_chunks), len(pos_chunk_clean)))
+    blockend_rec_distances = np.empty((len(blockend_chunks), len(pos_chunk_clean)))  # Initialize array for recombination distances 
     blockstart_rec_distances = np.empty((len(blockstart_chunks), len(pos_chunk_clean)))
+#
+    # print("hai", blockend_rec_distances) # 
 
 ## FOR LOOP COULD BE IMPORVED BY USING NP ARRAY OPERATIONS INSTEAD!!!
 
@@ -76,6 +73,78 @@ def calc_R_distances(precise_blockstart, precise_blockend, precise_rates, precis
 
     return blockend_rec_distances, blockstart_rec_distances
 
+def calc_R_distances(
+    precise_blockstart, precise_blockend, precise_rates,
+    precise_region_start, precise_region_end, chunk_size,
+    pos_chunk_clean, chunk_num, chunk_start
+):
+    num_chunks = (precise_region_end - precise_region_start) // chunk_size
+    chunk_starts = precise_region_start + np.arange(0, num_chunks + 1) * chunk_size
+    chunk_ends = np.minimum(chunk_starts + chunk_size, precise_region_end)
+    this_chunk_idx = np.where(chunk_starts == chunk_start)[0][0]
+    chunk_end = chunk_ends[this_chunk_idx]
+
+    blockstart_chunks = (precise_blockstart - precise_region_start) // chunk_size
+    blockend_chunks = (precise_blockend - precise_region_start) // chunk_size
+
+    # Broadcast pos_chunk_clean over all blocks
+    pos_broadcast = pos_chunk_clean[None, :]  # shape (1, P)
+
+    # print("aye", np.shape(pos_broadcast))
+
+    # BLOCKEND (upstream) distances
+    inchunk_distances_end = np.minimum(
+        pos_broadcast - precise_blockend[:, None],
+        pos_broadcast - chunk_start
+    )
+    rec_distance_focal_end = inchunk_distances_end * precise_rates[this_chunk_idx]
+
+    # Determine which blocks are in different chunks
+    is_diffchunk_end = (blockend_chunks < this_chunk_idx).astype(float)[:, None]
+
+    chunk_edge_dist_end = (
+        chunk_ends[blockend_chunks] - precise_blockend
+    )
+    rec_blockchunk_end = chunk_edge_dist_end * precise_rates[blockend_chunks]
+
+    # Recombination distances in overlapped chunks (sparse)
+    blockend_overlap_dists = np.array([
+        np.sum(precise_rates[blockend_chunks[i]+1:this_chunk_idx] * chunk_size)
+        for i in range(len(blockend_chunks))
+    ])
+
+    # Total distances
+    blockend_rec_distances = rec_distance_focal_end + is_diffchunk_end * (
+        rec_blockchunk_end[:, None] + blockend_overlap_dists[:, None]
+    )
+
+    # BLOCKSTART (downstream) distances
+    inchunk_distances_start = np.minimum(
+        precise_blockstart[:, None] - pos_broadcast,
+        chunk_end - pos_broadcast
+    )
+    rec_distance_focal_start = inchunk_distances_start * precise_rates[this_chunk_idx]
+
+    is_diffchunk_start = (blockstart_chunks > this_chunk_idx).astype(float)[:, None]
+
+    chunk_edge_dist_start = (
+        precise_blockstart - chunk_starts[blockstart_chunks]
+    )
+    rec_blockchunk_start = chunk_edge_dist_start * precise_rates[blockstart_chunks]
+
+    blockstart_overlap_dists = np.array([
+        np.sum(precise_rates[this_chunk_idx+1:blockstart_chunks[i]] * chunk_size)
+        for i in range(len(blockstart_chunks))
+    ])
+
+    blockstart_rec_distances = rec_distance_focal_start + is_diffchunk_start * (
+        rec_blockchunk_start[:, None] + blockstart_overlap_dists[:, None]
+    )
+
+    return blockend_rec_distances, blockstart_rec_distances
+
+
+
 def calc_R_lendist_for_chunks(upstream_indices, downstream_indices, rec_rate_per_chunk, relevant_upstream_psdc_lengths, relevant_downstream_psdc_lengths, chunk_index, chunk_size, relevant_upstream_pseudoblockends, relevant_downstream_pseudoblockstarts, chunk_starts, chunk_ends, chunk_rec_distances, num_chunks):
 
     ## Calculate relevant upstream and downstream rec lengths of pseudoblocks
@@ -112,19 +181,3 @@ def calc_R_lendist_for_chunks(upstream_indices, downstream_indices, rec_rate_per
 
 
     return upstream_rec_lengths, downstream_rec_lengths, upstream_rec_distances, downstream_rec_distances
-
-
-## Can remove??
-# def calc_R_lendist_for_genes(this_chunk_blockstart, this_chunk_blockend, precise_rates, precise_region_start, precise_region_end, chunk_size, chunk_num, chunk_start, precise_chunks):
-#     num_chunks = (precise_region_end - precise_region_start) // chunk_size
-#     chunk_starts = precise_region_start + np.arange(0, num_chunks + 1) * chunk_size
-#     chunk_ends = np.minimum(chunk_starts + chunk_size, precise_region_end)
-#     this_chunk_idx = np.where(chunk_starts == chunk_start)[0][0] # The ID of this chunk in the chunk_starts array, e.g. if precise_chunks = 3, this will be [3] for chunk_num > 2
-#     right_rec_distances = 1 * precise_rates[this_chunk_idx]
-#     left_rec_distances = 1 * precise_rates[this_chunk_idx]
-
-    
-#     print("in recmaphandler", precise_rates)
-#     right_rec_lengths = 3
-
-#     return right_rec_lengths, right_rec_distances, left_rec_distances
