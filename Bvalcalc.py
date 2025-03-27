@@ -4,7 +4,7 @@ import time
 import numpy as np
 import os
 import argparse
-from core.parseArgs import parseGenomeArgs, parseRegionArgs, parseSiteArgs
+from core.utils.parseArgs import parseGenomeArgs, parseRegionArgs, parseSiteArgs
 from core.plotBasic import plotBasic
 
 def main():
@@ -40,8 +40,12 @@ def main():
                 
 
     if args.out is not None: # Write to CSV
-        np.savetxt(args.out, # This might be "b_values.csv" or a custom path
-            output_data, delimiter=",", header="Distance,B", fmt=("%d", "%.6f"), comments="")
+        if known_args.genome:
+            np.savetxt(args.out, # This might be "b_values.csv" or a custom path
+                output_data, delimiter=",", header="Position,B", fmt=("%d", "%.6f"), comments="")
+        elif known_args.region:
+            np.savetxt(args.out, # This might be "b_values.csv" or a custom path
+                output_data, delimiter=",", header="Distance,B", fmt=("%d", "%.6f"), comments="")
         print(f"Saved B values to: {os.path.abspath(args.out)}")
     else:
         if not args.silent:

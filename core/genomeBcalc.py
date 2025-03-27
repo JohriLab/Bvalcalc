@@ -1,8 +1,8 @@
-from core.RunBCalcScripts.process_single_chunk import process_single_chunk
-from core.RunBCalcScripts.bedgffHandler import bedgffHandler
-from core.RunBCalcScripts.calculateLPerChunk import calculateLPerChunk
-from core.RunBCalcScripts.demographyHelpers import get_Bcur
-from core.RunBCalcScripts.recmapHandler import recmapHandler
+from core.helpers.process_single_chunk import process_single_chunk
+from core.utils.bedgffHandler import bedgffHandler
+from core.helpers.calc_L_per_chunk import calculate_L_per_chunk
+from core.helpers.demography_helpers import get_Bcur
+from core.utils.recmapHandler import recmapHandler
 from concurrent.futures import ThreadPoolExecutor
 import numpy as np
 
@@ -24,7 +24,7 @@ def genomeBcalc(args):
 
     b_values = np.ones(calc_end + 1 - calc_start, dtype=np.float64) # Initialize array of B values
 
-    lperchunk = calculateLPerChunk(chunk_size, blockstart, blockend, chr_start, chr_end) # Cumulative conserved length in each chunk
+    lperchunk = calculate_L_per_chunk(chunk_size, blockstart, blockend, chr_start, chr_end) # Cumulative conserved length in each chunk
 
     if args.rec_map: # Process recombination map if provided
         print(f"Using recombination (crossover) map from {args.rec_map}")

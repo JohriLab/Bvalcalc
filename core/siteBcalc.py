@@ -1,4 +1,4 @@
-from core.RunBCalcScripts.demographyHelpers import get_Bcur
+from core.helpers.demography_helpers import get_Bcur
 from core.calculateB import calculateB_linear
 
 def siteBcalc(args):    

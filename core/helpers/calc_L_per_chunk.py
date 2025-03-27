@@ -1,6 +1,6 @@
 import numpy as np
 
-def calculateLPerChunk(
+def calculate_L_per_chunk(
     chunk_size,
     blockstart,
     blockend,

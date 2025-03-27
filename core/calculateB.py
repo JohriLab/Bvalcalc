@@ -11,6 +11,84 @@ spec = importlib.util.spec_from_file_location("pop_params", os.environ["BCALC_PO
 _pop = importlib.util.module_from_spec(spec); spec.loader.exec_module(_pop)
 for v in ['g','k','r','u','t1','t1half','t2','t3','t4','f0','f1','f2','f3']: globals()[v] = getattr(_pop, v)
 
+def calculateB_linear(distance_to_element, length_of_element):
+    """
+    Calculate the B value for a single functional element at the focal site,
+    summing over the DFE while consolidating the intermediate calculations.
+    """    
+    with np.errstate(divide='ignore', invalid='ignore'):
+        C = (1.0 - np.exp(-2.0 * r * distance_to_element)) / 2.0 # cM
+        U = length_of_element * u
+        if g == 0:
+            a = C # RECOMBINATION IN Y
+            b = C + (r * length_of_element) # RECOMBINATION IN X
+        elif g > 0:
+            a, b = get_a_b_with_GC(C, distance_to_element, length_of_element)
+        # print(a, b, C, U)
+
+        E_f1 = calculate_exponent(t1half, t2, U, a, b)
+        E_f2 = calculate_exponent(t2, t3, U, a, b)
+        E_f3 = calculate_exponent(t3, t4, U, a, b)
+
+        E_bar = ( # Sum over the DFE
+            f0 * 0.0
+            + f1 * ((t1half - t1) / (t2 - t1)) * 0.0
+            + f1 * ((t2 - t1half) / (t2 - t1)) * E_f1
+            + f2 * E_f2
+            + f3 * E_f3)
+
+        B = np.exp(-1.0 * E_bar)
+        
+    return np.where(length_of_element == 0, 1.0, B)
+
+def calculateB_recmap(distance_to_element, length_of_element, 
+                      rec_distances = None, rec_lengths = None, 
+                      gc_distances = None, gc_lengths = None):
+    """
+    Calculate the B value WITH REC MAP for a single functional element at the focal site,
+    summing over the DFE while consolidating the intermediate calculations.
+    """    
+    with np.errstate(divide='ignore', invalid='ignore'):
+        # rec_distances is the length of the element * rec rate in each spanned region. 
+        
+        if rec_distances is not None:
+            rec_adjusted_length_of_element = rec_lengths 
+            rec_adjusted_distance_to_element = rec_distances
+        else:
+            rec_adjusted_length_of_element = length_of_element
+            rec_adjusted_distance_to_element = distance_to_element
+        
+        if gc_distances is not None:
+            local_g = (gc_lengths + gc_distances)/(length_of_element + distance_to_element) * g
+        else:
+            local_g = g
+            
+        C = (1.0 - np.exp(-2.0 * r * rec_adjusted_distance_to_element)) / 2.0 # cM
+        U = length_of_element * u
+        if g == 0:
+            a = C
+            b = C + r * rec_adjusted_length_of_element # cM
+        elif g > 0:
+             a, b = get_a_b_with_GC_andMaps(C, y=distance_to_element, l=length_of_element, 
+                                            rec_l=rec_adjusted_length_of_element, local_g = local_g)
+
+        E_f1 = calculate_exponent(t1half, t2, U, a, b)
+        E_f2 = calculate_exponent(t2, t3, U, a, b)
+        E_f3 = calculate_exponent(t3, t4, U, a, b)
+
+        E_bar = ( # Sum over the DFE
+            f0 * 0.0
+            + f1 * ((t1half - t1) / (t2 - t1)) * 0.0
+            + f1 * ((t2 - t1half) / (t2 - t1)) * E_f1
+            + f2 * E_f2
+            + f3 * E_f3)    
+
+        B = np.exp(-1.0 * E_bar)
+        
+    return np.where(length_of_element == 0, 1.0, B)
+
+## Helper functions
+
 def calculate_exponent(t_start, t_end, U, a, b):
     """"
     Helper to calculate the exponent using "a" and "b"
@@ -65,116 +143,3 @@ def get_a_b_with_GC_andMaps(C, y, l, rec_l, local_g):
         b = C + (r * rec_l) + (2 * local_g * k) * (1 - (1-proportion_nogc_a)*proportion_nogc_b) #* prop k out
 
         return a, b
-
-def calculateB_linear(distance_to_element, length_of_element):
-    """
-    Calculate the B value for a single functional element at the focal site,
-    summing over the DFE while consolidating the intermediate calculations.
-    """    
-    with np.errstate(divide='ignore', invalid='ignore'):
-        C = (1.0 - np.exp(-2.0 * r * distance_to_element)) / 2.0 # cM
-        U = length_of_element * u
-        if g == 0:
-            a = C # RECOMBINATION IN Y
-            b = C + (r * length_of_element) # RECOMBINATION IN X
-        elif g > 0:
-            a, b = get_a_b_with_GC(C, distance_to_element, length_of_element)
-        # print(a, b, C, U)
-
-        E_f1 = calculate_exponent(t1half, t2, U, a, b)
-        E_f2 = calculate_exponent(t2, t3, U, a, b)
-        E_f3 = calculate_exponent(t3, t4, U, a, b)
-
-        E_bar = ( # Sum over the DFE
-            f0 * 0.0
-            + f1 * ((t1half - t1) / (t2 - t1)) * 0.0
-            + f1 * ((t2 - t1half) / (t2 - t1)) * E_f1
-            + f2 * E_f2
-            + f3 * E_f3)
-
-        B = np.exp(-1.0 * E_bar)
-        
-    return np.where(length_of_element == 0, 1.0, B)
-
-
-def calculateB_recmap(distance_to_element, length_of_element, 
-                      rec_distances = None, rec_lengths = None, 
-                      gc_distances = None, gc_lengths = None):
-    """
-    Calculate the B value WITH REC MAP for a single functional element at the focal site,
-    summing over the DFE while consolidating the intermediate calculations.
-    """    
-    with np.errstate(divide='ignore', invalid='ignore'):
-        # rec_distances is the length of the element * rec rate in each spanned region. 
-        
-        if rec_distances is not None:
-            rec_adjusted_length_of_element = rec_lengths 
-            rec_adjusted_distance_to_element = rec_distances
-        else:
-            rec_adjusted_length_of_element = length_of_element
-            rec_adjusted_distance_to_element = distance_to_element
-        
-        if gc_distances is not None:
-            local_g = (gc_lengths + gc_distances)/(length_of_element + distance_to_element) * g
-        else:
-            local_g = g
-            
-        C = (1.0 - np.exp(-2.0 * r * rec_adjusted_distance_to_element)) / 2.0 # cM
-        U = length_of_element * u
-        if g == 0:
-            a = C
-            b = C + r * rec_adjusted_length_of_element # cM
-        elif g > 0:
-             a, b = get_a_b_with_GC_andMaps(C, y=distance_to_element, l=length_of_element, 
-                                            rec_l=rec_adjusted_length_of_element, local_g = local_g)
-
-        E_f1 = calculate_exponent(t1half, t2, U, a, b)
-        E_f2 = calculate_exponent(t2, t3, U, a, b)
-        E_f3 = calculate_exponent(t3, t4, U, a, b)
-
-        E_bar = ( # Sum over the DFE
-            f0 * 0.0
-            + f1 * ((t1half - t1) / (t2 - t1)) * 0.0
-            + f1 * ((t2 - t1half) / (t2 - t1)) * E_f1
-            + f2 * E_f2
-            + f3 * E_f3)    
-
-        B = np.exp(-1.0 * E_bar)
-        
-    return np.where(length_of_element == 0, 1.0, B)
-
-def calculateB_linear_oldGC(distance_to_element, length_of_element):
-    """
-        Not currently used in main Bvalcalc function, 
-        Here for reference, Parul's gene conversion equation.
-    """    
-    C = (1.0 - np.exp(-2.0 * r * distance_to_element)) / 2.0 # cM
-    U = length_of_element * u
-    if g == 0:
-        a = C
-        b = C + (r * length_of_element) # cM
-    elif g > 0:
-        threshold = distance_to_element + length_of_element < 0.5 * k # Arbitrary threshold
-        a = np.where(
-            threshold, 
-            C + (g * distance_to_element), #pGC happens outside the element to BREAK linkage, lowers because sometimes both GC
-            C + g * k #pGC happens outside element to BREAK linkage
-            ) 
-        b = np.where(
-            threshold,
-            C + (r * length_of_element) + (g * (distance_to_element + length_of_element)), #pGC happens within element to BREAK linkage, IS IT LOWER???
-            C + (r * length_of_element) + (g * k) #pGC happens within element to BREAK linkage,
-        )
-
-    E_f1 = calculate_exponent(t1half, t2, U, a, b)
-    E_f2 = calculate_exponent(t2, t3, U, a, b)
-    E_f3 = calculate_exponent(t3, t4, U, a, b)
-
-    E_bar = ( # Sum over the DFE
-        f0 * 0.0
-        + f1 * ((t1half - t1) / (t2 - t1)) * 0.0
-        + f1 * ((t2 - t1half) / (t2 - t1)) * E_f1
-        + f2 * E_f2
-        + f3 * E_f3)
-
-    return np.exp(-1.0 * E_bar) # Return B

@@ -1,8 +1,8 @@
 from core.calculateB import calculateB_linear, calculateB_recmap
-from core.RunBCalcScripts.recmapHandler import calcRLengthsDistances_forchunks
+from core.helpers.calc_R_len_dist import calc_R_lendist_for_chunks
 import numpy as np
 
-def calcBFromChunks(chunk_index, chunk_size, chr_start, chr_end, num_chunks, 
+def calc_B_from_chunks(chunk_index, chunk_size, chr_start, chr_end, num_chunks, 
                     precise_chunks, lperchunk, rec_rate_per_chunk, gc_rate_per_chunk):
 
     chunk_starts = chr_start + np.arange(num_chunks) * chunk_size
@@ -34,7 +34,7 @@ def calcBFromChunks(chunk_index, chunk_size, chr_start, chr_end, num_chunks,
         upstream_indices = np.nonzero(upstream_pseudochunk_mask)[0]
         downstream_indices = np.nonzero(downstream_pseudochunk_mask)[0]
 
-        upstream_rec_lengths, downstream_rec_lengths, upstream_rec_distances, downstream_rec_distances = calcRLengthsDistances_forchunks(
+        upstream_rec_lengths, downstream_rec_lengths, upstream_rec_distances, downstream_rec_distances = calc_R_lendist_for_chunks(
             upstream_indices, downstream_indices, rec_rate_per_chunk, 
             relevant_upstream_psdc_lengths, relevant_downstream_psdc_lengths, 
             chunk_index, chunk_size, relevant_upstream_pseudoblockends, relevant_downstream_pseudoblockstarts, 
@@ -47,7 +47,7 @@ def calcBFromChunks(chunk_index, chunk_size, chr_start, chr_end, num_chunks,
         upstream_indices = np.nonzero(upstream_pseudochunk_mask)[0]
         downstream_indices = np.nonzero(downstream_pseudochunk_mask)[0]
 
-        upstream_gc_lengths, downstream_gc_lengths, upstream_gc_distances, downstream_gc_distances = calcRLengthsDistances_forchunks(
+        upstream_gc_lengths, downstream_gc_lengths, upstream_gc_distances, downstream_gc_distances = calc_R_lendist_for_chunks(
             upstream_indices, downstream_indices, gc_rate_per_chunk, 
             relevant_upstream_psdc_lengths, relevant_downstream_psdc_lengths, 
             chunk_index, chunk_size, relevant_upstream_pseudoblockends, relevant_downstream_pseudoblockstarts, 
