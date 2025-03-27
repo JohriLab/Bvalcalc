@@ -3,9 +3,8 @@ import matplotlib as mpl
 import matplotlib.ticker as ticker
 import numpy as np
 from matplotlib.collections import LineCollection
-import cProfile
 
-def plotBasic(b_values_input, caller, output_path, silent, genes=None):
+def plotB(b_values_input, caller, output_path, silent, genes=None):
     if not silent: 
         print('====== P L O T T I N G . . . =======================')
     
