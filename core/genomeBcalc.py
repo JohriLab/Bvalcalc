@@ -73,5 +73,6 @@ def genomeBcalc(args):
     [positions.astype(int), conserved.astype(str), b_values.astype(float)],
     names='Position,Conserved,B',
     formats='i8,U1,f8'
-)
-    return output_data
+    )
+    block_ranges = np.column_stack((blockstart, blockend))
+    return output_data, block_ranges

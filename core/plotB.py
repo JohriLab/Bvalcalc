@@ -31,8 +31,12 @@ def plotB(b_values_input, caller, output_path, silent, genes=None):
     fig, ax = plt.subplots(figsize=(10, 6))
 
     # Extract x and y values.
-    x = b_values_input[:, 0]  # x-values (positions)
-    y = b_values_input[:, 1]  # y-values (corresponding values)
+    if caller == "genome":
+        x = b_values_input['Position']
+        y = b_values_input['B']
+    elif caller == "region":
+        x = b_values_input[0]
+        y = b_values_input[1]
 
     # Downsample the data if there are too many points.
     max_points = 10000  # adjust this threshold as needed
