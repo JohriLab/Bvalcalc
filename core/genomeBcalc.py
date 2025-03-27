@@ -1,8 +1,8 @@
-from helperScripts.RunBCalcScripts.process_single_chunk import process_single_chunk
-from helperScripts.RunBCalcScripts.bedgffHandler import bedgffHandler
-from helperScripts.RunBCalcScripts.calculateLPerChunk import calculateLPerChunk
-from helperScripts.RunBCalcScripts.demographyHelpers import get_Bcur
-from helperScripts.RunBCalcScripts.recmapHandler import recmapHandler
+from core.RunBCalcScripts.process_single_chunk import process_single_chunk
+from core.RunBCalcScripts.bedgffHandler import bedgffHandler
+from core.RunBCalcScripts.calculateLPerChunk import calculateLPerChunk
+from core.RunBCalcScripts.demographyHelpers import get_Bcur
+from core.RunBCalcScripts.recmapHandler import recmapHandler
 from concurrent.futures import ThreadPoolExecutor
 import numpy as np
 

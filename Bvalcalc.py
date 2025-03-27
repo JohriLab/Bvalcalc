@@ -4,8 +4,8 @@ import time
 import numpy as np
 import os
 import argparse
-from helperScripts.parseArgs import parseGenomeArgs, parseRegionArgs, parseSiteArgs
-from helperScripts.plotBasic import plotBasic
+from core.parseArgs import parseGenomeArgs, parseRegionArgs, parseSiteArgs
+from core.plotBasic import plotBasic
 
 def main():
     start_time = time.time()
@@ -20,21 +20,21 @@ def main():
     if known_args.genome: # Run genome Bcalc
         args = parseGenomeArgs(remaining_args)
         os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Handle Params file
-        from helperScripts.genomeBcalc import genomeBcalc
+        from core.genomeBcalc import genomeBcalc
         output_data, block_ranges = genomeBcalc(args)
         if getattr(args, 'plot_output', True):
             plotBasic(b_values_input=output_data, caller="genome", output_path=args.plot_output, silent=args.silent, genes=block_ranges)
     elif known_args.region: # Run region Bcalc
         args = parseRegionArgs(remaining_args)
         os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Handle Params file
-        from helperScripts.regionBcalc import regionBcalc
+        from core.regionBcalc import regionBcalc
         output_data = regionBcalc(args) # Capture the output from regionBcalc
         if getattr(args, 'plot_output', False): # If the --plot_basic flag was provided, call plotBasic with regionBcalc's output.
             plotBasic(b_values_input=output_data, caller="region", output_path=args.plot_output, silent=args.silent)
     elif known_args.site: # Run single site Bcalc
         args = parseSiteArgs(remaining_args)
         os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Handle Params file
-        from helperScripts.siteBcalc import siteBcalc
+        from core.siteBcalc import siteBcalc
         siteBcalc(args)
         sys.exit()
                 

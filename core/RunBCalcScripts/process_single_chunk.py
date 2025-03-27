@@ -1,8 +1,8 @@
-from helperScripts.calculateB import calculateB_linear, calculateB_recmap
-from helperScripts.RunBCalcScripts.calcBFromChunks import calcBFromChunks
-from helperScripts.RunBCalcScripts.recmapHandler import calcRLengths
-from helperScripts.RunBCalcScripts.recmapHandler import calcRDistances
-from helperScripts.RunBCalcScripts.calcBInGenes import calcBInGenes
+from core.calculateB import calculateB_linear, calculateB_recmap
+from core.RunBCalcScripts.calcBFromChunks import calcBFromChunks
+from core.RunBCalcScripts.recmapHandler import calcRLengths
+from core.RunBCalcScripts.recmapHandler import calcRDistances
+from core.RunBCalcScripts.calcBInGenes import calcBInGenes
 import numpy as np
 
 def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start, chr_end,

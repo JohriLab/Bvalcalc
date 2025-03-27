@@ -1,0 +1,67 @@
+# Query: helperScripts
+# ContextLines: 1
+
+24 results - 9 files
+
+Bvalcalc.py:
+   6  import argparse
+   7: from helperScripts.parseArgs import parseGenomeArgs, parseRegionArgs, parseSiteArgs
+   8: from helperScripts.plotBasic import plotBasic
+   9  
+
+  22          os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Handle Params file
+  23:         from helperScripts.genomeBcalc import genomeBcalc
+  24          output_data, block_ranges = genomeBcalc(args)
+
+  29          os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Handle Params file
+  30:         from helperScripts.regionBcalc import regionBcalc
+  31          output_data = regionBcalc(args) # Capture the output from regionBcalc
+
+  36          os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Handle Params file
+  37:         from helperScripts.siteBcalc import siteBcalc
+  38          siteBcalc(args)
+
+core/genomeBcalc.py:
+  1: from helperScripts.RunBCalcScripts.process_single_chunk import process_single_chunk
+  2: from helperScripts.RunBCalcScripts.bedgffHandler import bedgffHandler
+  3: from helperScripts.RunBCalcScripts.calculateLPerChunk import calculateLPerChunk
+  4: from helperScripts.RunBCalcScripts.demographyHelpers import get_Bcur
+  5: from helperScripts.RunBCalcScripts.recmapHandler import recmapHandler
+  6  from concurrent.futures import ThreadPoolExecutor
+
+core/regionBcalc.py:
+  1: from helperScripts.RunBCalcScripts.demographyHelpers import get_Bcur
+  2: from helperScripts.calculateB import calculateB_linear
+  3  import numpy as np
+
+core/siteBcalc.py:
+  1: from helperScripts.RunBCalcScripts.demographyHelpers import get_Bcur
+  2: from helperScripts.calculateB import calculateB_linear
+  3  
+
+core/RunBCalcScripts/calcBFromChunks.py:
+  1: from helperScripts.calculateB import calculateB_linear, calculateB_recmap
+  2: from helperScripts.RunBCalcScripts.recmapHandler import calcRLengthsDistances_forchunks
+  3  import numpy as np
+
+core/RunBCalcScripts/calcBInGenes.py:
+  1  import numpy as np
+  2: from helperScripts.calculateB import calculateB_linear, calculateB_recmap
+  3  
+
+core/RunBCalcScripts/process_single_chunk.py:
+  1: from helperScripts.calculateB import calculateB_linear, calculateB_recmap
+  2: from helperScripts.RunBCalcScripts.calcBFromChunks import calcBFromChunks
+  3: from helperScripts.RunBCalcScripts.recmapHandler import calcRLengths
+  4: from helperScripts.RunBCalcScripts.recmapHandler import calcRDistances
+  5: from helperScripts.RunBCalcScripts.calcBInGenes import calcBInGenes
+  6  import numpy as np
+
+deprecated/findFlankLen.py:
+  1: from helperScripts.calculateB import calculateB_linear
+  2  
+
+tests/test_calculateB.py:
+  1  import numpy as np
+  2: from helperScripts.calculateB import calculateB_linear
+  3  

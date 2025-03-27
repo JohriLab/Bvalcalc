@@ -1,5 +1,5 @@
 import numpy as np
-from helperScripts.calculateB import calculateB_linear, calculateB_recmap
+from core.calculateB import calculateB_linear, calculateB_recmap
 
 def calcBInGenes(chunk_size, num_chunks, precise_chunks, precise_blockstart, precise_blockend, chunk_start, chunk_end, physical_lengths, precise_region_start, chunk_num, rec_rate_per_chunk = None, gc_rate_per_chunk = None, rec_lengths = None, gc_lengths = None):
     

@@ -1,5 +1,5 @@
-from helperScripts.RunBCalcScripts.demographyHelpers import get_Bcur
-from helperScripts.calculateB import calculateB_linear
+from core.RunBCalcScripts.demographyHelpers import get_Bcur
+from core.calculateB import calculateB_linear
 
 def siteBcalc(args):    
     gene_size, distance, silent = args.gene_size, args.distance, args.silent

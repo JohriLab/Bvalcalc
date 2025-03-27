@@ -1,4 +1,4 @@
-from helperScripts.calculateB import calculateB_linear
+from core.calculateB import calculateB_linear
 
 def findFlankLen(target_B, length_of_element, max_distance=1e6):
     """

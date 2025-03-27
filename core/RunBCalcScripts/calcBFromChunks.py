@@ -1,5 +1,5 @@
-from helperScripts.calculateB import calculateB_linear, calculateB_recmap
-from helperScripts.RunBCalcScripts.recmapHandler import calcRLengthsDistances_forchunks
+from core.calculateB import calculateB_linear, calculateB_recmap
+from core.RunBCalcScripts.recmapHandler import calcRLengthsDistances_forchunks
 import numpy as np
 
 def calcBFromChunks(chunk_index, chunk_size, chr_start, chr_end, num_chunks, 
