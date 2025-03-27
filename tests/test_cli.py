@@ -3,6 +3,7 @@ import sys
 from pathlib import Path
 
 def test_cli_site_basic():
+    #python Bvalcalc.py --site --pop_params tests/testparams/gcBasicParams.py --distance 100 --gene_size 5000
     script = Path(__file__).resolve().parents[1] / "Bvalcalc.py"
     params = Path(__file__).resolve().parent / "testparams" / "gcBasicParams.py"
 
@@ -20,27 +21,28 @@ def test_cli_site_basic():
     assert "B for site 100bp away from 5000bp region:" in result.stdout
     assert "0.9246145075198539" in result.stdout
 
-def test_cli_region_basic(tmp_path):
+def test_cli_region_basic():
     script = Path(__file__).resolve().parents[1] / "Bvalcalc.py"
     params = Path(__file__).resolve().parents[1] / "tests" / "testparams" / "nogcBasicParams.py"
-    output_path = tmp_path / "dfe_bvals.csv"
 
     result = subprocess.run(
         [sys.executable, str(script),
          "--region",
          "--pop_params", str(params),
-         "--gene_size", "10000",
-         "--out", str(output_path),
-         "--silent"],
+         "--gene_size", "10000"],
         capture_output=True,
         text=True
     )
 
     assert result.returncode == 0, f"CLI failed:\n{result.stderr}"
-    assert output_path.exists(), "Expected output CSV was not created"
-    assert output_path.stat().st_size > 0, "Output CSV is empty"
-    contents = output_path.read_text()
-    assert "Distance,B" in contents, "Output CSV does not contain expected header"
+    out = result.stdout + result.stderr
+
+    assert "====== R E S U L T S ! =============================" in out
+    assert "B for adjacent site: 0.8049242606161049" in out
+    assert "Mean B for flanking region: 0.9761402805820517" in out
+    assert "No output CSV requested; skipping save." in out
+    assert "= B value calculated" in out
+
 
 def test_cli_region_gcparams(tmp_path):
     script = Path(__file__).resolve().parents[1] / "Bvalcalc.py"
