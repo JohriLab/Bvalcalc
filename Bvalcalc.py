@@ -10,7 +10,7 @@ from core.plotB import plotB
 def main():
     start_time = time.time()
 
-    parser = argparse.ArgumentParser(description="Bcalc main! :p")
+    parser = argparse.ArgumentParser(description="Bcalc main function! :p")
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('--genome', action='store_true', help="Compute B values genome-wide")
     group.add_argument('--region', action='store_true', help="Compute B values for a region")
@@ -21,7 +21,8 @@ def main():
         args = parseGenomeArgs(remaining_args)
         os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Handle Params file
         from core.genomeBcalc import genomeBcalc
-        output_data, block_ranges = genomeBcalc(args)
+        output_data = genomeBcalc(args)
+        print(output_data)
         if getattr(args, 'plot_output', True):
             plotB(b_values_input=output_data, caller="genome", output_path=args.plot_output, silent=args.silent, genes=block_ranges)
     elif known_args.region: # Run region Bcalc
@@ -36,13 +37,12 @@ def main():
         os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Handle Params file
         from core.siteBcalc import siteBcalc
         siteBcalc(args)
-        sys.exit()
-                
+        sys.exit()      
 
     if args.out is not None: # Write to CSV
         if known_args.genome:
             np.savetxt(args.out, # This might be "b_values.csv" or a custom path
-                output_data, delimiter=",", header="Position,B", fmt=("%d", "%.6f"), comments="")
+                output_data, delimiter=",", header="Position,Conserved,B", fmt="%d,%s,%.6f", comments="")
         elif known_args.region:
             np.savetxt(args.out, # This might be "b_values.csv" or a custom path
                 output_data, delimiter=",", header="Distance,B", fmt=("%d", "%.6f"), comments="")

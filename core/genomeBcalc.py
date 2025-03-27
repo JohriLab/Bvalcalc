@@ -62,9 +62,16 @@ def genomeBcalc(args):
             print(f"Calculated using gene conversion map, with rates averaged within {chunk_size}bp chunks")    
 
     positions = np.arange(calc_start, calc_end + 1)
+    conserved = np.full_like(positions, "N", dtype="<U1")
+    for start, end in zip(blockstart, blockend): # Mark conserved regions
+        conserved[max(start, calc_start) - calc_start : min(end, calc_end) - calc_start + 1] = "C"
+
     if args.pop_change:
         b_values = get_Bcur(b_values)
         if not silent: print("Demographic change applied to B-calculation")
-    output_data = np.column_stack((positions, b_values))
-    block_ranges = np.column_stack((blockstart, blockend))
-    return output_data, block_ranges
+    output_data = np.core.records.fromarrays(
+    [positions.astype(int), conserved.astype(str), b_values.astype(float)],
+    names='Position,Conserved,B',
+    formats='i8,U1,f8'
+)
+    return output_data
