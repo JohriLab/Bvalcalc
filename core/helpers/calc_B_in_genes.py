@@ -22,7 +22,7 @@ def calc_B_in_genes(
     this_chunk_blockstart_inchunk = np.clip(this_chunk_blockstart, chunk_start, chunk_end - 1)
     this_chunk_blockend_inchunk = np.clip(this_chunk_blockend, chunk_start, chunk_end - 1)
 
-    within_gene_B = np.ones(chunk_end - chunk_start, dtype=np.float64)
+    within_gene_B = np.ones(chunk_end - chunk_start, dtype=np.float64) # Initialize array
     chunk_starts = precise_region_start + np.arange(num_chunks + 1) * chunk_size
     this_chunk_idx = np.searchsorted(chunk_starts, chunk_start)
 

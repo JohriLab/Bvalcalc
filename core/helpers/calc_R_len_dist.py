@@ -1,21 +1,22 @@
 import numpy as np
+import sys
 
 def calc_R_lengths(blockstart, blockend, rec_rate_per_chunk, calc_start, calc_end, chunk_size):
     """
     Calculates the weighted lengths of each conserved block (gene), so that for example if the mean 
     recombination rate across the block is 0.5, this will return the length of the block multiplied by 0.5
     """
-    num_chunks = (calc_end - calc_start) // chunk_size
+    num_precise_chunks = (calc_end - calc_start) // chunk_size
+
     # Build chunk boundaries (note: length = num_chunks + 1)
-    chunk_starts = calc_start + np.arange(0, num_chunks + 1) * chunk_size
-    chunk_left  = chunk_starts           # shape: (num_chunks+1,)
-    chunk_right = chunk_starts + chunk_size  # shape: (num_chunks+1,)
+    chunk_starts = calc_start + np.arange(0, num_precise_chunks + 1) * chunk_size
+    next_chunk_starts = chunk_starts + chunk_size  # shape: (num_chunks+1,)
 
     # Compute the overlap between each block and each chunk interval:
     # For block i and chunk j, the overlap is:
     #   max(0, min(blockend[i], chunk_right[j]) - max(blockstart[i], chunk_left[j]))
-    overlap = np.maximum(0, np.minimum(blockend[:, None], chunk_right[None, :]) -
-                           np.maximum(blockstart[:, None], chunk_left[None, :]))
+    overlap = np.maximum(0, np.minimum(blockend[:, None], next_chunk_starts[None, :]) -
+                           np.maximum(blockstart[:, None], chunk_starts[None, :]))
     weighted_overlap = overlap * rec_rate_per_chunk[None, :] # Multiply by the recombination rate for each chunk
     weighted_sum = np.sum(weighted_overlap, axis=1) # Sum over the chunk intervals for each block
     
@@ -26,8 +27,8 @@ def calc_R_distances(
     precise_region_start, precise_region_end, chunk_size,
     pos_chunk_clean, chunk_start
 ):
-    num_chunks = (precise_region_end - precise_region_start) // chunk_size
-    chunk_starts = precise_region_start + np.arange(0, num_chunks + 1) * chunk_size
+    num_precise_chunks = (precise_region_end - precise_region_start) // chunk_size
+    chunk_starts = precise_region_start + np.arange(0, num_precise_chunks + 1) * chunk_size
     chunk_ends = np.minimum(chunk_starts + chunk_size, precise_region_end)
     this_chunk_idx = np.where(chunk_starts == chunk_start)[0][0]
     chunk_end = chunk_ends[this_chunk_idx]

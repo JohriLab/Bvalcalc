@@ -5,6 +5,7 @@ from core.helpers.demography_helpers import get_Bcur
 from core.utils.recmapHandler import recmapHandler
 from concurrent.futures import ThreadPoolExecutor
 import numpy as np
+import os
 
 def genomeBcalc(args):    
     file_path, chr_start, chr_end, calc_start, calc_end, chunk_size, precise_chunks, silent = args.bedgff_path, args.chr_start, args.chr_end, args.calc_start, args.calc_end, args.chunk_size, args.precise_chunks, args.silent
@@ -75,4 +76,13 @@ def genomeBcalc(args):
     formats='i8,U1,f8'
     )
     block_ranges = np.column_stack((blockstart, blockend))
+
+    if args.out is not None: # Write to CSV
+        np.savetxt(args.out, # This might be "b_values.csv" or a custom path
+            output_data, delimiter=",", header="Position,Conserved,B", fmt="%d,%s,%.6f", comments="")
+        print(f"Saved B values to: {os.path.abspath(args.out)}")
+    else:
+        if not args.silent:
+            print("No output CSV requested; skipping save.")
+
     return output_data, block_ranges
