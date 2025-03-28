@@ -5,18 +5,18 @@ from core.helpers.calc_R_len_dist import calc_R_distances
 from core.helpers.calc_B_in_genes import calc_B_in_genes
 import numpy as np
 
-def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start, chr_end,
+def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start, chr_end,
                          calc_start, calc_end, num_chunks, precise_chunks,lperchunk, 
                          b_values, rec_rate_per_chunk=None, gc_rate_per_chunk=None, silent=False):
     
-    chunk_start = chr_start + chunk_num * chunk_size
+    chunk_start = chr_start + chunk_idx * chunk_size
     chunk_end   = min(chunk_start + chunk_size - 1, calc_end)
     chunk_slice = b_values[chunk_start - calc_start:chunk_end+1 - calc_start] # Get b_values for this chunk
     pos_chunk = np.arange(chunk_start, chunk_end+1) # Array of positions in this chunk
     
     # Identify blocks in the "precise region"
-    precise_region_start = np.maximum(chr_start, chr_start + (chunk_num - precise_chunks) * chunk_size)
-    precise_region_end   = np.minimum(chr_end, chr_start + (chunk_num + 1 + precise_chunks) * chunk_size - 1)
+    precise_region_start = np.maximum(chr_start, chr_start + (chunk_idx - precise_chunks) * chunk_size)
+    precise_region_end   = np.minimum(chr_end, chr_start + (chunk_idx + 1 + precise_chunks) * chunk_size - 1)
     precise_blockregion_mask = (
         (precise_region_end   > blockstart) &
         (precise_region_start < blockend))
@@ -44,9 +44,9 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
     flat_lengths   = flat_lengths[nonzero_mask]
     
     if rec_rate_per_chunk is not None: # IF REC_RATE MAP IS AVAILABLE 
-        precise_rates = rec_rate_per_chunk[np.maximum(0, chunk_num - precise_chunks):np.minimum(num_chunks, chunk_num + precise_chunks + 1)]
-        rec_lengths = calc_R_lengths(precise_blockstart, precise_blockend, precise_rates, precise_region_start, precise_region_end, chunk_size, chunk_num)
-        rec_distances_upstream, rec_distances_downstream = calc_R_distances(precise_blockstart, precise_blockend, precise_rates, precise_region_start, precise_region_end, chunk_size, pos_chunk, chunk_num, chunk_start)
+        precise_rates = rec_rate_per_chunk[np.maximum(0, chunk_idx - precise_chunks):np.minimum(num_chunks, chunk_idx + precise_chunks + 1)]
+        rec_lengths = calc_R_lengths(precise_blockstart, precise_blockend, precise_rates, precise_region_start, precise_region_end, chunk_size)
+        rec_distances_upstream, rec_distances_downstream = calc_R_distances(precise_blockstart, precise_blockend, precise_rates, precise_region_start, precise_region_end, chunk_size, pos_chunk, chunk_start)
         rec_distances = np.where(
             flanking_mask,
             np.where(upstream_mask, rec_distances_upstream, rec_distances_downstream),
@@ -58,9 +58,9 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
         flat_rec_lengths   = flat_rec_lengths[nonzero_rec_mask]
 
     if gc_rate_per_chunk is not None: # IF GC_RATE MAP IS AVAILABLE 
-        precise_gc_rates = gc_rate_per_chunk[np.maximum(0, chunk_num - precise_chunks):np.minimum(num_chunks, chunk_num + precise_chunks + 1)]
-        gc_lengths = calc_R_lengths(precise_blockstart, precise_blockend, precise_gc_rates, precise_region_start, precise_region_end, chunk_size, chunk_num)
-        gc_distances_upstream, gc_distances_downstream = calc_R_distances(precise_blockstart, precise_blockend, precise_gc_rates, precise_region_start, precise_region_end, chunk_size, pos_chunk, chunk_num, chunk_start)
+        precise_gc_rates = gc_rate_per_chunk[np.maximum(0, chunk_idx - precise_chunks):np.minimum(num_chunks, chunk_idx + precise_chunks + 1)]
+        gc_lengths = calc_R_lengths(precise_blockstart, precise_blockend, precise_gc_rates, precise_region_start, precise_region_end, chunk_size)
+        gc_distances_upstream, gc_distances_downstream = calc_R_distances(precise_blockstart, precise_blockend, precise_gc_rates, precise_region_start, precise_region_end, chunk_size, pos_chunk, chunk_start)
         gc_distances = np.where(
             flanking_mask,
             np.where(upstream_mask, gc_distances_upstream, gc_distances_downstream),
@@ -72,24 +72,24 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
         flat_gc_lengths   = flat_gc_lengths[nonzero_gc_mask]
 
     B_from_distant_chunks = calc_B_from_chunks( # Compute B from distant chunks in non-precise region
-        chunk_num, chunk_size, chr_start, chr_end, num_chunks, 
+        chunk_idx, chunk_size, chr_start, chr_end, num_chunks, 
         precise_chunks, lperchunk, rec_rate_per_chunk, gc_rate_per_chunk)
 
     # Calculate B for genes within chunk. within_gene_B is to include B for genic sites from BGS caused by the gene they're in
     if rec_rate_per_chunk is not None and gc_rate_per_chunk is not None: # IF REC_RATE MAP IS AVAILABLE and GC IS AVAILABLE
-        within_gene_B = calc_B_in_genes(chunk_size, num_chunks, precise_chunks, precise_blockstart, precise_blockend, chunk_start, chunk_end+1, physical_lengths, precise_region_start, chunk_num, rec_rate_per_chunk = rec_rate_per_chunk, gc_rate_per_chunk = gc_rate_per_chunk, rec_lengths = rec_lengths, gc_lengths = gc_lengths)
+        within_gene_B = calc_B_in_genes(chunk_size, num_chunks, precise_chunks, precise_blockstart, precise_blockend, chunk_start, chunk_end+1, physical_lengths, precise_region_start, chunk_idx, rec_rate_per_chunk = rec_rate_per_chunk, gc_rate_per_chunk = gc_rate_per_chunk, rec_lengths = rec_lengths, gc_lengths = gc_lengths)
         flank_B = calculateB_recmap(distance_to_element=flat_distances, length_of_element=flat_lengths, rec_distances=flat_rec_distances, 
                                     rec_lengths=flat_rec_lengths, gc_distances=flat_gc_distances, gc_lengths=flat_gc_lengths)
     elif rec_rate_per_chunk is not None and gc_rate_per_chunk is None: # IF REC_RATE MAP IS AVAILABLE and GC NOT AVAILABLE
-        within_gene_B = calc_B_in_genes(chunk_size, num_chunks, precise_chunks, precise_blockstart, precise_blockend, chunk_start, chunk_end+1, physical_lengths, precise_region_start, chunk_num, rec_rate_per_chunk = rec_rate_per_chunk, gc_rate_per_chunk = None, rec_lengths = rec_lengths, gc_lengths = None)
+        within_gene_B = calc_B_in_genes(chunk_size, num_chunks, precise_chunks, precise_blockstart, precise_blockend, chunk_start, chunk_end+1, physical_lengths, precise_region_start, chunk_idx, rec_rate_per_chunk = rec_rate_per_chunk, gc_rate_per_chunk = None, rec_lengths = rec_lengths, gc_lengths = None)
         flank_B = calculateB_recmap(distance_to_element=flat_distances, length_of_element=flat_lengths, 
                                     rec_distances=flat_rec_distances, rec_lengths=flat_rec_lengths)
     elif rec_rate_per_chunk is None and gc_rate_per_chunk is not None: # IF REC_RATE MAP NOT AVAILABLE and GC IS AVAILALBE
-        within_gene_B = calc_B_in_genes(chunk_size, num_chunks, precise_chunks, precise_blockstart, precise_blockend, chunk_start, chunk_end+1, physical_lengths, precise_region_start, chunk_num, rec_rate_per_chunk = None, gc_rate_per_chunk = gc_rate_per_chunk, rec_lengths = None, gc_lengths = gc_lengths)
+        within_gene_B = calc_B_in_genes(chunk_size, num_chunks, precise_chunks, precise_blockstart, precise_blockend, chunk_start, chunk_end+1, physical_lengths, precise_region_start, chunk_idx, rec_rate_per_chunk = None, gc_rate_per_chunk = gc_rate_per_chunk, rec_lengths = None, gc_lengths = gc_lengths)
         flank_B = calculateB_recmap(distance_to_element=flat_distances, length_of_element=flat_lengths, 
                                     rec_distances=None, rec_lengths=None, gc_distances=flat_gc_distances, gc_lengths=flat_gc_lengths)
     else: # NO MAPS AVAILABLE
-        within_gene_B = calc_B_in_genes(chunk_size, num_chunks, precise_chunks, precise_blockstart, precise_blockend, chunk_start, chunk_end+1, physical_lengths, precise_region_start, chunk_num, rec_rate_per_chunk = None, gc_rate_per_chunk = None, rec_lengths = None, gc_lengths = None)
+        within_gene_B = calc_B_in_genes(chunk_size, num_chunks, precise_chunks, precise_blockstart, precise_blockend, chunk_start, chunk_end+1, physical_lengths, precise_region_start, chunk_idx, rec_rate_per_chunk = None, gc_rate_per_chunk = None, rec_lengths = None, gc_lengths = None)
         flank_B = calculateB_linear(flat_distances, flat_lengths)
 
     # Combine B's calculated from distant genes, and genes within the region!
@@ -108,13 +108,13 @@ def process_single_chunk(chunk_num, chunk_size, blockstart, blockend, chr_start,
     if not silent: # Per-chunk summaries
         print(f"Processing chunk: {pos_chunk.min()} - {pos_chunk.max()}")
         if rec_rate_per_chunk is not None:
-            print(f"Chunk {chunk_num}: recombination rate = {rec_rate_per_chunk[chunk_num]}")
+            print(f"Chunk {chunk_idx}: recombination rate = {rec_rate_per_chunk[chunk_idx]}")
         if gc_rate_per_chunk is not None:
-            print(f"Chunk {chunk_num}: recombination rate = {gc_rate_per_chunk[chunk_num]}")
+            print(f"Chunk {chunk_idx}: recombination rate = {gc_rate_per_chunk[chunk_idx]}")
         # print(f"B from distant chunks: {B_from_distant_chunks}")
         print(f"Number of relevant genes: {len(precise_blockstart)}")
         print(f"Number of neutral sites in chunk [{chunk_start}-{chunk_end}): {np.isnan(chunk_slice).sum()}")
         # print(f"Aggregated B values for chunk: {aggregated_B}")
-        print(f"Mean B value for chunk {chunk_num}: [{chunk_start}-{chunk_end}]: {mean_chunk_b}")
+        print(f"Mean B value for chunk {chunk_idx}: [{chunk_start}-{chunk_end}]: {mean_chunk_b}")
 
     return b_values

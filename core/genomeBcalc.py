@@ -46,10 +46,10 @@ def genomeBcalc(args):
     calc_chunks = np.arange(calc_chunk_start,calc_chunk_end + 1) # Relevant chunks to calculate B for based on calc_start and calc_end
 
     with ThreadPoolExecutor() as executor:
-        results = [executor.submit(process_single_chunk, chunk_num, 
+        results = [executor.submit(process_single_chunk, chunk_idx, 
                                    chunk_size, blockstart, blockend, chr_start, chr_end, calc_start, 
                                    calc_end, num_chunks, precise_chunks, lperchunk, b_values, rec_rate_per_chunk, gc_rate_per_chunk, silent)
-            for chunk_num in calc_chunks]
+            for chunk_idx in calc_chunks]
     
     if not silent: 
         print(f"====== F I N I S H E D ===== C A L C ===============")

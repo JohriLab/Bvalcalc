@@ -1,6 +1,6 @@
 import numpy as np
 
-def calc_R_lengths(blockstart, blockend, rec_rate_per_chunk, calc_start, calc_end, chunk_size, chunk_num):
+def calc_R_lengths(blockstart, blockend, rec_rate_per_chunk, calc_start, calc_end, chunk_size):
     """
     Calculates the weighted lengths of each conserved block (gene), so that for example if the mean 
     recombination rate across the block is 0.5, this will return the length of the block multiplied by 0.5
@@ -24,7 +24,7 @@ def calc_R_lengths(blockstart, blockend, rec_rate_per_chunk, calc_start, calc_en
 def calc_R_distances(
     precise_blockstart, precise_blockend, precise_rates,
     precise_region_start, precise_region_end, chunk_size,
-    pos_chunk_clean, chunk_num, chunk_start
+    pos_chunk_clean, chunk_start
 ):
     num_chunks = (precise_region_end - precise_region_start) // chunk_size
     chunk_starts = precise_region_start + np.arange(0, num_chunks + 1) * chunk_size
@@ -83,7 +83,7 @@ def calc_R_distances(
 
     return blockend_rec_distances, blockstart_rec_distances
 
-def calc_R_lendist_for_chunks(upstream_indices, downstream_indices, rec_rate_per_chunk, relevant_upstream_psdc_lengths, relevant_downstream_psdc_lengths, chunk_index, chunk_size, relevant_upstream_pseudoblockends, relevant_downstream_pseudoblockstarts, chunk_starts, chunk_ends, chunk_rec_distances, num_chunks):
+def calc_R_lendist_for_chunks(upstream_indices, downstream_indices, rec_rate_per_chunk, relevant_upstream_psdc_lengths, relevant_downstream_psdc_lengths, chunk_idx, chunk_size, relevant_upstream_pseudoblockends, relevant_downstream_pseudoblockstarts, chunk_starts, chunk_ends, chunk_rec_distances, num_chunks):
 
     ## Calculate relevant upstream and downstream rec lengths of pseudoblocks
     upstream_rec_rates = rec_rate_per_chunk[upstream_indices] # Relevant rec rates for pseudochunks upstream
@@ -92,10 +92,10 @@ def calc_R_lendist_for_chunks(upstream_indices, downstream_indices, rec_rate_per
     downstream_rec_lengths = downstream_rec_rates * relevant_downstream_psdc_lengths
 
     ## Calculate relevant upstream rec distances!
-    mean_rec_distance_focalchunk = rec_rate_per_chunk[chunk_index] * chunk_size / 2 - 0.5 # Note that this is distance to middle of focal chunk.
+    mean_rec_distance_focalchunk = rec_rate_per_chunk[chunk_idx] * chunk_size / 2 - 0.5 # Note that this is distance to middle of focal chunk.
 
-    if chunk_index == num_chunks -1: # If it's the final chunk (which may be not be full chunk_size length)
-        end_focalchunk_distance = (chunk_ends[chunk_index] - chunk_starts[chunk_index])/2 # I think needs to be shifted by 1bp
+    if chunk_idx == num_chunks -1: # If it's the final chunk (which may be not be full chunk_size length)
+        end_focalchunk_distance = (chunk_ends[chunk_idx] - chunk_starts[chunk_idx])/2 # I think needs to be shifted by 1bp
         mean_rec_distance_focalchunk = end_focalchunk_distance
 
     upstream_distance_blockchunk = chunk_ends[upstream_indices] - relevant_upstream_pseudoblockends
@@ -103,7 +103,7 @@ def calc_R_lendist_for_chunks(upstream_indices, downstream_indices, rec_rate_per
 
     chunk_cumsum = np.concatenate([[0], np.cumsum(chunk_rec_distances)])
     upstream_start = np.array(upstream_indices) + 1
-    upstream_end = chunk_index
+    upstream_end = chunk_idx
     upstream_overlapped_rec_distances = chunk_cumsum[upstream_end] - chunk_cumsum[upstream_start]  # This is rec distance spanned in fully overlapped chunks
 
     upstream_rec_distances = mean_rec_distance_focalchunk + upstream_rec_distance_blockchunk + upstream_overlapped_rec_distances # Combined rec distance from middle of focal chunk to edge of pseudo"blocks" upstream
@@ -112,7 +112,7 @@ def calc_R_lendist_for_chunks(upstream_indices, downstream_indices, rec_rate_per
     downstream_distance_blockchunk = relevant_downstream_pseudoblockstarts - chunk_starts[downstream_indices]
     downstream_rec_distance_blockchunk = downstream_distance_blockchunk * rec_rate_per_chunk[downstream_indices] # This is rec distance from edge of pseudoblock to its chunk start
     
-    downstream_start = chunk_index + 1
+    downstream_start = chunk_idx + 1
     downstream_end = np.array(downstream_indices)
     downstream_overlapped_rec_distances = chunk_cumsum[downstream_end] - chunk_cumsum[downstream_start] # This is rec distance spanned in fully overlapped chunks
 
