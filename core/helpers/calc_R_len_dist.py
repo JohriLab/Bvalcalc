@@ -106,7 +106,6 @@ def calc_R_lendist_for_chunks(upstream_indices, downstream_indices, rec_rate_per
     upstream_end = chunk_index
     upstream_overlapped_rec_distances = chunk_cumsum[upstream_end] - chunk_cumsum[upstream_start]  # This is rec distance spanned in fully overlapped chunks
 
-
     upstream_rec_distances = mean_rec_distance_focalchunk + upstream_rec_distance_blockchunk + upstream_overlapped_rec_distances # Combined rec distance from middle of focal chunk to edge of pseudo"blocks" upstream
 
     ## Calculate downstream rec distances!
@@ -117,8 +116,6 @@ def calc_R_lendist_for_chunks(upstream_indices, downstream_indices, rec_rate_per
     downstream_end = np.array(downstream_indices)
     downstream_overlapped_rec_distances = chunk_cumsum[downstream_end] - chunk_cumsum[downstream_start] # This is rec distance spanned in fully overlapped chunks
 
-
     downstream_rec_distances = mean_rec_distance_focalchunk + downstream_rec_distance_blockchunk + downstream_overlapped_rec_distances # Combined rec distance from middle of focal chunk to edge of pseudo"blocks" upstream
-
 
     return upstream_rec_lengths, downstream_rec_lengths, upstream_rec_distances, downstream_rec_distances
