@@ -23,6 +23,7 @@ def parseGenomeArgs(argv=None):
     parser.add_argument('--plot_output', nargs='?', const='genome_plot.png', default=None, 
                         help="Generate a basic plot using `Bvalcalc.py --genome` output"
                             "Provide path to plot output.")
+    parser.add_argument('--neutral_only', action='store_true', help="If set, plot_output will only show neutral sites.")
     parser.add_argument('--out', nargs='?', default=None,
                         help="Required path to output CSV file. If --out is specified but no file name is given, "
                              "'b_values.csv' will be used in the current directory. If --out is not specified, "
