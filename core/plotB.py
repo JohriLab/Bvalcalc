@@ -4,7 +4,7 @@ import matplotlib.ticker as ticker
 import numpy as np
 from matplotlib.collections import LineCollection
 
-def plotB(b_values_input, caller, output_path, silent, gene_ranges=None, neutral_only=True):
+def plotB(b_values_input, caller, output_path, silent, gene_ranges=None, neutral_only=False):
     if not silent: 
         print('====== P L O T T I N G . . . =======================')
 
@@ -72,14 +72,8 @@ def plotB(b_values_input, caller, output_path, silent, gene_ranges=None, neutral
 
     # Region mode
     elif caller == "region":
-        x = b_values_input[0]
-        y = b_values_input[1]
-
-        max_points = 10000
-        if len(x) > max_points:
-            indices = np.linspace(0, len(x) - 1, max_points).astype(int)
-            x = x[indices]
-            y = y[indices]
+        x = b_values_input[:, 0]  # column 0 = positions
+        y = b_values_input[:, 1]  # column 1 = B values
 
         ax.plot(x, y, color='blue', lw=1.5, alpha=0.8)
         ax.set_xlim(x.min() - 1, x.max())
