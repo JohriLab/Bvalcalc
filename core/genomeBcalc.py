@@ -51,7 +51,7 @@ def genomeBcalc(args):
                                    chunk_size, blockstart, blockend, chr_start, chr_end, calc_start, 
                                    calc_end, num_chunks, precise_chunks, lperchunk, b_values, rec_rate_per_chunk, gc_rate_per_chunk, silent)
             for chunk_idx in calc_chunks]
-    b_values = b_values[calc_start:(calc_end+2)] # Trim b_values array to only calculated region
+    b_values = b_values[calc_start:(calc_end+1)] # Trim b_values array to only calculated region
     
     if not silent: 
         print(f"====== F I N I S H E D ===== C A L C ===============")
