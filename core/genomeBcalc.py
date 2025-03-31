@@ -6,6 +6,7 @@ from core.utils.recmapHandler import recmapHandler
 from concurrent.futures import ThreadPoolExecutor
 import numpy as np
 import os
+import sys
 
 def genomeBcalc(args):    
     file_path, chr_start, chr_end, calc_start, calc_end, chunk_size, precise_chunks, silent = args.bedgff_path, args.chr_start, args.chr_end, args.calc_start, args.calc_end, args.chunk_size, args.precise_chunks, args.silent
@@ -23,8 +24,12 @@ def genomeBcalc(args):
 
     if not silent: print(f"====== S T A R T I N G ===== C A L C ===============")
 
-    b_values = np.ones(calc_end + 1 - calc_start, dtype=np.float64) # Initialize array of B values
+    num_chunks = (chr_end - chr_start + chunk_size - 1) // chunk_size
+    calc_chunk_start = (calc_start - chr_start) // chunk_size
+    calc_chunk_end = (calc_end - chr_start) // chunk_size
+    calc_chunks = np.arange(calc_chunk_start,calc_chunk_end + 1) # Relevant chunks to calculate B for based on calc_start and calc_end
 
+    b_values = np.ones(chr_end + 2 - chr_start, dtype=np.float64) # Initialize array of B values
     lperchunk = calculate_L_per_chunk(chunk_size, blockstart, blockend, chr_start, chr_end) # Cumulative conserved length in each chunk
 
     if args.rec_map: # Process recombination map if provided
@@ -41,16 +46,12 @@ def genomeBcalc(args):
 
     if not silent: print(f"====== R E S U L T S == P E R == C H U N K =========")
 
-    num_chunks = (chr_end - chr_start + chunk_size - 1) // chunk_size
-    calc_chunk_start = (calc_start - chr_start) // chunk_size
-    calc_chunk_end = (calc_end - chr_start) // chunk_size
-    calc_chunks = np.arange(calc_chunk_start,calc_chunk_end + 1) # Relevant chunks to calculate B for based on calc_start and calc_end
-
     with ThreadPoolExecutor() as executor:
         results = [executor.submit(process_single_chunk, chunk_idx, 
                                    chunk_size, blockstart, blockend, chr_start, chr_end, calc_start, 
                                    calc_end, num_chunks, precise_chunks, lperchunk, b_values, rec_rate_per_chunk, gc_rate_per_chunk, silent)
             for chunk_idx in calc_chunks]
+    b_values = b_values[calc_start:(calc_end+2)] # Trim b_values array to only calculated region
     
     if not silent: 
         print(f"====== F I N I S H E D ===== C A L C ===============")
