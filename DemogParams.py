@@ -5,16 +5,16 @@
 ##        ./Bvalcalc --genome --pop_params ExampleParams.py
 
 ## Core parameters
-x = 1 # Scaling factor (N,u,r), keep as 1 unless calculating for rescaled simulations
+x = 100 # Scaling factor (N,u,r), keep as 1 unless calculating for rescaled simulations
 Nanc = 1e6/x # Ancestral population size
 r = 0.5*1e-8*x # Recombination (crossover) rate per bp, per generation
 u = 3*1e-9*x # Mutation rate (all types) per bp, per generation
-g = 1*1e-8*x # Gene conversion initiation rate per bp, per generation
+g = 0*1e-8*x # Gene conversion initiation rate per bp, per generation
 k = 440 # Gene conversion tract length (bp)
 
 ## Demography parameters
-Ncur = Nanc # Current population size (!Requires --pop_change)
-time_of_change = 1 # Time in 2Ncur generations ago that effective population size went from Nanc to Ncur (!Requires --pop_change)
+Ncur = Nanc*5 # Current population size (!Requires --pop_change)
+time_of_change = 0.1/5 # Time in 2Ncur generations ago that effective population size went from Nanc to Ncur (!Requires --pop_change)
 
 # Distribution of fitness effects (DFE) parameters (Must equal 1)
 f0 = 0.1 #(*Proportion of effectively neutral mutations with 0 <= |2Nes| < 1 *) 0.25

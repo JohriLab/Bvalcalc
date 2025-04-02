@@ -13,4 +13,4 @@ for v in ['Nanc', 'Ncur', 'time_of_change']: globals()[v] = getattr(_pop, v)
 def get_Bcur(Banc):
     R = Nanc / Ncur
     return (Banc * (1 + (R - 1) * np.exp(-time_of_change / Banc))) / \
-           (1 + (R - 1) * np.exp(-time_of_change))
+           (1 + (R - 1) * np.exp(-time_of_change)) # Denominator
