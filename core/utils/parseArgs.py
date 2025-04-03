@@ -27,7 +27,8 @@ def parseGenomeArgs(argv=None):
                         help="Required path to output CSV file. If --out is specified but no file name is given, "
                              "'b_values.csv' will be used in the current directory. If --out is not specified, "
                              "no CSV will be saved.")
-    parser.add_argument('--silent', action='store_true', help="If set, silence prince statements.")
+    parser.add_argument('--verbose', action='store_true', help="If set, will give per-chunk summaries")
+    parser.add_argument('--silent', action='store_true', help="If set, silence print statements.")
 
     
     args = parser.parse_args(argv)

@@ -9,7 +9,7 @@ import os
 import sys
 
 def genomeBcalc(args):    
-    file_path, chr_start, chr_end, calc_start, calc_end, chunk_size, precise_chunks, silent = args.bedgff_path, 1, args.chr_end, args.calc_start, args.calc_end, args.chunk_size, args.precise_chunks, args.silent
+    file_path, chr_end, calc_start, calc_end, chunk_size, precise_chunks, silent = args.bedgff_path, args.chr_end, args.calc_start, args.calc_end, args.chunk_size, args.precise_chunks, args.silent
 
     print(f"= Calculating relative diversity (B) for all neutral sites across the genome. = = =")
     if not args.silent: 
@@ -31,6 +31,7 @@ def genomeBcalc(args):
 
     if not silent: print(f"====== S T A R T I N G ===== C A L C ===============")
 
+    chr_start = 1
     num_chunks = (chr_end - chr_start + chunk_size - 1) // chunk_size
     calc_chunk_start = (calc_start - chr_start) // chunk_size
     calc_chunk_end = (calc_end - chr_start) // chunk_size
