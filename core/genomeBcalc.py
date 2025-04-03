@@ -4,6 +4,7 @@ from core.helpers.calc_L_per_chunk import calculate_L_per_chunk
 from core.helpers.demography_helpers import get_Bcur
 from core.utils.recmapHandler import recmapHandler
 from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import as_completed
 import numpy as np
 import os
 import sys
@@ -28,8 +29,14 @@ def genomeBcalc(args):
         chr_end = blockend[-1]
         if not args.silent:
             print(f"No --chr_end provided. Using last position in BED/GFF: {chr_end}")
+    if args.calc_start is None:
+        calc_start = 1
+    if args.calc_end is None:
+        calc_end = chr_end
 
     if not silent: print(f"====== S T A R T I N G ===== C A L C ===============")
+    if args.calc_start is None and args.calc_end is None:
+        if not silent: print(f"Calculating B for entire chromosome, to only calculate for a subregion, use --calc_start and --calc_end")
 
     chr_start = 1
     num_chunks = (chr_end - chr_start + chunk_size - 1) // chunk_size
@@ -56,10 +63,24 @@ def genomeBcalc(args):
     else: print(f"To print per-chunk summaries, add --verbose.")
 
     with ThreadPoolExecutor() as executor:
-        results = [executor.submit(process_single_chunk, chunk_idx, 
-                                   chunk_size, blockstart, blockend, chr_start, chr_end, calc_start, 
-                                   calc_end, num_chunks, precise_chunks, lperchunk, b_values, rec_rate_per_chunk, gc_rate_per_chunk, silent, verbose)
-            for chunk_idx in calc_chunks]
+        futures = {
+            executor.submit(process_single_chunk, chunk_idx,
+                            chunk_size, blockstart, blockend, chr_start, chr_end, calc_start,
+                            calc_end, num_chunks, precise_chunks, lperchunk, b_values,
+                            rec_rate_per_chunk, gc_rate_per_chunk, silent, verbose): chunk_idx
+            for chunk_idx in calc_chunks
+        }
+
+        total_chunks = len(calc_chunks)
+        completed = 0
+
+        for future in as_completed(futures):
+            completed += 1
+            progress = int((completed / total_chunks) * 100)
+            sys.stdout.write(f"\rProgress: {progress}% ({completed}/{total_chunks} chunks)")
+            sys.stdout.flush()
+
+        print()  # move to the next line after progress bar
     b_values = b_values[calc_start:(calc_end+1)] # Trim b_values array to only calculated region
     
     if not silent: 

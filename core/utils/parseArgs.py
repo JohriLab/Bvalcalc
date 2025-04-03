@@ -29,14 +29,8 @@ def parseGenomeArgs(argv=None):
                              "no CSV will be saved.")
     parser.add_argument('--verbose', action='store_true', help="If set, will give per-chunk summaries")
     parser.add_argument('--silent', action='store_true', help="If set, silence print statements.")
-
     
     args = parser.parse_args(argv)
-    
-    if args.calc_start is None: # Update calc_start and calc_end to default to chr_start and chr_end if not provided
-        args.calc_start = args.chr_start
-    if args.calc_end is None:
-        args.calc_end = args.chr_end
         
     return args
 
