@@ -81,9 +81,20 @@ def genomeBcalc(args):
 
     b_values = b_values[calc_start:(calc_end+1)] # Trim b_values array to only calculated region
     
+
+
     if not quiet: 
         print(f"====== F I N I S H E D ===== C A L C ===============")
         print(f"====== R E S U L T S ====== S U M M A R Y ==========")
+                # Total genic bases within calc_start to calc_end
+        calc_selected_length = 0
+        for start, end in zip(blockstart, blockend):
+            # Find overlap between this block and the calculated region
+            overlap_start = max(start, calc_start)
+            overlap_end = min(end, calc_end)
+            if overlap_start <= overlap_end:
+                calc_selected_length += (overlap_end - overlap_start + 1)
+        print(f"Cumulative length of calculated region under selection: {calc_selected_length}bp "f"({round((calc_selected_length / (calc_end - calc_start + 1)) * 100, 2)}%)")
         print(f"Cumulative length of chromosome under selection: {int(sum(lperchunk))}bp ({round((sum(lperchunk)/(chr_end - chr_start + 1))*100,2)}%)")
         print(f"Mean B of neutral sites across genome: {b_values[~np.isnan(b_values)].mean()}")
         if args.rec_map: # Process recombination map if provided
