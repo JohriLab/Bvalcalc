@@ -4,9 +4,9 @@ import numpy as np
 import os
 
 def regionBcalc(args):    
-    gene_size, flank_len, silent = args.gene_size, args.flank_len, args.silent
+    gene_size, flank_len, quiet = args.gene_size, args.flank_len, args.quiet
     print(f"= Calculating relative diversity (B) for a neutral region adjacent to a single selected element = = =")
-    if not silent: 
+    if not quiet: 
         print(f"====== P A R A M E T E R S =========================")
         print(f"Distribution of fitness effects (DFE): {flank_len}bp")
         print(f"Length of region under selection: {gene_size}bp")
@@ -16,16 +16,16 @@ def regionBcalc(args):
     b_values = calculateB_linear(np.arange(1, flank_len, 1, dtype = int), gene_size)
     print(f"====== F I N I S H E D ===== C A L C ===============")
 
-    if not silent:
+    if not quiet:
         print(f"====== R E S U L T S ! =============================")
         print(f"B for adjacent site: {b_values[0]}")
         print(f"Mean B for flanking region: {b_values.mean()}")
         print(f"B at start and end of the neutral region: {b_values}")
 
     if args.pop_change:
-        if not silent: print("Demographic change prior to B-calculation", b_values)
+        if not quiet: print("Demographic change prior to B-calculation", b_values)
         b_values = get_Bcur(b_values)
-        if not silent: print("Demographic change applied to B-calculation", b_values)
+        if not quiet: print("Demographic change applied to B-calculation", b_values)
     output_data = np.column_stack((np.arange(1, flank_len, 1, dtype = int), b_values))
 
     if args.out is not None: # Write to CSV
@@ -33,7 +33,7 @@ def regionBcalc(args):
             output_data, delimiter=",", header="Distance,B", fmt=("%d", "%.6f"), comments="")
         print(f"Saved B values to: {os.path.abspath(args.out)}")
     else:
-        if not args.silent:
+        if not args.quiet:
             print("No output CSV requested; skipping save.")
     
     return output_data

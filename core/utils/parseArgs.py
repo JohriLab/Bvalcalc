@@ -28,7 +28,7 @@ def parseGenomeArgs(argv=None):
                              "'b_values.csv' will be used in the current directory. If --out is not specified, "
                              "no CSV will be saved.")
     parser.add_argument('--verbose', action='store_true', help="If set, will give per-chunk summaries")
-    parser.add_argument('--silent', action='store_true', help="If set, silence print statements.")
+    parser.add_argument('--quiet', action='store_true', help="If set, silence print statements.")
     
     args = parser.parse_args(argv)
         
@@ -47,7 +47,7 @@ def parseRegionArgs(argv=None):
                         help="Optional path to output CSV file. If --out is specified but no file name is given, "
                              "'b_values.csv' will be used in the current directory. If --out is not specified, "
                              "no CSV will be saved.")
-    parser.add_argument('--silent', action='store_true', help="If set, silence print statements.")
+    parser.add_argument('--quiet', action='store_true', help="If set, silence print statements.")
     return parser.parse_args(argv)
 
 def parseSiteArgs(argv=None):
@@ -56,5 +56,5 @@ def parseSiteArgs(argv=None):
     parser.add_argument('--gene_size', type=int, default=10000, help="Length of single region (e.g. gene) under selection. [5000]")
     parser.add_argument('--distance', type=int, default=1, help="Length of single region (e.g. gene) under selection. [5000]")
     parser.add_argument('--pop_change', action='store_true', help="If set, B will reflect the current B after a step change in population size, rather than ancestral B.")
-    parser.add_argument('--silent', action='store_true', help="If set, silence print statements.")
+    parser.add_argument('--quiet', action='store_true', help="If set, silence print statements.")
     return parser.parse_args(argv)

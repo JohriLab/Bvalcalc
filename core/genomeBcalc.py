@@ -10,10 +10,10 @@ import os
 import sys
 
 def genomeBcalc(args):    
-    file_path, chr_end, calc_start, calc_end, chunk_size, precise_chunks, silent, verbose = args.bedgff_path, args.chr_end, args.calc_start, args.calc_end, args.chunk_size, args.precise_chunks, args.silent, args.verbose
+    file_path, chr_end, calc_start, calc_end, chunk_size, precise_chunks, quiet, verbose = args.bedgff_path, args.chr_end, args.calc_start, args.calc_end, args.chunk_size, args.precise_chunks, args.quiet, args.verbose
 
     print(f"= Calculating relative diversity (B) for all neutral sites across the genome. = = =")
-    if not args.silent: 
+    if not args.quiet: 
         print(f"====== P A R A M E T E R S =========================")
         print(f"BED/GFF file for regions under selection: {file_path}")
         print(f"First position in chromosome: {calc_start}")
@@ -27,16 +27,16 @@ def genomeBcalc(args):
         if len(blockend) == 0:
             raise ValueError("chr_end was not provided and gene position ends not computed. Check BED/GFF input, and specify chr_end if needed")
         chr_end = blockend[-1]
-        if calc_end is None and not args.silent:
+        if calc_end is None and not args.quiet:
             print(f"No --chr_end provided. Using last position in BED/GFF: {chr_end}")
     if args.calc_start is None:
         calc_start = 1
     if args.calc_end is None:
         calc_end = chr_end
 
-    if not silent: print(f"====== S T A R T I N G ===== C A L C ===============")
+    if not quiet: print(f"====== S T A R T I N G ===== C A L C ===============")
     if args.calc_start is None and args.calc_end is None:
-        if not silent: print(f"Calculating B for entire chromosome, to only calculate for a subregion, use --calc_start and --calc_end")
+        if not quiet: print(f"Calculating B for entire chromosome, to only calculate for a subregion, use --calc_start and --calc_end")
 
     chr_start = 1
     num_chunks = (chr_end - chr_start + chunk_size - 1) // chunk_size
@@ -48,39 +48,40 @@ def genomeBcalc(args):
     lperchunk = calculate_L_per_chunk(chunk_size, blockstart, blockend, chr_start, chr_end) # Cumulative conserved length in each chunk
 
     if args.rec_map: # Process recombination map if provided
-        if not silent: print(f"Using recombination (crossover) map from {args.rec_map}")
+        if not quiet: print(f"Using recombination (crossover) map from {args.rec_map}")
         rec_rate_per_chunk = recmapHandler(args.rec_map, chr_start, chr_end, chunk_size)
     else:
         rec_rate_per_chunk = None
 
     if args.gc_map:
-        if not silent: print(f"Using gene conversion map from {args.gc_map}")
+        if not quiet: print(f"Using gene conversion map from {args.gc_map}")
         gc_rate_per_chunk = recmapHandler(args.gc_map, chr_start, chr_end, chunk_size)
     else:
         gc_rate_per_chunk = None
 
     if verbose: print(f"====== R E S U L T S == P E R == C H U N K =========")
-    else: print(f"To print per-chunk summaries, add --verbose.")
+    elif not quiet: print(f"To print per-chunk summaries, add --verbose.")
 
     with ThreadPoolExecutor() as executor:
         futures = {
             executor.submit(process_single_chunk, chunk_idx,
                             chunk_size, blockstart, blockend, chr_start, chr_end, calc_start,
                             calc_end, num_chunks, precise_chunks, lperchunk, b_values,
-                            rec_rate_per_chunk, gc_rate_per_chunk, silent, verbose): chunk_idx
+                            rec_rate_per_chunk, gc_rate_per_chunk, quiet, verbose): chunk_idx
             for chunk_idx in calc_chunks
         }
-        completed = 0 # Print progress
-        for future in as_completed(futures):
-            completed += 1
-            progress = int((completed / len(calc_chunks)) * 100)
-            sys.stdout.write(f"\rProgress: {progress}% ({completed}/{len(calc_chunks)} chunks [{chunk_size}])")
-            sys.stdout.flush()
-        print()  # Move to the next line after progress printing
+        if not quiet and not verbose:
+            completed = 0 # Print progress
+            for future in as_completed(futures):
+                completed += 1
+                progress = int((completed / len(calc_chunks)) * 100)
+                sys.stdout.write(f"\rProgress: {progress}% ({completed}/{len(calc_chunks)} chunks [{chunk_size}])")
+                sys.stdout.flush()
+            print()  # Move to the next line after progress printing
 
     b_values = b_values[calc_start:(calc_end+1)] # Trim b_values array to only calculated region
     
-    if not silent: 
+    if not quiet: 
         print(f"====== F I N I S H E D ===== C A L C ===============")
         print(f"====== R E S U L T S ====== S U M M A R Y ==========")
         print(f"Cumulative length of chromosome under selection: {int(sum(lperchunk))}bp ({round((sum(lperchunk)/(chr_end - chr_start + 1))*100,2)}%)")
@@ -97,7 +98,7 @@ def genomeBcalc(args):
 
     if args.pop_change:
         b_values = get_Bcur(b_values)
-        if not silent: print("Demographic change applied to B-calculation")
+        if not quiet: print("Demographic change applied to B-calculation")
     output_data = np.core.records.fromarrays(
     [positions.astype(int), conserved.astype(str), b_values.astype(float)],
     names='Position,Conserved,B',
@@ -110,7 +111,7 @@ def genomeBcalc(args):
             output_data, delimiter=",", header="Position,Conserved,B", fmt="%d,%s,%.6f", comments="")
         print(f"Saved B values to: {os.path.abspath(args.out)}")
     else:
-        if not args.silent:
+        if not args.quiet:
             print("No output CSV requested; skipping save.")
 
     return output_data, block_ranges

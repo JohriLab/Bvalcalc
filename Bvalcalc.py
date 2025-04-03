@@ -23,7 +23,7 @@ def main():
         from core.genomeBcalc import genomeBcalc
         output_data, block_ranges = genomeBcalc(args)
         if getattr(args, 'plot_output', True):
-            plotB(b_values_input=output_data, caller="genome", output_path=args.plot_output, silent=args.silent, gene_ranges=block_ranges, neutral_only=args.neutral_only)
+            plotB(b_values_input=output_data, caller="genome", output_path=args.plot_output, quiet=args.quiet, gene_ranges=block_ranges, neutral_only=args.neutral_only)
 
     elif known_args.region: # Run region Bcalc
         args = parseRegionArgs(remaining_args)
@@ -31,7 +31,7 @@ def main():
         from core.regionBcalc import regionBcalc
         output_data = regionBcalc(args) # Capture the output from regionBcalc
         if getattr(args, 'plot_output', False): # If the --plot_basic flag was provided, call plotB with regionBcalc's output.
-            plotB(b_values_input=output_data, caller="region", output_path=args.plot_output, silent=args.silent)
+            plotB(b_values_input=output_data, caller="region", output_path=args.plot_output, quiet=args.quiet)
 
     elif known_args.site: # Run single site Bcalc
         args = parseSiteArgs(remaining_args)

@@ -4,8 +4,8 @@ import matplotlib.ticker as ticker
 import numpy as np
 from matplotlib.collections import LineCollection
 
-def plotB(b_values_input, caller, output_path, silent, gene_ranges=None, neutral_only=False):
-    if not silent: 
+def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_only=False):
+    if not quiet: 
         print('====== P L O T T I N G . . . =======================')
 
     # Set the font family with a fallback list.
