@@ -9,7 +9,7 @@ import os
 import sys
 
 def genomeBcalc(args):    
-    file_path, chr_start, chr_end, calc_start, calc_end, chunk_size, precise_chunks, silent = args.bedgff_path, args.chr_start, args.chr_end, args.calc_start, args.calc_end, args.chunk_size, args.precise_chunks, args.silent
+    file_path, chr_start, chr_end, calc_start, calc_end, chunk_size, precise_chunks, silent = args.bedgff_path, 1, args.chr_end, args.calc_start, args.calc_end, args.chunk_size, args.precise_chunks, args.silent
 
     print(f"= Calculating relative diversity (B) for all neutral sites across the genome. = = =")
     if not args.silent: 
@@ -21,6 +21,13 @@ def genomeBcalc(args):
         print(f"Number of adjacent chunks to calculate B precisely for: {precise_chunks}")
 
     blockstart, blockend = bedgffHandler(file_path) # Read BED/GFF, return start and end of conserved elements
+    
+    if args.chr_end is None: # Default chr_end to last value in blockend if not given
+        if len(blockend) == 0:
+            raise ValueError("chr_end was not provided and gene position ends not computed. Check BED/GFF input, and specify chr_end if needed")
+        chr_end = blockend[-1]
+        if not args.silent:
+            print(f"No --chr_end provided. Using last position in BED/GFF: {chr_end}")
 
     if not silent: print(f"====== S T A R T I N G ===== C A L C ===============")
 

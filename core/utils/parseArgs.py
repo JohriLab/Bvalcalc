@@ -5,8 +5,7 @@ def parseGenomeArgs(argv=None):
     # parser.add_argument('--pop_params', type=int, required=True, help="Path to file providing popgen parameters specific to modelled population (empirical or simulated).")
     parser.add_argument('--pop_params', type=str, required=True, help="Path to Python file with population genetic parameters, e.g., ExampleParams.py")
     parser.add_argument('--bedgff_path', type=str, required=True, help="Path to input BED or GFF3 file.")
-    parser.add_argument('--chr_start', type=int, required=True, help="Start of chromosome position.")
-    parser.add_argument('--chr_end', type=int, required=True, help="End of chromosome position.")
+    parser.add_argument('--chr_end', type=int, default=None, help="End of chromosome position. Defaults to calc_end if not provided.")
     parser.add_argument('--calc_start', type=int, default=None, help="Start of region to calculate B [default: chr_start]") # See if statment below
     parser.add_argument('--calc_end', type=int, default=None, help="End of region to calculate B [default: chr_end]") # See if statment below
     parser.add_argument('--chunk_size', type=int, default=20000, help="Size of chunks calculated simultaneously (bp). [100000]")
