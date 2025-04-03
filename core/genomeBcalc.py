@@ -9,7 +9,7 @@ import os
 import sys
 
 def genomeBcalc(args):    
-    file_path, chr_end, calc_start, calc_end, chunk_size, precise_chunks, silent = args.bedgff_path, args.chr_end, args.calc_start, args.calc_end, args.chunk_size, args.precise_chunks, args.silent
+    file_path, chr_end, calc_start, calc_end, chunk_size, precise_chunks, silent, verbose = args.bedgff_path, args.chr_end, args.calc_start, args.calc_end, args.chunk_size, args.precise_chunks, args.silent, args.verbose
 
     print(f"= Calculating relative diversity (B) for all neutral sites across the genome. = = =")
     if not args.silent: 
@@ -41,23 +41,24 @@ def genomeBcalc(args):
     lperchunk = calculate_L_per_chunk(chunk_size, blockstart, blockend, chr_start, chr_end) # Cumulative conserved length in each chunk
 
     if args.rec_map: # Process recombination map if provided
-        print(f"Using recombination (crossover) map from {args.rec_map}")
+        if not silent: print(f"Using recombination (crossover) map from {args.rec_map}")
         rec_rate_per_chunk = recmapHandler(args.rec_map, chr_start, chr_end, chunk_size)
     else:
         rec_rate_per_chunk = None
 
     if args.gc_map:
-        print(f"Using gene conversion map from {args.gc_map}")
+        if not silent: print(f"Using gene conversion map from {args.gc_map}")
         gc_rate_per_chunk = recmapHandler(args.gc_map, chr_start, chr_end, chunk_size)
     else:
         gc_rate_per_chunk = None
 
-    if not silent: print(f"====== R E S U L T S == P E R == C H U N K =========")
+    if verbose: print(f"====== R E S U L T S == P E R == C H U N K =========")
+    else: print(f"To print per-chunk summaries, add --verbose.")
 
     with ThreadPoolExecutor() as executor:
         results = [executor.submit(process_single_chunk, chunk_idx, 
                                    chunk_size, blockstart, blockend, chr_start, chr_end, calc_start, 
-                                   calc_end, num_chunks, precise_chunks, lperchunk, b_values, rec_rate_per_chunk, gc_rate_per_chunk, silent)
+                                   calc_end, num_chunks, precise_chunks, lperchunk, b_values, rec_rate_per_chunk, gc_rate_per_chunk, silent, verbose)
             for chunk_idx in calc_chunks]
     b_values = b_values[calc_start:(calc_end+1)] # Trim b_values array to only calculated region
     

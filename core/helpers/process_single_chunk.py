@@ -8,7 +8,7 @@ import sys
 
 def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start, chr_end,
                          calc_start, calc_end, num_chunks, precise_chunks,lperchunk, 
-                         b_values, rec_rate_per_chunk=None, gc_rate_per_chunk=None, silent=False):
+                         b_values, rec_rate_per_chunk=None, gc_rate_per_chunk=None, silent=False, verbose=False):
     
     chunk_start =  chr_start + chunk_idx * chunk_size
     chunk_end   = min(chunk_start + chunk_size - 1, calc_end)
@@ -106,7 +106,7 @@ def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start,
 
     mean_chunk_b = np.nanmean(chunk_slice) # Mean B for chunk
 
-    if not silent: # Per-chunk summaries
+    if verbose: # Per-chunk summaries
         print(f"Processing chunk {chunk_idx}: {pos_chunk.min()} - {pos_chunk.max()}")
         if rec_rate_per_chunk is not None:
             print(f"Chunk {chunk_idx}: recombination rate = {rec_rate_per_chunk[chunk_idx]}")
