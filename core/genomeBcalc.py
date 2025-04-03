@@ -27,7 +27,7 @@ def genomeBcalc(args):
         if len(blockend) == 0:
             raise ValueError("chr_end was not provided and gene position ends not computed. Check BED/GFF input, and specify chr_end if needed")
         chr_end = blockend[-1]
-        if not args.silent:
+        if calc_end is None and not args.silent:
             print(f"No --chr_end provided. Using last position in BED/GFF: {chr_end}")
     if args.calc_start is None:
         calc_start = 1
@@ -70,17 +70,14 @@ def genomeBcalc(args):
                             rec_rate_per_chunk, gc_rate_per_chunk, silent, verbose): chunk_idx
             for chunk_idx in calc_chunks
         }
-
-        total_chunks = len(calc_chunks)
-        completed = 0
-
+        completed = 0 # Print progress
         for future in as_completed(futures):
             completed += 1
-            progress = int((completed / total_chunks) * 100)
-            sys.stdout.write(f"\rProgress: {progress}% ({completed}/{total_chunks} chunks)")
+            progress = int((completed / len(calc_chunks)) * 100)
+            sys.stdout.write(f"\rProgress: {progress}% ({completed}/{len(calc_chunks)} chunks [{chunk_size}])")
             sys.stdout.flush()
+        print()  # Move to the next line after progress printing
 
-        print()  # move to the next line after progress bar
     b_values = b_values[calc_start:(calc_end+1)] # Trim b_values array to only calculated region
     
     if not silent: 
