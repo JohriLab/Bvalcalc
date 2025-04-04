@@ -8,10 +8,8 @@ def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_
     if not quiet: 
         print('====== P L O T T I N G . . . =======================')
 
-    # Set the font family with a fallback list.
     mpl.rcParams['font.family'] = ['Helvetica', 'DejaVu Sans', 'Arial']
 
-    # Style
     if 'seaborn-v0_8-whitegrid' in plt.style.available:
         plt.style.use('seaborn-v0_8-whitegrid')
     else:
@@ -27,10 +25,13 @@ def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_
 
     fig, ax = plt.subplots(figsize=(10, 6))
 
-    # Genome mode: extract and optionally filter/segment
     if caller == "genome":
         positions = b_values_input['Position']
         b_vals = b_values_input['B']
+        if 'Chrom' in b_values_input.dtype.names:
+            chrom = b_values_input['Chrom'][0]
+        else:
+            chrom = "unknown"
 
         if neutral_only:
             conserved = b_values_input['Conserved']
@@ -70,19 +71,17 @@ def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_
             ax.plot(x, y, color='blue', lw=1.5, alpha=0.8)
             ax.set_xlim(x.min() - 1, x.max())
 
-    # Region mode
     elif caller == "region":
-        x = b_values_input[:, 0]  # column 0 = positions
-        y = b_values_input[:, 1]  # column 1 = B values
+        x = b_values_input[:, 0]
+        y = b_values_input[:, 1]
 
         ax.plot(x, y, color='blue', lw=1.5, alpha=0.8)
         ax.set_xlim(x.min() - 1, x.max())
 
-    # Labels and title
     ax.set_ylabel('Expected diversity relative to neutral evolution (B)', fontsize=13)
 
     if caller == "genome":
-        ax.set_title(f'B for chromosome {positions.min()}-{positions.max()}', fontsize=15, fontweight='bold')
+        ax.set_title(f'B for chromosome {chrom} ({positions.min()}–{positions.max()} bp)', fontsize=15, fontweight='bold')  # 🔧 updated
         ax.set_xlabel('Chromosomal position (bp)', fontsize=13)
     elif caller == "region":
         ax.set_xlabel('Distance from single selected element of size', fontsize=13)
@@ -90,19 +89,20 @@ def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_
 
     ax.tick_params(axis='both', which='major', labelsize=10)
 
-    # Gene bars
     if gene_ranges is not None and len(gene_ranges) > 0:
         ymin, ymax = ax.get_ylim()
         bar_y = ymin - (ymax - ymin) * 0.05
         ax.set_ylim(bar_y, ymax)
 
-        segments = [((start, bar_y), (end, bar_y)) for start, end in gene_ranges]
+        segments = [((start, bar_y), (end, bar_y)) for _, start, end in gene_ranges]  # 🔧 updated
         lc = LineCollection(segments, colors='black', linewidths=30)
         ax.add_collection(lc)
 
         if caller == "genome" and not neutral_only:
             gene_mask = np.zeros_like(x, dtype=bool)
-            for start, end in gene_ranges:
+            for _, start, end in gene_ranges:
+                start = int(start)
+                end = int(end)
                 gene_mask |= ((x >= start) & (x <= end))
             idx = np.where(gene_mask)[0]
             if len(idx) > 0:
@@ -112,7 +112,6 @@ def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_
                     lc_black = LineCollection(black_segments, colors='black', linewidths=1.5)
                     ax.add_collection(lc_black)
 
-    # Format the x-axis ticks
     ax.xaxis.set_major_formatter(
         ticker.FuncFormatter(
             lambda x_val, pos: f"{int(x_val)} bp" if x_val < 1000 

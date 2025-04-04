@@ -22,7 +22,6 @@ def genomeBcalc(args):
         print(f"Number of adjacent chunks to calculate B precisely for: {precise_chunks}")
 
     blockstart, blockend, blockchrom = bedgffHandler(file_path) # Read BED/GFF, return start and end of conserved elements
-    print(blockchrom)
     
     if args.chr_end is None: # Default chr_end to last value in blockend if not given
         if len(blockend) == 0:
@@ -114,11 +113,11 @@ def genomeBcalc(args):
     names='Position,Conserved,B',
     formats='i8,U1,f8'
     )
-    block_ranges = np.column_stack((blockstart, blockend))
+    block_ranges = np.column_stack((blockchrom, blockstart, blockend))
 
     if args.out is not None: # Write to CSV
         np.savetxt(args.out, # This might be "b_values.csv" or a custom path
-            output_data, delimiter=",", header="Position,Conserved,B", fmt="%d,%s,%.6f", comments="")
+            output_data, delimiter=",", header="Chromosome,Position,Conserved,B", fmt="%d,%s,%.6f", comments="")
         print(f"Saved B values to: {os.path.abspath(args.out)}")
     else:
         if not args.quiet:
