@@ -38,7 +38,7 @@ def genomeBcalc(args):
     if args.calc_start is None and args.calc_end is None:
         if not quiet: print(f"Calculating B for entire chromosome, to only calculate for a subregion, use --calc_start and --calc_end")
 
-    chr_start = 1
+    chr_start = 1 # Currently hardcoded, can change if needed
     num_chunks = (chr_end - chr_start + chunk_size - 1) // chunk_size
     calc_chunk_start = (calc_start - chr_start) // chunk_size
     calc_chunk_end = (calc_end - chr_start) // chunk_size
@@ -81,8 +81,6 @@ def genomeBcalc(args):
 
     b_values = b_values[calc_start:(calc_end+1)] # Trim b_values array to only calculated region
     
-
-
     if not quiet: 
         print(f"====== F I N I S H E D ===== C A L C ===============")
         print(f"====== R E S U L T S ====== S U M M A R Y ==========")
