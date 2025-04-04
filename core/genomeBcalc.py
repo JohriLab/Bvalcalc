@@ -21,7 +21,8 @@ def genomeBcalc(args):
         print(f"Size of chunks to calculate B in per iteration: {chunk_size}bp")
         print(f"Number of adjacent chunks to calculate B precisely for: {precise_chunks}")
 
-    blockstart, blockend = bedgffHandler(file_path) # Read BED/GFF, return start and end of conserved elements
+    blockstart, blockend, blockchrom = bedgffHandler(file_path) # Read BED/GFF, return start and end of conserved elements
+    print(blockchrom)
     
     if args.chr_end is None: # Default chr_end to last value in blockend if not given
         if len(blockend) == 0:
