@@ -7,6 +7,7 @@ from matplotlib.collections import LineCollection
 def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_only=False):
     if not quiet: 
         print('====== P L O T T I N G . . . =======================')
+    print("Need to work on chromosome column")
 
     mpl.rcParams['font.family'] = ['Helvetica', 'DejaVu Sans', 'Arial']
 
