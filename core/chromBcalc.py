@@ -9,7 +9,7 @@ import numpy as np
 import os
 import sys
 
-def chromBcalc(args):    
+def chromBcalc(args, blockstart, blockend, blockchrom):    
     file_path, chr_end, calc_start, calc_end, chunk_size, precise_chunks, quiet, verbose = args.bedgff_path, args.chr_end, args.calc_start, args.calc_end, args.chunk_size, args.precise_chunks, args.quiet, args.verbose
 
     print(f"= Calculating relative diversity (B) for all neutral sites across the genome. = = =")
@@ -21,7 +21,6 @@ def chromBcalc(args):
         print(f"Size of chunks to calculate B in per iteration: {chunk_size}bp")
         print(f"Number of adjacent chunks to calculate B precisely for: {precise_chunks}")
 
-    blockstart, blockend, blockchrom = bedgffHandler(file_path) # Read BED/GFF, return start and end of conserved elements
     
     if args.chr_end is None: # Default chr_end to last value in blockend if not given
         if len(blockend) == 0:
