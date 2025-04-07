@@ -9,7 +9,7 @@ import numpy as np
 import os
 import sys
 
-def chromBcalc(args, blockstart, blockend, blockchrom):    
+def chromBcalc(args, blockstart, blockend, chromosome):    
     file_path, chr_end, calc_start, calc_end, chunk_size, precise_chunks, quiet, verbose = args.bedgff_path, args.chr_end, args.calc_start, args.calc_end, args.chunk_size, args.precise_chunks, args.quiet, args.verbose
 
     print(f"= Calculating relative diversity (B) for all neutral sites across the genome. = = =")
@@ -112,7 +112,7 @@ def chromBcalc(args, blockstart, blockend, blockchrom):
     names='Position,Conserved,B',
     formats='i8,U1,f8'
     )
-    block_ranges = np.column_stack((blockchrom, blockstart, blockend))
+    block_ranges = np.column_stack((chromosome, blockstart, blockend))
 
     if args.out is not None: # Write to CSV
         np.savetxt(args.out, # This might be "b_values.csv" or a custom path

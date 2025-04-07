@@ -12,12 +12,12 @@ def genomeBcalc(args):
     for i in np.arange(0,len(unique_chromosomes)):
         mask = allblockchrom == unique_chromosomes[i]
         blockstart = allblockstart[mask]
-        blockend = allblockstart[mask]
-        blockchrom = allblockchrom[mask]
-        print(mask)
-
-    sys.exit()
-    output_data, block_ranges = chromBcalc(args, blockstart, blockend, blockchrom)
+        blockend = allblockend[mask]
+        chromosome = unique_chromosomes[i]
+        print(blockstart, blockend, chromosome)
+        output_data, block_ranges = chromBcalc(args, blockstart, blockend, chromosome)
+        print("First chromosomes output done, need to figure out what to do with it now...")
+        sys.exit()
 
     # GET UNLINKED B FOR EACH CHROMOSOME
     # FOR EACH UNIQUE CHROM
