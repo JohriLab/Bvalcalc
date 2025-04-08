@@ -14,16 +14,10 @@ def genomeBcalc(args):
         blockstart = allblockstart[mask]
         blockend = allblockend[mask]
         chromosome = unique_chromosomes[i]
-        print(blockstart, blockend, chromosome)
         output_data, block_ranges = chromBcalc(args, blockstart, blockend, chromosome)
-        print("First chromosomes output done, need to figure out what to do with it now...")
-        sys.exit()
-
-    # GET UNLINKED B FOR EACH CHROMOSOME
-    # FOR EACH UNIQUE CHROM
-    # # DO: 
     
-    # # # NO INPUT COLLECTED!!
+    # # Don't need to capture output, simply save in chromBcalc or not. 
+    # # Then, if you want to plot a region, must use --calc_region chr:start-end (instead of calc_start,calc_end)
     # # Pass up plot data as needed
 
     return output_data, block_ranges

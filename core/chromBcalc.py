@@ -121,5 +121,6 @@ def chromBcalc(args, blockstart, blockend, chromosome):
     else:
         if not args.quiet:
             print("No output CSV requested; skipping save.")
-
-    return output_data, block_ranges
+            
+    return
+    # return output_data, block_ranges
