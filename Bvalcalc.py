@@ -21,8 +21,8 @@ def main():
         args = parseGenomeArgs(remaining_args)
         os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Handle Params file
         from core.genomeBcalc import genomeBcalc
-        output_data, block_ranges = genomeBcalc(args)
-        print("Heer", output_data)
+        genomeBcalc(args)
+        # print("Heer", output_data)
         sys.exit()
         if getattr(args, 'plot_output', True):
             plotB(b_values_input=output_data, caller="genome", output_path=args.plot_output, quiet=args.quiet, gene_ranges=block_ranges, neutral_only=args.neutral_only)

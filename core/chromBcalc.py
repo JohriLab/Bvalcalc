@@ -112,7 +112,7 @@ def chromBcalc(args, blockstart, blockend, chromosome):
     names='Position,Conserved,B',
     formats='i8,U1,f8'
     )
-    block_ranges = np.column_stack((chromosome, blockstart, blockend))
+    block_ranges = np.column_stack((np.repeat(chromosome, blockstart.shape[0]), blockstart, blockend))
 
     if args.out is not None: # Write to CSV
         np.savetxt(args.out, # This might be "b_values.csv" or a custom path
