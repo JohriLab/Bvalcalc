@@ -13,7 +13,8 @@ def main():
     parser = argparse.ArgumentParser(description="Bcalc main function! :p")
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('--genome', action='store_true', help="Compute B values genome-wide for all sites considering all selected elements")
-    group.add_argument('--gene', action='store_true', help="Compute B values for a neutral region next to a single selected element")
+    group.add_argument('--region', action='store_true', help="Compute B values for a specific chromosomal region, considering genome-wide effects")
+    group.add_argument('--gene', action='store_true', help="Compute B values for a neutral region adjacent to a single selected element")
     group.add_argument('--site', action='store_true', help="Compute B values for a single site from a selected element")
     known_args, remaining_args = parser.parse_known_args()
 
@@ -24,6 +25,14 @@ def main():
         genomeBcalc(args)
         # print("Heer", output_data)
         sys.exit()
+
+    elif known_args.region: 
+        args = parseGenomeArgs(remaining_args)
+        os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Handle Params file
+        from core.genomeBcalc import genomeBcalc
+        genomeBcalc(args)
+        # from core.regionBcalc import regionBcalc
+        # regionBcalc(args)
         if getattr(args, 'plot_output', True):
             plotB(b_values_input=output_data, caller="genome", output_path=args.plot_output, quiet=args.quiet, gene_ranges=block_ranges, neutral_only=args.neutral_only)
 
