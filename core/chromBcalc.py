@@ -121,6 +121,11 @@ def chromBcalc(args, blockstart, blockend, chromosome):
     else:
         if not args.quiet:
             print("No output CSV requested; skipping save.")
+
+    if args.plot_output is not None:
+        #Output the data needed for plotting, when calc_start and calc_end are provided 
+        #Plot the chromosome of interest from calc_start to calc_end
+
             
     return
     # return output_data, block_ranges
