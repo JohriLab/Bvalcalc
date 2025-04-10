@@ -34,8 +34,8 @@ def parseGenomeArgs(argv=None):
         
     return args
 
-def parseRegionArgs(argv=None):
-    parser = argparse.ArgumentParser(description="Calculates B for neutral sites flanking a single region under selection.")
+def parseGeneArgs(argv=None):
+    parser = argparse.ArgumentParser(description="Calculates B for neutral sites flanking a single element under selection.")
     parser.add_argument('--pop_params', type=str, required=True, help="Path to Python file with population genetic parameters, e.g., ExampleParams.py")
     parser.add_argument('--gene_size', type=int, default=10000, help="Length of single region (e.g. gene) under selection. [5000]")
     parser.add_argument('--flank_len', type=int, default=40000, help="Length of flanking neutral region for which to calcuate recovery of B. [25000]")
