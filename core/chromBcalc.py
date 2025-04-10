@@ -9,11 +9,16 @@ import numpy as np
 import os
 import sys
 
-def chromBcalc(args, blockstart, blockend, chromosome, caller):    
+def chromBcalc(args, blockstart, blockend, chromosome, calc_start=None, calc_end=None, caller="regionBcalc"):    
     #Shared arguments between genomeBcalc and regionBcalc
-    file_path, chr_end, calc_start, calc_end, chunk_size, precise_chunks, quiet, verbose = args.bedgff_path, args.chr_end, args.calc_start, args.calc_end, args.chunk_size, args.precise_chunks, args.quiet, args.verbose
+    file_path, chunk_size, precise_chunks, quiet, verbose = args.bedgff_path, args.chunk_size, args.precise_chunks, args.quiet, args.verbose
     #Arguments specific to genomeBcalc
+    if caller is "genomeBcalc":
+        chr_end = args.chr_end
     #Arguments specific to regionBcalc
+    elif caller is "regionBcalc":
+        calc_start, calc_end = calc_start, calc_end
+        chr_end = None
 
     print(f"= Calculating relative diversity (B) for all neutral sites across the genome. = = =")
     if not args.quiet: 
@@ -25,19 +30,19 @@ def chromBcalc(args, blockstart, blockend, chromosome, caller):
         print(f"Number of adjacent chunks to calculate B precisely for: {precise_chunks}")
 
     
-    if args.chr_end is None: # Default chr_end to last value in blockend if not given
+    if chr_end is None: # Default chr_end to last value in blockend if not given
         if len(blockend) == 0:
             raise ValueError("chr_end was not provided and gene position ends not computed. Check BED/GFF input, and specify chr_end if needed")
         chr_end = blockend[-1]
         if calc_end is None and not args.quiet:
             print(f"No --chr_end provided. Using last position in BED/GFF: {chr_end}")
-    if args.calc_start is None:
+    if calc_start is None:
         calc_start = 1
-    if args.calc_end is None:
+    if calc_end is None:
         calc_end = chr_end
 
     if not quiet: print(f"====== S T A R T I N G ===== C A L C ===============")
-    if args.calc_start is None and args.calc_end is None:
+    if calc_start is None and calc_end is None:
         if not quiet: print(f"Calculating B for entire chromosome, to only calculate for a subregion, use --calc_start and --calc_end")
 
     chr_start = 1 # Currently hardcoded, can change if needed
@@ -129,6 +134,7 @@ def chromBcalc(args, blockstart, blockend, chromosome, caller):
         #Output the data needed for plotting, when calc_start and calc_end are provided 
         #Plot the chromosome of interest from calc_start to calc_end
 
-            
-    return
-    # return output_data, block_ranges
+    if caller is "regionBcalc":
+        return output_data, block_ranges
+    else: #caller should be genomeBcalc
+        return

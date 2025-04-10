@@ -7,7 +7,7 @@ def regionBcalc(args):
 
     allblockstart, allblockend, allblockchrom,  = bedgffHandler(args.bedgff_path) # Read BED/GFF, return start and end of conserved elements
 
-    calc_chrom, start, end = parse_region(args.calc_region)
+    calc_chrom, calc_start, calc_end = parse_region(args.calc_region)
 
     # # First, require calc_region
     # # Then, mask for the chromosome the calc_region is in.
@@ -16,11 +16,10 @@ def regionBcalc(args):
     blockstart = allblockstart[mask]
     blockend = allblockend[mask]
     chromosome = calc_chrom
-    output_data, block_ranges = chromBcalc(args, blockstart, blockend, chromosome, caller="regionBcalc")
+    output_data, block_ranges = chromBcalc(args, blockstart, blockend, chromosome, calc_start, calc_end, caller="regionBcalc")
 
     # print("gaten", unique_chromosomes[i])
     sys.exit()
-
 
     # unique_chromosomes = np.unique(allblockchrom) # Move BED/GFF handler here
     # print(unique_chromosomes) ## Now, loop over each chromosome and save B output
