@@ -27,7 +27,6 @@ def parseGenomeArgs(argv=None):
                              "no CSV will be saved.")
     parser.add_argument('--verbose', action='store_true', help="If set, will give per-chunk summaries")
     parser.add_argument('--quiet', action='store_true', help="If set, silence print statements.")
-    
     args = parser.parse_args(argv)
         
     return args
@@ -37,7 +36,7 @@ def parseRegionArgs(argv=None):
     # parser.add_argument('--pop_params', type=int, required=True, help="Path to file providing popgen parameters specific to modelled population (empirical or simulated).")
     parser.add_argument('--pop_params', type=str, required=True, help="Path to Python file with population genetic parameters, e.g., ExampleParams.py")
     parser.add_argument('--bedgff_path', type=str, required=True, help="Path to input BED or GFF3 file.")
-    parser.add_argument('--calc_region', type=int, default=None, help="[CHR:START-END] indicating the name of the chromosome, and start/end positions of region to calculate B e.g. [2R:9260000-11700000]") # See if statment below
+    parser.add_argument('--calc_region', type=str, default=None, help="[CHR:START-END] indicating the name of the chromosome, and start/end positions of region to calculate B e.g. [2R:9260000-11700000]") # See if statment below
     parser.add_argument('--chunk_size', type=int, default=20000, help="Size of chunks calculated simultaneously (bp). [100000]")
     parser.add_argument('--precise_chunks', type=int, default=3, help="Number of adjacent chunks to calculate B precisely.")
     parser.add_argument('--pop_change', action='store_true', help="If set, B will reflect the current B after a step change in population size, rather than ancestral B.")

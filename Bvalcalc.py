@@ -4,7 +4,7 @@ import time
 import numpy as np
 import os
 import argparse
-from core.utils.parseArgs import parseGenomeArgs, parseGeneArgs, parseSiteArgs
+from core.utils.parseArgs import parseGenomeArgs, parseRegionArgs, parseGeneArgs, parseSiteArgs
 from core.plotB import plotB
 
 def main():
@@ -26,17 +26,15 @@ def main():
         print("Exiting in Bcalcalc.py", output_data)
         sys.exit()
 
-    elif known_args.region: 
-        args = parseGenomeArgs(remaining_args)
+    elif known_args.region: # Run region Bcalc
+        args = parseRegionArgs(remaining_args)
         os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Handle Params file
-        from core.genomeBcalc import genomeBcalc
-        genomeBcalc(args)
-        # from core.regionBcalc import regionBcalc
-        # regionBcalc(args)
+        from core.regionBcalc import regionBcalc
+        output_data, block_ranges = regionBcalc(args)
         if getattr(args, 'plot_output', True):
             plotB(b_values_input=output_data, caller="genome", output_path=args.plot_output, quiet=args.quiet, gene_ranges=block_ranges, neutral_only=args.neutral_only)
 
-    elif known_args.gene: # Run region Bcalc
+    elif known_args.gene: # Run gene Bcalc
         args = parseGeneArgs(remaining_args)
         os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Handle Params file
         from core.geneBcalc import geneBcalc
