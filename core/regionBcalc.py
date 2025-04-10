@@ -16,7 +16,7 @@ def regionBcalc(args):
     blockstart = allblockstart[mask]
     blockend = allblockend[mask]
     chromosome = calc_chrom
-    output_data, block_ranges = chromBcalc(args, blockstart, blockend, chromosome)
+    output_data, block_ranges = chromBcalc(args, blockstart, blockend, chromosome, caller="regionBcalc")
 
     # print("gaten", unique_chromosomes[i])
     sys.exit()

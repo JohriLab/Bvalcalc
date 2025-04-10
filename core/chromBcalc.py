@@ -9,10 +9,11 @@ import numpy as np
 import os
 import sys
 
-def chromBcalc(args, blockstart, blockend, chromosome):    
+def chromBcalc(args, blockstart, blockend, chromosome, caller):    
     #Shared arguments between genomeBcalc and regionBcalc
-    
     file_path, chr_end, calc_start, calc_end, chunk_size, precise_chunks, quiet, verbose = args.bedgff_path, args.chr_end, args.calc_start, args.calc_end, args.chunk_size, args.precise_chunks, args.quiet, args.verbose
+    #Arguments specific to genomeBcalc
+    #Arguments specific to regionBcalc
 
     print(f"= Calculating relative diversity (B) for all neutral sites across the genome. = = =")
     if not args.quiet: 
