@@ -116,15 +116,16 @@ def chromBcalc(args, blockstart, blockend, chromosome, calc_start=None, calc_end
         b_values = get_Bcur(b_values)
         if not quiet: print("Demographic change applied to B-calculation")
     output_data = np.core.records.fromarrays(
-    [positions.astype(int), conserved.astype(str), b_values.astype(float)],
-    names='Position,Conserved,B',
-    formats='i8,U1,f8'
+    [np.full_like(positions, chromosome, dtype="<U20"), positions.astype(int), conserved.astype(str), b_values.astype(float)],
+    names='Chromosome,Position,Conserved,B',
+    formats='U20,i8,U1,f8'
     )
     block_ranges = np.column_stack((np.repeat(chromosome, blockstart.shape[0]), blockstart, blockend))
 
     if args.out is not None: # Write to CSV
+        print(f"Writing B output to file...")
         np.savetxt(args.out, # This might be "b_values.csv" or a custom path
-            output_data, delimiter=",", header="Chromosome,Position,Conserved,B", fmt="%d,%s,%.6f", comments="")
+            output_data, delimiter=",", header="Chromosome,Position,Conserved,B", fmt="%s,%d,%s,%.6f", comments="")
         print(f"Saved B values to: {os.path.abspath(args.out)}")
     else:
         if not args.quiet:

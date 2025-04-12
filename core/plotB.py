@@ -29,8 +29,8 @@ def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_
     if caller == "chromosome":
         positions = b_values_input['Position']
         b_vals = b_values_input['B']
-        if 'Chrom' in b_values_input.dtype.names:
-            chrom = b_values_input['Chrom'][0]
+        if 'Chromosome' in b_values_input.dtype.names:
+            chrom = b_values_input['Chromosome'][0]
         else:
             chrom = "unknown"
 
