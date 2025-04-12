@@ -26,7 +26,7 @@ def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_
 
     fig, ax = plt.subplots(figsize=(10, 6))
 
-    if caller == "genome":
+    if caller == "chromosome":
         positions = b_values_input['Position']
         b_vals = b_values_input['B']
         if 'Chrom' in b_values_input.dtype.names:
@@ -72,7 +72,7 @@ def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_
             ax.plot(x, y, color='blue', lw=1.5, alpha=0.8)
             ax.set_xlim(x.min() - 1, x.max())
 
-    elif caller == "region":
+    elif caller == "gene":
         x = b_values_input[:, 0]
         y = b_values_input[:, 1]
 
@@ -81,10 +81,10 @@ def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_
 
     ax.set_ylabel('Expected diversity relative to neutral evolution (B)', fontsize=13)
 
-    if caller == "genome":
+    if caller == "chromosome":
         ax.set_title(f'B for chromosome {chrom} ({positions.min()}–{positions.max()} bp)', fontsize=15, fontweight='bold')  # 🔧 updated
         ax.set_xlabel('Chromosomal position (bp)', fontsize=13)
-    elif caller == "region":
+    elif caller == "gene":
         ax.set_xlabel('Distance from single selected element of size', fontsize=13)
         ax.set_title('B recovery from single element', fontsize=15, fontweight='bold')
 
@@ -99,7 +99,7 @@ def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_
         lc = LineCollection(segments, colors='black', linewidths=30)
         ax.add_collection(lc)
 
-        if caller == "genome" and not neutral_only:
+        if caller == "chromosome" and not neutral_only:
             gene_mask = np.zeros_like(x, dtype=bool)
             for _, start, end in gene_ranges:
                 start = int(start)

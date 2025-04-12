@@ -19,7 +19,7 @@ def regionBcalc(args):
     output_data, block_ranges = chromBcalc(args, blockstart, blockend, chromosome, calc_start, calc_end, caller="regionBcalc")
 
     # print("gaten", unique_chromosomes[i])
-    sys.exit()
+    # sys.exit()
 
     # unique_chromosomes = np.unique(allblockchrom) # Move BED/GFF handler here
     # print(unique_chromosomes) ## Now, loop over each chromosome and save B output
