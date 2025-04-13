@@ -5,7 +5,7 @@ def parseGenomeArgs(argv=None):
     # parser.add_argument('--pop_params', type=int, required=True, help="Path to file providing popgen parameters specific to modelled population (empirical or simulated).")
     parser.add_argument('--pop_params', type=str, required=True, help="Path to Python file with population genetic parameters, e.g., ExampleParams.py")
     parser.add_argument('--bedgff_path', type=str, required=True, help="Path to input BED or GFF3 file.")
-    parser.add_argument('--chr_sizes', type=int, default=None, help="Chromosome sizes file. Defaults to end of last gene in each chromosome if not provided.")
+    parser.add_argument('--chr_sizes', type=str, default=None, help="Chromosome sizes file. Defaults to end of last gene in each chromosome if not provided.")
     parser.add_argument('--chunk_size', type=int, default=20000, help="Size of chunks calculated simultaneously (bp). [100000]")
     parser.add_argument('--precise_chunks', type=int, default=3, help="Number of adjacent chunks to calculate B precisely.")
     parser.add_argument('--pop_change', action='store_true', help="If set, B will reflect the current B after a step change in population size, rather than ancestral B.")

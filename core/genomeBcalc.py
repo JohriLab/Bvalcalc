@@ -10,8 +10,6 @@ def genomeBcalc(args):
 
     unique_chromosomes = np.unique(allblockchrom) # Move BED/GFF handler here
     chr_sizes = load_chr_sizes(args.chr_sizes)  # <-- Path to the sizes CSV file
-    print(chr_sizes)
-    sys.exit()
 
     print(unique_chromosomes) ## Now, loop over each chromosome and save B output
     for i in np.arange(0,len(unique_chromosomes)):
@@ -19,6 +17,7 @@ def genomeBcalc(args):
         blockstart = allblockstart[mask]
         blockend = allblockend[mask]
         chromosome = unique_chromosomes[i]
+        chr_size = chr_sizes.get(chromosome)
         chromBcalc(args, blockstart, blockend, chromosome, chr_size, caller="genomeBcalc")
     
     # # Don't need to capture output, simply save in chromBcalc or not. 

@@ -13,10 +13,9 @@ def chromBcalc(args, blockstart, blockend, chromosome, calc_start=None, calc_end
     #Shared arguments between genomeBcalc and regionBcalc
     file_path, chunk_size, precise_chunks, quiet, verbose = args.bedgff_path, args.chunk_size, args.precise_chunks, args.quiet, args.verbose
     #Arguments specific to genomeBcalc
-    if caller == "genomeBcalc":
-        chr_size = chr
+    # if caller == "genomeBcalc":
     #Arguments specific to regionBcalc
-    elif caller == "regionBcalc":
+    if caller == "regionBcalc":
         calc_start, calc_end = calc_start, calc_end
         chr_size = None
 
@@ -47,6 +46,7 @@ def chromBcalc(args, blockstart, blockend, chromosome, calc_start=None, calc_end
 
     chr_start = 1 # Currently hardcoded, can change if needed
     num_chunks = (chr_size - chr_start + chunk_size - 1) // chunk_size
+    
     calc_chunk_start = (calc_start - chr_start) // chunk_size
     calc_chunk_end = (calc_end - chr_start) // chunk_size
     calc_chunks = np.arange(calc_chunk_start,calc_chunk_end + 1) # Relevant chunks to calculate B for based on calc_start and calc_end

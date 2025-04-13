@@ -23,8 +23,8 @@ def main():
         os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Handle Params file
         from core.genomeBcalc import genomeBcalc
         genomeBcalc(args)
-        print("Exiting in Bcalcalc.py", output_data)
-        sys.exit()
+        # print("Exiting in Bcalcalc.py", output_data)
+        # sys.exit()
 
     elif known_args.region: # Run region Bcalc
         args = parseRegionArgs(remaining_args)
