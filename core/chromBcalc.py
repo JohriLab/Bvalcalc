@@ -12,8 +12,6 @@ import sys
 def chromBcalc(args, blockstart, blockend, chromosome, calc_start=None, calc_end=None, chr_size=None, caller="regionBcalc"):    
     #Shared arguments between genomeBcalc and regionBcalc
     file_path, chunk_size, precise_chunks, quiet, verbose = args.bedgff_path, args.chunk_size, args.precise_chunks, args.quiet, args.verbose
-    #Arguments specific to genomeBcalc
-    # if caller == "genomeBcalc":
     #Arguments specific to regionBcalc
     if caller == "regionBcalc":
         calc_start, calc_end = calc_start, calc_end
@@ -28,7 +26,8 @@ def chromBcalc(args, blockstart, blockend, chromosome, calc_start=None, calc_end
         print(f"Size of chunks to calculate B in per iteration: {chunk_size}bp")
         print(f"Number of adjacent chunks to calculate B precisely for: {precise_chunks}")
 
-    
+    if chr_size is not None and chr_size < blockend[-1]:
+        raise ValueError(f"chr_size provided is less than gene position for chromosome {chromosome}")
     if chr_size is None: # Default chr_size to last value in blockend if not given
         if len(blockend) == 0:
             raise ValueError("chr_size was not provided and gene position ends not computed. Check BED/GFF input, and specify chr_size if needed")

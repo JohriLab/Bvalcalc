@@ -2,16 +2,28 @@ import csv
 
 def load_chr_sizes(file_path):
     chr_size_dict = {}
+    valid_rows = 0
+
     with open(file_path, newline='') as csvfile:
         reader = csv.reader(csvfile)
-        header = next(reader)  # skip header row
+        header = next(reader, None)  # skip header if present
+
         for row in reader:
             if len(row) < 2:
-                continue  # skip incomplete lines
+                continue
+
             chr_name = row[0].strip()
+            size_str = row[1].strip()
+
             try:
-                chr_size = int(row[1])
-                chr_size_dict[chr_name] = chr_size
+                chr_size = int(size_str)
             except ValueError:
-                print(f"Skipping invalid size for {chr_name}: {row[1]}")
+                continue
+
+            chr_size_dict[chr_name] = chr_size
+            valid_rows += 1
+
+    if valid_rows == 0:
+        raise ValueError(f"No valid chromosome size entries found in '{file_path}'. Expecting format: string,int per line.")
+
     return chr_size_dict
