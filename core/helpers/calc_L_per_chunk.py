@@ -5,16 +5,16 @@ def calculate_L_per_chunk(
     blockstart,
     blockend,
     chr_start,
-    chr_end
+    chr_size
 ):
     """
     Loop-based calculation of how much each set of blocks (flank blocks + main blocks)
-    overlaps with each chunk in [chr_start, chr_end).
+    overlaps with each chunk in [chr_start, chr_size).
 
     """
 
     # Number of chunks, ensuring we cover the entire [calc_start, calc_end)
-    num_chunks = (chr_end - chr_start + chunk_size - 1) // chunk_size  # ceiling division
+    num_chunks = (chr_size - chr_start + chunk_size - 1) // chunk_size  # ceiling division
     
     # Precompute the start and end of each chunk
     chunk_indices = np.arange(num_chunks)
@@ -32,12 +32,12 @@ def calculate_L_per_chunk(
             # Ignore blocks with no positive length or completely out of range
             if e <= s:
                 continue
-            if e <= chr_start or s >= chr_end:
+            if e <= chr_start or s >= chr_size:
                 continue
 
             # Clamp block coordinates to [calc_start, calc_end)
             s_clamped = max(s, chr_start)
-            e_clamped = min(e, chr_end)
+            e_clamped = min(e, chr_size)
 
             if e_clamped <= s_clamped:
                 continue  # No valid overlap

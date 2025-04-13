@@ -2,11 +2,11 @@ from core.calculateB import calculateB_linear, calculateB_recmap
 from core.helpers.calc_R_len_dist import calc_R_lendist_for_chunks
 import numpy as np
 
-def calc_B_from_chunks(chunk_idx, chunk_size, chr_start, chr_end, num_chunks, 
+def calc_B_from_chunks(chunk_idx, chunk_size, chr_start, chr_size, num_chunks, 
                     precise_chunks, lperchunk, rec_rate_per_chunk, gc_rate_per_chunk):
 
     chunk_starts = chr_start + np.arange(num_chunks) * chunk_size
-    chunk_ends = np.minimum(chunk_starts + chunk_size - 1, chr_end)
+    chunk_ends = np.minimum(chunk_starts + chunk_size - 1, chr_size)
     chunk_mids = (chunk_ends + chunk_starts) / 2
 
     chunk_pseudoblockstart = chunk_mids - 0.5 * lperchunk # Pseudoblocks are the combined selected regions in each chunk, which are combined into a single central "pseudoblock" aka single selected region

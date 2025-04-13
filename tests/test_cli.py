@@ -80,7 +80,7 @@ def test_cli_region_gcparams(tmp_path):
     assert "= B value calculated" in out
 
 def test_cli_genome_basic(tmp_path):
-    #python Bvalcalc.py --genome --pop_params tests/testparams/nogcBasicParams.py --bedgff_path exampleData/200kb_slimtest.csv --chr_start 1 --chr_end 200000 --out /path/to/output/dgas.bvals
+    #python Bvalcalc.py --genome --pop_params tests/testparams/nogcBasicParams.py --bedgff_path exampleData/200kb_slimtest.csv --chr_start 1 --chr_size 200000 --out /path/to/output/dgas.bvals
     script = Path(__file__).resolve().parents[1] / "Bvalcalc.py"
     params = Path(__file__).resolve().parents[1] / "tests" / "testparams" / "nogcBasicParams.py"
     bed_path = Path(__file__).resolve().parents[1] / "exampleData" / "200kb_slimtest.csv"
@@ -91,7 +91,7 @@ def test_cli_genome_basic(tmp_path):
             "--genome",
             "--pop_params", str(params),
             "--bedgff_path", str(bed_path),
-            "--chr_end", "200000",
+            "--chr_size", "200000",
             "--out", str(output_path)],
         capture_output=True,
         text=True
@@ -114,7 +114,7 @@ def test_cli_genome_gcparams(tmp_path):
          "--genome",
          "--pop_params", str(params),
          "--bedgff_path", str(bed_path),
-         "--chr_end", "200000",
+         "--chr_size", "200000",
          "--plot_output",
          "--out", str(output_path)],
         capture_output=True,
@@ -140,7 +140,7 @@ def test_cli_genome_with_recmap_plot(tmp_path):
          "--genome",
          "--pop_params", str(params),
          "--bedgff_path", str(bed_path),
-         "--chr_end", "200000",
+         "--chr_size", "200000",
          "--plot_output",
          "--rec_map", str(map_path),
          "--out", str(output_path)],
@@ -158,13 +158,13 @@ def test_cli_genome_with_recmap_plot(tmp_path):
     assert output_path.stat().st_size > 0, "Output file is empty"
 
 def test_cli_mean_b_value():
-    #./Bvalcalc.py --genome --pop_params tests/testparams/nogcBasicParams.py --bedgff_path exampleData/200kb_slimtest.csv --chr_start 1 --chr_end 200000 --plot_output --calc_start 1514 --calc_end 62456
+    #./Bvalcalc.py --genome --pop_params tests/testparams/nogcBasicParams.py --bedgff_path exampleData/200kb_slimtest.csv --chr_start 1 --chr_size 200000 --plot_output --calc_start 1514 --calc_end 62456
     result = subprocess.run([
         sys.executable, "Bvalcalc.py",
         "--genome",
         "--pop_params", "tests/testparams/nogcBasicParams.py",
         "--bedgff_path", "exampleData/200kb_slimtest.csv",
-        "--chr_end", "200000",
+        "--chr_size", "200000",
         "--plot_output",
         "--calc_start", "1514",
         "--calc_end", "62456"

@@ -6,7 +6,7 @@ from core.helpers.calc_B_in_genes import calc_B_in_genes
 import numpy as np
 import sys
 
-def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start, chr_end,
+def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start, chr_size,
                          calc_start, calc_end, num_chunks, precise_chunks,lperchunk, 
                          b_values, rec_rate_per_chunk=None, gc_rate_per_chunk=None, quiet=False, verbose=False):
     
@@ -17,7 +17,7 @@ def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start,
     
     # Identify blocks in the "precise region"
     precise_region_start = np.maximum(chr_start, chr_start + (chunk_idx - precise_chunks) * chunk_size)
-    precise_region_end   = np.minimum(chr_end, chr_start + (chunk_idx + 1 + precise_chunks) * chunk_size - 1)
+    precise_region_end   = np.minimum(chr_size, chr_start + (chunk_idx + 1 + precise_chunks) * chunk_size - 1)
     precise_blockregion_mask = (
         (precise_region_end   > blockstart) &
         (precise_region_start < blockend))
@@ -73,7 +73,7 @@ def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start,
         flat_gc_lengths   = flat_gc_lengths[nonzero_gc_mask]
 
     B_from_distant_chunks = calc_B_from_chunks( # Compute B from distant chunks in non-precise region
-        chunk_idx, chunk_size, chr_start, chr_end, num_chunks, 
+        chunk_idx, chunk_size, chr_start, chr_size, num_chunks, 
         precise_chunks, lperchunk, rec_rate_per_chunk, gc_rate_per_chunk)
     
     # Calculate B for genes within chunk. within_gene_B is to include B for genic sites from BGS caused by the gene they're in
