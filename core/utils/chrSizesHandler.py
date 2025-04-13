@@ -1,12 +1,17 @@
 import csv
 
-# Step 1: Read the chromosome sizes file into a dictionary
 def load_chr_sizes(file_path):
     chr_size_dict = {}
     with open(file_path, newline='') as csvfile:
-        reader = csv.DictReader(csvfile)
+        reader = csv.reader(csvfile)
+        header = next(reader)  # skip header row
         for row in reader:
-            chr_name = row["chr"]
-            chr_size = int(row["sizes"])
-            chr_size_dict[chr_name] = chr_size
+            if len(row) < 2:
+                continue  # skip incomplete lines
+            chr_name = row[0].strip()
+            try:
+                chr_size = int(row[1])
+                chr_size_dict[chr_name] = chr_size
+            except ValueError:
+                print(f"Skipping invalid size for {chr_name}: {row[1]}")
     return chr_size_dict
