@@ -18,7 +18,7 @@ def genomeBcalc(args):
         blockend = allblockend[mask]
         chromosome = unique_chromosomes[i]
         chr_size = chr_sizes.get(chromosome)
-        chromBcalc(args, blockstart, blockend, chromosome, chr_size, caller="genomeBcalc")
+        chromBcalc(args, blockstart, blockend, chromosome, calc_start=None, calc_end=None, chr_size=chr_size, caller="genomeBcalc")
     
     # # Don't need to capture output, simply save in chromBcalc or not. 
     # # Then, if you want to plot a region, must use --calc_region chr:start-end (instead of calc_start,calc_end)

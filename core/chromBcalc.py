@@ -46,7 +46,7 @@ def chromBcalc(args, blockstart, blockend, chromosome, calc_start=None, calc_end
 
     chr_start = 1 # Currently hardcoded, can change if needed
     num_chunks = (chr_size - chr_start + chunk_size - 1) // chunk_size
-    
+
     calc_chunk_start = (calc_start - chr_start) // chunk_size
     calc_chunk_end = (calc_end - chr_start) // chunk_size
     calc_chunks = np.arange(calc_chunk_start,calc_chunk_end + 1) # Relevant chunks to calculate B for based on calc_start and calc_end
@@ -68,6 +68,12 @@ def chromBcalc(args, blockstart, blockend, chromosome, calc_start=None, calc_end
 
     if verbose: print(f"====== R E S U L T S == P E R == C H U N K =========")
     elif not quiet: print(f"To print per-chunk summaries, add --verbose.")
+
+    # print("Blop", 
+    #                         chunk_size, blockstart, blockend, chr_start, chr_size, calc_start,
+    #                         calc_end, num_chunks, precise_chunks, lperchunk, b_values,
+    #                         rec_rate_per_chunk, gc_rate_per_chunk, quiet, verbose)
+    # sys.exit()
 
     with ThreadPoolExecutor() as executor:
         futures = {
