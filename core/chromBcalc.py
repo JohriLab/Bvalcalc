@@ -29,7 +29,7 @@ def chromBcalc(args, blockstart, blockend, chromosome, calc_start=None, calc_end
     if chr_size is not None and chr_size < blockend[-1]:
         raise ValueError(f"chr_size provided is less than gene position for chromosome {chromosome}")
     if chr_size is None: # Default chr_size to last value in blockend if not given
-        if len(blockend) == 0:
+        if len(blockend) == 0 and caller is not "regionBcalc":
             raise ValueError("chr_size was not provided and gene position ends not computed. Check BED/GFF input, and specify chr_size if needed")
         chr_size = blockend[-1]
         if calc_end is None and not args.quiet:
@@ -106,7 +106,8 @@ def chromBcalc(args, blockstart, blockend, chromosome, calc_start=None, calc_end
                 calc_selected_length += (overlap_end - overlap_start + 1)
         print(f"Cumulative length of calculated region under selection: {calc_selected_length}bp "f"({round((calc_selected_length / (calc_end - calc_start + 1)) * 100, 2)}%)")
         print(f"Cumulative length of chromosome under selection: {int(sum(lperchunk))}bp ({round((sum(lperchunk)/(chr_size - chr_start + 1))*100,2)}%)")
-        print(f"Mean B of neutral sites across genome: {b_values[~np.isnan(b_values)].mean()}")
+        if caller is "genomeBcalc": print(f"Mean B of neutral sites across chromosome {chromosome}: {b_values[~np.isnan(b_values)].mean()}")
+        elif caller is "regionBcalc": print(f"Mean B of neutral sites across specified region: {b_values[~np.isnan(b_values)].mean()}")
         if args.rec_map: # Process recombination map if provided
             print(f"Calculated using recombination (crossover) map, with rates averaged within {chunk_size}bp chunks")
         if args.gc_map: # Process recombination map if provided

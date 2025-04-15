@@ -100,7 +100,7 @@ def test_cli_genome_basic(tmp_path):
 
     assert result.returncode == 0, f"CLI failed:\n{result.stderr}"
     out = result.stdout + result.stderr
-    assert "Mean B of neutral sites across genome: 0.753693843332109" in out
+    assert "Mean B of neutral sites across chromosome chr_2R: 0.753693843332109" in out
     assert output_path.exists(), "Expected output file not created"
     assert output_path.stat().st_size > 0, "Output file is empty"
 
@@ -125,7 +125,7 @@ def test_cli_genome_gcparams(tmp_path):
     assert result.returncode == 0, f"CLI failed:\n{result.stderr}"
     out = result.stdout + result.stderr
     assert "====== R E S U L T S ====== S U M M A R Y ==========" in out
-    assert "Mean B of neutral sites across genome: 0.836347850423207" in out
+    assert "Mean B of neutral sites across chromosome chr_2R: 0.836347850423207" in out
     assert output_path.exists(), "Expected output file not created"
     assert output_path.stat().st_size > 0, "Output file is empty"
 
@@ -152,7 +152,7 @@ def test_cli_genome_with_recmap_plot(tmp_path):
     assert result.returncode == 0, f"CLI failed:\n{result.stderr}"
     out = result.stdout + result.stderr
     assert "Cumulative length of chromosome under selection: 99990bp (50.0%)" in out
-    assert "Mean B of neutral sites across genome: 0.7015847245703709" in out
+    assert "Mean B of neutral sites across chromosome chr_2R: 0.7015847245703709" in out
     assert f"Saved B values to: {output_path.as_posix()}" in out
     assert output_path.exists(), "Expected output file not created"
     assert output_path.stat().st_size > 0, "Output file is empty"
@@ -165,14 +165,13 @@ def test_cli_mean_b_value():
         "--region",
         "--pop_params", "tests/testparams/nogcBasicParams.py",
         "--bedgff_path", "exampleData/200kb_slimtest.csv",
-        # "--chr_sizes", "exampleData/test_sizes.txt",
         "--plot_output",
-        "--calc_region", "2R:1514-62456",
+        "--calc_region", "chr_2R:1514-62456",
     ], capture_output=True, text=True)
 
     assert result.returncode == 0, f"Process failed: {result.stderr}"
 
-    match = re.search(r"Mean B of neutral sites across region:\s+([0-9.]+)", result.stdout)
+    match = re.search(r"Mean B of neutral sites across specified region:\s+([0-9.]+)", result.stdout)
     assert match, "Could not find mean B output in CLI output"
 
     mean_b = float(match.group(1))
