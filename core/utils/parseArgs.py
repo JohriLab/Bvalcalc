@@ -17,9 +17,6 @@ def parseGenomeArgs(argv=None):
                         help="Optional gene conversion (non-crossover) map input. Usage: --gc_map your.map, "
                              "Format should be a two column csv with the header: 'start,rate'. "
                              "Note that gene conversion rates will be averaged within each chunk.")    
-    parser.add_argument('--plot_output', nargs='?', const='Bplot.png', default=None, 
-                        help="Generate a basic plot using `Bvalcalc.py --genome` output"
-                            "Provide path to plot output.")
     parser.add_argument('--neutral_only', action='store_true', help="If set, plot_output will only show neutral sites.")
     parser.add_argument('--out', nargs='?', default=None,
                         help="Required path to output CSV file. If --out is specified but no file name is given, "
