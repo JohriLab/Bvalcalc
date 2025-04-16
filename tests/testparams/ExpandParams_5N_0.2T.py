@@ -1,4 +1,4 @@
-## ./Bvalcalc.py --gene --pop_params tests/testparams/ContractParams_5N_0.2T.py --plot_output --out ../sim_testing/calculatedBfiles/40kb_contract_5N_0.2T.bvals --pop_change
+# ./Bvalcalc.py --gene --pop_params tests/testparams/ExpandParams_5N_0.2T.py --plot_output --out ../sim_testing/calculatedBfiles/40kb_expand_5N_0.2T.bvals --pop_change 
 
 ## Core parameters
 x = 100 # Scaling factor (N,u,r), keep as 1 unless calculating for rescaled simulations
@@ -9,7 +9,7 @@ g = 0*1e-8*x # Gene conversion initiation rate per bp, per generation
 k = 440 # Gene conversion tract length (bp)
 
 ## Demography parameters
-Ncur = Nanc/5 # Current population size (!Requires --pop_change)
+Ncur = Nanc*5 # Current population size (!Requires --pop_change)
 time_of_change = 0.2*Nanc # Time in 2Ncur generations ago that effective population size went from Nanc to Ncur (!Requires --pop_change)
 
 # Distribution of fitness effects (DFE) parameters (Must equal 1)
