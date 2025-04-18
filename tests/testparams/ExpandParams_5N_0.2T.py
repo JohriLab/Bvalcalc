@@ -10,7 +10,7 @@ k = 440 # Gene conversion tract length (bp)
 
 ## Demography parameters
 Ncur = Nanc*5 # Current population size (!Requires --pop_change)
-time_of_change = 0.2*Nanc # Time in 2Ncur generations ago that effective population size went from Nanc to Ncur (!Requires --pop_change)
+time_of_change = 100 # Time in 2Ncur generations ago that effective population size went from Nanc to Ncur (!Requires --pop_change)
 
 # Distribution of fitness effects (DFE) parameters (Must equal 1)
 f0 = 0.1 #(*Proportion of effectively neutral mutations with 0 <= |2Nes| < 1 *) 0.25

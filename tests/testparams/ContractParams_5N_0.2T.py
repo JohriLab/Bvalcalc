@@ -19,7 +19,7 @@ f2 = 0.3 #(*Proportion of moderately deleterious mutations with 10 <= |2Nes| < 1
 f3 = 0.4 #(*Proportion of strongly deleterious mutations with |2Nes| >= 100 *) 0.2933 0.22
 
 ## Advanced DFE parameters
-gamma_cutoff = 5 # 2Ns threshold for effectively neutral alleles, mutations below this threshold will be ignored in B calculation. Keep as 5 unless theory suggests otherwise.
+gamma_cutoff = 5 # 2Ns threshold for effectively neutral alleles, mutations below this threshold will be ignored in B calculation. !!Keep as 5 unless theory suggests otherwise!!
 h=0.5 # Dominance coefficient of selected alleles
 t0 = 0.0
 t1 = h*(1/(2*Nanc))
