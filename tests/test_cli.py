@@ -178,10 +178,10 @@ def test_cli_mean_b_value():
     expected = 0.7609515711751818
     assert abs(mean_b - expected) < 1e-10, f"Expected {expected}, got {mean_b}"
 
-def test_cli_gene_contract_flanking():
-    # ./Bvalcalc.py --gene --pop_params tests/testparams/ContractParams_5N_0.2T.py --plot_output --pop_change
+def test_cli_gene_contract():
+    # ./Bvalcalc.py --gene --pop_params tests/testparams/ContractParams_5N_1T.py --plot_output --pop_change
     script = Path(__file__).resolve().parents[1] / "Bvalcalc.py"
-    params = Path(__file__).resolve().parents[1] / "tests" / "testparams" / "ContractParams_5N_0.2T.py"
+    params = Path(__file__).resolve().parents[1] / "tests" / "testparams" / "ContractParams_5N_1T.py"
 
     result = subprocess.run(
         [
@@ -201,3 +201,25 @@ def test_cli_gene_contract_flanking():
     # check that the mean-B for the flanking region is printed
     assert "Mean B for flanking region: 0.9761402805820517" in out
 
+def test_cli_gene_expand():
+    # ./Bvalcalc.py --gene --pop_params tests/testparams/ContractParams_5N_1T.py --plot_output --pop_change
+    script = Path(__file__).resolve().parents[1] / "Bvalcalc.py"
+    params = Path(__file__).resolve().parents[1] / "tests" / "testparams" / "ContractParams_5N_1T.py"
+
+    result = subprocess.run(
+        [
+            sys.executable, str(script),
+            "--gene",
+            "--pop_params", str(params),
+            "--plot_output",
+            "--pop_change"
+        ],
+        capture_output=True,
+        text=True
+    )
+
+    assert result.returncode == 0, f"CLI failed:\n{result.stderr}"
+    out = result.stdout + result.stderr
+
+    # check that the mean-B for the flanking region is printed
+    assert "Mean B for flanking region: 0.9761402805820517" in out
