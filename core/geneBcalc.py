@@ -18,15 +18,17 @@ def geneBcalc(args):
 
     if not quiet:
         print(f"====== R E S U L T S ! =============================")
+
+    if args.pop_change:
+        if not quiet: print("B prior to demographic change", b_values)
+        b_values = get_Bcur(b_values)
+        if not quiet: print("B post B-calculation", b_values)
+    output_data = np.column_stack((np.arange(1, flank_len, 1, dtype = int), b_values))
+
+    if not quiet:
         print(f"B for adjacent site: {b_values[0]}")
         print(f"Mean B for flanking region: {b_values.mean()}")
         print(f"B at start and end of the neutral region: {b_values}")
-
-    if args.pop_change:
-        if not quiet: print("Demographic change prior to B-calculation", b_values)
-        b_values = get_Bcur(b_values)
-        if not quiet: print("Demographic change applied to B-calculation", b_values)
-    output_data = np.column_stack((np.arange(1, flank_len, 1, dtype = int), b_values))
 
     if args.out is not None: # Write to CSV
         np.savetxt(args.out, # This might be "b_values.csv" or a custom path

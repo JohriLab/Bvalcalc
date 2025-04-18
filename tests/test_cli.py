@@ -188,7 +188,6 @@ def test_cli_gene_contract():
             sys.executable, str(script),
             "--gene",
             "--pop_params", str(params),
-            "--plot_output",
             "--pop_change"
         ],
         capture_output=True,
@@ -199,19 +198,18 @@ def test_cli_gene_contract():
     out = result.stdout + result.stderr
 
     # check that the mean-B for the flanking region is printed
-    assert "Mean B for flanking region: 0.9761402805820517" in out
+    assert "Mean B for flanking region: 0.9623874578845304" in out
 
 def test_cli_gene_expand():
-    # ./Bvalcalc.py --gene --pop_params tests/testparams/ContractParams_5N_1T.py --plot_output --pop_change
+    # ./Bvalcalc.py --gene --pop_params tests/testparams/ExpandParams_5N_1T.py --pop_change
     script = Path(__file__).resolve().parents[1] / "Bvalcalc.py"
-    params = Path(__file__).resolve().parents[1] / "tests" / "testparams" / "ContractParams_5N_1T.py"
+    params = Path(__file__).resolve().parents[1] / "tests" / "testparams" / "ExpandParams_5N_1T.py"
 
     result = subprocess.run(
         [
             sys.executable, str(script),
             "--gene",
             "--pop_params", str(params),
-            "--plot_output",
             "--pop_change"
         ],
         capture_output=True,
@@ -222,4 +220,6 @@ def test_cli_gene_expand():
     out = result.stdout + result.stderr
 
     # check that the mean-B for the flanking region is printed
-    assert "Mean B for flanking region: 0.9761402805820517" in out
+    assert "Mean B for flanking region: 0.9823767432235562" in out
+    assert "B prior to demographic change [0.80492426 0.80514361 0.80536207 ... 0.9921807  0.99218084 0.99218099]" in out
+    assert "B post B-calculation [0.8554483  0.8556117  0.85577442 ... 0.99422971 0.99422981 0.99422992]" in out

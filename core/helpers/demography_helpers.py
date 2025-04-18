@@ -14,5 +14,4 @@ def get_Bcur(Banc):
     R = Nanc / Ncur
     Bcur = (Banc * (1 + (R - 1) * np.exp(-(time_of_change/(2*Ncur)) / Banc))) / \
            (1 + (R - 1) * np.exp(-(time_of_change/(2*Ncur)))) # Denominator
-    print(Nanc, Ncur, time_of_change, Banc, -(time_of_change/(2*Ncur)), "godot")
     return Bcur
