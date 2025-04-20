@@ -46,6 +46,10 @@ def main():
         args = parseSiteArgs(remaining_args)
         os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Handle Params file
         from core.siteBcalc import siteBcalc
+        ## DFE TESTING
+        from core.utils.gammaToDiscretized import gammaDFE_to_discretized
+        gammaDFE_to_discretized(1, 3)
+        ##
         siteBcalc(args)
 
     print(f"= B value calculated in {time.time() - start_time:.2f} seconds. = = =")
