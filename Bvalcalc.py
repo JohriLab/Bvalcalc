@@ -48,7 +48,9 @@ def main():
         from core.siteBcalc import siteBcalc
         ## DFE TESTING
         from core.utils.gammaToDiscretized import gammaDFE_to_discretized
-        gammaDFE_to_discretized(1, 3)
+        print("pre")
+        print(gammaDFE_to_discretized(8, 3))
+        print("post")
         ##
         siteBcalc(args)
 

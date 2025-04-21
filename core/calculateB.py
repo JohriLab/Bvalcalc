@@ -105,7 +105,7 @@ def get_a_b_with_GC(C, y, l):
         with np.errstate(divide='ignore', invalid='ignore'):
             proportion_nogc_a = np.where(k < y + l, # When GC includes neutral site, this is proportion of the gene it includes
                                         np.maximum((0.5*(k-y)/l), 0),
-                                        ((2 * k - (y + l)))/(2 * k)
+                                        1-(y + l)/(2 * k)
                                         )
 
             proportion_nogc_b = np.where(k < y + l, # When GC includes gene site, this is probability the tract includes neutral site of interest 

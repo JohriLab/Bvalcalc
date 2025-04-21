@@ -21,10 +21,13 @@ f0 = 0.25 #(*Proportion of effectively neutral mutations with 0 <= |2Nes| < 1 *)
 f1 = 0.49 #(*Proportion of weakly deleterious mutations with 1 <= |2Nes| < 10 *) 0.6533 0.49
 f2 = 0.04 #(*Proportion of moderately deleterious mutations with 10 <= |2Nes| < 100 *) 0.0533 0.04
 f3 = 0.22 #(*Proportion of strongly deleterious mutations with |2Nes| >= 100 *) 0.2933 0.22
+# Alternatively, can comment out f0-f3 and provide a gamma distribution which will be discretized into f0-f3 proportions by gammaToDiscretized.py:
+# gamDFE_mean =  # DFE gamma distribution mean 2Ns (Must comment out f0-f3)
+# gamDFE_shape = # DFE gamma distribution shape parameter (Must comment out f0-f3)
 
-## Advanced DFE parameters
-gamma_cutoff = 5 # 2Ns threshold for effectively neutral alleles, mutations below this threshold will be ignored in B calculation. Keep as 5 unless theory suggests otherwise.
+## Advanced DFE parameters, don't change for most analyses
 h=0.5 # Dominance coefficient of selected alleles
+gamma_cutoff = 5 # 2Ns threshold for effectively neutral alleles, mutations below this threshold will be ignored in B calculation. Keep as 5 unless theory suggests otherwise.
 
 t0 = 0.0
 t1 = h*(1/(2*Nanc))
