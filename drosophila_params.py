@@ -16,22 +16,22 @@ k = 440 # Gene conversion tract length (bp)
 Ncur = Nanc*2 # Current population size (!Requires --pop_change)
 time_of_change = 0.1 # Time in 2Ncur generations ago that effective population size went from Nanc to Ncur (!Requires --pop_change)
 
-# Distribution of fitness effects (DFE) parameters (Must equal 1)
+## Distribution of fitness effects (DFE) parameters (Must equal 1)
 f0 = 0.25 #(*Proportion of effectively neutral mutations with 0 <= |2Nes| < 1 *) 0.25
 f1 = 0.49 #(*Proportion of weakly deleterious mutations with 1 <= |2Nes| < 10 *) 0.6533 0.49
 f2 = 0.04 #(*Proportion of moderately deleterious mutations with 10 <= |2Nes| < 100 *) 0.0533 0.04
 f3 = 0.22 #(*Proportion of strongly deleterious mutations with |2Nes| >= 100 *) 0.2933 0.22
-# Alternatively, can comment out f0-f3 and provide a gamma distribution which will be discretized into f0-f3 proportions by gammaToDiscretized.py:
-# gamDFE_mean =  # DFE gamma distribution mean 2Ns (Must comment out f0-f3)
-# gamDFE_shape = # DFE gamma distribution shape parameter (Must comment out f0-f3)
+## Gamma distribution to discretize into f0-f3 proportions when --gamma is active:
+gamDFE_mean = 500 # DFE gamma distribution mean in 2Nes (!Requires --gamma)
+gamDFE_shape = 0.5 # DFE gamma distribution shape parameter (!Requires --gamma)
 
-## Advanced DFE parameters, don't change for most analyses
+## LEAVE DEFAULTS BELOW unless informed by popgen theory
+## Advanced DFE parameters
 h=0.5 # Dominance coefficient of selected alleles
 gamma_cutoff = 5 # 2Ns threshold for effectively neutral alleles, mutations below this threshold will be ignored in B calculation. Keep as 5 unless theory suggests otherwise.
-
-t0 = 0.0
-t1 = h*(1/(2*Nanc))
-t1half = h*(gamma_cutoff/(2*Nanc))
-t2 = h*(10/(2*Nanc))
-t3 = h*(100/(2*Nanc))
-t4 = h*1.0
+t0 = 0.0 # Start of first bin in DFE (t=hs)
+t1 = h*(1/(2*Nanc)) # Start of f1 class (2Ns=1)
+t1half = h*(gamma_cutoff/(2*Nanc)) # 2Ns threshold for effectively neutral alleles
+t2 = h*(10/(2*Nanc)) # End of f1 class, start of f2 class (2Ns=10)
+t3 = h*(100/(2*Nanc)) # End of f2 class, start of f3 class (2Ns=100) 
+t4 = h*1.0 # End of f3 class (s=1)
