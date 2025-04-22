@@ -7,7 +7,6 @@ def siteBcalc(args):
             ## DFE TESTING
     from core.utils.dfeHelper import gammaDFE_to_discretized
     print("pre")
-    if args.gamma_dfe: print(gammaDFE_to_discretized(8, 3))
     print("post")
         ##
 

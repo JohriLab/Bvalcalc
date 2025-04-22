@@ -2,8 +2,9 @@ import sys
 import scipy.stats as st
 import os, importlib.util
 from typing import Tuple
+GAMMA_DFE = None # Default, instead of prop injected
 
-def getDFEparams(gamma_dfe = None) -> Tuple[
+def getDFEparams() -> Tuple[
         float, float, float, float,   # g, k, r, u
         float, float,                 # Nanc, h
         float, float, float, float,   # f0‑f3
@@ -22,8 +23,11 @@ def getDFEparams(gamma_dfe = None) -> Tuple[
         ['g', 'k', 'r', 'u', 'Nanc', 'h', 'f0', 'f1', 'f2', 'f3', 'mean', 'shape']
     )
 
-    if gamma_dfe is not None:
+    if GAMMA_DFE is True:
         f0, f1, f2, f3 = gammaDFE_to_discretized(mean, shape)
+    # else:
+    print(GAMMA_DFE)
+
 
     gamma_cutoff = 5 # 2Ns threshold for effectively neutral alleles, mutations below this threshold will be ignored in B calculation. Keep as 5 unless theory suggests otherwise.
     t0 = 0.0 # Start of neutral class (t=hs=0)
