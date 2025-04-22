@@ -6,6 +6,8 @@ import sys
 def regionBcalc(args):    
 
     allblockstart, allblockend, allblockchrom,  = bedgffHandler(args.bedgff_path) # Read BED/GFF, return start and end of conserved elements
+    import core.utils.dfeHelper as dfeHelper
+    dfeHelper.GAMMA_DFE = args.gamma_dfe # Update DFE if --gamma_dfe
 
     calc_chrom, calc_start, calc_end = parse_region(args.calc_region)
 
@@ -17,22 +19,6 @@ def regionBcalc(args):
     blockend = allblockend[mask]
     chromosome = calc_chrom
     output_data, block_ranges = chromBcalc(args, blockstart, blockend, chromosome, calc_start, calc_end, caller="regionBcalc")
-
-    # print("gaten", unique_chromosomes[i])
-    # sys.exit()
-
-    # unique_chromosomes = np.unique(allblockchrom) # Move BED/GFF handler here
-    # print(unique_chromosomes) ## Now, loop over each chromosome and save B output
-    # for i in np.arange(0,len(unique_chromosomes)):
-    #     mask = allblockchrom == unique_chromosomes[i]
-    #     blockstart = allblockstart[mask]
-    #     blockend = allblockend[mask]
-    #     chromosome = unique_chromosomes[i]
-    #     output_data, block_ranges = chromBcalc(args, blockstart, blockend, chromosome)
-    
-    # # Don't need to capture output, simply save in chromBcalc or not. 
-    # # Then, if you want to plot a region, must use --calc_region chr:start-end (instead of calc_start,calc_end)
-    # # Pass up plot data as needed
 
     return  output_data, block_ranges
 

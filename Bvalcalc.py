@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-import sys
 import time
-import numpy as np
 import os
 import argparse
 from core.utils.parseArgs import parseGenomeArgs, parseRegionArgs, parseGeneArgs, parseSiteArgs
@@ -23,16 +21,12 @@ def main():
     if known_args.genome: # Run genome Bcalc
         args = parseGenomeArgs(remaining_args)
         os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Handle Params file
-        import core.utils.dfeHelper as dfeHelper
-        dfeHelper.GAMMA_DFE = args.gamma_dfe
         from core.genomeBcalc import genomeBcalc
         genomeBcalc(args)
 
     elif known_args.region: # Run region Bcalc
         args = parseRegionArgs(remaining_args)
         os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Handle Params file
-        import core.utils.dfeHelper as dfeHelper
-        dfeHelper.GAMMA_DFE = args.gamma_dfe
         from core.regionBcalc import regionBcalc
         output_data, block_ranges = regionBcalc(args)
         if getattr(args, 'plot_output', True):
@@ -41,8 +35,6 @@ def main():
     elif known_args.gene: # Run gene Bcalc
         args = parseGeneArgs(remaining_args)
         os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Handle Params file
-        import core.utils.dfeHelper as dfeHelper
-        dfeHelper.GAMMA_DFE = args.gamma_dfe
         from core.geneBcalc import geneBcalc
         output_data = geneBcalc(args) # Capture the output from geneBcalc
         if getattr(args, 'plot_output', False): # If the --plot_basic flag was provided, call plotB with geneBcalc's output.
@@ -51,8 +43,6 @@ def main():
     elif known_args.site: # Run single site Bcalc
         args = parseSiteArgs(remaining_args)
         os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Handle Params file
-        import core.utils.dfeHelper as dfeHelper
-        dfeHelper.GAMMA_DFE = args.gamma_dfe
         from core.siteBcalc import siteBcalc
         siteBcalc(args)
 
