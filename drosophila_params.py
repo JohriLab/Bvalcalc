@@ -26,10 +26,3 @@ mean, shape = 500, 0.5 # Gamma distribution of DFE to replace f0-f3 [mean (2Ns),
 ##
 
 ## !DO NOT CHANGE BELOW UNLESS WELL INFORMED BY POPGEN THEORY!
-gamma_cutoff = 5 # 2Ns threshold for effectively neutral alleles, mutations below this threshold will be ignored in B calculation. Keep as 5 unless theory suggests otherwise.
-t0 = 0.0 # Start of neutral class (t=hs=0)
-t1 = h*(1/(2*Nanc)) # Start of f1 class (2Ns=1)
-t1half = h*(gamma_cutoff/(2*Nanc)) # 2Ns threshold for effectively neutral alleles
-t2 = h*(10/(2*Nanc)) # End of f1 class, start of f2 class (2Ns=10)
-t3 = h*(100/(2*Nanc)) # End of f2 class, start of f3 class (2Ns=100) 
-t4 = h*1.0 # End of f3 class (s=1)
