@@ -15,15 +15,16 @@ k = 440 # Gene conversion tract length (bp)
 Ncur = Nanc*2 # Current population size (!Requires --pop_change)
 time_of_change = 0.1 # Time in 2Ncur generations ago that effective population size went from Nanc to Ncur (!Requires --pop_change)
 ## Distribution of fitness effects (DFE) parameters
-f0 = 0.25 # Proportion of effectively neutral mutations with 0 <= |2Nes| < 1 (e.g.)
-f1 = 0.49 # Proportion of weakly deleterious mutations with 1 <= |2Nes| < 10
-f2 = 0.04 # Proportion of moderately deleterious mutations with 10 <= |2Nes| < 100
-f3 = 0.22 # Proportion of strongly deleterious mutations with |2Nes| >= 100
+f0 = 0.25 # Proportion of effectively neutral mutations with 0 <= |2Ns| < 1 (Note that 2Ns<5 does not contribute to BGS)
+f1 = 0.49 # Proportion of weakly deleterious mutations with 1 <= |2Ns| < 10
+f2 = 0.04 # Proportion of moderately deleterious mutations with 10 <= |2Ns| < 100
+f3 = 0.22 # Proportion of strongly deleterious mutations with |2Ns| >= 100
 ##
 ## Advanced DFE parameters 
 h=0.5 # Dominance coefficient of selected alleles
-mean, shape = 500, 0.5 # Gamma distribution of DFE [mean in 2Ns, shape parameter] (!Requires --gamma_dfe)
+mean, shape = 500, 0.5 # Gamma distribution of DFE to replace f0-f3 [mean (2Ns), shape] (!Requires --gamma_dfe)
 ##
+
 ## !DO NOT CHANGE BELOW UNLESS WELL INFORMED BY POPGEN THEORY!
 gamma_cutoff = 5 # 2Ns threshold for effectively neutral alleles, mutations below this threshold will be ignored in B calculation. Keep as 5 unless theory suggests otherwise.
 t0 = 0.0 # Start of neutral class (t=hs=0)
