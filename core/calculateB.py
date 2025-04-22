@@ -1,22 +1,8 @@
-import os
 import numpy as np
-import importlib.util
-from typing import TYPE_CHECKING
+from core.utils.dfeHelper import getDFEparams
 
-## Get popgen parameters from input file
-if TYPE_CHECKING:
-    g: float; k: int; r: float; u: float; Nanc: float; h: float; f0: float; f1: float; f2: float; f3: float
-spec = importlib.util.spec_from_file_location("pop_params", os.environ["BCALC_POP_PARAMS"])
-_pop = importlib.util.module_from_spec(spec); spec.loader.exec_module(_pop)
-for v in ['g','k','r','u','Nanc', 'h', 'f0','f1','f2','f3']: globals()[v] = getattr(_pop, v)
-gamma_cutoff = 5 # 2Ns threshold for effectively neutral alleles, mutations below this threshold will be ignored in B calculation. Keep as 5 unless theory suggests otherwise.
-t0 = 0.0 # Start of neutral class (t=hs=0)
-t1 = h*(1/(2*Nanc)) # Start of f1 class (2Ns=1)
-t1half = h*(gamma_cutoff/(2*Nanc)) # 2Ns threshold for effectively neutral alleles
-t2 = h*(10/(2*Nanc)) # End of f1 class, start of f2 class (2Ns=10)
-t3 = h*(100/(2*Nanc)) # End of f2 class, start of f3 class (2Ns=100) 
-t4 = h*1.0 # End of f3 class (s=1)
-
+(g, k, r, u, Nanc, h, f0, f1, f2, f3,
+ gamma_cutoff, t0, t1, t1half, t2, t3, t4) = getDFEparams()
 
 def calculateB_linear(distance_to_element, length_of_element):
     """
