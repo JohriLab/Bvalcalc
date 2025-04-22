@@ -10,6 +10,8 @@ from core.plotB import plotB
 def main():
     start_time = time.time()
 
+    print(f"= Calculating relative diversity (B) for all neutral sites across the genome. = = =")
+
     parser = argparse.ArgumentParser(description="Bcalc main function! :p")
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('--genome', action='store_true', help="Compute B values genome-wide for all sites considering all selected elements")
@@ -25,8 +27,6 @@ def main():
         dfeHelper.GAMMA_DFE = args.gamma_dfe
         from core.genomeBcalc import genomeBcalc
         genomeBcalc(args)
-        # print("Exiting in Bcalcalc.py", output_data)
-        # sys.exit()
 
     elif known_args.region: # Run region Bcalc
         args = parseRegionArgs(remaining_args)

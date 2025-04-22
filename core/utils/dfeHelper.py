@@ -25,9 +25,6 @@ def getDFEparams() -> Tuple[
 
     if GAMMA_DFE is True:
         f0, f1, f2, f3 = gammaDFE_to_discretized(mean, shape)
-    # else:
-    print(GAMMA_DFE)
-
 
     gamma_cutoff = 5 # 2Ns threshold for effectively neutral alleles, mutations below this threshold will be ignored in B calculation. Keep as 5 unless theory suggests otherwise.
     t0 = 0.0 # Start of neutral class (t=hs=0)

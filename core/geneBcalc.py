@@ -5,7 +5,6 @@ import os
 
 def geneBcalc(args):    
     gene_size, flank_len, quiet = args.gene_size, args.flank_len, args.quiet
-    print(f"= Calculating relative diversity (B) for a neutral region adjacent to a single selected element = = =")
     if not quiet: 
         print(f"====== P A R A M E T E R S =========================")
         print(f"Distribution of fitness effects (DFE): {flank_len}bp")

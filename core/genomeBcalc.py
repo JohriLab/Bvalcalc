@@ -12,7 +12,7 @@ def genomeBcalc(args):
     if args.chr_sizes is not None: 
         chr_sizes = load_chr_sizes(args.chr_sizes)  # <-- Path to the sizes CSV file
 
-    print(unique_chromosomes) ## Now, loop over each chromosome and save B output
+    print("Chromosomes loaded:", unique_chromosomes) ## Now, loop over each chromosome and save B output
     for i in np.arange(0,len(unique_chromosomes)):
         mask = allblockchrom == unique_chromosomes[i]
         blockstart = allblockstart[mask]

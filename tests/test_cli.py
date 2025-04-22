@@ -65,7 +65,6 @@ def test_cli_gene_gcparams(tmp_path):
     assert result.returncode == 0, f"CLI failed:\n{result.stderr}"
     
     out = result.stdout + result.stderr
-    assert "= Calculating relative diversity (B) for a neutral region adjacent to a single selected element =" in out
     assert "Length of element under selection: 10000bp" in out
     assert "Length of flanking neutral region: 40000bp" in out
     assert "====== S T A R T I N G ===== C A L C ===============" in out
