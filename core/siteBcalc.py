@@ -4,6 +4,13 @@ from core.calculateB import calculateB_linear
 def siteBcalc(args):    
     gene_size, distance, quiet = args.gene_size, args.distance, args.quiet
 
+            ## DFE TESTING
+    from core.utils.dfeHelper import gammaDFE_to_discretized
+    print("pre")
+    if args.gamma_dfe: print(gammaDFE_to_discretized(8, 3))
+    print("post")
+        ##
+
     b_values = calculateB_linear(distance, gene_size)
     print(f"B for site {distance}bp away from {gene_size}bp region: {b_values}")
 
