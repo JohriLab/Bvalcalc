@@ -1,5 +1,22 @@
 import os
 import shutil
+import sys
+
+# keep your list of valid species here
+SPECIES = ['human', 'drosophila', 'arabidopsis', 'mouse']
+
+def check_generate_params_args(argv=None):
+    """
+    If '--generate_params' appears with no species or next flag,
+    print a concise error and exit.
+    """
+    if argv is None:
+        argv = sys.argv
+    if '--generate_params' in argv:
+        idx = argv.index('--generate_params')
+        if idx == len(argv) - 1 or argv[idx+1].startswith('-'):
+            print(f"--generate_params requires species: {', '.join(SPECIES)}")
+            sys.exit(1)
 
 def generateParams(species):
     species_cap = species.capitalize()

@@ -4,11 +4,13 @@ import os
 import argparse
 from core.utils.parseArgs import parseGenomeArgs, parseRegionArgs, parseGeneArgs, parseSiteArgs
 from core.plotB import plotB
-from core.utils.generateParams import generateParams
+from core.utils.generateParams import check_generate_params_args, SPECIES, generateParams
+import sys
 
 def main():
     start_time = time.time()
 
+    check_generate_params_args() # Unique error message for --generate_params to print species names
     parser = argparse.ArgumentParser(description="Bcalc main function! :p")
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('--generate_params', metavar='SPECIES', choices=['human', 'drosophila', 'arabidopsis', 'mouse'], help="Generate popgen params for a given species (human, drosophila, arabidopsis or mouse)")
