@@ -9,7 +9,6 @@ from core.utils.generateParams import generateParams
 def main():
     start_time = time.time()
 
-
     parser = argparse.ArgumentParser(description="Bcalc main function! :p")
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('--generate_params', action='store_true', help="Generate popgen params file to be edited for your species/population of interest. [human/drosophila/arabidopsis/mouse]")
