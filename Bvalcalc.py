@@ -11,7 +11,7 @@ def main():
 
     parser = argparse.ArgumentParser(description="Bcalc main function! :p")
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument('--generate_params', action='store_true', help="Generate popgen params file to be edited for your species/population of interest. [human/drosophila/arabidopsis/mouse]")
+    group.add_argument('--generate_params', metavar='SPECIES', choices=['human', 'drosophila', 'arabidopsis', 'mouse'], help="Generate popgen params for a given species (human, drosophila, arabidopsis or mouse)")
     group.add_argument('--genome', action='store_true', help="Compute B values genome-wide for all sites considering all selected elements")
     group.add_argument('--region', action='store_true', help="Compute B values for a specific chromosomal region, considering genome-wide effects")
     group.add_argument('--gene', action='store_true', help="Compute B values for a neutral region adjacent to a single selected element")
