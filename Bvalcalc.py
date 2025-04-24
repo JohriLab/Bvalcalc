@@ -21,8 +21,8 @@ def main():
     known_args, remaining_args = parser.parse_known_args()
 
     if known_args.generate_params:
-        print(f"Generating params")
-        generateParams()
+        print(f"Retrieving params from template...")
+        generateParams(known_args.generate_params)
         return
 
     print(f"= Calculating relative diversity (B) for all neutral sites across the genome. = = =")
