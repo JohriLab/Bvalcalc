@@ -17,7 +17,7 @@ def check_generate_params_args(argv=None):
             print(f"--generate_params requires species: {', '.join(SPECIES)}")
             sys.exit(1)
 
-def generateParams(species):
+def generateParams(species, folder='.'):
     species_cap = species.capitalize()
     tpl_path = os.path.abspath(
         os.path.join(
@@ -34,10 +34,13 @@ def generateParams(species):
         content = tpl_file.read()
     print(f"Loaded template from:   {tpl_path}")
 
-    # Write directly to newParams.py
-    dest_path = os.path.join(os.getcwd(), f'{species_cap}Params.py')
+    # Ensure target folder exists
+    os.makedirs(folder, exist_ok=True)
+
+    # Write into <folder>/<Species>Params.py
+    dest_path = os.path.join(folder, f'{species_cap}Params.py')
     with open(dest_path, 'w') as out_file:
         out_file.write(content)
 
     print(f"Wrote parameters to:     {dest_path}")
-    print(f"Note that these are example parameters, please tailor to your population and analysis")
+    print("Note that these are example parameters, please tailor to your population and analysis")
