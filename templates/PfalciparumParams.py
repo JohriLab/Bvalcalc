@@ -5,11 +5,11 @@
 ##
 ## Core parameters
 x = 1 # Scaling factor (N,u,r), keep as 1 unless calculating for rescaled simulations
-Nanc = 5e4 / x # Ancestral population size (0.9)
+Nanc = 5e4 / x # Ancestral population size (0.9) []
 r = 7.4e-7 * x # Recombination (crossover) rate per bp, per generation (sex-averaged)
 u = 5.6e-9 * x # Mutation rate (all types) per bp, per generation
 g = 3.6e-7 * x # Gene conversion initiation rate per bp, per generation
-k = 1400 # Gene conversion tract length (bp)
+k = 1400 # Gene conversion tract length (bp) []
 # ## DFE parameters (Sum must equal 1)
 f0 = 0.52 # Proportion of effectively neutral mutations with 0 <= |2Ns| < 1 (Note that 2Ns<5 does not contribute to BGS) [Naive value]
 f1 = 0.16 # Proportion of weakly deleterious mutations with 1 <= |2Ns| < 10 [Naive value]
