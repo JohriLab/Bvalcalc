@@ -1,12 +1,13 @@
 from core.helpers.demography_helpers import get_Bcur
-from core.calculateB import calculateB_linear
 import numpy as np
 import os
 
 def geneBcalc(args):    
     gene_size, flank_len, quiet = args.gene_size, args.flank_len, args.quiet
+    
     import core.utils.dfeHelper as dfeHelper
     dfeHelper.GAMMA_DFE = args.gamma_dfe # Update DFE if --gamma_dfe
+    from core.calculateB import calculateB_linear # Import calculateB with updated gamma DFE if needed
 
     if not quiet: 
         print(f"====== P A R A M E T E R S =========================")

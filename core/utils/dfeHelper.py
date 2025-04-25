@@ -1,7 +1,7 @@
 import scipy.stats as st
 import os, importlib.util
 from typing import Tuple
-GAMMA_DFE = None # Default, instead of prop injected
+GAMMA_DFE = False # Default, instead of prop injected
 
 def getDFEparams() -> Tuple[
         float, float, float, float,   # g, k, r, u
@@ -17,12 +17,26 @@ def getDFEparams() -> Tuple[
     spec = importlib.util.spec_from_file_location("pop_params",
                                                   os.environ["BCALC_POP_PARAMS"])
     _pop = importlib.util.module_from_spec(spec); spec.loader.exec_module(_pop)
-    g, k, r, u, Nanc, h, f0, f1, f2, f3, mean, shape = (
-        getattr(_pop, v) for v in
-        ['g', 'k', 'r', 'u', 'Nanc', 'h', 'f0', 'f1', 'f2', 'f3', 'mean', 'shape']
-    )
+    # required parameters
+    g    = _pop.g
+    k    = _pop.k
+    r    = _pop.r
+    u    = _pop.u
+    Nanc = _pop.Nanc
+    h    = _pop.h
+    f0   = _pop.f0
+    f1   = _pop.f1
+    f2   = _pop.f2
+    f3   = _pop.f3
 
-    if GAMMA_DFE is True:
+    # if the user asked for gamma-DFE, pull mean/shape and override f0–f3
+    if GAMMA_DFE:
+        mean  = getattr(_pop, 'mean',  None)
+        shape = getattr(_pop, 'shape', None)
+        if mean is None or shape is None:
+            raise AttributeError(
+                "pop_params must define both 'mean' and 'shape' when GAMMA_DFE=True"
+            )
         f0, f1, f2, f3 = gammaDFE_to_discretized(mean, shape)
 
     gamma_cutoff = 5 # 2Ns threshold for effectively neutral alleles, mutations below this threshold will be ignored in B calculation. Keep as 5 unless theory suggests otherwise.
