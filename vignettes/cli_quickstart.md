@@ -48,6 +48,7 @@ That's all that's necessary for many analyses, especially if you're only interes
 ## Calculating a complete B-map
 
 If you wanted to generate a complete B-map for all sites across all chromosomes you can use the following command, though note its a lot more data to crunch!
+The following is the basic command, recommended options include `--chr_sizes` with a file specifying each chromosome's length, `--pop_change` for demography, `--rec_map` and `--gc_map` for crossover and gene conversion maps.
 
 ```bash
 ./Bvalcalc.py \
