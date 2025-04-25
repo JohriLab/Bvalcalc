@@ -13,7 +13,7 @@ def main():
     check_generate_params_args() # Unique error message for --generate_params to print species names
     parser = argparse.ArgumentParser(description="Bcalc main function! :p")
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument('--generate_params', '-p', metavar='SPECIES', choices=['human', 'drosophila', 'arabidopsis', 'mouse'], help="Generate popgen params for a given species (human, drosophila, arabidopsis or mouse)")
+    group.add_argument('--generate_params', '-p', metavar='SPECIES', choices=['human', 'drosophila', 'arabidopsis', 'mouse', 'pfalciparum'], help="Generate popgen params for a given species (human, drosophila, arabidopsis or mouse)")
     parser.add_argument('--dir', '-d', default='.', help="Directory in which to write the generated params file (default: current directory)")
     group.add_argument('--genome', '-w', action='store_true', help="Compute B values genome-wide for all sites considering all selected elements")
     group.add_argument('--region', '-r', action='store_true', help="Compute B values for a specific chromosomal region, considering genome-wide effects")
