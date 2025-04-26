@@ -129,6 +129,7 @@ def test_cli_genome_gcparams(tmp_path):
     assert output_path.stat().st_size > 0, "Output file is empty"
 
 def test_cli_genome_with_recmap_plot(tmp_path):
+    #./Bvalcalc.py --genome --pop_params tests/testparams/nogcBasicParams.py --bedgff_path tests/testfiles/200kb_slimtest.csv --chr_sizes exampleData/test_sizes.txt --rec_map tests/testfiles/200kb.map --out 200kb_dfe5.bvals
     script = Path(__file__).resolve().parents[1] / "Bvalcalc.py"
     params = Path(__file__).resolve().parents[1] / "tests" / "testparams" / "nogcBasicParams.py"
     bed_path = Path(__file__).resolve().parents[1] / "tests" / "testfiles" / "200kb_slimtest.csv"
@@ -152,7 +153,7 @@ def test_cli_genome_with_recmap_plot(tmp_path):
     out = result.stdout + result.stderr
     assert "Cumulative length of chromosome under selection: 99990bp (50.0%)" in out
     assert "Mean B of neutral sites across chromosome chr_200kb: 0.7015847245703709" in out
-    assert f"Saved B values to: {output_path.as_posix()}" in out
+    assert f"Appended B values to: {output_path.as_posix()}" in out
     assert output_path.exists(), "Expected output file not created"
     assert output_path.stat().st_size > 0, "Output file is empty"
 
