@@ -18,6 +18,9 @@ def regionBcalc(args):
     blockstart = allblockstart[mask]
     blockend = allblockend[mask]
     chromosome = calc_chrom
+    if args.out is not None: # Overwrite existing file with header
+        with open(args.out, 'w') as out_f:
+            out_f.write("Chromosome,Position,Conserved,B\n")
     output_data, block_ranges = chromBcalc(args, blockstart, blockend, chromosome, calc_start, calc_end, caller="regionBcalc")
 
     return  output_data, block_ranges

@@ -122,9 +122,9 @@ def chromBcalc(args, blockstart, blockend, chromosome, calc_start=None, calc_end
 
     if args.out is not None: # Write to CSV
         print(f"Writing B output to file...")
-        np.savetxt(args.out, # This might be "b_values.csv" or a custom path
-            output_data, delimiter=",", header="Chromosome,Position,Conserved,B", fmt="%s,%d,%s,%.6f", comments="")
-        print(f"Saved B values to: {os.path.abspath(args.out)}")
+        with open(args.out, 'a') as f:
+            np.savetxt(f, output_data, delimiter=",", fmt="%s,%d,%s,%.6f", comments="")
+        print(f"Appended B values to: {os.path.abspath(args.out)}")
     else:
         if not args.quiet:
             print("No output CSV requested; skipping save.")

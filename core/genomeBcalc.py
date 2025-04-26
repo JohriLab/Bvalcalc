@@ -16,6 +16,11 @@ def genomeBcalc(args):
     dfeHelper.GAMMA_DFE = args.gamma_dfe # Update DFE if --gamma_dfe
 
     print("Chromosomes loaded:", unique_chromosomes) ## Now, loop over each chromosome and save B output
+
+    if args.out is not None: # Overwrite existing file with header
+        with open(args.out, 'w') as out_f:
+            out_f.write("Chromosome,Position,Conserved,B\n")
+
     for i in np.arange(0,len(unique_chromosomes)):
         mask = allblockchrom == unique_chromosomes[i]
         blockstart = allblockstart[mask]

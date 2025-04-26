@@ -30,7 +30,7 @@ Now, let's calculate the recovery of B as a function of distance from a single c
 
 ## Calculating B for a region of the genome
 
-Next, we can use a BED file that specifies which areas are conserved to calculate B for a region in the genome.
+Next, we can use a BED file that specifies which genomic ranges are conserved to calculate B for a region in the genome.
 Let's calculate B for a 1Mb region in the middle of chromosome 2R [9500000-10500000] and save it to 1Mb_B.png.
 
 ```bash
