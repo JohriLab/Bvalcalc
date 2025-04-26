@@ -1,4 +1,4 @@
 *.pyc
-*out
-*png
-*txt
+*.out
+*.png
+*.txt
