@@ -18,12 +18,15 @@ def genomeBcalc(args):
 
     print("Chromosomes loaded:", unique_chromosomes) ## Now, loop over each chromosome and save B output
 
+    if args.pi_map is not None:
+        prior_chromosomes, prior_positions, prior_b_values = pimapHandler(file_path = args.pi_map)
+        print(prior_chromosomes, prior_positions, prior_b_values)
+        sys.exit()
+
     if args.out is not None: # Overwrite existing file with header
         with open(args.out, 'w') as out_f:
             out_f.write("Chromosome,Position,Conserved,B\n")
     
-    if args.pi_map is not None:
-        pimapHandler(file_path = args.pi_map)
 
     for i in np.arange(0,len(unique_chromosomes)):
         mask = allblockchrom == unique_chromosomes[i]
