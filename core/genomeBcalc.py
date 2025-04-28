@@ -1,6 +1,7 @@
 from core.chromBcalc import chromBcalc
 from core.utils.bedgffHandler import bedgffHandler
 from core.utils.chrSizesHandler import load_chr_sizes
+from core.utils.pimapHandler import pimapHandler
 import numpy as np
 import sys
 
@@ -20,6 +21,9 @@ def genomeBcalc(args):
     if args.out is not None: # Overwrite existing file with header
         with open(args.out, 'w') as out_f:
             out_f.write("Chromosome,Position,Conserved,B\n")
+    
+    if args.pi_map is not None:
+        pimapHandler(file_path = args.pi_map)
 
     for i in np.arange(0,len(unique_chromosomes)):
         mask = allblockchrom == unique_chromosomes[i]
