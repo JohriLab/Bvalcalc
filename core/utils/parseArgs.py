@@ -9,11 +9,16 @@ def parseGenomeArgs(argv=None):
     parser.add_argument('--chunk_size', type=int, default=20000, help="Size of chunks calculated simultaneously (bp). [100000]")
     parser.add_argument('--precise_chunks', type=int, default=3, help="Number of adjacent chunks to calculate B precisely.")
     parser.add_argument('--pop_change', action='store_true', help="If set, B will reflect the current B after a step change in population size, rather than ancestral B.")
-    parser.add_argument('--rec_map', nargs='?', default=None,
+    parser.add_argument('--pi_map', type=str, default=None,
+                        help="Optional input with per-site expected diversity, e.g. a B map calculated using Bvalcalc on different annotations! Usage: --pi_map your_map.csv "
+                             "These values will be multiplied by the caluculated B, i.e. a value of 0.9 at a given position will be returned as 0.9 * [newly calculated B]"
+                             "Format should be the same as the B-map output: 'Chromosome,Position,Conserved,B'. "
+                             "Note that the Conserved column is needed for accurate parsing but will not affect the analysis.")
+    parser.add_argument('--rec_map', type=str, default=None,
                         help="Optional recombination (crossover) map input. Usage: --rec_map your.map, "
                              "Format should be a two column csv with the header: 'start,rate'. "
                              "Note that recombination rates will be averaged within each chunk.")    
-    parser.add_argument('--gc_map', nargs='?', default=None,
+    parser.add_argument('--gc_map', type=str, default=None,
                         help="Optional gene conversion (non-crossover) map input. Usage: --gc_map your.map, "
                              "Format should be a two column csv with the header: 'start,rate'. "
                              "Note that gene conversion rates will be averaged within each chunk.") 
