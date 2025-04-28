@@ -21,7 +21,6 @@ def genomeBcalc(args):
     if args.pi_map is not None:
         prior_chromosomes, prior_positions, prior_b_values = pimapHandler(file_path = args.pi_map)
         print(prior_chromosomes, len(prior_positions), prior_b_values)
-        sys.exit()
 
     if args.out is not None: # Overwrite existing file with header
         with open(args.out, 'w') as out_f:
@@ -33,8 +32,16 @@ def genomeBcalc(args):
         blockstart = allblockstart[mask]
         blockend = allblockend[mask]
         chromosome = unique_chromosomes[i]
+
+        if args.pi_map is not None: 
+            prior_mask = (prior_chromosomes == chromosome)
+            prior_pos = prior_positions[prior_mask]
+            prior_b = prior_b_values[prior_mask]
+        else:
+            prior_pos, prior_b = None, None
+
         if args.chr_sizes is not None: chr_size = chr_sizes.get(chromosome)
         else: chr_size = None
-        chromBcalc(args, blockstart, blockend, chromosome, calc_start=None, calc_end=None, chr_size=chr_size, caller="genomeBcalc")
+        chromBcalc(args, blockstart, blockend, chromosome, prior_pos, prior_b, calc_start=None, calc_end=None, chr_size=chr_size, caller="genomeBcalc")
 
     return

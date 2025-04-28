@@ -9,7 +9,7 @@ import numpy as np
 import os
 import sys
 
-def chromBcalc(args, blockstart, blockend, chromosome, calc_start=None, calc_end=None, chr_size=None, caller="regionBcalc"):    
+def chromBcalc(args, blockstart, blockend, chromosome, prior_pos = None, prior_b = None, calc_start=None, calc_end=None, chr_size=None, caller="regionBcalc"):    
     #Shared arguments between genomeBcalc and regionBcalc
     file_path, chunk_size, precise_chunks, quiet, verbose = args.bedgff_path, args.chunk_size, args.precise_chunks, args.quiet, args.verbose
     #Arguments specific to regionBcalc
