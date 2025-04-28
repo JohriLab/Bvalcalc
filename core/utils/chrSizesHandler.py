@@ -6,7 +6,6 @@ def load_chr_sizes(file_path):
 
     with open(file_path, newline='') as csvfile:
         reader = csv.reader(csvfile)
-        header = next(reader, None)  # skip header if present
 
         for row in reader:
             if len(row) < 2:

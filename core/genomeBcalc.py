@@ -20,7 +20,7 @@ def genomeBcalc(args):
 
     if args.pi_map is not None:
         prior_chromosomes, prior_positions, prior_b_values = pimapHandler(file_path = args.pi_map)
-        print(prior_chromosomes, prior_positions, prior_b_values)
+        print(prior_chromosomes, len(prior_positions), prior_b_values)
         sys.exit()
 
     if args.out is not None: # Overwrite existing file with header
