@@ -2,7 +2,7 @@ import sys
 import csv
 import numpy as np
 
-def pimapHandler(file_path):
+def BmapHandler(file_path):
     chromosomes = []
     positions   = []
     b_values    = []

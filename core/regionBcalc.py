@@ -1,11 +1,13 @@
 from core.chromBcalc import chromBcalc
 from core.utils.bedgffHandler import bedgffHandler
+from core.utils.BmapHandler import BmapHandler
 import numpy as np
 import sys
 
 def regionBcalc(args):    
 
     allblockstart, allblockend, allblockchrom,  = bedgffHandler(args.bedgff_path) # Read BED/GFF, return start and end of conserved elements
+
     import core.utils.dfeHelper as dfeHelper
     dfeHelper.GAMMA_DFE = args.gamma_dfe # Update DFE if --gamma_dfe
 
@@ -18,10 +20,20 @@ def regionBcalc(args):
     blockstart = allblockstart[mask]
     blockend = allblockend[mask]
     chromosome = calc_chrom
+
+    if args.prior_Bmap is not None:
+        prior_chromosomes, prior_positions, prior_b_values = BmapHandler(file_path = args.prior_Bmap)
+        if not args.quiet: print(f"Using prior B values from {args.prior_Bmap}")
+        prior_mask = (prior_chromosomes == chromosome)
+        prior_pos = prior_positions[prior_mask]
+        prior_b = prior_b_values[prior_mask]
+    else:
+        prior_pos, prior_b = None, None
+
     if args.out is not None: # Overwrite existing file with header
         with open(args.out, 'w') as out_f:
             out_f.write("Chromosome,Position,Conserved,B\n")
-    output_data, block_ranges = chromBcalc(args, blockstart, blockend, chromosome, None, None, calc_start, calc_end, caller="regionBcalc")
+    output_data, block_ranges = chromBcalc(args, blockstart, blockend, chromosome, prior_pos, prior_b, calc_start, calc_end, caller="regionBcalc")
 
     return  output_data, block_ranges
 

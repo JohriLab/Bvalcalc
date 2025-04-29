@@ -1,7 +1,7 @@
 from core.chromBcalc import chromBcalc
 from core.utils.bedgffHandler import bedgffHandler
 from core.utils.chrSizesHandler import load_chr_sizes
-from core.utils.pimapHandler import pimapHandler
+from core.utils.BmapHandler import BmapHandler
 import numpy as np
 import sys
 
@@ -18,9 +18,9 @@ def genomeBcalc(args):
 
     print("Chromosomes loaded:", unique_chromosomes) ## Now, loop over each chromosome and save B output
 
-    if args.pi_map is not None:
-        prior_chromosomes, prior_positions, prior_b_values = pimapHandler(file_path = args.pi_map)
-        print(prior_chromosomes, len(prior_positions), prior_b_values)
+    if args.prior_Bmap is not None:
+        prior_chromosomes, prior_positions, prior_b_values = BmapHandler(file_path = args.prior_Bmap)
+        if not args.quiet: print(f"Using prior B values from {args.prior_Bmap}")
 
     if args.out is not None: # Overwrite existing file with header
         with open(args.out, 'w') as out_f:
@@ -33,7 +33,7 @@ def genomeBcalc(args):
         blockend = allblockend[mask]
         chromosome = unique_chromosomes[i]
 
-        if args.pi_map is not None: 
+        if args.prior_Bmap is not None: 
             prior_mask = (prior_chromosomes == chromosome)
             prior_pos = prior_positions[prior_mask]
             prior_b = prior_b_values[prior_mask]

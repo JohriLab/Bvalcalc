@@ -17,7 +17,6 @@ def chromBcalc(args, blockstart, blockend, chromosome, prior_pos = None, prior_b
         calc_start, calc_end = calc_start, calc_end
         chr_size = None
 
-
     if not args.quiet: 
         print(f"====== P A R A M E T E R S =========================")
         print(f"BED/GFF file for regions under selection: {file_path}")
@@ -52,7 +51,10 @@ def chromBcalc(args, blockstart, blockend, chromosome, prior_pos = None, prior_b
     b_values = np.ones(chr_size + 2 - chr_start, dtype=np.float64) # Initialize array of B values
     if prior_pos is not None and prior_b is not None: # If we have prior B map, overwrite those positions' B values
         idx = np.asarray(prior_pos, dtype=int)
-        b_values[idx] = prior_b
+        calc_mask = (idx >= calc_start) & (idx <= calc_end)
+        idx = idx[calc_mask] # filter to only those within [calc_start, calc_end]
+        bprior = np.asarray(prior_b, dtype=b_values.dtype)[calc_mask]
+        b_values[idx] = bprior
 
     lperchunk = calculate_L_per_chunk(chunk_size, blockstart, blockend, chr_start, chr_size) # Cumulative conserved length in each chunk
 
