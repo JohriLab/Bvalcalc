@@ -223,3 +223,19 @@ def test_cli_gene_expand():
     assert "Mean B for flanking region: 0.9823767432235562" in out
     assert "B prior to demographic change [0.80492426 0.80514361 0.80536207 ... 0.9921807  0.99218084 0.99218099]" in out
     assert "B post B-calculation [0.8554483  0.8556117  0.85577442 ... 0.99422971 0.99422981 0.99422992]" in out
+
+def test_cli_site_with_gamma_dfe():
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(Path(__file__).parents[1] / "Bvalcalc.py"),
+            "--site",
+            "--pop_params", str(Path(__file__).parent / "testparams/nogcBasicParams.py"),
+            "--gamma_dfe",
+        ],
+        capture_output=True, text=True
+    )
+    assert result.returncode == 0, result.stderr
+    out = result.stdout
+    assert "Inferred f0, f1, f2, f3 =  0.3249694142107759 0.05375462700202351 0.16297136657419678 0.45830459221300374" in out
+    assert "B for site 1bp away from 10000bp region: 0.8990286767704615" in out
