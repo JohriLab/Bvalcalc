@@ -21,7 +21,7 @@ time_of_change = 0.45 # Time in Nanc generations ago that effective population s
 ## Advanced DFE parameters 
 h = 0.5 # Dominance coefficient of selected alleles [Naive value]
 mean, shape, proportion_synonymous = 500, 0.5, 0.3 # Gamma distribution of DFE to discretize and replace f0-f3 [mean (2Ns), shape, proportion synonymous] (!Requires --gamma_dfe) [Naive value]
-## Literature citeds
+## Literature cited
 # [1] Keightley et al 2014  doi: 10.1534/genetics.113.158758
 # [2] Comeron et al 2012 doi: 10.1371/journal.pgen.1002905
 # [3] Miller et al 2016 doi: 10.1534/genetics.115.186486
