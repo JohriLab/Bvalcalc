@@ -33,11 +33,12 @@ def getDFEparams() -> Tuple[
     if GAMMA_DFE:
         mean  = getattr(_pop, 'mean',  None)
         shape = getattr(_pop, 'shape', None)
-        if mean is None or shape is None:
+        proportion_synonymous = getattr(_pop, 'proportion_synonymous', None)
+        if mean is None or shape is None or proportion_synonymous is None:
             raise AttributeError(
-                "pop_params must define both 'mean' and 'shape' when GAMMA_DFE=True"
+                "pop_params must define 'mean', 'shape' and 'proportion_synonymous when GAMMA_DFE=True"
             )
-        f0, f1, f2, f3 = gammaDFE_to_discretized(mean, shape)
+        f0, f1, f2, f3 = gammaDFE_to_discretized(mean, shape, proportion_synonymous)
 
     gamma_cutoff = 5 # 2Ns threshold for effectively neutral alleles, mutations below this threshold will be ignored in B calculation. Keep as 5 unless theory suggests otherwise.
     t0 = 0.0 # Start of neutral class (t=hs=0)
@@ -51,9 +52,11 @@ def getDFEparams() -> Tuple[
             gamma_cutoff, t0, t1, t1half, t2, t3, t4)
 
 
-def gammaDFE_to_discretized(mean: float, shape: float):
+def gammaDFE_to_discretized(mean: float, shape: float, proportion_synonymous: float):
     if mean <= 0 or shape <= 0:
-        raise ValueError("Both mean and shape must be positive.")
+        raise ValueError("`mean` and `shape` must be positive.")
+    if not (0 <= proportion_synonymous < 1):
+        raise ValueError("`proportion_synonymous` must be in [0, 1).")
 
     theta = mean / shape               # scale parameter
     dist  = st.gamma(a=shape, scale=theta)
@@ -63,10 +66,21 @@ def gammaDFE_to_discretized(mean: float, shape: float):
     c10  = dist.cdf(10.0)
     c100 = dist.cdf(100.0)
 
-    f0 = c1                      # (0,1]
+
+    f0 = c1                      # (0, 1]
     f1 = c10  - c1               # (1,10]
     f2 = c100 - c10              # (10,100]
     f3 = 1.0   - c100            # >100
+
+    # 4) scale to sum to (1 - p_syn)
+    scale = 1.0 - proportion_synonymous
+    f0, f1, f2, f3 = (f0 * scale,
+                      f1 * scale,
+                      f2 * scale,
+                      f3 * scale)
+
+    # 5) add synonymous fraction back into f0
+    f0 += proportion_synonymous
 
     print(f"Converting gamma distribution to discretized DFE")
     print(f"Gamma params: mean = {mean}, shape = {shape}, scale = {theta}")

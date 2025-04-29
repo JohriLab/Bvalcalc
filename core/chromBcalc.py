@@ -17,6 +17,7 @@ def chromBcalc(args, blockstart, blockend, chromosome, prior_pos = None, prior_b
         calc_start, calc_end = calc_start, calc_end
         chr_size = None
 
+
     if not args.quiet: 
         print(f"====== P A R A M E T E R S =========================")
         print(f"BED/GFF file for regions under selection: {file_path}")
@@ -49,6 +50,9 @@ def chromBcalc(args, blockstart, blockend, chromosome, prior_pos = None, prior_b
     calc_chunks = np.arange(calc_chunk_start,calc_chunk_end + 1) # Relevant chunks to calculate B for based on calc_start and calc_end
 
     b_values = np.ones(chr_size + 2 - chr_start, dtype=np.float64) # Initialize array of B values
+    print(prior_pos, len(prior_b), "ayaya") ## CHECK THAT B VALUES WORKS BY CHANGING TO 0.1 AND SEEING OUTPUT!
+    print(b_values, calc_start, calc_end) ## NEED TO UPDATE SPECIFIC B VALUES AS REQUIRED
+    sys.exit()
     lperchunk = calculate_L_per_chunk(chunk_size, blockstart, blockend, chr_start, chr_size) # Cumulative conserved length in each chunk
 
     if args.rec_map: # Process recombination map if provided
