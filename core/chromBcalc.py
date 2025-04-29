@@ -50,9 +50,10 @@ def chromBcalc(args, blockstart, blockend, chromosome, prior_pos = None, prior_b
     calc_chunks = np.arange(calc_chunk_start,calc_chunk_end + 1) # Relevant chunks to calculate B for based on calc_start and calc_end
 
     b_values = np.ones(chr_size + 2 - chr_start, dtype=np.float64) # Initialize array of B values
-    print(prior_pos, len(prior_b), "ayaya") ## CHECK THAT B VALUES WORKS BY CHANGING TO 0.1 AND SEEING OUTPUT!
-    print(b_values, calc_start, calc_end) ## NEED TO UPDATE SPECIFIC B VALUES AS REQUIRED
-    sys.exit()
+    if prior_pos is not None and prior_b is not None: # If we have prior B map, overwrite those positions' B values
+        idx = np.asarray(prior_pos, dtype=int)
+        b_values[idx] = prior_b
+
     lperchunk = calculate_L_per_chunk(chunk_size, blockstart, blockend, chr_start, chr_size) # Cumulative conserved length in each chunk
 
     if args.rec_map: # Process recombination map if provided
