@@ -29,6 +29,7 @@ def parseGenomeArgs(argv=None):
                         help="Required path to output CSV file. If --out is specified but no file name is given, "
                              "'b_values.csv' will be used in the current directory. If --out is not specified, "
                              "no CSV will be saved.")
+    parser.add_argument('--out_binsize', type=int, default=None, help="Size of bins to write average B in. By default B is saved per-base")
     parser.add_argument('--verbose', action='store_true', help="If set, will give per-chunk summaries")
     parser.add_argument('--quiet', action='store_true', help="If set, silence print statements.")
 
@@ -72,7 +73,7 @@ def parseRegionArgs(argv=None):
                              "'b_values.csv' will be used in the current directory. If --out is not specified, "
                              "no CSV will be saved. Note that by default it is per-base B, to output B averaged across"
                              "bins, use --out_bins [int]")
-    parser.add_argument('--out_binsize', type=int, default=1, help="Size of bins to write average B in. By default B is saved per-base")
+    parser.add_argument('--out_binsize', type=int, default=None, help="Size of bins to write average B in. By default B is saved per-base")
     parser.add_argument('--verbose', action='store_true', help="If set, will give per-chunk summaries")
     parser.add_argument('--quiet', action='store_true', help="If set, silence print statements.")
     
@@ -99,8 +100,14 @@ def parseGeneArgs(argv=None):
                         help="Optional path to output CSV file. If --out is specified but no file name is given, "
                              "'b_values.csv' will be used in the current directory. If --out is not specified, "
                              "no CSV will be saved.")
+    parser.add_argument('--out_binsize', type=int, default=None, help="Size of bins to write average B in. By default B is saved per-base")
     parser.add_argument('--quiet', action='store_true', help="If set, silence print statements.")
-    return parser.parse_args(argv)
+    raw = argv if argv is not None else sys.argv[1:]
+    args = parser.parse_args(argv)
+
+    if '--out' in raw and '--out_binsize' not in raw: # enforce: if they asked for --out, they must have also provided --out_binsize
+        parser.error("argument --out_binsize is required when --out is specified")
+    return args
 
 def parseSiteArgs(argv=None):
     parser = argparse.ArgumentParser(description="Calculates B for a single neutral site given a distance from a single selected region and prints to console.")
