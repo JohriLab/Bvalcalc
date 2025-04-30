@@ -1,3 +1,4 @@
+import sys
 import argparse
 
 def parseGenomeArgs(argv=None):
@@ -30,7 +31,12 @@ def parseGenomeArgs(argv=None):
                              "no CSV will be saved.")
     parser.add_argument('--verbose', action='store_true', help="If set, will give per-chunk summaries")
     parser.add_argument('--quiet', action='store_true', help="If set, silence print statements.")
+
+    raw = argv if argv is not None else sys.argv[1:]
     args = parser.parse_args(argv)
+
+    if '--out' in raw and '--out_binsize' not in raw: # enforce: if they asked for --out, they must have also provided --out_binsize
+        parser.error("argument --out_binsize is required when --out is specified")
         
     return args
 
@@ -64,11 +70,18 @@ def parseRegionArgs(argv=None):
     parser.add_argument('--out', nargs='?', default=None,
                         help="Required path to output CSV file. If --out is specified but no file name is given, "
                              "'b_values.csv' will be used in the current directory. If --out is not specified, "
-                             "no CSV will be saved.")
+                             "no CSV will be saved. Note that by default it is per-base B, to output B averaged across"
+                             "bins, use --out_bins [int]")
+    parser.add_argument('--out_binsize', type=int, default=1, help="Size of bins to write average B in. By default B is saved per-base")
     parser.add_argument('--verbose', action='store_true', help="If set, will give per-chunk summaries")
     parser.add_argument('--quiet', action='store_true', help="If set, silence print statements.")
     
+    raw = argv if argv is not None else sys.argv[1:]
     args = parser.parse_args(argv)
+
+    if '--out' in raw and '--out_binsize' not in raw: # enforce: if they asked for --out, they must have also provided --out_binsize
+        parser.error("argument --out_binsize is required when --out is specified")
+
         
     return args
 
