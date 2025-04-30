@@ -57,6 +57,7 @@ The following is the basic command, recommended options include `--chr_sizes` wi
 --bedgff_path exampleData/dmel6_2R_genes.csv
 ```
 
-A caveat to the `--region` and `--genome` modes is that by default they discretize chunks of the genome which can slightly change the distance of distant conserved elements
-when calculating B. Typically will not result in any directional biases and will not significantly change estimates of large windows of B, while allowing for vastly
-improved performance. However, to achieve precise results you can specify `--precise`, though performance may be substantially slower so it may only work with `--region`.
+A caveat to the `--region` and `--genome` modes is that by default they combine and simplify distant elements in discrete chunks which can slightly change the distance of distant conserved elements when
+calculating B. The default chunk size is 20kb and the window within which calculations are perfectly precise is three chunks in each direction (140kb total). This allows for vastly improved performance
+and typically will not result in directional biases of B estimates. However, to achieve more exact results you can specify the size of the chunks with `--chunk_size`, and the size of the window to
+perform perfectly precise calculations with `--precise_chunks`, though this will come at the cost of perfomance so consider using HPC resources or limiting to a specific region with `--region`.
