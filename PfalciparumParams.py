@@ -4,9 +4,9 @@
 ## e.g. Bvalcalc --pop_params path/to/ExampleParams.py
 ##
 ## Core parameters
-f = 0 # Selfing rate (F = S/(2-S); Wright's inbreeding coefficient)
+f = 0.9 # Selfing rate (F = S/(2-S); Wright's inbreeding coefficient)
 x = 1 # Scaling factor (N,u,r), keep as 1 unless calculating for rescaled simulations
-Nanc = 42105 / x # Ancestral population size (0.9)
+Nanc = 80000 / (1+f) / x # Ancestral population size
 r = 7.4e-7 * (1-f) * x # Recombination (crossover) rate per bp, per generation (sex-averaged)
 u = 5.6e-9 * x # Mutation rate (all types) per bp, per generation
 g = 3.6e-7 * (1-f) * x # Gene conversion initiation rate per bp, per generation
@@ -20,7 +20,7 @@ f3 = 0.16 # Proportion of strongly deleterious mutations with |2Ns| >= 100 [Naiv
 Ncur = Nanc # Current population size (!Requires --pop_change)
 time_of_change = 0.1 # Time in Nanc generations ago that effective population size went from Nanc to Ncur (!Requires --pop_change)
 ## Advanced DFE parameters 
-h = 0.5 + f-0.5*f # Dominance coefficient of selected alleles
+h = 0.5 + (f-0.5*f) # Dominance coefficient of selected alleles
 mean, shape = 500, 0.5 # Gamma distribution of DFE to discretize and replace f0-f3 [mean (2Ns), shape] (!Requires --gamma_dfe)
 ## Literature cited
 # [1]
