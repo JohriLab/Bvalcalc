@@ -2,20 +2,21 @@ import os
 import sys
 
 # keep your list of valid species here
-SPECIES = ['human', 'drosophila', 'arabidopsis', 'mouse']
+SPECIES = ['human', 'drosophila', 'arabidopsis', 'mouse', 'pfalciparum', 'celegans', 'template']
 
-def check_generate_params_args(argv=None):
-    """
-    If '--generate_params' appears with no species or next flag,
-    print a concise error and exit.
-    """
-    if argv is None:
-        argv = sys.argv
-    if '--generate_params' in argv:
-        idx = argv.index('--generate_params')
-        if idx == len(argv) - 1 or argv[idx+1].startswith('-'):
-            print(f"--generate_params requires species: {', '.join(SPECIES)}")
-            sys.exit(1)
+# Deprecated behaviour
+# def check_generate_params_args(argv=None):
+#     """
+#     If '--generate_params' appears with no species or next flag,
+#     print a concise error and exit.
+#     """
+#     if argv is None:
+#         argv = sys.argv
+#     if '--generate_params' in argv:
+#         idx = argv.index('--generate_params')
+#         if idx == len(argv) - 1 or argv[idx+1].startswith('-'):
+#             print(f"--generate_params requires species: {', '.join(SPECIES)}")
+#             sys.exit(1)
 
 def generateParams(species, folder='.'):
     species_cap = species.capitalize()
