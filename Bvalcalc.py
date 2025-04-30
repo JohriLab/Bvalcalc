@@ -2,7 +2,7 @@
 import time
 import os
 import argparse
-from core.utils.parseArgs import parseGenomeArgs, parseRegionArgs, parseGeneArgs, parseSiteArgs
+from core.utils.parseArgs import parseGenomeArgs, parseRegionArgs, parseGeneArgs, parseSiteArgs, parsePreciseArgs
 from core.plotB import plotB
 from core.utils.generateParams import SPECIES, generateParams
 import sys
@@ -15,6 +15,7 @@ def main():
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('--generate_params',metavar='SPECIES',nargs='?',const='template',default=None,choices=['human', 'drosophila', 'arabidopsis', 'mouse', 'pfalciparum', 'celegans', 'template'], help="Generate popgen params for a given species (human, drosophila, arabidopsis or mouse)")
     parser.add_argument('--dir', '-d', default='.', help="Directory in which to write the generated params file (default: current directory)")
+    group.add_argument('--precise', '-p', action='store_true', help="Compute B values genome-wide for all sites considering all selected elements")
     group.add_argument('--genome', '-w', action='store_true', help="Compute B values genome-wide for all sites considering all selected elements")
     group.add_argument('--region', '-r', action='store_true', help="Compute B values for a specific chromosomal region, considering genome-wide effects")
     group.add_argument('--gene', '-g', action='store_true', help="Compute B values for a neutral region adjacent to a single selected element")
@@ -33,6 +34,12 @@ def main():
         os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Handle Params file
         from core.genomeBcalc import genomeBcalc
         genomeBcalc(args)
+
+    elif known_args.precise: # Run genome Bcalc
+        args = parsePreciseArgs(remaining_args)
+        os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Handle Params file
+        from core.preciseBcalc import preciseBcalc
+        preciseBcalc(args)
 
     elif known_args.region: # Run region Bcalc
         args = parseRegionArgs(remaining_args)
