@@ -10,7 +10,7 @@ r = 1e-8 * x # Recombination (crossover) rate per bp, per generation (sex-averag
 u = 1.25e-8 * x # Mutation rate (all types) per bp, per generation [2]
 g = 2e-8 * x # Gene conversion initiation rate per bp, per generation [3]
 k = 459 # Gene conversion tract length (bp) [3]
-## DFE parameters (Sum must equal 1)
+## DFE parameters for ALL sites in annotated regions (Sum must equal 1)
 f0 = 0.51 # Proportion of effectively neutral mutations with 0 <= |2Ns| < 1 (Note that 2Ns<5 does not contribute to BGS) [4]
 f1 = 0.14 # Proportion of weakly deleterious mutations with 1 <= |2Ns| < 10 [4]
 f2 = 0.14 # Proportion of moderately deleterious mutations with 10 <= |2Ns| < 100 [4]
