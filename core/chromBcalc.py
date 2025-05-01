@@ -113,6 +113,8 @@ def chromBcalc(args, blockstart, blockend, chromosome, prior_pos = None, prior_b
         if args.gc_map: # Process recombination map if provided
             print(f"Calculated using gene conversion map, with rates averaged within {chunk_size}bp chunks")    
 
+    block_ranges = np.column_stack((np.repeat(chromosome, blockstart.shape[0]), blockstart, blockend))
+
     positions = np.arange(calc_start, calc_end + 1)
     conserved = np.full_like(positions, "N", dtype="<U1")
     for start, end in zip(blockstart, blockend): # Mark conserved regions
@@ -123,18 +125,16 @@ def chromBcalc(args, blockstart, blockend, chromosome, prior_pos = None, prior_b
         if not quiet: print("Demographic change applied to B-calculation")
 
     binned_b_values, binned_positions = bin_outputs(b_values, positions, args.out_binsize)
+    chrom_col = np.full(binned_positions.shape, chromosome, dtype="<U20")
 
     output_data = np.core.records.fromarrays(
-    [np.full_like(positions, chromosome, dtype="<U20"), binned_positions.astype(int), conserved.astype(str), binned_b_values.astype(float)],
-    names='Chromosome,Position,Conserved,B',
-    formats='U20,i8,U1,f8'
-    )
-    block_ranges = np.column_stack((np.repeat(chromosome, blockstart.shape[0]), blockstart, blockend))
+    [chrom_col,binned_positions.astype(int),binned_b_values.astype(float)],
+    names='Chromosome,Position,B',formats='U20,i8,f8')
 
     if args.out is not None: # Write to CSV
         print(f"Writing B output to file...")
         with open(args.out, 'a') as f:
-            np.savetxt(f, output_data, delimiter=",", fmt="%s,%d,%s,%.6f", comments="")
+            np.savetxt(f, output_data, delimiter=",", fmt="%s,%d,%.6f", comments="")
         print(f"Appended B values to: {os.path.abspath(args.out)}")
     else:
         if not args.quiet:
