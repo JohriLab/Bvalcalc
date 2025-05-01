@@ -25,7 +25,7 @@ def parseGenomeArgs(argv=None):
                              "Note that gene conversion rates will be averaged within each chunk.") 
     parser.add_argument('--gamma_dfe', action='store_true', help="If set, gamma distribution parameters will be used to define DFE's discretized f0-f3 proportions")   
     parser.add_argument('--neutral_only', action='store_true', help="If set, plot_output will only show neutral sites.")
-    parser.add_argument('--out', nargs='?', default=None,
+    parser.add_argument('--out', type=str, default=None,
                         help="Required path to output CSV file. If --out is specified but no file name is given, "
                              "'b_values.csv' will be used in the current directory. If --out is not specified, "
                              "no CSV will be saved.")
@@ -68,7 +68,7 @@ def parseRegionArgs(argv=None):
                         help="Generate a basic plot using `Bvalcalc.py --genome` output"
                             "Provide path to plot output.")
     parser.add_argument('--neutral_only', action='store_true', help="If set, plot_output will only show neutral sites.")
-    parser.add_argument('--out', nargs='?', default=None,
+    parser.add_argument('--out', type=str, default=None,
                         help="Required path to output CSV file. If --out is specified but no file name is given, "
                              "'b_values.csv' will be used in the current directory. If --out is not specified, "
                              "no CSV will be saved. Note that by default it is per-base B, to output B averaged across"
@@ -96,10 +96,8 @@ def parseGeneArgs(argv=None):
     parser.add_argument('--plot_output', nargs='?', const='Bplot.png', default=None, 
                         help="Generate a basic plot using `Bvalcalc.py --genome` output"
                             "Provide path to plot output.")
-    parser.add_argument('--out', nargs='?', default=None,
-                        help="Optional path to output CSV file. If --out is specified but no file name is given, "
-                             "'b_values.csv' will be used in the current directory. If --out is not specified, "
-                             "no CSV will be saved.")
+    parser.add_argument('--out', type=str, default=None,
+                        help="Optional path to output CSV file.")
     parser.add_argument('--out_binsize', type=int, default=None, help="Size of bins to write average B in. By default B is saved per-base")
     parser.add_argument('--quiet', action='store_true', help="If set, silence print statements.")
     raw = argv if argv is not None else sys.argv[1:]

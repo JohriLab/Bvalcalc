@@ -38,10 +38,9 @@ def geneBcalc(args):
         # 1) decouple
         positions = output_data[:, 0].astype(int)
         bvals     = output_data[:, 1].astype(float)
-
         b_bvals, b_pos = bin_outputs(bvals, positions, args.out_binsize) # 2) bin them
-        
         binned_output = np.column_stack((b_pos, b_bvals)) # 3) rebuild a two-column array for the binned output
+        
         np.savetxt(args.out, # This might be "b_values.csv" or a custom path
             binned_output, delimiter=",", header="Distance,B", fmt=("%d", "%.6f"), comments="")
         print(f"Saved B values to: {os.path.abspath(args.out)}")
