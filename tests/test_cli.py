@@ -57,6 +57,7 @@ def test_cli_gene_gcparams(tmp_path):
          "--pop_params", str(params),
          "--gene_size", "10000",
          "--out", str(output_path),
+         "--out_binsize", "1",
          "--plot_output"],
         capture_output=True,
         text=True
@@ -78,8 +79,9 @@ def test_cli_gene_gcparams(tmp_path):
     assert f"Saved B values to: {output_path.as_posix()}" in out
     assert "= B value calculated" in out
 
+
 def test_cli_genome_basic(tmp_path):
-    #python Bvalcalc.py --genome --pop_params tests/testparams/nogcBasicParams.py --bedgff_path exampleData/200kb_slimtest.csv --chr_size 200000 --out /path/to/output/dgas.bvals
+    #python Bvalcalc.py --genome --pop_params tests/testparams/nogcBasicParams.py --bedgff_path exampleData/200kb_slimtest.csv --chr_sizes 200000 --out /path/to/output/dgas.bvals
     script = Path(__file__).resolve().parents[1] / "Bvalcalc.py"
     params = Path(__file__).resolve().parents[1] / "tests" / "testparams" / "nogcBasicParams.py"
     bed_path = Path(__file__).resolve().parents[1] / "tests" / "testfiles" / "200kb_slimtest.csv"
@@ -91,8 +93,9 @@ def test_cli_genome_basic(tmp_path):
             "--genome",
             "--pop_params", str(params),
             "--bedgff_path", str(bed_path),
-            "--chr_size", str(chr_sizes_path),
-            "--out", str(output_path)],
+            "--chr_sizes", str(chr_sizes_path),
+            "--out", str(output_path),
+            "--out_binsize", "1"],
         capture_output=True,
         text=True
     )
@@ -102,6 +105,7 @@ def test_cli_genome_basic(tmp_path):
     assert "Mean B of neutral sites across chromosome chr_200kb: 0.753693843332109" in out
     assert output_path.exists(), "Expected output file not created"
     assert output_path.stat().st_size > 0, "Output file is empty"
+
 
 def test_cli_genome_gcparams(tmp_path):
     script = Path(__file__).resolve().parents[1] / "Bvalcalc.py"
@@ -116,7 +120,8 @@ def test_cli_genome_gcparams(tmp_path):
          "--pop_params", str(params),
          "--bedgff_path", str(bed_path),
          "--chr_sizes", str(chr_sizes_path),
-         "--out", str(output_path)],
+         "--out", str(output_path),
+         "--out_binsize", "1"],
         capture_output=True,
         text=True
     )
@@ -127,6 +132,7 @@ def test_cli_genome_gcparams(tmp_path):
     assert "Mean B of neutral sites across chromosome chr_200kb: 0.836347850423207" in out
     assert output_path.exists(), "Expected output file not created"
     assert output_path.stat().st_size > 0, "Output file is empty"
+
 
 def test_cli_genome_with_recmap_plot(tmp_path):
     #./Bvalcalc.py --genome --pop_params tests/testparams/nogcBasicParams.py --bedgff_path tests/testfiles/200kb_slimtest.csv --chr_sizes exampleData/test_sizes.txt --rec_map tests/testfiles/200kb.map --out 200kb_dfe5.bvals
@@ -144,7 +150,8 @@ def test_cli_genome_with_recmap_plot(tmp_path):
          "--bedgff_path", str(bed_path),
          "--chr_sizes", str(chr_sizes_path),
          "--rec_map", str(map_path),
-         "--out", str(output_path)],
+         "--out", str(output_path),
+         "--out_binsize", "1"],
         capture_output=True,
         text=True
     )
