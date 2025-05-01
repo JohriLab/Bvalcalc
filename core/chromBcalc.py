@@ -3,6 +3,7 @@ from core.utils.bedgffHandler import bedgffHandler
 from core.helpers.calc_L_per_chunk import calculate_L_per_chunk
 from core.helpers.demography_helpers import get_Bcur
 from core.utils.recmapHandler import recmapHandler
+from core.utils.binOutputsHandler import bin_outputs
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import as_completed
 import numpy as np
@@ -120,8 +121,11 @@ def chromBcalc(args, blockstart, blockend, chromosome, prior_pos = None, prior_b
     if args.pop_change:
         b_values = get_Bcur(b_values)
         if not quiet: print("Demographic change applied to B-calculation")
+
+    binned_b_values, binned_positions = bin_outputs(b_values, positions, args.out_binsize)
+
     output_data = np.core.records.fromarrays(
-    [np.full_like(positions, chromosome, dtype="<U20"), positions.astype(int), conserved.astype(str), b_values.astype(float)],
+    [np.full_like(positions, chromosome, dtype="<U20"), binned_positions.astype(int), conserved.astype(str), binned_b_values.astype(float)],
     names='Chromosome,Position,Conserved,B',
     formats='U20,i8,U1,f8'
     )
