@@ -1,32 +1,68 @@
 import csv
+import os
 import numpy as np
 
 def bedgffHandler(file_path):
+    """
+    Read a BED, CSV, GFF, GFF3, or GTF file and return arrays of block starts, block ends, and chromosomes.
+
+    - BED: tab-delimited, cols: chrom, start, end
+    - CSV: comma-delimited, cols: chrom, start, end
+    - GFF/GFF3/GTF: tab-delimited, cols: chrom, source, feature, start, end, ...
+
+    Any lines beginning with '#' or with fewer than the required columns are skipped.
+    Duplicate (start, end) pairs are removed.
+    """
+    # Determine extension and parsing rules
+    _, ext = os.path.splitext(file_path)
+    ext = ext.lower()
+
+    if ext == '.bed':
+        delim = '\t'
+        chrom_idx, start_idx, end_idx = 0, 1, 2
+        min_cols = 3
+    elif ext in ('.gff', '.gff3', '.gtf'):
+        delim = '\t'
+        chrom_idx, start_idx, end_idx = 0, 3, 4
+        min_cols = 5
+    else:
+        # default to CSV
+        delim = ','
+        chrom_idx, start_idx, end_idx = 0, 1, 2
+        min_cols = 3
+
     blockstart = []
     blockend = []
-    chromosomes = []  # List to hold the chromosome name for each block
+    chromosomes = []
     seen_blocks = set()
 
     with open(file_path, 'r') as file:
-        reader = csv.reader(file)
+        reader = csv.reader(file, delimiter=delim)
         for row in reader:
-            if row and row[0].startswith("#"):  # Skip header or comment lines
+            # skip comments
+            if row and row[0].startswith('#'):
                 continue
-            if len(row) >= 3:
-                chrom = str(row[0])
-                start, end = int(row[1]), int(row[2])
+            # skip too-short rows
+            if len(row) < min_cols:
+                continue
 
-                if end < start:
-                    start, end = end, start  # Flip if needed
+            chrom = row[chrom_idx]
+            try:
+                start = int(row[start_idx])
+                end = int(row[end_idx])
+            except ValueError:
+                # skip rows with non-integer coordinates
+                continue
 
-                if (start, end) not in seen_blocks:
-                    seen_blocks.add((start, end))
-                    chromosomes.append(chrom)
-                    blockstart.append(start)
-                    blockend.append(end)
+            # ensure start <= end
+            if end < start:
+                start, end = end, start
 
-    blockstart = np.array(blockstart)
-    blockend = np.array(blockend)
-    chromosomes = np.array(chromosomes)
+            # deduplicate
+            if (start, end) not in seen_blocks:
+                seen_blocks.add((start, end))
+                chromosomes.append(chrom)
+                blockstart.append(start)
+                blockend.append(end)
 
-    return blockstart, blockend, chromosomes
+    return np.array(blockstart), np.array(blockend), np.array(chromosomes)
