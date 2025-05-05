@@ -80,6 +80,9 @@ def calculateB_recmap(distance_to_element, length_of_element,
         
     return np.where(length_of_element == 0, 1.0, B)
 
+def calculateB_unlinked():
+     print("Gottcha")
+
 ## Helper functions
 
 def calculate_exponent(t_start, t_end, U, a, b):

@@ -2,6 +2,7 @@ from core.chromBcalc import chromBcalc
 from core.utils.bedgffHandler import bedgffHandler
 from core.utils.chrSizesHandler import load_chr_sizes
 from core.utils.BmapHandler import BmapHandler
+from core.helpers.calc_B_unlinked import calc_B_from_other_chromosomes
 import numpy as np
 import sys
 
@@ -28,10 +29,15 @@ def genomeBcalc(args):
     
 
     for i in np.arange(0,len(unique_chromosomes)):
+
+        
         mask = allblockchrom == unique_chromosomes[i]
-        blockstart = allblockstart[mask]
-        blockend = allblockend[mask]
+        blockstart, blockend = allblockstart[mask], allblockend[mask]
         chromosome = unique_chromosomes[i]
+        unlinked_blockstart, unlinked_blockend = allblockstart[~mask], allblockend[~mask]
+        unlinked_L = np.sum(unlinked_blockend-unlinked_blockstart)
+        unlinked_B = calc_B_from_other_chromosomes(unlinked_L)
+        sys.exit()
 
         if args.prior_Bmap is not None: 
             prior_mask = (prior_chromosomes == chromosome)
