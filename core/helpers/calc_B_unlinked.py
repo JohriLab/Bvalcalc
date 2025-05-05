@@ -4,5 +4,6 @@ import sys
 
 def calc_B_from_other_chromosomes(unlinked_L):
     print("Gacha")
-    calculateB_unlinked()
-    sys.exit()
+    unlinked_B = calculateB_unlinked(unlinked_L)
+    print(unlinked_B)
+    # sys.exit()
