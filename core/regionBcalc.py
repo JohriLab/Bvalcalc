@@ -1,6 +1,7 @@
 from core.chromBcalc import chromBcalc
 from core.utils.bedgffHandler import bedgffHandler
 from core.utils.BmapHandler import BmapHandler
+from core.calculateB import calculateB_unlinked
 import numpy as np
 import sys
 
@@ -17,9 +18,11 @@ def regionBcalc(args):
     # # Then, mask for the chromosome the calc_region is in.
     # # Then, pass that into chromBcalc() as calc_start and calc_end
     mask = allblockchrom == calc_chrom
-    blockstart = allblockstart[mask]
-    blockend = allblockend[mask]
+    blockstart, blockend = allblockstart[mask], allblockend[mask]
     chromosome = calc_chrom
+    unlinked_blockstart, unlinked_blockend = allblockstart[~mask], allblockend[~mask]
+    unlinked_L = np.sum(unlinked_blockend-unlinked_blockstart)
+    unlinked_B = calculateB_unlinked(unlinked_L)
 
     if args.prior_Bmap is not None:
         prior_chromosomes, prior_positions, prior_b_values = BmapHandler(file_path = args.prior_Bmap)
@@ -33,7 +36,7 @@ def regionBcalc(args):
     if args.out is not None: # Overwrite existing file with header
         with open(args.out, 'w') as out_f:
             out_f.write("Chromosome,Position,Conserved,B\n")
-    output_data, block_ranges = chromBcalc(args, blockstart, blockend, chromosome, prior_pos, prior_b, calc_start, calc_end, caller="regionBcalc")
+    output_data, block_ranges = chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos, prior_b, calc_start, calc_end, caller="regionBcalc")
 
     return  output_data, block_ranges
 

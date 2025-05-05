@@ -97,6 +97,7 @@ def calculateB_unlinked(unlinked_L):
      
     B = np.exp(-8 * u * unlinked_L * sum_f)
     print("After", sum_f, B)
+    return B
 
 
 ## Helper functions

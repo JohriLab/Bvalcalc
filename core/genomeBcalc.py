@@ -37,7 +37,6 @@ def genomeBcalc(args):
         unlinked_blockstart, unlinked_blockend = allblockstart[~mask], allblockend[~mask]
         unlinked_L = np.sum(unlinked_blockend-unlinked_blockstart)
         unlinked_B = calculateB_unlinked(unlinked_L)
-        # sys.exit()
 
         if args.prior_Bmap is not None: 
             prior_mask = (prior_chromosomes == chromosome)
@@ -48,6 +47,6 @@ def genomeBcalc(args):
 
         if args.chr_sizes is not None: chr_size = chr_sizes.get(chromosome)
         else: chr_size = None
-        chromBcalc(args, blockstart, blockend, chromosome, prior_pos, prior_b, calc_start=None, calc_end=None, chr_size=chr_size, caller="genomeBcalc")
+        chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos, prior_b, calc_start=None, calc_end=None, chr_size=chr_size, caller="genomeBcalc")
 
     return
