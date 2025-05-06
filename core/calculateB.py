@@ -82,21 +82,21 @@ def calculateB_recmap(distance_to_element, length_of_element,
 
 def calculateB_unlinked(unlinked_L):
     print("Before", unlinked_L, t0, t1, f0)
-    sum_f = (
-        f0 * (t0 + t1) / 2 
-        + f1 * (t1 + t2) / 2 
-        + f2 * (t2 + t3) / 2 
-        + f3 * (t3 + t4) / 2)
-     
     # sum_f = (
     #     f0 * 0.0
-    #     + f1 * ((t1half - t1) / (t2 - t1)) * 0.0
-    #     + f1 * ((t2 - t1half) / (t2 - t1)) / 2
+    #     + f1 * (t1 + t2) / 2 
     #     + f2 * (t2 + t3) / 2 
     #     + f3 * (t3 + t4) / 2)
      
-    B = np.exp(-8 * u * unlinked_L * sum_f)
-    print("After", sum_f, B)
+    sum_f = (
+        f0 * 0.0
+        + f1 * ((t1half - t1) / (t2 - t1)) * 0.0
+        + f1 * ((t2 - t1half) / (t2 - t1)) * (t2 + t1half) / 2
+        + f2 * (t2 + t3) / 2 
+        + f3 * (t3 + t4) / 2)
+     
+    B = np.exp(-8 * u * 50000000 * sum_f)
+    print("After", sum_f, B, unlinked_L)
     return B
 
 
