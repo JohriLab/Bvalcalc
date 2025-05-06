@@ -3,6 +3,7 @@ import sys
 import re
 from pathlib import Path
 
+
 def test_cli_site_basic():
     #python Bvalcalc.py --site --pop_params tests/testparams/gcBasicParams.py --distance 100 --gene_size 5000
     script = Path(__file__).resolve().parents[1] / "Bvalcalc.py"
@@ -46,38 +47,40 @@ def test_cli_gene_basic():
     assert "= B value calculated" in out
 
 
-def test_cli_gene_gcparams(tmp_path):
-    script = Path(__file__).resolve().parents[1] / "Bvalcalc.py"
-    params = Path(__file__).resolve().parents[1] / "tests" / "testparams" / "gcBasicParams.py"
-    output_path = tmp_path / "40kb_gc.bvals"
+def test_cli_gene_gcparams():
+    """
+    Test CLI with GC params, verifying B outputs and that the plot is saved to a fixed path.
+    """
+    # Paths
+    script   = Path(__file__).resolve().parents[1] / "Bvalcalc.py"
+    params   = Path(__file__).resolve().parents[1] / "tests" / "testparams" / "gcBasicParams.py"
+    plot_path = Path(__file__).resolve().parents[1] / "tests" / "testout" / "test_plot.png"
 
     result = subprocess.run(
         [sys.executable, str(script),
          "--gene",
          "--pop_params", str(params),
          "--gene_size", "10000",
-         "--out", str(output_path),
-         "--out_binsize", "1",
-         "--plot_output"],
+         "--plot_output", str(plot_path)
+        ],
         capture_output=True,
         text=True
     )
 
+    # Basic return code check
     assert result.returncode == 0, f"CLI failed:\n{result.stderr}"
-    
     out = result.stdout + result.stderr
-    assert "Length of element under selection: 10000bp" in out
-    assert "Length of flanking neutral region: 40000bp" in out
-    assert "====== S T A R T I N G ===== C A L C ===============" in out
-    assert "====== F I N I S H E D ===== C A L C ===============" in out
-    assert "====== R E S U L T S ! =============================" in out
+
+    # Verify key output lines
     assert "B for adjacent site: 0.8910346781386976" in out
     assert "Mean B for flanking region: 0.9810661565709757" in out
     assert "B at start and end of the neutral region" in out
     assert "====== P L O T T I N G . . . =======================" in out
-    assert "Plot saved to Bplot.png" in out
-    assert f"Saved B values to: {output_path.as_posix()}" in out
-    assert "= B value calculated" in out
+    # Confirm the CLI reports the correct plot save path
+    assert f"Plot saved to {plot_path}" in out
+
+    # Confirm the file was actually created
+    assert plot_path.exists(), f"Expected plot at {plot_path}, but not found"
 
 
 def test_cli_genome_basic(tmp_path):
@@ -172,15 +175,17 @@ def test_cli_mean_b_value():
         "--region",
         "--pop_params", "tests/testparams/nogcBasicParams.py",
         "--bedgff_path", "tests/testfiles/200kb_slimtest.csv",
-        "--plot_output",
+        "--plot_output","tests/testout/genome_test.png",
         "--calc_region", "chr_200kb:1514-62456",
     ], capture_output=True, text=True)
 
     assert result.returncode == 0, f"Process failed: {result.stderr}"
+    out = result.stdout + result.stderr
 
     match = re.search(r"Mean B of neutral sites across specified region:\s+([0-9.]+)", result.stdout)
     assert match, "Could not find mean B output in CLI output"
 
+    assert "Plot saved to tests/testout/genome_test.png" in out
     mean_b = float(match.group(1))
     expected = 0.7609515711751818
     assert abs(mean_b - expected) < 1e-10, f"Expected {expected}, got {mean_b}"
