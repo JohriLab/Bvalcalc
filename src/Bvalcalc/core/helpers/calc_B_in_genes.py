@@ -1,5 +1,5 @@
 import numpy as np
-from core.calculateB import calculateB_linear, calculateB_recmap
+from bvalcalc.core.calculateB import calculateB_linear, calculateB_recmap
 
 def calc_B_in_genes(
     chunk_size, num_chunks, precise_chunks,
