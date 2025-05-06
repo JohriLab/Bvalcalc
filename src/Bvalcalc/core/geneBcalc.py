@@ -1,5 +1,5 @@
 from core.helpers.demography_helpers import get_Bcur
-from core.utils.binOutputsHandler import bin_outputs
+from src.Bvalcalc.core.utils.bin_outputs import bin_outputs
 import numpy as np
 import os
 
