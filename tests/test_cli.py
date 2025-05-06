@@ -84,11 +84,11 @@ def test_cli_gene_gcparams():
 
 
 def test_cli_genome_basic(tmp_path):
-    #python Bvalcalc.py --genome --pop_params tests/testparams/nogcBasicParams.py --bedgff_path exampleData/200kb_slimtest.csv --chr_sizes 200000 --out /path/to/output/dgas.bvals
+    #python Bvalcalc.py --genome --pop_params tests/testparams/nogcBasicParams.py --bedgff_path examples/200kb_slimtest.csv --chr_sizes 200000 --out /path/to/output/dgas.bvals
     script = Path(__file__).resolve().parents[1] / "Bvalcalc.py"
     params = Path(__file__).resolve().parents[1] / "tests" / "testparams" / "nogcBasicParams.py"
     bed_path = Path(__file__).resolve().parents[1] / "tests" / "testfiles" / "200kb_slimtest.csv"
-    chr_sizes_path = Path(__file__).resolve().parents[1] / "exampleData" / "test_sizes.txt"
+    chr_sizes_path = Path(__file__).resolve().parents[1] / "examples" / "test_sizes.txt"
     output_path = tmp_path / "200kb_dfe5.bvals"
 
     result = subprocess.run(
@@ -114,7 +114,7 @@ def test_cli_genome_gcparams(tmp_path):
     script = Path(__file__).resolve().parents[1] / "Bvalcalc.py"
     params = Path(__file__).resolve().parents[1] / "tests" / "testparams" / "gcBasicParams.py"
     bed_path = Path(__file__).resolve().parents[1] / "tests" / "testfiles" / "200kb_slimtest.csv"
-    chr_sizes_path = Path(__file__).resolve().parents[1] / "exampleData" / "test_sizes.txt"
+    chr_sizes_path = Path(__file__).resolve().parents[1] / "examples" / "test_sizes.txt"
     output_path = tmp_path / "gc_bvals.bvals"
 
     result = subprocess.run(
@@ -138,12 +138,12 @@ def test_cli_genome_gcparams(tmp_path):
 
 
 def test_cli_genome_with_recmap_plot(tmp_path):
-    #./Bvalcalc.py --genome --pop_params tests/testparams/nogcBasicParams.py --bedgff_path tests/testfiles/200kb_slimtest.csv --chr_sizes exampleData/test_sizes.txt --rec_map tests/testfiles/200kb.map --out 200kb_dfe5.bvals
+    #./Bvalcalc.py --genome --pop_params tests/testparams/nogcBasicParams.py --bedgff_path tests/testfiles/200kb_slimtest.csv --chr_sizes examples/test_sizes.txt --rec_map tests/testfiles/200kb.map --out 200kb_dfe5.bvals
     script = Path(__file__).resolve().parents[1] / "Bvalcalc.py"
     params = Path(__file__).resolve().parents[1] / "tests" / "testparams" / "nogcBasicParams.py"
     bed_path = Path(__file__).resolve().parents[1] / "tests" / "testfiles" / "200kb_slimtest.csv"
     map_path = Path(__file__).resolve().parents[1] / "tests" / "testfiles" / "200kb.map"
-    chr_sizes_path = Path(__file__).resolve().parents[1] / "exampleData" / "test_sizes.txt"
+    chr_sizes_path = Path(__file__).resolve().parents[1] / "examples" / "test_sizes.txt"
     output_path = tmp_path / "200kb_dfe5.bvals"
 
     result = subprocess.run(
@@ -168,7 +168,7 @@ def test_cli_genome_with_recmap_plot(tmp_path):
     assert output_path.stat().st_size > 0, "Output file is empty"
 
 def test_cli_mean_b_value():
-    #./Bvalcalc.py --region --pop_params tests/testparams/nogcBasicParams.py --bedgff_path exampleData/200kb_slimtest.csv --chr_start 1 --chr_size 200000 --plot_output --calc_start 1514 --calc_end 62456
+    #./Bvalcalc.py --region --pop_params tests/testparams/nogcBasicParams.py --bedgff_path examples/200kb_slimtest.csv --chr_start 1 --chr_size 200000 --plot_output --calc_start 1514 --calc_end 62456
 
     result = subprocess.run([
         sys.executable, "Bvalcalc.py",

@@ -38,7 +38,7 @@ Let's calculate B for a 1Mb region in the middle of chromosome 2R [9500000-10500
 --region \
 --calc_region 2R:9500000-10500000 \
 --pop_params ./DrosophilaParams.py \
---bedgff_path exampleData/dmel6_2R_genes.csv \
+--bedgff_path examples/dmel6_2R_genes.csv \
 --plot_output 1Mb_B.png
 ```
 
@@ -54,7 +54,7 @@ The following is the basic command, recommended options include `--chr_sizes` wi
 ./Bvalcalc.py \
 --genome \
 --pop_params ./DrosophilaParams.py \
---bedgff_path exampleData/dmel6_2R_genes.csv
+--bedgff_path examples/dmel6_2R_genes.csv
 ```
 
 A caveat to the `--region` and `--genome` modes is that by default they combine and simplify distant elements in discrete chunks which can slightly change the distance of distant conserved elements when
