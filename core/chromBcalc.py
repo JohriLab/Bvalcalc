@@ -107,6 +107,7 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
                 calc_selected_length += (overlap_end - overlap_start + 1)
         print(f"Cumulative length of calculated region under selection: {calc_selected_length}bp "f"({round((calc_selected_length / (calc_end - calc_start + 1)) * 100, 2)}%)")
         print(f"Cumulative length of chromosome under selection: {int(sum(lperchunk))}bp ({round((sum(lperchunk)/(chr_size - chr_start + 1))*100,2)}%)")
+        print(f"B from unlinked sites for chromosome {chromosome}: {unlinked_B}")
         if caller == "genomeBcalc": print(f"Mean B of neutral sites across chromosome {chromosome}: {b_values[~np.isnan(b_values)].mean()}")
         elif caller == "regionBcalc": print(f"Mean B of neutral sites across specified region: {b_values[~np.isnan(b_values)].mean()}")
         if args.rec_map: # Process recombination map if provided
