@@ -1,5 +1,5 @@
-from core.calculateB import calculateB_linear, calculateB_recmap
-from core.helpers.calc_R_len_dist import calc_R_lendist_for_chunks
+from bvalcalc.core.calculateB import calculateB_linear, calculateB_recmap
+from bvalcalc.core.helpers.calc_R_len_dist import calc_R_lendist_for_chunks
 import numpy as np
 
 def calc_B_from_chunks(chunk_idx, chunk_size, chr_start, chr_size, num_chunks, 

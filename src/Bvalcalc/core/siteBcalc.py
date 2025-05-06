@@ -1,11 +1,11 @@
-from core.helpers.demography_helpers import get_Bcur
+from bvalcalc.helpers.demography_helpers import get_Bcur
 
 def siteBcalc(args):    
     gene_size, distance, quiet = args.gene_size, args.distance, args.quiet
 
-    import core.utils.dfeHelper as dfeHelper
+    import bvalcalc.core.utils.dfeHelper as dfeHelper
     dfeHelper.GAMMA_DFE = args.gamma_dfe # Update DFE if --gamma_dfe
-    from core.calculateB import calculateB_linear
+    from bvalcalc.calculateB import calculateB_linear
 
     b_values = calculateB_linear(distance, gene_size)
     print(f"B for site {distance}bp away from {gene_size}bp region: {b_values}")

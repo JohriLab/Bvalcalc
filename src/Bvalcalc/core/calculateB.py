@@ -1,8 +1,13 @@
 import numpy as np
-from core.utils.dfeHelper import getDFEparams
+from bvalcalc.core.utils.dfeHelper import getDFEparams
+try:
+    g, k, r, u, Nanc, h, f0, f1, f2, f3, gamma_cutoff, t0, t1, t1half, t2, t3, t4 = getDFEparams()
+except KeyError:
+    # CLI hasn’t set BCALC_POP_PARAMS yet; defer until real call
+    g = k = r = u = Nanc = h = f0 = f1 = f2 = f3=  gamma_cutoff = t0 = t1 = t1half = t2 = t3 = t4 = None
 
-(g, k, r, u, Nanc, h, f0, f1, f2, f3,
- gamma_cutoff, t0, t1, t1half, t2, t3, t4) = getDFEparams()
+# (g, k, r, u, Nanc, h, f0, f1, f2, f3,
+#  gamma_cutoff, t0, t1, t1half, t2, t3, t4) = getDFEparams()
 
 def calculateB_linear(distance_to_element, length_of_element):
     """
