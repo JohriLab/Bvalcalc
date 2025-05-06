@@ -3,7 +3,7 @@ from core.utils.bedgffHandler import bedgffHandler
 from core.helpers.calc_L_per_chunk import calculate_L_per_chunk
 from core.helpers.demography_helpers import get_Bcur
 from core.utils.recmapHandler import recmapHandler
-from src.Bvalcalc.core.utils.bin_outputs import bin_outputs
+from core.utils.bin_outputs import bin_outputs
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import as_completed
 import numpy as np

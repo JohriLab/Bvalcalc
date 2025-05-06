@@ -1,6 +1,6 @@
 from core.chromBcalc import chromBcalc
 from core.utils.bedgffHandler import bedgffHandler
-from src.Bvalcalc.core.utils.load_chr_sizes import load_chr_sizes
+from core.utils.load_chr_sizes import load_chr_sizes
 from core.utils.BmapHandler import BmapHandler
 from core.calculateB import calculateB_unlinked
 import numpy as np
