@@ -4,13 +4,13 @@ import os
 import argparse
 from bvalcalc.core.utils.parseArgs import parseGenomeArgs, parseRegionArgs, parseGeneArgs, parseSiteArgs
 from bvalcalc.core.plotB import plotB
-from bvalcalc.core.utils.generateParams import SPECIES, generateParams
+from bvalcalc.core.utils.generateParams import SPECIES, generateParams, check_generate_params_args
 import sys
 
 def main():
     start_time = time.time()
 
-    # check_generate_params_args() # Unique error message for --generate_params to print species names
+    check_generate_params_args() # Unique error message for --generate_params to print species names
     parser = argparse.ArgumentParser(description="Bcalc main function! :p")
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('--generate_params',metavar='SPECIES',nargs='?',const='template',default=None,choices=['human', 'drosophila', 'arabidopsis', 'mouse', 'pfalciparum', 'celegans', 'template'], help="Generate popgen params for a given species (human, drosophila, arabidopsis or mouse)")

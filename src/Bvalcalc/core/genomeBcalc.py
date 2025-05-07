@@ -14,7 +14,7 @@ def genomeBcalc(args):
     if args.chr_sizes is not None: 
         chr_sizes = load_chr_sizes(args.chr_sizes)  # <-- Path to the sizes CSV file
 
-    import core.utils.dfeHelper as dfeHelper
+    import bvalcalc.core.utils.dfeHelper as dfeHelper
     dfeHelper.GAMMA_DFE = args.gamma_dfe # Update DFE if --gamma_dfe
 
     print("Chromosomes loaded:", unique_chromosomes) ## Now, loop over each chromosome and save B output
