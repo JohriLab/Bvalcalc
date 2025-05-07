@@ -22,7 +22,7 @@ def generateParams(species, folder='.'):
     tpl_path = os.path.abspath(
         os.path.join(
             os.path.dirname(__file__),
-            '../../', 'templates',
+            '../', 'templates',
             f'{species_cap}Params.py'
         )
     )
