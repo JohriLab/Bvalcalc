@@ -28,13 +28,12 @@ classifiers = [
   "Programming Language :: Python :: 3.10",
   "Operating System :: OS Independent"
 ]
-# Project URLs for documentation and navigation
+
 [project.urls]
 Homepage      = "https://github.com/JohriLab/BvalueCalculator"
 Documentation = "https://github.com/JohriLab/BvalueCalculator"
 Source        = "https://github.com/JohriLab/BvalueCalculator"
 Tracker       = "https://github.com/JohriLab/BvalueCalculator/issues"
-
 
 [project.optional-dependencies]
 docs = [
@@ -44,7 +43,3 @@ docs = [
 
 [project.scripts]
 bvalcalc = "bvalcalc.cli:main"
-
-[tool.setuptools.packages.find]
-where   = ["src"]
-include = ["bvalcalc", "bvalcalc.*"]
