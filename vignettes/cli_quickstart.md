@@ -14,7 +14,7 @@ First we need to copy population genetic parameters from one of the templates, e
 In your own analysis you'll need to check the literature and use informed values for your population.
 
 ```bash
-./Bvalcalc.py --generate_params drosophila
+Bvalcalc --generate_params drosophila
 ```
 
 ## Calculating B recovery from a single element
@@ -22,7 +22,7 @@ In your own analysis you'll need to check the literature and use informed values
 Now, let's calculate the recovery of B as a function of distance from a single conserved element [10kb by default] and save it to gene_B.png
 
 ```bash
-./Bvalcalc.py \
+Bvalcalc \
 --gene \
 --pop_params ./DrosophilaParams.py \
 --plot_output gene_B.png
@@ -34,7 +34,7 @@ Next, we can use a BED file that specifies which genomic ranges are conserved to
 Let's calculate B for a 1Mb region in the middle of chromosome 2R [9500000-10500000] and save it to 1Mb_B.png.
 
 ```bash
-./Bvalcalc.py \
+Bvalcalc \
 --region \
 --calc_region 2R:9500000-10500000 \
 --pop_params ./DrosophilaParams.py \
@@ -51,7 +51,7 @@ If you wanted to generate a complete B-map for all sites across all chromosomes 
 The following is the basic command, recommended options include `--chr_sizes` with a file specifying each chromosome's length, `--pop_change` for demography, `--rec_map` and `--gc_map` for crossover and gene conversion maps.
 
 ```bash
-./Bvalcalc.py \
+Bvalcalc \
 --genome \
 --pop_params ./DrosophilaParams.py \
 --bedgff_path examples/dmel6_2R_genes.csv
