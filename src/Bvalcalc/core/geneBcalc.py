@@ -1,12 +1,12 @@
 from bvalcalc.core.helpers.demography_helpers import get_Bcur
-from bvalcalc.core.utils.bin_outputs import bin_outputs
+from bvalcalc.utils.bin_outputs import bin_outputs
 import numpy as np
 import os
 
 def geneBcalc(args):    
     gene_size, flank_len, quiet = args.gene_size, args.flank_len, args.quiet
     
-    import bvalcalc.core.utils.dfeHelper as dfeHelper
+    import bvalcalc.utils.dfeHelper as dfeHelper
     dfeHelper.GAMMA_DFE = args.gamma_dfe # Update DFE if --gamma_dfe
     from bvalcalc.core.calculateB import calculateB_linear # Import calculateB with updated gamma DFE if needed
 

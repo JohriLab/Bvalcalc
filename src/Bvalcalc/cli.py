@@ -2,9 +2,9 @@
 import time
 import os
 import argparse
-from bvalcalc.core.utils.parseArgs import parseGenomeArgs, parseRegionArgs, parseGeneArgs, parseSiteArgs
+from bvalcalc.utils.parseArgs import parseGenomeArgs, parseRegionArgs, parseGeneArgs, parseSiteArgs
 from bvalcalc.core.plotB import plotB
-from bvalcalc.core.utils.generateParams import SPECIES, generateParams, check_generate_params_args
+from bvalcalc.utils.generateParams import SPECIES, generateParams, check_generate_params_args
 import sys
 
 def main():

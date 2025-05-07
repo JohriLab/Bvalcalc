@@ -1,7 +1,7 @@
 from bvalcalc.core.chromBcalc import chromBcalc
-from bvalcalc.core.utils.bedgffHandler import bedgffHandler
-from bvalcalc.core.utils.load_chr_sizes import load_chr_sizes
-from bvalcalc.core.utils.BmapHandler import BmapHandler
+from bvalcalc.utils.bedgffHandler import bedgffHandler
+from bvalcalc.utils.load_chr_sizes import load_chr_sizes
+from bvalcalc.utils.BmapHandler import BmapHandler
 from bvalcalc.core.calculateB import calculateB_unlinked
 import numpy as np
 import sys
@@ -14,7 +14,7 @@ def genomeBcalc(args):
     if args.chr_sizes is not None: 
         chr_sizes = load_chr_sizes(args.chr_sizes)  # <-- Path to the sizes CSV file
 
-    import bvalcalc.core.utils.dfeHelper as dfeHelper
+    import bvalcalc.utils.dfeHelper as dfeHelper
     dfeHelper.GAMMA_DFE = args.gamma_dfe # Update DFE if --gamma_dfe
 
     print("Chromosomes loaded:", unique_chromosomes) ## Now, loop over each chromosome and save B output

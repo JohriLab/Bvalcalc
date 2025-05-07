@@ -3,7 +3,7 @@ from bvalcalc.core.helpers.demography_helpers import get_Bcur
 def siteBcalc(args):    
     gene_size, distance, quiet = args.gene_size, args.distance, args.quiet
 
-    import bvalcalc.core.utils.dfeHelper as dfeHelper
+    import bvalcalc.utils.dfeHelper as dfeHelper
     dfeHelper.GAMMA_DFE = args.gamma_dfe # Update DFE if --gamma_dfe
     from bvalcalc.core.calculateB import calculateB_linear
 

@@ -1,6 +1,6 @@
 from bvalcalc.core.chromBcalc import chromBcalc
-from bvalcalc.core.utils.bedgffHandler import bedgffHandler
-from bvalcalc.core.utils.BmapHandler import BmapHandler
+from bvalcalc.utils.bedgffHandler import bedgffHandler
+from bvalcalc.utils.BmapHandler import BmapHandler
 from bvalcalc.core.calculateB import calculateB_unlinked
 import numpy as np
 import sys
@@ -9,7 +9,7 @@ def regionBcalc(args):
 
     allblockstart, allblockend, allblockchrom,  = bedgffHandler(args.bedgff_path) # Read BED/GFF, return start and end of conserved elements
 
-    import bvalcalc.core.utils.dfeHelper as dfeHelper
+    import bvalcalc.utils.dfeHelper as dfeHelper
     dfeHelper.GAMMA_DFE = args.gamma_dfe # Update DFE if --gamma_dfe
 
     calc_chrom, calc_start, calc_end = parse_region(args.calc_region)
