@@ -10,7 +10,8 @@ readme = "README.md"
 requires-python = ">=3.8"
 license = { file = "LICENSE" }
 authors = [
-  { name = "Jacob Marsh", email = "jacob.marsh@unc.edu" }
+  { name = "Jacob Marsh", email = "jacob.marsh@unc.edu" },
+  { name = "Parul Johri", email = "pjohri@unc.edu" }
 ]
 dependencies = [
   "numpy",
