@@ -4,4 +4,4 @@
 *.txt
 *.B
 *.bvals
-*Params.py
+*.Params.py
