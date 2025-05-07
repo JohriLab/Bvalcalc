@@ -1,13 +1,13 @@
 import numpy as np
 from bvalcalc.core.utils.dfeHelper import getDFEparams
-try:
-    g, k, r, u, Nanc, h, f0, f1, f2, f3, gamma_cutoff, t0, t1, t1half, t2, t3, t4 = getDFEparams()
-except KeyError:
-    # CLI hasn’t set BCALC_POP_PARAMS yet; defer until real call
-    g = k = r = u = Nanc = h = f0 = f1 = f2 = f3=  gamma_cutoff = t0 = t1 = t1half = t2 = t3 = t4 = None
 
-# (g, k, r, u, Nanc, h, f0, f1, f2, f3,
-#  gamma_cutoff, t0, t1, t1half, t2, t3, t4) = getDFEparams()
+_params_cache = None
+
+def _get_params():
+    global _params_cache
+    if _params_cache is None:
+        _params_cache = getDFEparams()
+    return _params_cache
 
 def calculateB_linear(distance_to_element, length_of_element):
     """
@@ -15,6 +15,8 @@ def calculateB_linear(distance_to_element, length_of_element):
     summing over the DFE while consolidating the intermediate calculations.
     """    
     with np.errstate(divide='ignore', invalid='ignore'):
+        params = _get_params()
+        r, u, g, k, t1, t1half, t2, t3, t4, f1, f2, f3, f0 = params["r"], params["u"], params["g"], params["k"], params["t1"], params["t1half"], params["t2"], params["t3"], params["t4"], params["f1"], params["f2"], params["f3"], params["f0"]
         C = (1.0 - np.exp(-2.0 * r * distance_to_element)) / 2.0 # cM
         U = length_of_element * u
         if g == 0:
@@ -47,6 +49,8 @@ def calculateB_recmap(distance_to_element, length_of_element,
     summing over the DFE while consolidating the intermediate calculations.
     """    
     with np.errstate(divide='ignore', invalid='ignore'):
+        params = _get_params()
+        r, u, g, k, t1, t1half, t2, t3, t4, f1, f2, f3, f0 = params["r"], params["u"], params["g"], params["k"], params["t1"], params["t1half"], params["t2"], params["t3"], params["t4"], params["f1"], params["f2"], params["f3"], params["f0"]
         # rec_distances is the length of the element * rec rate in each spanned region. 
         
         if rec_distances is not None:
@@ -86,6 +90,8 @@ def calculateB_recmap(distance_to_element, length_of_element,
     return np.where(length_of_element == 0, 1.0, B)
 
 def calculateB_unlinked(unlinked_L):
+    params = _get_params()
+    r, u, g, k, t1, t1half, t2, t3, t4, f1, f2, f3, f0 = params["r"], params["u"], params["g"], params["k"], params["t1"], params["t1half"], params["t2"], params["t3"], params["t4"], params["f1"], params["f2"], params["f3"], params["f0"]
     sum_f = (
         f0 * 0.0
         + f1 * ((t1half - t1) / (t2 - t1)) * 0.0
@@ -113,6 +119,8 @@ def calculate_exponent(t_start, t_end, U, a, b):
 
 def get_a_b_with_GC(C, y, l):
         with np.errstate(divide='ignore', invalid='ignore'):
+            params = _get_params()
+            r, u, g, k, t1, t1half, t2, t3, t4, f1, f2, f3, f0 = params["r"], params["u"], params["g"], params["k"], params["t1"], params["t1half"], params["t2"], params["t3"], params["t4"], params["f1"], params["f2"], params["f3"], params["f0"]
             proportion_nogc_a = np.where(k < y + l, # When GC includes neutral site, this is proportion of the gene it includes
                                         np.maximum((0.5*(k-y)/l), 0),
                                         1-(y + l)/(2 * k)
@@ -134,6 +142,8 @@ def get_a_b_with_GC(C, y, l):
         return a, b
 
 def get_a_b_with_GC_andMaps(C, y, l, rec_l, local_g):
+        params = _get_params()
+        r, u, g, k, t1, t1half, t2, t3, t4, f1, f2, f3, f0 = params["r"], params["u"], params["g"], params["k"], params["t1"], params["t1half"], params["t2"], params["t3"], params["t4"], params["f1"], params["f2"], params["f3"], params["f0"]
         with np.errstate(divide='ignore', invalid='ignore'):
             proportion_nogc_a = np.where(k < y + l, # When GC includes neutral site, this is proportion of the gene it includes
                                         np.maximum((0.5*(k-y)/l), 0),

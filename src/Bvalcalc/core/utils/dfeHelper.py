@@ -1,55 +1,64 @@
 import scipy.stats as st
 import os, importlib.util
-from typing import Tuple
+from functools import lru_cache
+from typing import Dict, Any
 GAMMA_DFE = False # Default, instead of prop injected
 
-def getDFEparams() -> Tuple[
-        float, float, float, float,   # g, k, r, u
-        float, float,                 # Nanc, h
-        float, float, float, float,   # f0‑f3
-        float, float,                 # gamma_cutoff, t0
-        float, float, float, float, float]:   # t1, t1half, t2, t3, t4
+def getDFEparams() -> Dict[str, Any]:
     """
-    Load pop‑gen parameters from the params file pointed to by $BCALC_POP_PARAMS
-    and return everything needed by calculateB.py as a single tuple.
+    Load and validate population parameters from the file pointed to by BCALC_POP_PARAMS.
+    Returns a dictionary of parameters for use in B-value calculations.
     """
+    # 1. Ensure the env var is set
+    params_path = os.environ.get("BCALC_POP_PARAMS")
+    if not params_path:
+        raise KeyError("Environment variable BCALC_POP_PARAMS not set. Cannot load pop-gen parameters.")
+    print("YOYOY", params_path)
 
-    spec = importlib.util.spec_from_file_location("pop_params",
-                                                  os.environ["BCALC_POP_PARAMS"])
-    _pop = importlib.util.module_from_spec(spec); spec.loader.exec_module(_pop)
-    # required parameters
-    g    = _pop.g
-    k    = _pop.k
-    r    = _pop.r
-    u    = _pop.u
-    Nanc = _pop.Nanc
-    h    = _pop.h
-    f0   = _pop.f0
-    f1   = _pop.f1
-    f2   = _pop.f2
-    f3   = _pop.f3
+    # 2. Load the module
+    spec = importlib.util.spec_from_file_location("pop_params", params_path)
+    if spec is None or spec.loader is None:
+        raise FileNotFoundError(f"Could not load spec for pop_params from {params_path}")
+    pop = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(pop)
 
-    # if the user asked for gamma-DFE, pull mean/shape and override f0–f3
+    # 3. Extract and validate required attributes
+    required_names = ["g", "k", "r", "u", "Nanc", "h", "f0", "f1", "f2", "f3"]
+    params: Dict[str, Any] = {}
+    for name in required_names:
+        if not hasattr(pop, name):
+            raise AttributeError(f"pop_params must define '{name}'")
+        val = getattr(pop, name)
+        if val is None:
+            raise AttributeError(f"pop_params parameter '{name}' is None; must be a numeric value")
+        params[name] = float(val)
+
+    # 4. Optional gamma-DFE override
     if GAMMA_DFE:
-        mean  = getattr(_pop, 'mean',  None)
-        shape = getattr(_pop, 'shape', None)
-        proportion_synonymous = getattr(_pop, 'proportion_synonymous', None)
-        if mean is None or shape is None or proportion_synonymous is None:
+        mean = getattr(pop, 'mean', None)
+        shape = getattr(pop, 'shape', None)
+        prop_syn = getattr(pop, 'proportion_synonymous', None)
+        if mean is None or shape is None or prop_syn is None:
             raise AttributeError(
-                "pop_params must define 'mean', 'shape' and 'proportion_synonymous when GAMMA_DFE=True"
+                "pop_params must define 'mean', 'shape' and 'proportion_synonymous' when GAMMA_DFE=True"
             )
-        f0, f1, f2, f3 = gammaDFE_to_discretized(mean, shape, proportion_synonymous)
+        from .dfeHelper import gammaDFE_to_discretized
+        f0, f1, f2, f3 = gammaDFE_to_discretized(mean, shape, prop_syn)
+        params.update({"f0": f0, "f1": f1, "f2": f2, "f3": f3})
 
-    gamma_cutoff = 5 # 2Ns threshold for effectively neutral alleles, mutations below this threshold will be ignored in B calculation. Keep as 5 unless theory suggests otherwise.
-    t0 = 0.0 # Start of neutral class (t=hs=0)
-    t1 = h*(1/(2*Nanc)) # Start of f1 class (2Ns=1)
-    t1half = h*(gamma_cutoff/(2*Nanc)) # 2Ns threshold for effectively neutral alleles
-    t2 = h*(10/(2*Nanc)) # End of f1 class, start of f2 class (2Ns=10)
-    t3 = h*(100/(2*Nanc)) # End of f2 class, start of f3 class (2Ns=100) 
-    t4 = h*1.0 # End of f3 class (s=1)
+    # 5. Set derived parameters and thresholds
+    params["gamma_cutoff"] = 5
+    params["t0"] = 0.0
+    Nanc = params["Nanc"]
+    h = params["h"]
+    # Calculate generation-scale thresholds
+    params["t1"] = h * (1.0 / (2.0 * Nanc))
+    params["t1half"] = h * (params["gamma_cutoff"] / (2.0 * Nanc))
+    params["t2"] = h * (10.0 / (2.0 * Nanc))
+    params["t3"] = h * (100.0 / (2.0 * Nanc))
+    params["t4"] = h * 1.0
 
-    return (g, k, r, u, Nanc, h, f0, f1, f2, f3,
-            gamma_cutoff, t0, t1, t1half, t2, t3, t4)
+    return params
 
 
 def gammaDFE_to_discretized(mean: float, shape: float, proportion_synonymous: float):

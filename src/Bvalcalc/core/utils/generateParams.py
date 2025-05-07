@@ -4,7 +4,6 @@ import sys
 # keep your list of valid species here
 SPECIES = ['selfing', 'human', 'drosophila', 'arabidopsis', 'mouse', 'pfalciparum', 'celegans']
 
-# Deprecated behaviour
 def check_generate_params_args(argv=None):
     """
     If '--generate_params' appears with no species or next flag,
