@@ -43,3 +43,9 @@ docs = [
 
 [project.scripts]
 bvalcalc = "bvalcalc.cli:main"
+
+[tool.setuptools.packages.find]
+
+where   = ["."]
+include = ["bvalcalc", "bvalcalc.*"]
+exclude = ["trash*"]
