@@ -1,5 +1,5 @@
 import numpy as np
-from core.calculateB import calculateB_linear
+from bvalcalc.core.calculateB import calculateB_linear
 
 def test_B_value_for_zero_length():
     result = calculateB_linear(np.array([100]), np.array([0]))
