@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "bvalcalc"
-version = "0.1.1"
+version = "0.1.2"
 description = "Calculate relative diversity (B) under background selection"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 license = { file = "LICENSE" }
 authors = [
   { name = "Jacob Marsh", email = "jacob.marsh@unc.edu" },
@@ -50,3 +50,6 @@ bvalcalc = "bvalcalc.cli:main"
 where   = ["."]
 include = ["bvalcalc", "bvalcalc.*"]
 exclude = ["trash*"]
+[tool.poetry.group.docs.dependencies]
+sphinx = "^7.2"
+

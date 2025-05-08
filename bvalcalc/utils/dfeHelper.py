@@ -13,7 +13,6 @@ def getDFEparams() -> Dict[str, Any]:
     params_path = os.environ.get("BCALC_POP_PARAMS")
     if not params_path:
         raise KeyError("Environment variable BCALC_POP_PARAMS not set. Cannot load pop-gen parameters.")
-    print("YOYOY", params_path)
 
     # 2. Load the module
     spec = importlib.util.spec_from_file_location("pop_params", params_path)
