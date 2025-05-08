@@ -3,5 +3,5 @@ CLI Reference
 
 .. argparse::
    :module: bvalcalc.cli
-   :func: build_parser
+   :func: parse_args
    :prog: bvalcalc

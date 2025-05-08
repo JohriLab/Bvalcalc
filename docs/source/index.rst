@@ -13,8 +13,11 @@ documentation for details.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Command-Line Usage:
 
-   api
-
-
+   cli
+   modes/generate_params
+   modes/genome
+   modes/region
+   modes/gene
+   modes/site

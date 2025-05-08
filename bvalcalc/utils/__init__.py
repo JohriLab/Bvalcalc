@@ -2,7 +2,7 @@
 Utility modules for bvalcalc.
 """
 # Argument parsers
-from .parseArgs import parseGenomeArgs, parseRegionArgs, parseGeneArgs, parseSiteArgs
+from .parseArgs import parse_args, parseGenomeArgs, parseRegionArgs, parseGeneArgs, parseSiteArgs
 # Parameter generation
 from .generateParams import SPECIES, generateParams
 # File and map handlers
@@ -16,7 +16,7 @@ from . import dfe_helper
 
 __all__ = [
     # parsers
-    "parseGenomeArgs", "parseRegionArgs", "parseGeneArgs", "parseSiteArgs",
+   "parse_args", "parseGenomeArgs", "parseRegionArgs", "parseGeneArgs", "parseSiteArgs",
     # params
     "SPECIES", "generateParams",
     # handlers
