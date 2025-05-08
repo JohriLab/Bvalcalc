@@ -31,6 +31,8 @@ sys.path.insert(0, os.path.abspath('../..'))  # so it can find bvalcalc/
 
 extensions = [
     "sphinx.ext.autodoc",
-    "sphinx.ext.napoleon",   # to support Google/NumPy style docstrings
-    "sphinx.ext.viewcode",   # adds [source] links
+    "sphinx.ext.napoleon",
+    "sphinx.ext.viewcode",
+    "sphinxarg.ext",  # sphinx-argparse extension
 ]
+

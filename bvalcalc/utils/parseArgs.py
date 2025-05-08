@@ -117,3 +117,15 @@ def parseSiteArgs(argv=None):
     parser.add_argument('--quiet', action='store_true', help="If set, silence print statements.")
     return parser.parse_args(argv)
 
+def parse_args():
+    parser = argparse.ArgumentParser(description="Bcalc main function! :p")
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument('--generate_params', metavar='SPECIES', nargs='?', const='template', default=None,
+                       choices=['selfing', 'human', 'drosophila', 'arabidopsis', 'mouse', 'pfalciparum', 'celegans', 'template'],
+                       help="Generate popgen params for a given species...")
+    parser.add_argument('--dir', '-d', default='.', help="Directory to write the generated params file (default: current directory)")
+    group.add_argument('--genome', '-w', action='store_true', help="Compute B values genome-wide...")
+    group.add_argument('--region', '-r', action='store_true', help="Compute B values for a chromosomal region...")
+    group.add_argument('--gene', '-g', action='store_true', help="Compute B values for a region adjacent to a selected element")
+    group.add_argument('--site', '-s', action='store_true', help="Compute B values for a single site")
+    return parser

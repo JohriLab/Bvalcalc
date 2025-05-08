@@ -2,7 +2,7 @@
 import time
 import os
 import argparse
-from bvalcalc.utils.parseArgs import parseGenomeArgs, parseRegionArgs, parseGeneArgs, parseSiteArgs
+from bvalcalc.utils.parseArgs import parse_args, parseGenomeArgs, parseRegionArgs, parseGeneArgs, parseSiteArgs
 from bvalcalc.core.plotB import plotB
 from bvalcalc.utils.generateParams import SPECIES, generateParams, check_generate_params_args
 import sys
@@ -11,14 +11,7 @@ def main():
     start_time = time.time()
 
     check_generate_params_args() # Unique error message for --generate_params to print species names
-    parser = argparse.ArgumentParser(description="Bcalc main function! :p")
-    group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument('--generate_params',metavar='SPECIES',nargs='?',const='template',default=None,choices=['human', 'drosophila', 'arabidopsis', 'mouse', 'pfalciparum', 'celegans', 'template'], help="Generate popgen params for a given species (human, drosophila, arabidopsis or mouse)")
-    parser.add_argument('--dir', '-d', default='.', help="Directory in which to write the generated params file (default: current directory)")
-    group.add_argument('--genome', '-w', action='store_true', help="Compute B values genome-wide for all sites considering all selected elements")
-    group.add_argument('--region', '-r', action='store_true', help="Compute B values for a specific chromosomal region, considering genome-wide effects")
-    group.add_argument('--gene', '-g', action='store_true', help="Compute B values for a neutral region adjacent to a single selected element")
-    group.add_argument('--site', '-s',action='store_true', help="Compute B values for a single site from a selected element")
+    parser = parse_args()
     known_args, remaining_args = parser.parse_known_args()
 
     if known_args.generate_params is not None: # if --generate_params

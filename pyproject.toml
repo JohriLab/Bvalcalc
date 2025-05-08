@@ -7,7 +7,7 @@ name = "bvalcalc"
 version = "0.1.2"
 description = "Calculate relative diversity (B) under background selection"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = { file = "LICENSE" }
 authors = [
   { name = "Jacob Marsh", email = "jacob.marsh@unc.edu" },
@@ -52,4 +52,5 @@ include = ["bvalcalc", "bvalcalc.*"]
 exclude = ["trash*"]
 [tool.poetry.group.docs.dependencies]
 sphinx = "^7.2"
+sphinx-argparse = "^0.5.2"
 
