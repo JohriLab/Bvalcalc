@@ -6,13 +6,13 @@ from .parseArgs import parseGenomeArgs, parseRegionArgs, parseGeneArgs, parseSit
 # Parameter generation
 from .generateParams import SPECIES, generateParams
 # File and map handlers
-from .bedgffHandler     import bedgffHandler
+from .load_bed_gff     import load_bed_gff
 from .bin_outputs import bin_outputs
 from .load_chr_sizes   import load_chr_sizes
-from .recmapHandler     import recmapHandler
-from .BmapHandler       import BmapHandler
+from .load_rec_map     import load_rec_map
+from .load_Bmap       import load_Bmap
 # DFE utilities
-from . import dfeHelper
+from . import dfe_helper
 
 __all__ = [
     # parsers
@@ -20,7 +20,7 @@ __all__ = [
     # params
     "SPECIES", "generateParams",
     # handlers
-    "bedgffHandler", "bin_outputs", "load_chr_sizes", "recmapHandler", "BmapHandler",
+    "load_bed_gff", "bin_outputs", "load_chr_sizes", "load_rec_map", "load_Bmap",
     # DFE utilities
-    "dfeHelper",
+    "dfe_helper",
 ]

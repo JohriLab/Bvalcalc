@@ -1,8 +1,8 @@
 from bvalcalc.core.helpers.process_single_chunk import process_single_chunk
-from bvalcalc.utils.bedgffHandler import bedgffHandler
+from bvalcalc.utils.load_bed_gff import load_bed_gff
 from bvalcalc.core.helpers.calc_L_per_chunk import calculate_L_per_chunk
 from bvalcalc.core.helpers.demography_helpers import get_Bcur
-from bvalcalc.utils.recmapHandler import recmapHandler
+from bvalcalc.utils.load_rec_map import load_rec_map
 from bvalcalc.utils.bin_outputs import bin_outputs
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import as_completed
@@ -61,13 +61,13 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
 
     if args.rec_map: # Process recombination map if provided
         if not quiet: print(f"Using recombination (crossover) map from {args.rec_map}")
-        rec_rate_per_chunk = recmapHandler(args.rec_map, chr_start, chr_size, chunk_size)
+        rec_rate_per_chunk = load_rec_map(args.rec_map, chr_start, chr_size, chunk_size)
     else:
         rec_rate_per_chunk = None
 
     if args.gc_map:
         if not quiet: print(f"Using gene conversion map from {args.gc_map}")
-        gc_rate_per_chunk = recmapHandler(args.gc_map, chr_start, chr_size, chunk_size)
+        gc_rate_per_chunk = load_rec_map(args.gc_map, chr_start, chr_size, chunk_size)
     else:
         gc_rate_per_chunk = None
 

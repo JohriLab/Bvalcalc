@@ -1,7 +1,7 @@
 import csv
 import numpy as np
 
-def recmapHandler(rec_map, calc_start, calc_end, chunk_size):
+def load_rec_map(rec_map, calc_start, calc_end, chunk_size):
     """
     Processes the recombination map CSV file using the csv module and returns
     the average recombination rate per chunk, weighted by the proportion of each 

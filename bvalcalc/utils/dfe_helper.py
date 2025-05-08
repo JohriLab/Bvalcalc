@@ -4,7 +4,7 @@ from functools import lru_cache
 from typing import Dict, Any
 GAMMA_DFE = False # Default, instead of prop injected
 
-def getDFEparams() -> Dict[str, Any]:
+def get_DFE_params() -> Dict[str, Any]:
     """
     Load and validate population parameters from the file pointed to by BCALC_POP_PARAMS.
     Returns a dictionary of parameters for use in B-value calculations.
@@ -41,7 +41,7 @@ def getDFEparams() -> Dict[str, Any]:
             raise AttributeError(
                 "pop_params must define 'mean', 'shape' and 'proportion_synonymous' when GAMMA_DFE=True"
             )
-        from .dfeHelper import gammaDFE_to_discretized
+        from .dfe_helper import gammaDFE_to_discretized
         f0, f1, f2, f3 = gammaDFE_to_discretized(mean, shape, prop_syn)
         params.update({"f0": f0, "f1": f1, "f2": f2, "f3": f3})
 

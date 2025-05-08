@@ -1,16 +1,16 @@
 from bvalcalc.core.chromBcalc import chromBcalc
-from bvalcalc.utils.bedgffHandler import bedgffHandler
-from bvalcalc.utils.BmapHandler import BmapHandler
+from bvalcalc.utils.load_bed_gff import load_bed_gff
+from bvalcalc.utils.load_Bmap import load_Bmap
 from bvalcalc.core.calculateB import calculateB_unlinked
 import numpy as np
 import sys
 
 def regionBcalc(args):    
 
-    allblockstart, allblockend, allblockchrom,  = bedgffHandler(args.bedgff_path) # Read BED/GFF, return start and end of conserved elements
+    allblockstart, allblockend, allblockchrom,  = load_bed_gff(args.bedgff_path) # Read BED/GFF, return start and end of conserved elements
 
-    import bvalcalc.utils.dfeHelper as dfeHelper
-    dfeHelper.GAMMA_DFE = args.gamma_dfe # Update DFE if --gamma_dfe
+    import bvalcalc.utils.dfe_helper as dfe_helper
+    dfe_helper.GAMMA_DFE = args.gamma_dfe # Update DFE if --gamma_dfe
 
     calc_chrom, calc_start, calc_end = parse_region(args.calc_region)
 
@@ -25,7 +25,7 @@ def regionBcalc(args):
     unlinked_B = calculateB_unlinked(unlinked_L)
 
     if args.prior_Bmap is not None:
-        prior_chromosomes, prior_positions, prior_b_values = BmapHandler(file_path = args.prior_Bmap)
+        prior_chromosomes, prior_positions, prior_b_values = load_Bmap(file_path = args.prior_Bmap)
         if not args.quiet: print(f"Using prior B values from {args.prior_Bmap}")
         prior_mask = (prior_chromosomes == chromosome)
         prior_pos = prior_positions[prior_mask]

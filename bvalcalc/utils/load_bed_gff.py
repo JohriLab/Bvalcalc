@@ -2,7 +2,7 @@ import csv
 import os
 import numpy as np
 
-def bedgffHandler(file_path):
+def load_bed_gff(file_path):
     """
     Read a BED, CSV, GFF, GFF3, or GTF file and return arrays of block starts, block ends, and chromosomes.
 

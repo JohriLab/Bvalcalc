@@ -1,26 +1,26 @@
 from bvalcalc.core.chromBcalc import chromBcalc
-from bvalcalc.utils.bedgffHandler import bedgffHandler
+from bvalcalc.utils.load_bed_gff import load_bed_gff
 from bvalcalc.utils.load_chr_sizes import load_chr_sizes
-from bvalcalc.utils.BmapHandler import BmapHandler
+from bvalcalc.utils.load_Bmap import load_Bmap
 from bvalcalc.core.calculateB import calculateB_unlinked
 import numpy as np
 import sys
 
 def genomeBcalc(args):    
 
-    allblockstart, allblockend, allblockchrom = bedgffHandler(args.bedgff_path) # Read BED/GFF, return start and end of conserved elements
+    allblockstart, allblockend, allblockchrom = load_bed_gff(args.bedgff_path) # Read BED/GFF, return start and end of conserved elements
 
     unique_chromosomes = np.unique(allblockchrom) # Move BED/GFF handler here
     if args.chr_sizes is not None: 
         chr_sizes = load_chr_sizes(args.chr_sizes)  # <-- Path to the sizes CSV file
 
-    import bvalcalc.utils.dfeHelper as dfeHelper
-    dfeHelper.GAMMA_DFE = args.gamma_dfe # Update DFE if --gamma_dfe
+    import bvalcalc.utils.dfe_helper as dfe_helper
+    dfe_helper.GAMMA_DFE = args.gamma_dfe # Update DFE if --gamma_dfe
 
     print("Chromosomes loaded:", unique_chromosomes) ## Now, loop over each chromosome and save B output
 
     if args.prior_Bmap is not None:
-        prior_chromosomes, prior_positions, prior_b_values = BmapHandler(file_path = args.prior_Bmap)
+        prior_chromosomes, prior_positions, prior_b_values = load_Bmap(file_path = args.prior_Bmap)
         if not args.quiet: print(f"Using prior B values from {args.prior_Bmap}")
 
     if args.out is not None: # Overwrite existing file with header

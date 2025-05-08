@@ -1,12 +1,12 @@
 import numpy as np
-from bvalcalc.utils.dfeHelper import getDFEparams
+from bvalcalc.utils.dfe_helper import get_DFE_params
 
 _params_cache = None
 
 def _get_params():
     global _params_cache
     if _params_cache is None:
-        _params_cache = getDFEparams()
+        _params_cache = get_DFE_params()
     return _params_cache
 
 def calculateB_linear(distance_to_element, length_of_element):

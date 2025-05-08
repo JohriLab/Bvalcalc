@@ -6,8 +6,8 @@ import os
 def geneBcalc(args):    
     gene_size, flank_len, quiet = args.gene_size, args.flank_len, args.quiet
     
-    import bvalcalc.utils.dfeHelper as dfeHelper
-    dfeHelper.GAMMA_DFE = args.gamma_dfe # Update DFE if --gamma_dfe
+    import bvalcalc.utils.dfe_helper as dfe_helper
+    dfe_helper.GAMMA_DFE = args.gamma_dfe # Update DFE if --gamma_dfe
     from bvalcalc.core.calculateB import calculateB_linear # Import calculateB with updated gamma DFE if needed
 
     if not quiet: 
