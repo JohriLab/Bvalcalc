@@ -21,3 +21,4 @@ documentation for details.
    modes/region
    modes/gene
    modes/site
+   api

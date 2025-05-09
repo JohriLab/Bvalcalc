@@ -1,7 +1,7 @@
 Generating population parameters
 =========================
 
-A population parameter file can be generated from one of the pre-built templates in `Bvalcalc` using `--generate_params`.
+A population parameter file can be generated from one of the pre-built templates using `Bvalcalc --generate_params`.
 
 This file provides population genetic parameters such as the effective population size and per-base mutation/recombination rates which are all variables that impact the linked effects of selection (i.e., B).
 
