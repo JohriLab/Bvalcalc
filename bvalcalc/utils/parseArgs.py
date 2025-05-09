@@ -94,7 +94,7 @@ def parseGeneArgs(argv=None):
     parser.add_argument('--pop_change', action='store_true', help="If set, B will reflect the current B after a step change in population size, rather than ancestral B.")
     parser.add_argument('--gamma_dfe', action='store_true', help="If set, gamma distribution parameters will be used to define DFE's discretized f0-f3 proportions")
     parser.add_argument('--plot_output', nargs='?', const='Bplot.png', default=None, 
-                        help="Generate a basic plot using `Bvalcalc.py --genome` output"
+                        help="Generate a B recovery slope output"
                             "Provide path to plot output.")
     parser.add_argument('--out', type=str, default=None,
                         help="Optional path to output CSV file.")
@@ -118,14 +118,14 @@ def parseSiteArgs(argv=None):
     return parser.parse_args(argv)
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Bcalc main function! :p")
+    parser = argparse.ArgumentParser(description="Welcome to Bvalcalc! Please specify a mode to calculate B.")
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('--generate_params', metavar='SPECIES', nargs='?', const='template', default=None,
                        choices=['selfing', 'human', 'drosophila', 'arabidopsis', 'mouse', 'pfalciparum', 'celegans', 'template'],
-                       help="Generate popgen params for a given species...")
+                       help="Generate popgen params for a given species from one of the default templates.")
     parser.add_argument('--dir', '-d', default='.', help="Directory to write the generated params file (default: current directory)")
-    group.add_argument('--genome', '-w', action='store_true', help="Compute B values genome-wide...")
-    group.add_argument('--region', '-r', action='store_true', help="Compute B values for a chromosomal region...")
+    group.add_argument('--genome', '-w', action='store_true', help="Compute B values genome-wide")
+    group.add_argument('--region', '-r', action='store_true', help="Compute B values for a chromosomal region")
     group.add_argument('--gene', '-g', action='store_true', help="Compute B values for a region adjacent to a selected element")
     group.add_argument('--site', '-s', action='store_true', help="Compute B values for a single site")
     return parser
