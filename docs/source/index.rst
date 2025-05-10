@@ -1,24 +1,21 @@
-.. Bvalcalc documentation master file, created by
-   sphinx-quickstart on Thu May  8 12:12:53 2025.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
-Bvalcalc documentation
+Bvalcalc Documentation
 ======================
 
-Add your content using ``reStructuredText`` syntax. See the
-`reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-documentation for details.
-
+Welcome to the official documentation for **Bvalcalc**, a CLI tool for computing B-values under background selection.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Command-Line Usage:
+   :caption: Usage Modes
 
    cli
    modes/generate_params
-   modes/genome
-   modes/region
-   modes/gene
    modes/site
+   modes/gene
+   modes/region
+   modes/genome
+
+.. toctree::
+   :maxdepth: 1
+   :caption: API Reference
+
    api
