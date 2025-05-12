@@ -46,7 +46,6 @@ def parseRegionArgs(argv=None):
     # parser.add_argument('--pop_params', type=int, required=True, help="Path to file providing popgen parameters specific to modelled population (empirical or simulated).")
     parser.add_argument('--pop_params', type=str, required=True, help="Path to Python file with population genetic parameters, e.g., ExampleParams.py")
     parser.add_argument('--bedgff_path', type=str, required=True, help="Path to input BED or GFF3 file.")
-    parser.add_argument('--calc_region', type=str, default=None, help="[CHR:START-END] indicating the name of the chromosome, and start/end positions of region to calculate B e.g. [2R:9260000-11700000]") # See if statment below
     parser.add_argument('--chunk_size', type=int, default=20000, help="Size of chunks calculated simultaneously (bp). [100000]")
     parser.add_argument('--precise_chunks', type=int, default=3, help="Number of adjacent chunks to calculate B precisely.")
     parser.add_argument('--pop_change', action='store_true', help="If set, B will reflect the current B after a step change in population size, rather than ancestral B.")
@@ -125,7 +124,7 @@ def parse_args():
                        help="Generate popgen params for a given species from one of the default templates.")
     parser.add_argument('--dir', '-d', default='.', help="Directory to write the generated params file (default: current directory)")
     group.add_argument('--genome', '-w', action='store_true', help="Compute B values genome-wide")
-    group.add_argument('--region', '-r', action='store_true', help="Compute B values for a chromosomal region")
+    group.add_argument('--region', '-r', type=str, default=None, help="Compute B values for a specified chromosomal region [CHR:START-END]")
     group.add_argument('--gene', '-g', action='store_true', help="Compute B values for a region adjacent to a selected element")
     group.add_argument('--site', '-s', action='store_true', help="Compute B values for a single site")
     return parser

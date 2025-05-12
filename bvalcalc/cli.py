@@ -31,7 +31,7 @@ def main():
         args = parseRegionArgs(remaining_args)
         os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Handle Params file
         from bvalcalc.core.regionBcalc import regionBcalc
-        output_data, block_ranges = regionBcalc(args)
+        output_data, block_ranges = regionBcalc(args, known_args.region)
         if getattr(args, 'plot_output', True):
             plotB(b_values_input=output_data, caller="chromosome", output_path=args.plot_output, quiet=args.quiet, gene_ranges=block_ranges, neutral_only=args.neutral_only)
 

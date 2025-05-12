@@ -35,8 +35,7 @@ Let's calculate B for a 1Mb region in the middle of chromosome 2R [9500000-10500
 
 ```bash
 Bvalcalc \
---region \
---calc_region 2R:9500000-10500000 \
+--region 2R:9500000-10500000 \
 --pop_params ./DrosophilaParams.py \
 --bedgff_path examples/dmel6_2R_genes.csv \
 --plot_output 1Mb_B.png

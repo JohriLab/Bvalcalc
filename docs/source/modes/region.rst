@@ -6,10 +6,15 @@ Calculate a B-map for a specified chromosomal region, considering linked and unl
 
 .. code-block:: console
 
-    bvalcalc --region --pop_params YourParams.py --bedgff_path annotations.gff --calc_region 2R:9260000-11700000
+    bvalcalc --region 2R:9260000-11700000 --pop_params YourParams.py --bedgff_path annotations.gff 
 
 Core Arguments
 --------------
+
+**--region**  
+Chromosome and coordinate range to calculate B over  
+Format: `CHR:START-END` (e.g. `2R:9260000-11700000`)  
+If not set, defaults to the entire chromosome in the annotation file
 
 **--pop_params**  
 Path to a Python file defining population genetic parameters  
@@ -17,11 +22,6 @@ Path to a Python file defining population genetic parameters
 
 **--bedgff_path**  
 Path to an annotation file of selected elements, in BED or GFF3 format
-
-**--calc_region**  
-Chromosome and coordinate range to calculate B over  
-Format: `CHR:START-END` (e.g. `2R:9260000-11700000`)  
-If not set, defaults to the entire chromosome in the annotation file
 
 Optional Arguments
 ------------------
@@ -73,16 +73,15 @@ Example
 
 .. code-block:: console
 
-    bvalcalc --region \
+    bvalcalc --region 2R:9260000-11700000 \
       --pop_params HumanParams.py \
       --bedgff_path annotations.gff \
-      --calc_region 2R:9260000-11700000 \
       --chunk_size 20000 \
       --plot_output BregionPlot.png
 
 Notes
 -----
 
-- You **must** provide a valid `--calc_region` or ensure your BED/GFF file covers only the desired region.
+- You **must** provide a valid region or ensure your BED/GFF file covers only the desired region.
 - If you use `--out`, you **must** also include `--out_binsize`.
 - Recombination and GC maps will be averaged over chunks.

@@ -5,18 +5,15 @@ from bvalcalc.core.calculateB import calculateB_unlinked
 import numpy as np
 import sys
 
-def regionBcalc(args):    
+def regionBcalc(args, region):    
 
     allblockstart, allblockend, allblockchrom,  = load_bed_gff(args.bedgff_path) # Read BED/GFF, return start and end of conserved elements
 
     import bvalcalc.utils.dfe_helper as dfe_helper
     dfe_helper.GAMMA_DFE = args.gamma_dfe # Update DFE if --gamma_dfe
 
-    calc_chrom, calc_start, calc_end = parse_region(args.calc_region)
+    calc_chrom, calc_start, calc_end = parse_region(region)
 
-    # # First, require calc_region
-    # # Then, mask for the chromosome the calc_region is in.
-    # # Then, pass that into chromBcalc() as calc_start and calc_end
     mask = allblockchrom == calc_chrom
     blockstart, blockend = allblockstart[mask], allblockend[mask]
     chromosome = calc_chrom

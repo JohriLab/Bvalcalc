@@ -4,8 +4,10 @@
 ## Usage: ./Bvalcalc --region --pop_params ExampleParams.py
 ##        ./Bvalcalc --genome --pop_params ExampleParams.py
 
+#poetry run bvalcalc --region chr_neutral:1-1 --pop_params tests/testparams/UnlinkedParams.py --bedgff_path tests/testfiles/200kb_unlinked.csv
+
 ## Core parameters
-x = 100 # Scaling factor (N,u,r), keep as 1 unless calculating for rescaled simulations
+x = 1000 # Scaling factor (N,u,r), keep as 1 unless calculating for rescaled simulations
 Nanc = 1e6/x # Ancestral population size
 r = 0.5*1e-8*x # Recombination (crossover) rate per bp, per generation
 u = 3*1e-9*x # Mutation rate (all types) per bp, per generation
@@ -25,11 +27,4 @@ f3 = 0.4 #(*Proportion of strongly deleterious mutations with |2Nes| >= 100 *) 0
 ## Advanced DFE parameters
 gamma_cutoff = 5 # 2Ns threshold for effectively neutral alleles, mutations below this threshold will be ignored in B calculation. Keep as 5 unless theory suggests otherwise.
 h=0.5 # Dominance coefficient of selected alleles
-t0 = 0.0
-t1 = h*(1/(2*Nanc))
-t1half = h*(gamma_cutoff/(2*Nanc))
-t2 = h*(10/(2*Nanc))
-t3 = h*(100/(2*Nanc))
-t4 = h*1.0
-
 mean, shape, proportion_synonymous = 500, 0.5, 0.3 # Gamma distribution of DFE to discretize and replace f0-f3 [mean (2Ns), shape] (!Requires --gamma_dfe)
