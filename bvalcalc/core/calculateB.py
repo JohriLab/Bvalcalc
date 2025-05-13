@@ -91,7 +91,7 @@ def calculateB_recmap(distance_to_element, length_of_element,
 
 def calculateB_unlinked(unlinked_L):
     params = _get_params()
-    r, u, g, k, t1, t1half, t2, t3, t4, f1, f2, f3, f0 = params["r"], params["u"], params["g"], params["k"], params["t1"], params["t1half"], params["t2"], params["t3"], params["t4"], params["f1"], params["f2"], params["f3"], params["f0"]
+    u, t1, t1half, t2, t3, t4, f0, f1, f2, f3 = params["u"], params["t1"], params["t1half"], params["t2"], params["t3"], params["t4"], params["f0"], params["f1"], params["f2"], params["f3"]
     sum_f = (
         f0 * 0.0
         + f1 * ((t1half - t1) / (t2 - t1)) * 0.0

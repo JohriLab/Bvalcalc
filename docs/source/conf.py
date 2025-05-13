@@ -9,7 +9,7 @@
 project = 'Bvalcalc'
 copyright = '2025, Jacob Marsh, Parul Johri'
 author = 'Jacob Marsh, Parul Johri'
-release = '0.1.2'
+release = '0.1.4'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -22,7 +22,7 @@ exclude_patterns = []
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'alabaster'
+html_theme = 'sphinx_book_theme'
 html_static_path = ['_static']
 
 import os

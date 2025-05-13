@@ -7,7 +7,7 @@
 #poetry run bvalcalc --region chr_neutral:1-1 --pop_params tests/testparams/UnlinkedParams.py --bedgff_path tests/testfiles/200kb_unlinked.csv
 
 ## Core parameters
-x = 1000 # Scaling factor (N,u,r), keep as 1 unless calculating for rescaled simulations
+x = 100 # Scaling factor (N,u,r), keep as 1 unless calculating for rescaled simulations
 Nanc = 1e6/x # Ancestral population size
 r = 0.5*1e-8*x # Recombination (crossover) rate per bp, per generation
 u = 3*1e-9*x # Mutation rate (all types) per bp, per generation
