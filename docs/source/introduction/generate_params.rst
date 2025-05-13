@@ -1,5 +1,5 @@
-Generating population parameters
-=========================
+Generating parameters
+=================================
 
 A population parameter file can be generated from one of the pre-built templates using `Bvalcalc --generate_params`.
 

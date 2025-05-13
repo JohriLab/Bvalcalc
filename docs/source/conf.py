@@ -34,5 +34,11 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
     "sphinxarg.ext",  # sphinx-argparse extension
+    "myst_parser",
 ]
 
+myst_enable_extensions = [
+  "deflist",
+  "html_image",
+  # etc.
+]

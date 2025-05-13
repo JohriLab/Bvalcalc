@@ -1,5 +1,5 @@
 Calculate Single Site B
-================
+=========================
 
 Calculate B for a single site at a specified distance from a single selected element:
 

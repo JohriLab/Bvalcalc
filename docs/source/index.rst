@@ -8,18 +8,27 @@ Welcome to the official documentation for **Bvalcalc**, a CLI tool for computing
    :maxdepth: 2
    :caption: Introduction
 
-   cli
-   installation
+   introduction/cli_overview
+   introduction/installation
+   introduction/generate_params
 
 .. toctree::
    :maxdepth: 2
    :caption: Modules
 
-   modes/generate_params
    modes/site
    modes/gene
    modes/region
    modes/genome
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Guides
+
+   guides/quickstart
+   guides/params
+   guides/selfing
+   guides/demography
 
 .. toctree::
    :maxdepth: 1

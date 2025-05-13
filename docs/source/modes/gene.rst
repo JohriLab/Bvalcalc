@@ -1,5 +1,5 @@
 Calculate Gene B Recovery
-=====================
+=========================
 
 Calculate B values for a range of neutral sites flanking a single selected element (e.g., a gene under selection).
 
