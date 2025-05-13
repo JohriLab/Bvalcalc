@@ -9,7 +9,7 @@
 project = 'Bvalcalc'
 copyright = '2025, Jacob Marsh, Parul Johri'
 author = 'Jacob Marsh, Parul Johri'
-release = '0.1.4'
+release = '0.2.0'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
