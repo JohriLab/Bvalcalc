@@ -1,5 +1,6 @@
 import numpy as np
 from bvalcalc.utils.dfe_helper import get_DFE_params
+import sys
 
 _params_cache = None
 
@@ -90,6 +91,7 @@ def calculateB_recmap(distance_to_element, length_of_element,
     return np.where(length_of_element == 0, 1.0, B)
 
 def calculateB_unlinked(unlinked_L):
+
     params = _get_params()
     u, t1, t1half, t2, t3, t4, f0, f1, f2, f3 = params["u"], params["t1"], params["t1half"], params["t2"], params["t3"], params["t4"], params["f0"], params["f1"], params["f2"], params["f3"]
     sum_f = (
