@@ -1,0 +1,37 @@
+/* docs/source/_static/css/custom.css */
+/* target the RTD nav wrapper */
+/* .wy-menu.wy-menu-vertical {
+    background-color: #FFC415 !important;
+  } */
+  
+  /* make the links in the nav black */
+  .wy-menu.wy-menu-vertical a {
+    color: black !important;
+  }
+
+  .wy-menu.wy-menu-vertical p {
+    color: black !important;
+
+  }
+  
+  .wy-side-scroll {
+    background: #FFC415;
+  }
+
+  .wy-side-nav-search {
+    background: #FFC415
+}
+
+.wy-nav-side {
+      background: #FFC415;
+      padding-bottom: 0;
+  }
+
+/* make the “Bvalcalc” home link text black */
+a.icon.icon-home {
+    color: black !important;
+  }
+
+.toctree-l1 {
+    text-indent: 1rem;
+}
