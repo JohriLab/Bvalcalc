@@ -1,9 +1,15 @@
 /* docs/source/_static/css/custom.css */
 /* target the RTD nav wrapper */
-/* .wy-menu.wy-menu-vertical {
+.wy-menu.wy-menu-vertical {
     background-color: #FFC415 !important;
-  } */
+  }
   
+  /* make the “Bvalcalc” home link text black */
+  a.icon.icon-home {
+      color: black !important;
+      font-size: 1.25em !important;
+      line-height: 1.2em;      /* optional: adjust vertical centering */
+    }
   /* make the links in the nav black */
   .wy-menu.wy-menu-vertical a {
     color: black !important;
@@ -19,18 +25,14 @@
   }
 
   .wy-side-nav-search {
-    background: #FFC415
+    background: #FFC415;
+    /* border-bottom: 1.5px dashed black !important; */
 }
 
 .wy-nav-side {
       background: #FFC415;
-      padding-bottom: 0;
   }
 
-/* make the “Bvalcalc” home link text black */
-a.icon.icon-home {
-    color: black !important;
-  }
 
 .toctree-l1 {
     text-indent: 1rem;
