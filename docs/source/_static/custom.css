@@ -37,3 +37,32 @@
 .toctree-l1 {
     text-indent: 1rem;
 }
+
+.wy-menu.wy-menu-vertical .toctree-l1:not(.current) > a:hover {
+    background-color:#ffd454;
+}
+
+  /* keep the same yellow bg when you mouse-down on a toctree item */
+.wy-menu.wy-menu-vertical .toctree-l1 a:active,
+.wy-menu.wy-menu-vertical .toctree-l1 a:focus {
+  background-color: #fff !important;
+  /* filter: brightness(%); */
+  outline: none !important;
+}
+
+.toctree-l2 .current {
+  background-color: #fff !important;
+  /* filter: brightness(%); */
+  outline: none !important;
+}
+
+/* (optional) completely disable the blue text-selection on hold */
+.wy-menu.wy-menu-vertical .toctree-l1 a {
+  user-select: none;
+}
+
+/* or, if you still want selection but without the default blue highlight */
+/* .wy-menu.wy-menu-vertical .toctree-l1 a::selection {
+     background: transparent !important;
+   }
+*/
