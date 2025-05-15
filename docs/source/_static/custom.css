@@ -42,6 +42,10 @@
     background-color:#ffd454;
 }
 
+.wy-menu.wy-menu-vertical .toctree-l2:not(.current) > a:hover {
+    background-color:#ffd454;
+}
+
   /* keep the same yellow bg when you mouse-down on a toctree item */
 .wy-menu.wy-menu-vertical .toctree-l1 a:active,
 .wy-menu.wy-menu-vertical .toctree-l1 a:focus {
@@ -50,7 +54,13 @@
   outline: none !important;
 }
 
-.toctree-l2 .current {
+.wy-menu .toctree-l2 {
+  background-color: #FFC415 !important;
+  filter: brightness(110%);
+  outline: none !important;
+}
+
+.wy-menu .toctree-l2 .current {
   background-color: #fff !important;
   /* filter: brightness(%); */
   outline: none !important;
@@ -60,9 +70,3 @@
 .wy-menu.wy-menu-vertical .toctree-l1 a {
   user-select: none;
 }
-
-/* or, if you still want selection but without the default blue highlight */
-/* .wy-menu.wy-menu-vertical .toctree-l1 a::selection {
-     background: transparent !important;
-   }
-*/
