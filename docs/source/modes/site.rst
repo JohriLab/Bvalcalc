@@ -10,11 +10,11 @@ Core Arguments
 **-\-pop_params [path/to/YourParams.py]** 
   Path to a Python file defining population genetic parameters, see [here for generating a pre-built template] and [here for tailoring your own parameters]
 
+**-\-gene_size [int]**
+  Total length of the selected region, e.g. gene or CDS, (default: `10000`)
+
 **-\-distance [int]**
   Distance from the focal neutral site to the edge of the selected element in bp (default: `1`). Note that this assumes recombinant distance increases linearly with physical distance.
-
-**-\-gene_size [int]**
-  Total length of the selected region (default: `10000`)
 
 Optional Arguments
 ------------------

@@ -1,85 +1,67 @@
 Calculate Genome B-map
 ===============================
 
-Calculate a B-map for all neutral and conserved sites across the genome, considering linked and unlinked effects of selection from all conserved elements.
-
-
-.. code-block:: console
-
-    bvalcalc --genome --pop_params YourParams.py --bedgff_path annotations.gff --chr_sizes chrom_sizes.txt
+**-\-genome**
+    Calculate a B-map for all neutral and conserved sites across the genome, considering linked and unlinked effects of selection from all conserved elements.
 
 Core Arguments
 --------------
 
-**--pop_params**  
-Path to a Python file defining population genetic parameters  
-*(e.g. `Params.py`, see [Population Parameters](../your-reference-page))*
+**-\-pop_params [path/to/YourParams.py]** 
+  Path to a Python file defining population genetic parameters, see [here for generating a pre-built template] and [here for tailoring your own parameters]
 
-**--bedgff_path**  
-Path to an annotation file of selected elements in BED or GFF3 format
+**-\-bedgff_path [path/to/example.bed]**  
+    Path to an annotation file of selected elements, in BED, GFF3 or CSV format (CHR,START,END)
 
-**--chr_sizes**  
-Path to a tab-delimited chromosome size file  
-If not provided, chromosome boundaries will default to the end of the last annotated gene
+**-\-chr_sizes [path/to/chr_sizes.csv]**  
+    Path to a file specifying chromosome sizes in CSV format (CHR,END). If not provided, chromosome boundaries will default to the end of the last annotated gene
 
 Optional Arguments
 ------------------
 
-**--chunk_size**  
-Size of genomic chunks processed per thread (default: `20000`)
+**-\-out [path]**  
+    Write B-values to a CSV file with the specified path (must also provide `--out_binsize`)
 
-**--precise_chunks**  
-Number of chunks on either side of a focal chunk to calculate precisely (default: `3`)
+**-\-out_binsize [int]**  
+    Bin size to average B-values in the CSV output, required if `--out` is used.
 
-**--pop_change**  
-Apply a step-change population size history (defined by `Ncur` and `time_of_change`) to output `Bcur` instead of `Banc`
+**-\-rec_map [path/to/rec_map.csv]**  
+    Optional recombination (crossover) map in CSV format (CHR,START,RATE). Note that recombination rates are averaged over chunks.
 
-**--gamma_dfe**  
-Use a gamma-distributed DFE to replace fixed `f0–f3` proportions
+**-\-gc_map [path/to/gc_map.csv]**  
+    Optional gene conversion map in CSV format (CHR,START,RATE). Note that the same map can be used for crossover and gene conversion rates, rates are averaged over chunks.
 
-**--prior_Bmap**  
-Optional input CSV defining prior B-values per site (e.g. combining multiple annotation layers)  
-Format: `Chromosome,Position,Conserved,B`  
-→ `Conserved` is required for parsing but doesn't affect the result
+**-\-pop_change**
+    If included, compute current B (`Bcur`) under a step population size change, see the associated guide on [demography]. Note that `Bcur` and `time_of_change` should be set in the parameters file when active.
 
-**--rec_map**  
-Optional recombination rate map in CSV format with header: `start,rate`  
-Rates are averaged within each chunk
+**-\-gamma_dfe**
+    If included, use a gamma distribution to define the DFE (instead of fixed `f0,f1,f2,f3`). Note that `mean`, `shape` and `proportion_synonymous` should be set in the parameters file when active.
 
-**--gc_map**  
-Optional gene conversion rate map, same format as recombination map
+**-\-prior_Bmap [path/to/prior_Bmap.csv]**  
+    Optional prior B-value map (`.csv` format). Used to multiply the newly calculated B-values by a per-site prior (e.g. for regions under different selection parameters). Format: `Chromosome,Position,Conserved,B`. Note that `Conserved` is required for parsing but does not affect output
 
-**--neutral_only**  
-If used, any plots generated will include only neutral (non-conserved) sites
+**-\-chunk_size [int]**  
+    Size of chunks to process in each B calculation (default: `20000`). It may be useful to increase this in large chromosomes with sparse selection for tractability, though consider how this may affect analysis in conjunction with the number of `precise_chunks`.
 
-**--out [path]**  
-Write B-values to a `.csv` file (must also use `--out_binsize`)
+**-\-precise_chunks [int]**  
+    Number of chunks on either side of a focal chunk to calculate precisely (default: `3`). Increasing this beyond the default will lead to more precise results though reduces tractability, consider how this may affect analysis in conjunction with the `chunk_size`.
 
-**--out_binsize**  
-Bin size for averaging B-values in CSV output. Required when `--out` is used
+**-\-verbose**  
+    Print per-chunk processing summaries (default: False)
 
-**--verbose**  
-Print detailed progress and per-chunk summaries
-
-**--quiet**  
-Suppress console output
+**-\-quiet**  
+    Suppress console output
 
 Example
 -------
 
-.. code-block:: console
+.. code-block:: bash
 
-    bvalcalc --genome \
-      --pop_params HumanParams.py \
-      --bedgff_path annotations.gff \
+    Bvalcalc --genome \
+      --pop_params DrosophilaParams.py \
+      --bedgff_path drosophila_CDS.bed \
       --chr_sizes chrom_sizes.txt \
       --out Bvalues_chr2R.csv \
       --out_binsize 1000
 
-Notes
------
-
-- If `--out` is used, you **must** also provide `--out_binsize`
-- B-values are calculated per base by default unless binning is specified
-- Recombination and GC rates are averaged within each chunk boundary
-- Use `--neutral_only` to visualize only unconserved sites in plots
+Calculates a B-map for across the genome considering all CDS regions. Output of B values in 1kb bins for the region will be saved.
