@@ -1,0 +1,72 @@
+/* docs/source/_static/css/custom.css */
+/* target the RTD nav wrapper */
+.wy-menu.wy-menu-vertical {
+    background-color: #FFC415 !important;
+  }
+  
+  /* make the “Bvalcalc” home link text black */
+  a.icon.icon-home {
+      color: black !important;
+      font-size: 1.25em !important;
+      line-height: 1.2em;      /* optional: adjust vertical centering */
+    }
+  /* make the links in the nav black */
+  .wy-menu.wy-menu-vertical a {
+    color: black !important;
+  }
+
+  .wy-menu.wy-menu-vertical p {
+    color: black !important;
+
+  }
+  
+  .wy-side-scroll {
+    background: #FFC415;
+  }
+
+  .wy-side-nav-search {
+    background: #FFC415;
+    /* border-bottom: 1.5px dashed black !important; */
+}
+
+.wy-nav-side {
+      background: #FFC415;
+  }
+
+
+.toctree-l1 {
+    text-indent: 1rem;
+}
+
+.wy-menu.wy-menu-vertical .toctree-l1:not(.current) > a:hover {
+    background-color:#ffd454;
+}
+
+.wy-menu.wy-menu-vertical .toctree-l2:not(.current) > a:hover {
+    background-color:#ffd454;
+}
+
+  /* keep the same yellow bg when you mouse-down on a toctree item */
+.wy-menu.wy-menu-vertical .toctree-l1 a:active,
+.wy-menu.wy-menu-vertical .toctree-l1 a:focus {
+  background-color: #fff !important;
+  /* filter: brightness(%); */
+  outline: none !important;
+}
+
+.wy-menu .toctree-l2 {
+  background-color: #FFC415 !important;
+  filter: brightness(110%);
+  outline: none !important;
+}
+
+.wy-menu .toctree-l2 .current {
+  background-color: #fff !important;
+  /* filter: brightness(%); */
+  outline: none !important;
+}
+
+/* (optional) completely disable the blue text-selection on hold */
+.wy-menu.wy-menu-vertical .toctree-l1 a {
+  user-select: none;
+}

@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bvalcalc"
+version = "0.2.1"
+description = "Calculate relative diversity (B) under background selection"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [
+  { name = "Jacob Marsh", email = "jacob.marsh@unc.edu" },
+  { name = "Parul Johri", email = "pjohri@unc.edu" }
+]
+dependencies = [
+  "numpy",
+  "scipy",
+  "matplotlib"
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering :: Bio-Informatics",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Operating System :: OS Independent"
+]
+
+[project.urls]
+Homepage      = "https://github.com/JohriLab/BvalueCalculator"
+Documentation = "https://github.com/JohriLab/BvalueCalculator"
+Source        = "https://github.com/JohriLab/BvalueCalculator"
+Tracker       = "https://github.com/JohriLab/BvalueCalculator/issues"
+
+[project.optional-dependencies]
+docs = [
+  "sphinx>=6.0",
+  "sphinx-rtd-theme"
+]
+
+[project.scripts]
+bvalcalc = "bvalcalc.cli:main"
+
+[tool.setuptools.packages.find]
+
+where   = ["."]
+include = ["bvalcalc", "bvalcalc.*"]
+exclude = ["trash*"]
+[tool.poetry.group.docs.dependencies]
+sphinx = "^7.2"
+sphinx-argparse = "^0.5.2"
+

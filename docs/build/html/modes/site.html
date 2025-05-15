@@ -1,0 +1,170 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculate Single Site B &mdash; Bvalcalc 0.2.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=463a749d" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=37f418d5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Calculate Gene B Recovery" href="gene.html" />
+    <link rel="prev" title="Generating parameters" href="../introduction/generate_params.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Bvalcalc
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/cli_overview.html">CLI Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/generate_params.html">Generating parameters</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Calculate Single Site B</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#core-arguments">Core Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#optional-arguments">Optional Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gene.html">Calculate Gene B Recovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="region.html">Calculate Region B-map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genome.html">Calculate Genome B-map</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/params.html">Tailoring Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/selfing.html">Selfing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/demography.html">Demography</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Bvalcalc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Calculate Single Site B</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/modes/site.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="calculate-single-site-b">
+<h1>Calculate Single Site B<a class="headerlink" href="#calculate-single-site-b" title="Link to this heading"></a></h1>
+<dl class="simple">
+<dt><strong>--site</strong></dt><dd><p>Calculate B for a single site at a specified distance from a single selected element</p>
+</dd>
+</dl>
+<section id="core-arguments">
+<h2>Core Arguments<a class="headerlink" href="#core-arguments" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><strong>--pop_params [path/to/YourParams.py]</strong></dt><dd><p>Path to a Python file defining population genetic parameters, see [here for generating a pre-built template] and [here for tailoring your own parameters]</p>
+</dd>
+<dt><strong>--gene_size [int]</strong></dt><dd><p>Total length of the selected region, e.g. gene or CDS, (default: <cite>10000</cite>)</p>
+</dd>
+<dt><strong>--distance [int]</strong></dt><dd><p>Distance from the focal neutral site to the edge of the selected element in bp (default: <cite>1</cite>). Note that this assumes recombinant distance increases linearly with physical distance.</p>
+</dd>
+</dl>
+</section>
+<section id="optional-arguments">
+<h2>Optional Arguments<a class="headerlink" href="#optional-arguments" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><strong>--pop_change</strong></dt><dd><p>If included, compute current B (<cite>Bcur</cite>) under a step population size change, see the associated guide on [demography].
+Note that <cite>Bcur</cite> and <cite>time_of_change</cite> should be set in the parameters file when active.</p>
+</dd>
+<dt><strong>--gamma_dfe</strong></dt><dd><p>If included, use a gamma distribution to define the DFE (instead of fixed <cite>f0,f1,f2,f3</cite>).
+Note that <cite>mean</cite>, <cite>shape</cite> and <cite>proportion_synonymous</cite> should be set in the parameters file when active.</p>
+</dd>
+<dt><strong>--quiet</strong></dt><dd><p>Suppress console output</p>
+</dd>
+</dl>
+</section>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--site<span class="w"> </span>--pop_params<span class="w"> </span>HumanParams.py<span class="w"> </span>--distance<span class="w"> </span><span class="m">1500</span><span class="w"> </span>--gene_size<span class="w"> </span><span class="m">10000</span>
+</pre></div>
+</div>
+<p>Calculates B for a single site 1500bp away from a gene under selection of length 10kb using example human parameters.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../introduction/generate_params.html" class="btn btn-neutral float-left" title="Generating parameters" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="gene.html" class="btn btn-neutral float-right" title="Calculate Gene B Recovery" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Jacob Marsh, Parul Johri.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
