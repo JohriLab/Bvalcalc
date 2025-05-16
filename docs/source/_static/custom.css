@@ -78,3 +78,31 @@
 .wy-nav-content {
   background-color: #fff
 }
+
+@media (min-width: 1400px) {
+  .bee-trail-container {
+    position: fixed;
+    top: 50%;
+    right: 50px;           /* still 50px from the right edge */
+    transform: translateY(-50%);
+    width: 20vw;           /* fluid sizing */
+    pointer-events: none;  /* click‐through */
+  }
+  .bee-trail-img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .bee-trail-text {
+    position: absolute;
+    bottom: 100%;          /* sit just above the image */
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    white-space: nowrap;
+  }
+}
+

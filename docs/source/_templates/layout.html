@@ -1,0 +1,17 @@
+{# docs/source/_templates/layout.html #}
+{% extends "!layout.html" %}
+
+{% block footer %}
+  {{ super() }}
+  <div class="bee-trail-container">
+    <img
+      src="{{ pathto('_static/Bvalcalc_bee_trail.svg', 1) }}"
+      aria-hidden="true"
+      class="bee-trail-img"
+    />
+    <div class="bee-trail-text"> Citation: 
+      Marsh, JI, Johri, PJ. The B-value calculator: 
+      efficient analytical calculation of expected 
+      genetic diversity with background selection </div>
+  </div>
+{% endblock %}
