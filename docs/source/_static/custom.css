@@ -1,7 +1,7 @@
 /* docs/source/_static/css/custom.css */
 /* target the RTD nav wrapper */
 .wy-menu.wy-menu-vertical {
-    background-color: #FFC415 !important;
+    background-color: #FFC30B !important;
   }
   
   /* make the “Bvalcalc” home link text black */
@@ -21,16 +21,16 @@
   }
   
   .wy-side-scroll {
-    background: #FFC415;
+    background: #FFC30B;
   }
 
   .wy-side-nav-search {
-    background: #FFC415;
+    background: #FFC30B;
     /* border-bottom: 1.5px dashed black !important; */
 }
 
 .wy-nav-side {
-      background: #FFC415;
+      background: #FFC30B;
   }
 
 
@@ -55,7 +55,7 @@
 }
 
 .wy-menu .toctree-l2 {
-  background-color: #FFC415 !important;
+  background-color: #FFC30B !important;
   filter: brightness(110%);
   outline: none !important;
 }
@@ -69,4 +69,12 @@
 /* (optional) completely disable the blue text-selection on hold */
 .wy-menu.wy-menu-vertical .toctree-l1 a {
   user-select: none;
+}
+
+.wy-nav-content-wrap {
+  background-color: #fff
+}
+
+.wy-nav-content {
+  background-color: #fff
 }

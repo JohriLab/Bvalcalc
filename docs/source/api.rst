@@ -1,4 +1,4 @@
-API Reference
+Python API
 =============
 
 .. automodule:: bvalcalc.cli
