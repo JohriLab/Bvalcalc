@@ -26,6 +26,8 @@ html_static_path = ['_static']
 
 templates_path = ['_templates']
 html_show_sphinx = False
+html_show_sourcelink = False
+
 # html_show_copyright = False
 
 
