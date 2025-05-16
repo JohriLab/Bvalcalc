@@ -155,3 +155,39 @@
     width: 100%;
   }
 }
+
+/* hide the last two toctree lists in the RTD sidebar */
+.wy-menu-vertical > ul:nth-last-of-type(1),
+.wy-menu-vertical > ul:nth-last-of-type(2) {
+  display: none !important;
+}
+
+/* “Learn more” caption (2nd-to-last) gets a red background */
+.wy-menu-vertical > p.caption:nth-last-of-type(2) {
+  background-color: #77FFDD !important;
+  padding: 0.25em 0.5em;    /* optional: add some padding so the bg shows nicely */
+}
+
+/* “Query pre-built maps” caption (last) gets a blue background */
+.wy-menu-vertical > p.caption:nth-last-of-type(1) {
+  background-color: #FF77FF !important;
+  padding: 0.25em 0.5em;
+}
+
+/* “Query pre-built maps” (last caption) → stick to very bottom */
+.wy-menu-vertical > p.caption:nth-last-of-type(1) {
+  position: absolute !important;
+  bottom: 0 !important;
+  width: 100%;
+  margin: 0;
+  /* padding: 0.25em 0.5em;  preserve your background padding */
+}
+
+/* “Learn more” (second-to-last caption) → just above it */
+.wy-menu-vertical > p.caption:nth-last-of-type(2) {
+  position: absolute !important;
+  bottom: 2.5em !important; /* adjust this gap as needed */
+  width: 100%;
+  margin: 0;
+  /* padding: 0.25em 0.5em; */
+}

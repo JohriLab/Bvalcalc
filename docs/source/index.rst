@@ -35,3 +35,15 @@ Welcome to the official documentation for **Bvalcalc**, a CLI tool for computing
    :caption: API
 
    api
+
+.. toctree::
+   :caption: Learn more
+   :maxdepth: 1
+
+   prebuilt_maps/learn
+
+.. toctree::
+   :caption: Query pre-built maps
+   :maxdepth: 1
+
+   prebuilt_maps/query

@@ -70,4 +70,20 @@ Source code
   </div>
 {% endblock %}
 
-
+{% block sidebar2 %}
+  {{ super() }}
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      document
+        .querySelectorAll("div.wy-menu-vertical p.caption")
+        .forEach(function(cap) {
+          if (cap.textContent.trim() === "Learn more") {
+            var ul = cap.nextElementSibling;
+            if (ul && ul.tagName === "UL") {
+              ul.style.display = "none";
+            }
+          }
+        });
+    });
+  </script>
+{% endblock %}
