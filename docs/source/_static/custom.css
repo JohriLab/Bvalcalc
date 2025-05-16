@@ -81,28 +81,77 @@
 
 @media (min-width: 1400px) {
   .bee-trail-container {
+    z-index: 9999; 
     position: fixed;
     top: 50%;
-    right: 50px;           /* still 50px from the right edge */
+    left: 1120px;
     transform: translateY(-50%);
-    width: 20vw;           /* fluid sizing */
-    pointer-events: none;  /* click‐through */
+    width: 20vw;      /* fluid image width */
+    max-width: 320px;
+    pointer-events: none;
+    text-align: center;
   }
+  
+  .bee-trail-container a {
+    pointer-events: auto;
+  }
+
   .bee-trail-img {
     display: block;
     width: 100%;
     height: auto;
   }
-  .bee-trail-text {
+
+  .right-elements-stack {
     position: absolute;
-    bottom: 100%;          /* sit just above the image */
+    bottom: 100%;            /* sit flush above the image */
     left: 50%;
     transform: translateX(-50%);
-    margin-bottom: 0.5rem;
-    font-size: 1.2rem;
-    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;               /* 50px between citation & made-by */
+    width: 100%;              /* wrap‐width for your text */
+    padding-bottom: 50px;
+  }
+
+  .citation-text,
+  .made-by-sphinx-text {
     color: #333;
-    white-space: nowrap;
+    line-height: 1.4;
+    white-space: normal;
   }
 }
 
+/* docs/source/_static/css/custom.css */
+@media (max-height: 670px) {
+  .bee-trail-container {
+    position: fixed;
+    top: 0;
+    right: 50px;
+    width: 20vw;
+    height: auto;           /* let it grow with content */
+    transform: none;        /* cancel the -50% translate */
+    
+    display: flex;
+    flex-direction: column-reverse; /* text‐wrapper first, then image */
+    align-items: center;
+    gap: 25px;              /* 50px between wrapper and image */
+    
+    pointer-events: none;   /* keep underlying docs clickable */
+    z-index: 9999;          /* stay on top */
+  }
+
+  /* re-enable clicks on links */
+  .bee-trail-container a {
+    pointer-events: auto;
+  }
+
+  /* drop absolute positioning */
+  .right-elements-stack,
+  .bee-trail-img {
+    position: static;
+    transform: none;
+    width: 100%;
+  }
+}
