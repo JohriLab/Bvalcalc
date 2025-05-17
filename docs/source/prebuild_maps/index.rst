@@ -1,2 +1,0 @@
-Bvalcalc Documentation
-======================

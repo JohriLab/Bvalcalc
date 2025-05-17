@@ -8,6 +8,16 @@
   background-color: #FFC30B !important;
 }
 
+.wy-nav-shift {
+  padding-bottom: 0px !important;
+}
+
+.wy-side-nav-search {
+  margin-bottom: 0;
+}
+
+
+
 /* Sidebar link & text colors */
 .wy-menu.wy-menu-vertical a,
 .wy-menu.wy-menu-vertical p {
@@ -119,6 +129,10 @@ a.icon.icon-home {
 /*                        Sidebar “Learn more” & “Query”                       */
 /* -------------------------------------------------------------------------- */
 
+.caption {
+  margin-block-start: 6px !important;
+}
+
 /* hide their ULs */
 .wy-menu-vertical > ul:nth-last-of-type(-n+2) {
   display: none !important;
@@ -130,7 +144,7 @@ a.icon.icon-home {
   padding: 0.25em 0.5em;
   background-color: #77FFDD !important;
   z-index: 9998;
-  transform: translateX(-1rem);
+  /* transform: translateX(-1rem); */
   text-align: center
 }
 
@@ -139,18 +153,29 @@ a.icon.icon-home {
   width: 100%; margin: 0;
   padding: 0.25em 0.5em;
   text-align: center;
-  transform: translateX(-1rem);
+  /* transform: translateX(-1rem); */
   background-color: #FF77FF !important;
   z-index: 9998;
 }
 
 @media (min-height: 760px) {
-  .wy-menu-vertical > p.caption:nth-last-of-type(1) {
-    position: absolute;
-    bottom: 0px !important ;   
-  }
   .wy-menu-vertical > p.caption:nth-last-of-type(2) {
-    position: absolute;
-    bottom: 32px;
+    position: fixed;
+    width: 300px;
+    bottom: 66px;
+  }
+  .wy-menu-vertical > p.caption:nth-last-of-type(1) {
+    position: fixed;
+    width: 300px;
+    bottom: 33px !important ;   
+  }
+}
+
+
+@media (min-height: 720px) {
+.wy-menu.wy-menu-vertical[data-spy="affix"] {
+  position: fixed !important;
+  overflow: hidden !important;
+  left: 0;
 }
 }

@@ -29,6 +29,7 @@ Welcome to the official documentation for **Bvalcalc**, a CLI tool for computing
    guides/params
    guides/selfing
    guides/demography
+   guides/multiple_dfes
 
 .. toctree::
    :maxdepth: 1
