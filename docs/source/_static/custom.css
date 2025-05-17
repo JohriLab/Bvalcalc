@@ -130,12 +130,16 @@ a.icon.icon-home {
   padding: 0.25em 0.5em;
   background-color: #77FFDD !important;
   z-index: 9998;
+  transform: translateX(-1rem);
+  text-align: center
 }
 
 /* purple caption (last) */
 .wy-menu-vertical > p.caption:nth-last-of-type(1) {
   width: 100%; margin: 0;
   padding: 0.25em 0.5em;
+  text-align: center;
+  transform: translateX(-1rem);
   background-color: #FF77FF !important;
   z-index: 9998;
 }

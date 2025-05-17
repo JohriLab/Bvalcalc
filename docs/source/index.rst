@@ -37,13 +37,13 @@ Welcome to the official documentation for **Bvalcalc**, a CLI tool for computing
    api
 
 .. toctree::
-   :caption: Learn more
+   :caption: About BGS and B-values
    :maxdepth: 1
 
    prebuilt_maps/learn
 
 .. toctree::
-   :caption: Query pre-built maps
+   :caption: Query species B-maps
    :maxdepth: 1
 
    prebuilt_maps/query
