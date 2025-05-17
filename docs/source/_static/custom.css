@@ -1,195 +1,143 @@
 /* docs/source/_static/css/custom.css */
-/* target the RTD nav wrapper */
-.wy-menu.wy-menu-vertical {
-    background-color: #FFC30B !important;
-  }
-  
-  /* make the “Bvalcalc” home link text black */
-  a.icon.icon-home {
-      color: black !important;
-      font-size: 1.25em !important;
-      line-height: 1.2em;      /* optional: adjust vertical centering */
-    }
-  /* make the links in the nav black */
-  .wy-menu.wy-menu-vertical a {
-    color: black !important;
-  }
 
-  .wy-menu.wy-menu-vertical p {
-    color: black !important;
-
-  }
-  
-  .wy-side-scroll {
-    background: #FFC30B;
-  }
-
-  .wy-side-nav-search {
-    background: #FFC30B;
-    /* border-bottom: 1.5px dashed black !important; */
-}
-
+/* Sidebar & nav backgrounds */
+.wy-menu.wy-menu-vertical,
+.wy-side-scroll,
+.wy-side-nav-search,
 .wy-nav-side {
-      background: #FFC30B;
-  }
+  background-color: #FFC30B !important;
+}
 
+/* Sidebar link & text colors */
+.wy-menu.wy-menu-vertical a,
+.wy-menu.wy-menu-vertical p {
+  color: black !important;
+}
 
+/* Home-icon tweaks */
+a.icon.icon-home {
+  color: black !important;
+  font-size: 1.25em !important;
+  line-height: 1.2em;
+}
+
+/* Indent 1st-level entries */
 .toctree-l1 {
-    text-indent: 1rem;
+  text-indent: 1rem;
 }
 
-.wy-menu.wy-menu-vertical .toctree-l1:not(.current) > a:hover {
-    background-color:#ffd454;
+/* Hover states */
+.wy-menu.wy-menu-vertical 
+  .toctree-l1:not(.current) > a:hover,
+.wy-menu.wy-menu-vertical 
+  .toctree-l2:not(.current) > a:hover {
+  background-color: #ffd454;
 }
 
-.wy-menu.wy-menu-vertical .toctree-l2:not(.current) > a:hover {
-    background-color:#ffd454;
-}
-
-  /* keep the same yellow bg when you mouse-down on a toctree item */
-.wy-menu.wy-menu-vertical .toctree-l1 a:active,
-.wy-menu.wy-menu-vertical .toctree-l1 a:focus {
+/* Active/focus & nested levels */
+.wy-menu.wy-menu-vertical 
+  .toctree-l1 a:active,
+.wy-menu.wy-menu-vertical 
+  .toctree-l1 a:focus {
   background-color: #fff !important;
-  /* filter: brightness(%); */
   outline: none !important;
 }
-
 .wy-menu .toctree-l2 {
   background-color: #FFC30B !important;
   filter: brightness(110%);
   outline: none !important;
 }
-
 .wy-menu .toctree-l2 .current {
   background-color: #fff !important;
-  /* filter: brightness(%); */
-  outline: none !important;
 }
 
-/* (optional) completely disable the blue text-selection on hold */
-.wy-menu.wy-menu-vertical .toctree-l1 a {
+/* Disable link-selection */
+.wy-menu.wy-menu-vertical 
+  .toctree-l1 a {
   user-select: none;
 }
 
-.wy-nav-content-wrap {
-  background-color: #fff
-}
-
+/* Main content background */
+.wy-nav-content-wrap,
 .wy-nav-content {
-  background-color: #fff
+  background-color: #fff;
 }
 
+
+/* -------------------------------------------------------------------------- */
+/*                               Bee-trail UX                                 */
+/* -------------------------------------------------------------------------- */
+
+/* Large viewports: fluid & capped container */
 @media (min-width: 1400px) {
   .bee-trail-container {
-    z-index: 9999; 
-    position: fixed;
-    top: 50%;
-    left: 1120px;
+    position: fixed; top: 50%; left: 1120px;
     transform: translateY(-50%);
-    width: 20vw;      /* fluid image width */
-    max-width: 320px;
-    pointer-events: none;
-    text-align: center;
+    width: 20vw; max-width: 320px;
+    pointer-events: none; text-align: center;
+    z-index: 9999;
   }
-  
   .bee-trail-container a {
     pointer-events: auto;
   }
 
   .bee-trail-img {
-    display: block;
-    width: 100%;
-    height: auto;
+    display: block; width: 100%; height: auto;
   }
-
   .right-elements-stack {
-    position: absolute;
-    bottom: 100%;            /* sit flush above the image */
-    left: 50%;
+    position: absolute; bottom: 100%; left: 50%;
     transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;               /* 50px between citation & made-by */
-    width: 100%;              /* wrap‐width for your text */
-    padding-bottom: 50px;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 15px;
+    width: 100%; padding-bottom: 50px;
   }
-
   .citation-text,
   .made-by-sphinx-text {
-    color: #333;
-    line-height: 1.4;
-    white-space: normal;
+    color: #333; line-height: 1.4; white-space: normal;
   }
 }
 
-/* docs/source/_static/css/custom.css */
+/* Short viewports: stack top-down */
 @media (max-height: 670px) {
   .bee-trail-container {
-    position: fixed;
-    top: 0;
-    right: 50px;
-    width: 20vw;
-    height: auto;           /* let it grow with content */
-    transform: none;        /* cancel the -50% translate */
-    
-    display: flex;
-    flex-direction: column-reverse; /* text‐wrapper first, then image */
-    align-items: center;
-    gap: 25px;              /* 50px between wrapper and image */
-    
-    pointer-events: none;   /* keep underlying docs clickable */
-    z-index: 9999;          /* stay on top */
+    position: fixed; top: 0; right: 50px;
+    width: 20vw; transform: none;
+    display: flex; flex-direction: column-reverse;
+    align-items: center; gap: 25px;
+    pointer-events: none; z-index: 9999;
   }
-
-  /* re-enable clicks on links */
   .bee-trail-container a {
     pointer-events: auto;
   }
-
-  /* drop absolute positioning */
   .right-elements-stack,
   .bee-trail-img {
-    position: static;
-    transform: none;
-    width: 100%;
+    position: static; transform: none; width: 100%;
   }
 }
 
-/* hide the last two toctree lists in the RTD sidebar */
-.wy-menu-vertical > ul:nth-last-of-type(1),
-.wy-menu-vertical > ul:nth-last-of-type(2) {
+/* -------------------------------------------------------------------------- */
+/*                        Sidebar “Learn more” & “Query”                       */
+/* -------------------------------------------------------------------------- */
+
+/* hide their ULs */
+.wy-menu-vertical > ul:nth-last-of-type(-n+2) {
   display: none !important;
 }
 
-/* “Learn more” caption (2nd-to-last) gets a red background */
+/* teal caption (2nd-to-last) */
 .wy-menu-vertical > p.caption:nth-last-of-type(2) {
-  background-color: #77FFDD !important;
-  padding: 0.25em 0.5em;    /* optional: add some padding so the bg shows nicely */
-}
-
-/* “Query pre-built maps” caption (last) gets a blue background */
-.wy-menu-vertical > p.caption:nth-last-of-type(1) {
-  background-color: #FF77FF !important;
+  position: absolute !important; bottom: 2.3em !important;
+  width: 100%; margin: 0;
   padding: 0.25em 0.5em;
-}
-
-/* “Query pre-built maps” (last caption) → stick to very bottom */
-.wy-menu-vertical > p.caption:nth-last-of-type(1) {
-  position: absolute !important;
-  bottom: 0 !important;
-  width: 100%;
-  margin: 0;
-  padding: 0.25em 0.5em;  /* preserve your background padding */
+  background-color: #77FFDD !important;
   z-index: 9998;
 }
 
-/* “Learn more” (second-to-last caption) → just above it */
-.wy-menu-vertical > p.caption:nth-last-of-type(2) {
-  position: absolute !important;
-  bottom: 2.3em !important; /* adjust this gap as needed */
-  width: 100%;
-  margin: 0;
+/* purple caption (last) */
+.wy-menu-vertical > p.caption:nth-last-of-type(1) {
+  position: absolute !important; bottom: 0 !important;
+  width: 100%; margin: 0;
   padding: 0.25em 0.5em;
+  background-color: #FF77FF !important;
   z-index: 9998;
 }
