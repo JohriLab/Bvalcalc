@@ -126,8 +126,6 @@ a.icon.icon-home {
 
 /* teal caption (2nd-to-last) */
 .wy-menu-vertical > p.caption:nth-last-of-type(2) {
-  position: absolute;
-  bottom: 32px;
   width: 100%; margin: 0;
   padding: 0.25em 0.5em;
   background-color: #77FFDD !important;
@@ -136,10 +134,19 @@ a.icon.icon-home {
 
 /* purple caption (last) */
 .wy-menu-vertical > p.caption:nth-last-of-type(1) {
-  position: absolute;
-  bottom: 0px !important ;             /* nudge up 4px */
   width: 100%; margin: 0;
   padding: 0.25em 0.5em;
   background-color: #FF77FF !important;
   z-index: 9998;
+}
+
+@media (min-height: 760px) {
+  .wy-menu-vertical > p.caption:nth-last-of-type(1) {
+    position: absolute;
+    bottom: 0px !important ;   
+  }
+  .wy-menu-vertical > p.caption:nth-last-of-type(2) {
+    position: absolute;
+    bottom: 32px;
+}
 }
