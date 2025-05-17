@@ -1,11 +1,15 @@
 Bvalcalc Documentation
 ======================
 
-Welcome to the official documentation for **Bvalcalc**, a CLI tool for computing B-values under background selection.
+Welcome to the documentation for **Bvalcalc**, a CLI tool for easily calculating B-values and B-maps. 
+
+Diversity is reduced at neutral sites linked to conserved regions such as exons or regulatory elements that experience direct purifying selection, which is part of a process called background selection (BGS). **Bvalcalc** allows users to easily calculate the relative reduction of diversity due to BGS (B) using several different modes. Calculating B-values is important for understanding the linked effects of selection, can be used to establish an evolutionary null model for inference, and can aid in selecting the most neutrally evolving sites for demographic inference. 
+
+To learn more about background selection, see [About BGS and B-values]. To access pre-built B-maps for select species, see [Query Species B-maps]. To calculate B-values for yourself, install **Bvalcalc** and explore the docs, we recommend getting started with the [Quickstart Tutorial].
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Introduction
 
    introduction/cli_overview
@@ -13,7 +17,7 @@ Welcome to the official documentation for **Bvalcalc**, a CLI tool for computing
    introduction/generate_params
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Modules
 
    modes/site
@@ -22,7 +26,7 @@ Welcome to the official documentation for **Bvalcalc**, a CLI tool for computing
    modes/genome
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Guides
 
    guides/quickstart
@@ -38,12 +42,14 @@ Welcome to the official documentation for **Bvalcalc**, a CLI tool for computing
    api
 
 .. toctree::
+   :hidden:
    :caption: About BGS and B-values
    :maxdepth: 1
 
    prebuilt_maps/learn
 
 .. toctree::
+   :hidden:
    :caption: Query species B-maps
    :maxdepth: 1
 
