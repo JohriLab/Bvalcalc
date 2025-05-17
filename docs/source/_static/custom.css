@@ -107,7 +107,7 @@ a.icon.icon-home {
   }
 }
 
-/* Short viewports: stack top-down */
+/* Short viewports: stack top-down
 @media (max-height: 670px) {
   .bee-trail-container {
     position: fixed; top: 0; right: 50px;
@@ -123,7 +123,7 @@ a.icon.icon-home {
   .bee-trail-img {
     position: static; transform: none; width: 100%;
   }
-}
+} */
 
 /* -------------------------------------------------------------------------- */
 /*                        Sidebar “Learn more” & “Query”                       */
@@ -142,32 +142,48 @@ a.icon.icon-home {
 .wy-menu-vertical > p.caption:nth-last-of-type(2) {
   width: 100%; margin: 0;
   padding: 0.25em 0.5em;
-  background-color: #77FFDD !important;
+  background-color: #d0793b !important;
+  margin-block-start: 0 !important;
   z-index: 9998;
   /* transform: translateX(-1rem); */
-  text-align: center
+  text-align: center;
+
+  display: flex !important;
+  align-items: center;       /* vertical centering */
+  justify-content: center;   /* horizontal centering */
 }
 
 /* purple caption (last) */
 .wy-menu-vertical > p.caption:nth-last-of-type(1) {
-  width: 100%; margin: 0;
+  width: 100%; 
   padding: 0.25em 0.5em;
+  margin-block-start: 0 !important;
   text-align: center;
   /* transform: translateX(-1rem); */
-  background-color: #FF77FF !important;
+  background-color: #ca5522 !important;
   z-index: 9998;
+
+  display: flex !important;
+  align-items: center;       /* vertical centering */
+  justify-content: center;   /* horizontal centering */
 }
 
 @media (min-height: 760px) {
   .wy-menu-vertical > p.caption:nth-last-of-type(2) {
     position: fixed;
     width: 300px;
-    bottom: 66px;
+    bottom: 65px;
   }
   .wy-menu-vertical > p.caption:nth-last-of-type(1) {
     position: fixed;
     width: 300px;
     bottom: 33px !important ;   
+  }
+}
+@media (max-height: 760px) {
+  .wy-menu-vertical > p.caption:nth-last-of-type(1) {
+    position: relative;
+    bottom: 6px
   }
 }
 
@@ -178,4 +194,16 @@ a.icon.icon-home {
   overflow: hidden !important;
   left: 0;
 }
+}
+
+@media (max-width: 770px) {
+  /* By default on narrow screens, hide the sidebar unless the content-wrap has .shift */
+  body:not(:has(.wy-nav-content-wrap.shift)) .wy-nav-side {
+    display: none !important;
+  }
+
+  /* Once .wy-nav-content-wrap gains the .shift class, reveal it again */
+  body:has(.wy-nav-content-wrap.shift) .wy-nav-side {
+    display: block !important;
+  }
 }
