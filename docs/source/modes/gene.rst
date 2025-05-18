@@ -2,7 +2,7 @@ Calculate Gene B Recovery
 =========================
 
 **-\-gene**
-  Calculate B values for a range of neutral sites flanking a single selected element (e.g., a gene).
+  Calculate B values for a range of neutral sites flanking a single selected element (e.g., a gene/exon).
 
 Core Arguments
 --------------
@@ -11,7 +11,7 @@ Core Arguments
   Path to a Python file defining population genetic parameters, see [here for generating a pre-built template] and [here for tailoring your own parameters]
 
 **-\-gene_size [int]**
-  Total length of the selected region, e.g. gene or CDS, (default: `10000`)
+  Total length of the selected region, e.g. gene or exon, (default: `10000`)
 
 **-\-flank_len [int]**
   Length of the flanking neutral region to calculate B (default: `40000`)

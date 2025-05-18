@@ -17,20 +17,34 @@ In your own analysis you'll need to check the literature and use informed values
 Bvalcalc --generate_params drosophila
 ```
 
+## Calculating a B value
+
+Let's start by calculating B at a site 1kb from the edge of a single conserved element 5kb in length.
+
+```bash
+Bvalcalc \
+--site \
+--pop_params ./DrosophilaParams.py \
+--gene_size 5000 \
+--distance 1000
+```
+
 ## Calculating B recovery from a single element
 
-Now, let's calculate the recovery of B as a function of distance from a single conserved element [10kb by default] and save it to gene_B.png
+Now, let's calculate the recovery of B as a function of distance from the 5kb element so we can plot it (gene_B.png)
 
 ```bash
 Bvalcalc \
 --gene \
+--gene_size 5000
 --pop_params ./DrosophilaParams.py \
 --plot_output gene_B.png
 ```
 
 ## Calculating B for a region of the genome
 
-Next, we can use a BED file that specifies which genomic ranges are conserved to calculate B for a region in the genome.
+Alright now lets look at part of a chromosome.
+We can use a BED file (or GFF/CSV) that specifies which genomic ranges are conserved to calculate B for a region in the genome.
 Let's calculate B for a 1Mb region in the middle of chromosome 2R [9500000-10500000] and save it to 1Mb_B.png.
 
 ```bash
