@@ -4,7 +4,7 @@
 ## e.g. Bvalcalc --pop_params path/to/ExampleParams.py
 ##
 ## Core parameters
-f = 0.9 # Selfing rate (F = S/(2-S); Wright's inbreeding coefficient)
+f = 0.9 # Inbreeding coefficient, selfing (F = S/(2-S); Wright's inbreeding coefficient)
 x = 1 # Scaling factor (N,u,r), keep as 1 unless calculating for rescaled simulations
 Nanc = 80000 / (1+f) / x # Ancestral population size
 r = 7.4e-7 * (1-f) * x # Recombination (crossover) rate per bp, per generation (sex-averaged)

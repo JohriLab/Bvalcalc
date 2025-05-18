@@ -1,5 +1,9 @@
 # Bvalcalc CLI Quickstart
 
+Bvalcalc is a python program called from the command line (terminal, shell, zsh, bash etc.)
+
+Let's get started!
+
 ## Installation
 
 You can install Bvalcalc via pip:
@@ -10,12 +14,16 @@ pip install bvalcalc
 
 ## Specifying popgen parameters
 
-First we need to copy population genetic parameters from one of the templates, e.g. Drosophila.
+To calculate B, we need evolutionary information about the species of the population in a parameters file.
+
+Copy population genetic parameters from one of the templates, e.g. Drosophila.
 In your own analysis you'll need to check the literature and use informed values for your population.
 
 ```bash
 Bvalcalc --generate_params drosophila
 ```
+
+Open `./DrosophilaParams.py` in your text editor of choice. This file contains example popgen parameters that allow us to accurately calculate B.
 
 ## Calculating a B value
 
