@@ -142,7 +142,7 @@ a.icon.icon-home {
 .wy-menu-vertical > p.caption:nth-last-of-type(2) {
   width: 100%; margin: 0;
   padding: 0.25em 0.5em;
-  background-color: #d0793b !important;
+  background-color: #f47201 !important;
   margin-block-start: 0 !important;
   z-index: 9998;
   /* transform: translateX(-1rem); */
@@ -160,7 +160,7 @@ a.icon.icon-home {
   margin-block-start: 0 !important;
   text-align: center;
   /* transform: translateX(-1rem); */
-  background-color: #ca5522 !important;
+  background-color: #cf501a !important;
   z-index: 9998;
 
   display: flex !important;
