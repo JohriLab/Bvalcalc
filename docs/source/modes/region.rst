@@ -1,6 +1,10 @@
 Calculate Region B-map
 ============================
 
+.. code-block:: bash
+
+    Bvalcalc --region chr1:1-1000000 --pop_params Params.py --bedgff_path CDS.bed
+
 **-\-region [CHR:START-END]**
     Calculate a B-map for a specified chromosomal region, considering linked and unlinked effects of selection from all conserved elements across the genome.
 
@@ -12,6 +16,19 @@ Core Arguments
 
 **-\-bedgff_path [path/to/example.bed]**  
     Path to an annotation file of selected elements, in BED, GFF3 or CSV format (CHR,START,END)
+
+Recommended Arguments
+---------------------
+
+**-\-rec_map [path/to/rec_map.csv]**  
+    Optional recombination (crossover) map in CSV format (CHR,START,RATE). Note that recombination rates are averaged over chunks.
+
+**-\-gc_map [path/to/gc_map.csv]**  
+    Optional gene conversion map in CSV format (CHR,START,RATE). Note that the same map can be used for crossover and gene conversion rates, rates are averaged over chunks.
+
+**-\-pop_change**
+  If included, compute current B (`Bcur`) under a step population size change, see the associated guide on [demography]. 
+  Note that `Bcur` and `time_of_change` should be set in the parameters file when active.
 
 Optional Arguments
 ------------------
@@ -25,22 +42,12 @@ Optional Arguments
 **-\-plot_output [path]**  
     Output path for a genome-wide or region B-value plot (default: `genome_plot.png`)
 
-**-\-rec_map [path/to/rec_map.csv]**  
-    Optional recombination (crossover) map in CSV format (CHR,START,RATE). Note that recombination rates are averaged over chunks.
-
-**-\-gc_map [path/to/gc_map.csv]**  
-    Optional gene conversion map in CSV format (CHR,START,RATE). Note that the same map can be used for crossover and gene conversion rates, rates are averaged over chunks.
-
-**-\-pop_change**
-  If included, compute current B (`Bcur`) under a step population size change, see the associated guide on [demography]. 
-  Note that `Bcur` and `time_of_change` should be set in the parameters file when active.
+**-\-neutral_only**  
+    If used with `--plot_output`, only neutral sites will be shown in the plot
 
 **-\-gamma_dfe**
   If included, use a gamma distribution to define the DFE (instead of fixed `f0,f1,f2,f3`). 
   Note that `mean`, `shape` and `proportion_synonymous` should be set in the parameters file when active.
-
-**-\-neutral_only**  
-    If used with `--plot_output`, only neutral sites will be shown in the plot
 
 **-\-prior_Bmap [path/to/prior_Bmap.csv]**  
     Optional prior B-value map (`.csv` format). Used to multiply the newly calculated B-values by a per-site prior (e.g. for regions under different selection parameters). Format: `Chromosome,Position,Conserved,B`. Note that `Conserved` is required for parsing but does not affect output

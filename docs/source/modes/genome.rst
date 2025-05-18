@@ -1,6 +1,10 @@
 Calculate Genome B-map
 ===============================
 
+.. code-block:: bash
+
+    Bvalcalc --genome --pop_params Params.py --bedgff_path CDS.bed
+
 **-\-genome**
     Calculate a B-map for all neutral and conserved sites across the genome, considering linked and unlinked effects of selection from all conserved elements.
 
@@ -13,8 +17,20 @@ Core Arguments
 **-\-bedgff_path [path/to/example.bed]**  
     Path to an annotation file of selected elements, in BED, GFF3 or CSV format (CHR,START,END)
 
+Recommended Arguments
+---------------------
+
 **-\-chr_sizes [path/to/chr_sizes.csv]**  
     Path to a file specifying chromosome sizes in CSV format (CHR,END). If not provided, chromosome boundaries will default to the end of the last annotated gene
+
+**-\-rec_map [path/to/rec_map.csv]**  
+    Optional recombination (crossover) map in CSV format (CHR,START,RATE). Note that recombination rates are averaged over chunks.
+
+**-\-gc_map [path/to/gc_map.csv]**  
+    Optional gene conversion map in CSV format (CHR,START,RATE). Note that the same map can be used for crossover and gene conversion rates, rates are averaged over chunks.
+
+**-\-pop_change**
+    If included, compute current B under a step population size change, see the associated guide on [demography]. Note that `Ncur` and `time_of_change` should be set in the parameters file when active.
 
 Optional Arguments
 ------------------
@@ -24,15 +40,6 @@ Optional Arguments
 
 **-\-out_binsize [int]**  
     Bin size to average B-values in the CSV output, required if `--out` is used.
-
-**-\-rec_map [path/to/rec_map.csv]**  
-    Optional recombination (crossover) map in CSV format (CHR,START,RATE). Note that recombination rates are averaged over chunks.
-
-**-\-gc_map [path/to/gc_map.csv]**  
-    Optional gene conversion map in CSV format (CHR,START,RATE). Note that the same map can be used for crossover and gene conversion rates, rates are averaged over chunks.
-
-**-\-pop_change**
-    If included, compute current B (`Bcur`) under a step population size change, see the associated guide on [demography]. Note that `Bcur` and `time_of_change` should be set in the parameters file when active.
 
 **-\-gamma_dfe**
     If included, use a gamma distribution to define the DFE (instead of fixed `f0,f1,f2,f3`). Note that `mean`, `shape` and `proportion_synonymous` should be set in the parameters file when active.

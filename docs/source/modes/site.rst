@@ -1,6 +1,10 @@
 Calculate Single Site B
 =========================
 
+.. code-block:: bash
+
+    Bvalcalc --site --pop_params Params.py
+
 **-\-site**
   Calculate B for a single site at a specified distance from a single selected element
 

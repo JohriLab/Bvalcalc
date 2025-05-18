@@ -7,13 +7,12 @@ Background selection (BGS) is the process by which diversity is reduced at neutr
 
 To learn more about background selection, see [About BGS and B-values]. To access pre-built B-maps for select species, see [Query Species B-maps]. To calculate B-values for yourself, install **Bvalcalc** and explore the docs, we recommend getting started with the [Quickstart Tutorial].
 
-
 .. toctree::
    :maxdepth: 1
    :caption: Introduction
 
-   introduction/cli_overview
    introduction/installation
+   introduction/bedgff_input
    introduction/generate_params
 
 .. toctree::
