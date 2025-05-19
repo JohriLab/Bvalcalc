@@ -36,10 +36,10 @@ Optional Arguments
 ------------------
 
 **-\-out [path]**  
-    Write B-values to a CSV file with the specified path (must also provide `--out_binsize`)
+    Write B-values to a CSV file with the specified path (must also provide ``--out_binsize``)
 
 **-\-out_binsize [int]**  
-    Bin size to average B-values in the CSV output, required if `--out` is used.
+    Bin size to average B-values in the CSV output, required if ``--out`` is used.
 
 **-\-gamma_dfe**
     If included, use a gamma distribution to define the DFE (instead of fixed `f0,f1,f2,f3`). Note that `mean`, `shape` and `proportion_synonymous` should be set in the parameters file when active.
@@ -76,9 +76,9 @@ Calculates a B-map for across the genome considering all CDS regions. Output of 
 Notes
 ------
 
-A caveat to the `--region` and `--genome` modes is that by default they combine and simplify distant elements in discrete chunks which can slightly change the distance of distant conserved elements when
+A caveat to the ``--region`` and ``--genome`` modes is that by default they combine and simplify distant elements in discrete chunks which can slightly change the distance of distant conserved elements when
 calculating B. The default chunk size is 20kb and the window within which calculations are perfectly precise is three chunks in each direction (140kb total). This allows for vastly improved performance
 and typically will not result in directional biases of B estimates for most analyses. 
 
-To achieve more exact results you can specify the size of the chunks with `--chunk_size`, and the size of the window to
-perform perfectly precise calculations with `--precise_chunks`, though this will come at the cost of perfomance so consider using HPC resources or limiting to a specific region with `--region`.
+To achieve more exact results you can specify the size of the chunks with ``--chunk_size``, and the size of the window to
+perform perfectly precise calculations with ``--precise_chunks``, though this will come at the cost of perfomance so consider using HPC resources or limiting to a specific region with ``--region``.

@@ -1,14 +1,14 @@
 Quickstart Tutorial
 ====================
 
-Let's get started!
+This tutorial (5-10 minutes) walks through the core functionality of calculating B with Bvalcalc!
+
+Installation
+------------
 
 Bvalcalc is a python program called from the command line (terminal, shell, zsh, bash etc.)
 
-Installation-
-------------
-
-You can install Bvalcalc via pip:
+You can install Bvalcalc on the command line via pip:
 
 .. code-block:: bash
 

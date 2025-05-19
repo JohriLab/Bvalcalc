@@ -6,7 +6,7 @@ Bvalcalc estimates the effects of BGS on linked (and unlinked) sites due to dire
 When using the ``--region`` and ``genome`` modules, these conserved regions are indicated by a BED/GFF/CSV annotation file:
 
 **-\-bedgff_path [path/to/example.bed]**  
-    Path to an annotation file of selected elements, in BED, GFF3 or CSV format (CHR,START,END). Header information, indiciated by ``#``, is ignored.
+    Path to an annotation file of selected elements, in BED, GFF3 or CSV format (CHR,START,END). Header information, indicated by ``#``, is ignored.
 
 Annotations
 ------------

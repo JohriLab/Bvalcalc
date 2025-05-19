@@ -27,10 +27,10 @@ Optional Arguments
   Generate a B recovery slope output with a specified path (default: `./Bplot.png` if no path is given)
 
 **-\-out [path]**  
-  Write B-values to a CSV file with the specified path (must also provide `--out_binsize`)
+  Write B-values to a CSV file with the specified path (must also provide ``--out_binsize``)
 
 **-\-out_binsize [int]**  
-  Bin size to average B-values in the CSV output, required if `--out` is used.
+  Bin size to average B-values in the CSV output, required if ``--out`` is used.
 
 **-\-pop_change**
   If included, compute current B (`Bcur`) under a step population size change, see the associated guide on [demography]. 
