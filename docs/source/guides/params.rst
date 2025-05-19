@@ -8,7 +8,7 @@ To save a local copy of one of the templates, see :doc:`Generate Parameters <../
 Core parameters
 ----------------
 x 
-    Scaling factor (N,u,r), keep as 1 unless calculating for rescaled simulations
+    Scaling factor that modifies N, u, r, and g. Keep as 1 for empirical analysis, only useful for calculating B to compare against rescaled simulations
 Nanc 
     Ancestral population size, often reported in literature. Can be roughly estimated from pairwise diversity at neutrally evolving sites, given a mutation rate and no demography (Nanc = pi/4u).
 r
