@@ -1,2 +1,0 @@
-Demography (deprecated)
-=========================

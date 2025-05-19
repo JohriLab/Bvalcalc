@@ -40,7 +40,7 @@ f2
 f3
     Proportion of strongly deleterious mutations with \|2Nanc*s| >= 100
 h
-    Dominance coefficient of selected alleles
+    Dominance coefficient of selected alleles. Keep at 0.5 (additive effects) unless literature suggests otherwise
 
 DFE parameters may be reported in the literature as a gamma distribution, which Bvalcalc can take parameters to generate a discretized DFE to replace f0-f3 when `-\-gamma_dfe` is specified:
 
@@ -48,12 +48,15 @@ mean, shape, proportion_synonymous
     The mean and shape parameters of the gamma DFE, and the proportion of strictly neutral sites in the annotated regions (e.g. synonymous in exon regions). 
 
 
-Historical population size change
-----------------------------------
+Demography
+-----------
 
-Ncur = 14474 # Current population size (!Requires --pop_change) [1]
-time_of_change = 0.81 # Time in Nanc generations ago that effective population size went from Nanc to Ncur (!Requires --pop_change) [1]
+Historical population size change as a single step-function can be accounted for with Bvalcalc by adding the `-\-pop_change` flag, and setting the following parameters:
 
+Ncur 
+    Current population size, i.e. over the current epoch.
+time_of_change 
+    Time in *Nanc* generations ago that effective population size went from Nanc to Ncur.
 
 Selfing species
 ---------------
