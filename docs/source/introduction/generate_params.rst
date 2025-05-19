@@ -15,7 +15,7 @@ The python file provides parameters that are used to calculate B such as the eff
 
 These are example parameters for your convenience and should be tailored to your population of interest where appropriate.
 
-To learn more about what the parameters represent and how to optimize them for your analysis see the guide [Tailoring Parameters].
+To learn more about what the parameters represent and how to optimize them for your analysis see the guide see :doc:`Tailoring Parameters <../guides/params>`.
 
 Example
 --------

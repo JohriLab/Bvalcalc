@@ -1,6 +1,59 @@
 Tailoring Parameters
 =========================
 
+When using Bvalcalc to study populations beyond the pre-built templates, it's important to tailor the popgen parameters to your population of interest.
+
+To save a local copy of one of the templates, see :doc:`Generate Parameters <../introduction/generate_params>` and open up the Params.py file in your text editor of choice.
+
+Core parameters
+----------------
+x 
+    Scaling factor (N,u,r), keep as 1 unless calculating for rescaled simulations
+Nanc 
+    Ancestral population size, often reported in literature. Can be roughly estimated from pairwise diversity at neutrally evolving sites, given a mutation rate and no demography (Nanc = pi/4u).
+r
+    Recombination (crossover) rate per bp, per generation (sex-averaged), often reported in literature from direct measurement (recombination in pedigrees) or inferred from sequence data. 
+u   
+    Mutation rate (all types) per bp, per generation, often reported in literature from mutation accumulation experiments. Note that the point mutation rate is typically used, though all mutation types with selective effects may contribute to BGS similarly, if considering different mutation types with different DFEs, see :doc:`Multiple DFEs <../guides/multiple_dfes>`. 
+g 
+    Gene conversion initiation rate per bp, per generation. Note that on occasion the g * k value is reported in the literature rather than the *initiation* rate, in which case, the value should be divided by the tract length (k). 
+k
+    Gene conversion tract length (bp). Note that Bvalcalc takes only a single mean value and so does not make assumptions about the distribution.
+
+DFE parameters
+----------------
+
+A distribution of fitness effects (DFE) describes the probability of different selective effects for new mutations when they arise.
+Bvalcalc models a discretized deleterious DFE consisting of four continuous distributions ranging from effectively neutral (f0), to strongly deleterious (f3); beneficial mutations are currently not supported.
+
+To specify a DFE, provide f0-f3 proportions that represent the DFE for all annotated regions in the :doc:`BED/GFF input <../introduction/bedgff_input>`. Note that the f0-f3 proportions must sum to 1.
+
+
+f0 
+    Proportion of effectively neutral mutations with 0 <= \|2Nanc*s| < 1.
+    
+    Note that 2Ns<5 does not contribute to BGS (see Johri et al 2020), Bvalcalc will exclude that proportion.
+f1
+    Proportion of weakly deleterious mutations with 1 <= \|2Nanc*s| < 10
+f2 
+    Proportion of moderately deleterious mutations with 10 <= \|2Nanc*s| < 100
+f3
+    Proportion of strongly deleterious mutations with \|2Nanc*s| >= 100
+h
+    Dominance coefficient of selected alleles
+
+DFE parameters may be reported in the literature as a gamma distribution, which Bvalcalc can take parameters to generate a discretized DFE to replace f0-f3 when `-\-gamma_dfe` is specified:
+
+mean, shape, proportion_synonymous 
+    The mean and shape parameters of the gamma DFE, and the proportion of strictly neutral sites in the annotated regions (e.g. synonymous in exon regions). 
+
+
+Historical population size change
+----------------------------------
+
+Ncur = 14474 # Current population size (!Requires --pop_change) [1]
+time_of_change = 0.81 # Time in Nanc generations ago that effective population size went from Nanc to Ncur (!Requires --pop_change) [1]
+
 
 Selfing species
 ---------------
@@ -14,3 +67,5 @@ For analysis of selfing populations, we recommend tailoring parameters from the 
 .. code-block:: bash
 
     Bvalcalc --generate_params selfing
+
+
