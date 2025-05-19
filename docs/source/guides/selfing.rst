@@ -1,3 +1,3 @@
-VCF Filtering with B-map
+Selfing
 =========================
 asas
