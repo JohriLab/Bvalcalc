@@ -7,6 +7,18 @@ Background selection (BGS) is the process by which diversity is reduced at neutr
 
 To learn more about background selection, see [About BGS and B-values]. To access pre-built B-maps for select species, see [Query Species B-maps]. To calculate B-values for yourself, install **Bvalcalc** and explore the docs, we recommend getting started with the [Quickstart Tutorial].
 
+
+.. code-block:: console
+
+    Bvalcalc [--generate_params [SPECIES]|--genome|--region|--gene|--site]
+
+   --generate_params [SPECIES]
+                         Save population parameters from a species template (human, drosophila, arabidopsis, celegans, mouse, pfalciparum, selfing)
+   --site, -s            Calculate B values for a single site from a selected element
+   --gene, -g            Calculate B values for a neutral region adjacent to a single selected element
+   --region, -r          Calculate B values for a specific chromosomal region, considering genome-wide effects
+   --genome, -w          Calculate B values genome-wide for all sites considering all selected elements
+
 .. toctree::
    :maxdepth: 1
    :caption: Introduction
