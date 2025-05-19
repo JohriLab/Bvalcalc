@@ -1,4 +1,4 @@
-API
+Calculate B
 =============
 
 .. automodule:: bvalcalc.cli

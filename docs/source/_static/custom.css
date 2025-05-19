@@ -84,13 +84,18 @@ a.icon.icon-home {
     position: fixed; top: 50%; left: 1120px;
     transform: translateY(-50%);
     width: 20vw; max-width: 320px;
-    pointer-events: none; text-align: center;
+    text-align: center;
+    pointer-events: none; 
     z-index: 9999;
   }
   .bee-trail-container a {
     pointer-events: auto;
   }
 
+  .citation-text {
+    pointer-events: all;
+  }
+  
   .bee-trail-img {
     display: block; width: 100%; height: auto;
   }
@@ -207,3 +212,4 @@ a.icon.icon-home {
     display: block !important;
   }
 }
+

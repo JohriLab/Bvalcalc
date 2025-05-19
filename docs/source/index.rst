@@ -10,14 +10,14 @@ To learn more about background selection, see [About BGS and B-values]. To acces
 
 .. code-block:: console
 
-    Bvalcalc [--generate_params [SPECIES]|--genome|--region|--gene|--site]
+    Bvalcalc [--generate_params [SPECIES]|--site|--gene|--region|--genome]
 
    --generate_params [SPECIES]
                          Save population parameters from a species template (human, drosophila, arabidopsis, celegans, mouse, pfalciparum, selfing)
    --site, -s            Calculate B values for a single site from a selected element
-   --gene, -g            Calculate B values for a neutral region adjacent to a single selected element
-   --region, -r          Calculate B values for a specific chromosomal region, considering genome-wide effects
-   --genome, -w          Calculate B values genome-wide for all sites considering all selected elements
+   --gene, -g            Calculate B values for a region adjacent to a single selected element
+   --region, -r          Calculate B values for a chromosomal region, considering genome-wide effects
+   --genome, -w          Calculate B values genome-wide for all sites considering all elements
 
 .. toctree::
    :maxdepth: 1
@@ -42,15 +42,14 @@ To learn more about background selection, see [About BGS and B-values]. To acces
 
    guides/quickstart
    guides/params
-   guides/selfing
-   guides/demography
+   guides/vcf
    guides/multiple_dfes
 
 .. toctree::
    :maxdepth: 1
    :caption: API
 
-   api
+   api/calculateB
 
 .. toctree::
    :hidden:
