@@ -72,3 +72,13 @@ Example
       --out_binsize 1000
 
 Calculates a B-map for across the genome considering all CDS regions. Output of B values in 1kb bins for the region will be saved.
+
+Notes
+------
+
+A caveat to the `--region` and `--genome` modes is that by default they combine and simplify distant elements in discrete chunks which can slightly change the distance of distant conserved elements when
+calculating B. The default chunk size is 20kb and the window within which calculations are perfectly precise is three chunks in each direction (140kb total). This allows for vastly improved performance
+and typically will not result in directional biases of B estimates for most analyses. 
+
+To achieve more exact results you can specify the size of the chunks with `--chunk_size`, and the size of the window to
+perform perfectly precise calculations with `--precise_chunks`, though this will come at the cost of perfomance so consider using HPC resources or limiting to a specific region with `--region`.
