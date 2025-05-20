@@ -9,7 +9,7 @@
 project = 'Bvalcalc'
 copyright = '2025, Jacob Marsh, Parul Johri'
 author = 'Jacob Marsh, Parul Johri'
-release = '0.2.1'
+release = '0.3.1'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -43,6 +43,7 @@ html_css_files = [
 import os
 import sys
 sys.path.insert(0, os.path.abspath('../..'))  # so it can find bvalcalc/
+html_output = os.path.join(os.path.dirname(__file__), "..", "docs")
 
 extensions = [
     "sphinx.ext.autodoc",
