@@ -185,7 +185,7 @@ a.icon.icon-home {
     bottom: 33px !important ;   
   }
 }
-@media (max-height: 760px) {
+@media (max-height: 759px) {
   .wy-menu-vertical > p.caption:nth-last-of-type(1) {
     position: relative;
     bottom: 6px

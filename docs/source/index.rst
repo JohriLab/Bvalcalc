@@ -7,7 +7,6 @@ Background selection (BGS) is the process by which diversity is reduced at neutr
 
 To learn more about background selection, see :doc:`About BGS and B-values <prebuilt_maps/learn>`. To access pre-built B-maps for select species, see :doc:`Query Species B-maps <prebuilt_maps/query>`. To calculate B-values for yourself, install **Bvalcalc** and explore the docs, we recommend getting started with the :doc:`Quickstart Tutorial <guides/quickstart>`.
 
-
 .. code-block:: console
 
     Bvalcalc [--generate_params [SPECIES]|--site|--gene|--region|--genome]
@@ -42,8 +41,9 @@ To learn more about background selection, see :doc:`About BGS and B-values <preb
 
    guides/quickstart
    guides/params
-   guides/vcf
    guides/multiple_dfes
+   guides/vcf
+   guides/sweepfinder2
 
 .. toctree::
    :maxdepth: 1
