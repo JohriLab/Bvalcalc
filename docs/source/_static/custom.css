@@ -152,6 +152,7 @@ a.icon.icon-home {
   z-index: 9998;
   /* transform: translateX(-1rem); */
   text-align: center;
+  bottom: 10px;
 
   display: flex !important;
   align-items: center;       /* vertical centering */
@@ -167,38 +168,46 @@ a.icon.icon-home {
   /* transform: translateX(-1rem); */
   background-color: #cf501a !important;
   z-index: 9998;
+  transform: translateY(6px);
 
   display: flex !important;
   align-items: center;       /* vertical centering */
   justify-content: center;   /* horizontal centering */
 }
 
-@media (min-height: 760px) {
+@media (min-height: 770px) {
   .wy-menu-vertical > p.caption:nth-last-of-type(2) {
     position: fixed;
     width: 300px;
-    bottom: 65px;
+    bottom: 63px;
   }
   .wy-menu-vertical > p.caption:nth-last-of-type(1) {
     position: fixed;
     width: 300px;
-    bottom: 33px !important ;   
+    bottom: 37px !important;   
   }
 }
-@media (max-height: 759px) {
+
+@media (max-height: 769px) {
+  .wy-menu-vertical > p.caption:nth-last-of-type(1) {
+    position: relative;
+    bottom: 6px
+  }
   .wy-menu-vertical > p.caption:nth-last-of-type(1) {
     position: relative;
     bottom: 6px
   }
 }
 
-
 @media (min-height: 720px) {
 .wy-menu.wy-menu-vertical[data-spy="affix"] {
   position: fixed !important;
-  overflow: hidden !important;
   left: 0;
 }
+}
+
+.wy-nav-side {
+  padding-bottom: 0 !important;
 }
 
 @media (max-width: 770px) {

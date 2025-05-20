@@ -34,6 +34,7 @@ To learn more about background selection, see :doc:`About BGS and B-values <preb
    modes/gene
    modes/region
    modes/genome
+   modes/vcf
 
 .. toctree::
    :maxdepth: 2
