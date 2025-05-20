@@ -43,7 +43,7 @@ To learn more about background selection, see :doc:`About BGS and B-values <preb
    guides/quickstart
    guides/params
    guides/multiple_dfes
-   guides/vcf
+   guides/demography
    guides/sweepfinder2
 
 .. toctree::

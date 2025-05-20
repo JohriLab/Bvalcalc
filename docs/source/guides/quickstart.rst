@@ -41,6 +41,8 @@ Let's start by calculating B at a site 1kb from the edge of a single conserved e
    --gene_size 5000 \
    --distance 1000
 
+The B-value for this site should be printed in the console as just above 0.99, which indicates diversity is expecteed to be reduced 1% due to BGS.
+
 Calculating B recovery from a single element
 ---------------------------------------------
 
@@ -53,6 +55,8 @@ Now, let's calculate the recovery of B as a function of distance from the 5kb el
    --gene_size 5000 \
    --pop_params ./DrosophilaParams.py \
    --plot_output gene_B.png
+
+Have a look at the plot and the results printed to the console, you'll notice B decays with distance from the selected element. It's still a modest reduction (<3.1%), but remember, across a genome ALL selected elements will contribute to B at any given site.
 
 Calculating B for a region of the genome
 -----------------------------------------
@@ -75,7 +79,7 @@ That's all that's necessary for many analyses, especially if you're only interes
 Calculating a complete B-map
 -----------------------------
 
-If you wanted to generate a complete B-map for all sites across all chromosomes you can use the following command, though note it's a lot more data to crunch!
+If you wanted to generate a complete B-map for all sites across all chromosomes you would use the following command, though note it's a lot more data to crunch and maps are already available for Drosophila so no need to run it!
 
 .. code-block:: bash
 
@@ -86,4 +90,6 @@ If you wanted to generate a complete B-map for all sites across all chromosomes 
    --out Dmel_Bmap.csv \
    --out_binsize 1000
 
-There you go, now you've got yourself a B-map! Consider using it to identify highly conserved regions of the genome, or to select the most neutrally-evolving sites for e.g. demographic inference, see :doc:`VCF Filtering with B-map <./vcf>`.
+If you had run that command, you'd get a B-map! 
+
+B-maps are useful to identify highly conserved regions of the genome, as a null-model for inference, e.g. :doc:`SweepFinder2 with B-map <./sweepfinder2>`, or to select the most neutrally-evolving sites for e.g. demographic inference, see :doc:`Demographic Inferece with B-map <./demography>`.
