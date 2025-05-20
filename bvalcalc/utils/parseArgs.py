@@ -116,6 +116,12 @@ def parseGenomeArgs(argv=None):
         
     return args
 
+def parseVcfArgs(argv=None):
+    parser = argparse.ArgumentParser(description="VCF utilities for getting B statistics and filtering using on a B-map.")
+    parser.add_argument('--Bmap', type=str, required=True, help="Path to B map, e.g., allchroms_B.csv")
+    parser.add_argument('--quiet', action='store_true', help="If set, silence print statements.")
+    return parser.parse_args(argv)
+
 def parse_args():
     parser = argparse.ArgumentParser(description="Welcome to Bvalcalc! Please specify a mode to calculate B.")
     group = parser.add_mutually_exclusive_group(required=True)
@@ -125,6 +131,7 @@ def parse_args():
     parser.add_argument('--dir', '-d', default='.', help="Directory to write the generated params file (default: current directory)")
     group.add_argument('--site', '-s', action='store_true', help="Calculate B values for a single site from a selected element")
     group.add_argument('--gene', '-g', action='store_true', help="Calculate B values for a neutral region adjacent to a single selected element")
-    group.add_argument('--region', '-r', type=str, default=None, help="Calculate B values for a specific chromosomal region, considering genome-wide effects")
+    group.add_argument('--region', '-r', type=str, default=None, help="Calculate B values for a specific chromosomal region, considering genome-wide effects. Provide region as following argument [CHR,START,END].")
     group.add_argument('--genome', '-w', action='store_true', help="Calculate B values genome-wide for all sites considering all selected elements")
+    group.add_argument('--vcf', '-v', type=str, default=None, help="VCF utilities for getting B statistics and filtering using a B-map. Provide VCF input as following argument.")
     return parser
