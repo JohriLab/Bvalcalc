@@ -119,6 +119,8 @@ def parseGenomeArgs(argv=None):
 def parseVcfArgs(argv=None):
     parser = argparse.ArgumentParser(description="VCF utilities for getting B statistics and filtering using on a B-map.")
     parser.add_argument('--Bmap', type=str, required=True, help="Path to B map, e.g., allchroms_B.csv")
+    parser.add_argument('--out', type=str, default=None,
+                        help="Out path. If --out is not specified, ")
     parser.add_argument('--quiet', action='store_true', help="If set, silence print statements.")
     return parser.parse_args(argv)
 
