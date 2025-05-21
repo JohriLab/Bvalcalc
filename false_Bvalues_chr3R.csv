@@ -1,4 +1,7 @@
 Chromosome,Position,B
+chr2R,1,0.5
+chr2R,10001,0.75
+chr2R,20001,0.25
 chr3R,1,0.993684
 chr3R,10001,0.993684
 chr3R,20001,0.993677
