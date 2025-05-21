@@ -27,8 +27,8 @@ def load_Bmap(file_path):
             chromosomes.append(chrom)
             positions.append(pos)
             b_values.append(b)
-        prior_chromosomes = np.array(chromosomes, dtype='<U20')
-        prior_positions = np.array(positions,   dtype=np.int64)
-        prior_b_values = np.array(b_values,    dtype=np.float64)
+        chromosomes = np.array(chromosomes, dtype='<U20')
+        positions = np.array(positions,   dtype=np.int64)
+        b_values = np.array(b_values,    dtype=np.float64)
 
-    return prior_chromosomes, prior_positions, prior_b_values
+    return chromosomes, positions, b_values
