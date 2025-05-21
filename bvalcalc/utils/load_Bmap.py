@@ -15,14 +15,14 @@ def load_Bmap(file_path):
             # skip comments or stray headers
             if row[0].startswith('#') or row[0] == 'Chromosome':
                 continue
-            if len(row) < 4:
+            if len(row) < 3:
                 # malformed line, skip
                 continue
 
             chrom = row[0]
             pos   = int(row[1])
             # row[2] is "Conserved" but we don't need it here
-            b     = float(row[3])
+            b     = float(row[2])
 
             chromosomes.append(chrom)
             positions.append(pos)
