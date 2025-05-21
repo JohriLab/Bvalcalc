@@ -21,7 +21,6 @@ def load_Bmap(file_path):
 
             chrom = row[0]
             pos   = int(row[1])
-            # row[2] is "Conserved" but we don't need it here
             b     = float(row[2])
 
             chromosomes.append(chrom)
