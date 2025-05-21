@@ -16,6 +16,9 @@ def vcfBmap(args, vcf_path):
     if above_count > 0:
         print(f"WARNING: {above_count} VCF positions are above the max B-map position ({max_bmap_pos})")
 
+    idx = np.searchsorted(bmap_positions, vcf_positions, side='right') - 1
+    vcf_b_values = b_values[idx]
+    print(idx, vcf_b_values)
 
     print("gottem in vcfBmap")
 
