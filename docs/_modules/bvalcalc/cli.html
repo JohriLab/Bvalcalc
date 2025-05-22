@@ -1,0 +1,265 @@
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>bvalcalc.cli &mdash; Bvalcalc 0.4.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=c87aa342"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Bvalcalc
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/bedgff_input.html">BED/GFF Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/generate_params.html">Generate Parameters</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modes/site.html">Calculate Single Site B</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modes/gene.html">Calculate Gene B Recovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modes/region.html">Calculate Region B-map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modes/genome.html">Calculate Genome B-map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modes/vcf.html">VCF Utilities for B-maps</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/quickstart.html">Quickstart Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/params.html">Tailoring Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/multiple_dfes.html">Multiple DFEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/demography.html">Demographic Inference with B-map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/sweepfinder2.html">SweepFinder2 with B-map</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/calculateB.html">Calculate B</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">About BGS and B-values</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../prebuilt_maps/learn.html">Work in Progress…</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Query species B-maps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../prebuilt_maps/query.html">Work in Progress…</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Bvalcalc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">bvalcalc.cli</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for bvalcalc.cli</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">from</span> <span class="nn">bvalcalc.utils.parseArgs</span> <span class="kn">import</span> <span class="n">parse_args</span><span class="p">,</span> <span class="n">parseGenomeArgs</span><span class="p">,</span> <span class="n">parseRegionArgs</span><span class="p">,</span> <span class="n">parseGeneArgs</span><span class="p">,</span> <span class="n">parseSiteArgs</span><span class="p">,</span> <span class="n">parseBmapArgs</span>
+<span class="kn">from</span> <span class="nn">bvalcalc.core.plotB</span> <span class="kn">import</span> <span class="n">plotB</span>
+<span class="kn">from</span> <span class="nn">bvalcalc.utils.generateParams</span> <span class="kn">import</span> <span class="n">SPECIES</span><span class="p">,</span> <span class="n">generateParams</span><span class="p">,</span> <span class="n">check_generate_params_args</span>
+<span class="kn">from</span> <span class="nn">bvalcalc.core.positionsBstats</span> <span class="kn">import</span> <span class="n">positionsBstats</span>
+<span class="kn">from</span> <span class="nn">bvalcalc.core.plotChromB</span> <span class="kn">import</span> <span class="n">plotChromB</span>
+
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../../api/calculateB.html#bvalcalc.cli.main">[docs]</a>
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+    <span class="n">check_generate_params_args</span><span class="p">()</span> <span class="c1"># Unique error message for --generate_params to print species names</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">parse_args</span><span class="p">()</span>
+    <span class="n">known_args</span><span class="p">,</span> <span class="n">remaining_args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_known_args</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">known_args</span><span class="o">.</span><span class="n">generate_params</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="c1"># if --generate_params</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Retrieving params from template...&quot;</span><span class="p">)</span>
+        <span class="n">generateParams</span><span class="p">(</span><span class="n">known_args</span><span class="o">.</span><span class="n">generate_params</span><span class="p">,</span> <span class="n">known_args</span><span class="o">.</span><span class="n">dir</span><span class="p">)</span>
+        <span class="k">return</span>
+    
+    <span class="k">if</span> <span class="n">known_args</span><span class="o">.</span><span class="n">Bmap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="c1"># if --generate_params</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">parseBmapArgs</span><span class="p">(</span><span class="n">remaining_args</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;= B-map utilities = = =&quot;</span><span class="p">)</span>
+        <span class="n">flat_b</span><span class="p">,</span> <span class="n">flat_chrom</span> <span class="o">=</span> <span class="n">positionsBstats</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">known_args</span><span class="o">.</span><span class="n">Bmap</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">plot_distribution</span><span class="p">:</span>
+            <span class="n">plotChromB</span><span class="p">(</span><span class="n">flat_b</span><span class="p">,</span> <span class="n">flat_chrom</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">plot_distribution</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;= Calculating relative diversity (B) for all neutral sites across the genome. = = =&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">known_args</span><span class="o">.</span><span class="n">genome</span><span class="p">:</span> <span class="c1"># Run genome Bcalc</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">parseGenomeArgs</span><span class="p">(</span><span class="n">remaining_args</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;BCALC_POP_PARAMS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">pop_params</span>  <span class="c1"># Handle Params file</span>
+        <span class="kn">from</span> <span class="nn">bvalcalc.core.genomeBcalc</span> <span class="kn">import</span> <span class="n">genomeBcalc</span>
+        <span class="n">genomeBcalc</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">known_args</span><span class="o">.</span><span class="n">region</span><span class="p">:</span> <span class="c1"># Run region Bcalc</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">parseRegionArgs</span><span class="p">(</span><span class="n">remaining_args</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;BCALC_POP_PARAMS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">pop_params</span>  <span class="c1"># Handle Params file</span>
+        <span class="kn">from</span> <span class="nn">bvalcalc.core.regionBcalc</span> <span class="kn">import</span> <span class="n">regionBcalc</span>
+        <span class="n">output_data</span><span class="p">,</span> <span class="n">block_ranges</span> <span class="o">=</span> <span class="n">regionBcalc</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">known_args</span><span class="o">.</span><span class="n">region</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="s1">&#39;plot_output&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+            <span class="n">plotB</span><span class="p">(</span><span class="n">b_values_input</span><span class="o">=</span><span class="n">output_data</span><span class="p">,</span> <span class="n">caller</span><span class="o">=</span><span class="s2">&quot;chromosome&quot;</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">plot_output</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">quiet</span><span class="p">,</span> <span class="n">gene_ranges</span><span class="o">=</span><span class="n">block_ranges</span><span class="p">,</span> <span class="n">neutral_only</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">neutral_only</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">known_args</span><span class="o">.</span><span class="n">gene</span><span class="p">:</span> <span class="c1"># Run gene Bcalc</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">parseGeneArgs</span><span class="p">(</span><span class="n">remaining_args</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;BCALC_POP_PARAMS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">pop_params</span>  <span class="c1"># Handle Params file</span>
+        <span class="kn">from</span> <span class="nn">bvalcalc.core.geneBcalc</span> <span class="kn">import</span> <span class="n">geneBcalc</span>
+        <span class="n">output_data</span> <span class="o">=</span> <span class="n">geneBcalc</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="c1"># Capture the output from geneBcalc</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="s1">&#39;plot_output&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span> <span class="c1"># If the --plot_basic flag was provided, call plotB with geneBcalc&#39;s output.</span>
+            <span class="n">plotB</span><span class="p">(</span><span class="n">b_values_input</span><span class="o">=</span><span class="n">output_data</span><span class="p">,</span> <span class="n">caller</span><span class="o">=</span><span class="s2">&quot;gene&quot;</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">plot_output</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">quiet</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">known_args</span><span class="o">.</span><span class="n">site</span><span class="p">:</span> <span class="c1"># Run single site Bcalc</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">parseSiteArgs</span><span class="p">(</span><span class="n">remaining_args</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;BCALC_POP_PARAMS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">pop_params</span>  <span class="c1"># Handle Params file</span>
+        <span class="kn">from</span> <span class="nn">bvalcalc.core.siteBcalc</span> <span class="kn">import</span> <span class="n">siteBcalc</span>
+        <span class="n">siteBcalc</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;= B value calculated in </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start_time</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> seconds. = = =&quot;</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Jacob Marsh, Parul Johri.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+   
+  <div class="bee-trail-container">
+    <img
+      src="../../_static/Bvalcalc_bee_trail.svg"
+      aria-hidden="true"
+      class="bee-trail-img"
+    />
+    <div class="right-elements-stack">
+      <div class="citation-text">
+        <strong>Citation:</strong><br/>
+        Marsh, JI, Johri, PJ (2025). The B-value calculator:
+        efficient analytical calculation of expected
+        genetic diversity with background selection. <i>bioRxiv</i>, <a
+        href="https://biorxiv"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+      10.1101/2063.10.10.561727
+      </a>.
+      </div>
+      <div class="made-by-sphinx-text">
+        Made with   <a
+        href="https://www.sphinx-doc.org/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Sphinx
+      </a> using an adapted <a
+        href="https://github.com/rtfd/sphinx_rtd_theme"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        theme
+      </a> from <a
+      href="https://readthedocs.org/"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Read the Docs
+    </a><br/>
+      </div>
+
+    <div class="made-by-sphinx-text">
+    <a
+    href="https://test.pypi.org/project/bvalcalc/"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    PyPI
+  </a> | <a
+  href="https://github.com/JohriLab/BvalueCalculator/issues"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+Report a bug
+</a> | <a
+href="https://github.com/JohriLab/BvalueCalculator"
+target="_blank"
+rel="noopener noreferrer"
+>
+Source code
+</a> 
+      </div>
+    </div>
+    
+  </div>
+
+
+</body>
+</html>
