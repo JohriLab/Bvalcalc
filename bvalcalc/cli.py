@@ -22,7 +22,7 @@ def main():
     
     if known_args.vcf is not None: # if --generate_params
         args = parseVcfArgs(remaining_args)
-        print(f"Running --vcf mode")
+        print(f"= VCF Utilities for B-maps = = =")
         vcfBmap(args, known_args.vcf)
         return
 
