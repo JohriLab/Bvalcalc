@@ -1,0 +1,48 @@
+# Bytecode and compiled files
+__pycache__/
+*.py[cod]
+*.so
+
+# Backup & temporary files
+*.out
+*.log
+*.txt
+*.png
+*.B
+*.bvals
+*.Params.py
+*.tmp
+*~
+
+# Editor/project files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+
+# Python packaging
+*.egg-info/
+dist/
+build/
+
+# Poetry virtual environments
+.venv/
+
+# Pytest cache
+.pytest_cache/
+
+# IPython/Jupyter
+.ipynb_checkpoints/
+
+# Coverage reports
+htmlcov/
+.coverage
+.cache/
+
+# Sphinx docs
+docs/_build/
+
+# Example or local-only data
+exampleData/
+trash/

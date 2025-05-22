@@ -1,0 +1,224 @@
+/* docs/source/_static/css/custom.css */
+
+/* Sidebar & nav backgrounds */
+.wy-menu.wy-menu-vertical,
+.wy-side-scroll,
+.wy-side-nav-search,
+.wy-nav-side {
+  background-color: #FFC30B !important;
+}
+
+.wy-nav-shift {
+  padding-bottom: 0px !important;
+}
+
+.wy-side-nav-search {
+  margin-bottom: 0;
+}
+
+
+
+/* Sidebar link & text colors */
+.wy-menu.wy-menu-vertical a,
+.wy-menu.wy-menu-vertical p {
+  color: black !important;
+}
+
+/* Home-icon tweaks */
+a.icon.icon-home {
+  color: black !important;
+  font-size: 1.25em !important;
+  line-height: 1.2em;
+}
+
+/* Indent 1st-level entries */
+.toctree-l1 {
+  text-indent: 1rem;
+}
+
+/* Hover states */
+.wy-menu.wy-menu-vertical 
+  .toctree-l1:not(.current) > a:hover,
+.wy-menu.wy-menu-vertical 
+  .toctree-l2:not(.current) > a:hover {
+  background-color: #ffd454;
+}
+
+/* Active/focus & nested levels */
+.wy-menu.wy-menu-vertical 
+  .toctree-l1 a:active,
+.wy-menu.wy-menu-vertical 
+  .toctree-l1 a:focus {
+  background-color: #fff !important;
+  outline: none !important;
+}
+.wy-menu .toctree-l2 {
+  background-color: #FFC30B !important;
+  filter: brightness(110%);
+  outline: none !important;
+}
+.wy-menu .toctree-l2 .current {
+  background-color: #fff !important;
+}
+
+/* Disable link-selection */
+.wy-menu.wy-menu-vertical 
+  .toctree-l1 a {
+  user-select: none;
+}
+
+/* Main content background */
+.wy-nav-content-wrap,
+.wy-nav-content {
+  background-color: #fff;
+}
+
+
+/* -------------------------------------------------------------------------- */
+/*                               Bee-trail UX                                 */
+/* -------------------------------------------------------------------------- */
+
+/* Large viewports: fluid & capped container */
+@media (min-width: 1400px) {
+  .bee-trail-container {
+    position: fixed; top: 50%; left: 1120px;
+    transform: translateY(-50%);
+    width: 20vw; max-width: 320px;
+    text-align: center;
+    pointer-events: none; 
+    z-index: 9999;
+  }
+  .bee-trail-container a {
+    pointer-events: auto;
+  }
+
+  .citation-text {
+    pointer-events: all;
+  }
+  
+  .bee-trail-img {
+    display: block; width: 100%; height: auto;
+  }
+  .right-elements-stack {
+    position: absolute; bottom: 100%; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column;
+    align-items: center; gap: 15px;
+    width: 100%; padding-bottom: 50px;
+  }
+  .citation-text,
+  .made-by-sphinx-text {
+    color: #333; line-height: 1.4; white-space: normal;
+  }
+}
+
+/* Short viewports: stack top-down
+@media (max-height: 670px) {
+  .bee-trail-container {
+    position: fixed; top: 0; right: 50px;
+    width: 20vw; transform: none;
+    display: flex; flex-direction: column-reverse;
+    align-items: center; gap: 25px;
+    pointer-events: none; z-index: 9999;
+  }
+  .bee-trail-container a {
+    pointer-events: auto;
+  }
+  .right-elements-stack,
+  .bee-trail-img {
+    position: static; transform: none; width: 100%;
+  }
+} */
+
+/* -------------------------------------------------------------------------- */
+/*                        Sidebar “Learn more” & “Query”                       */
+/* -------------------------------------------------------------------------- */
+
+.caption {
+  margin-block-start: 6px !important;
+}
+
+/* hide their ULs */
+.wy-menu-vertical > ul:nth-last-of-type(-n+2) {
+  display: none !important;
+}
+
+/* teal caption (2nd-to-last) */
+.wy-menu-vertical > p.caption:nth-last-of-type(2) {
+  width: 100%; margin: 0;
+  padding: 0.25em 0.5em;
+  background-color: #f47201 !important;
+  margin-block-start: 0 !important;
+  z-index: 9998;
+  /* transform: translateX(-1rem); */
+  text-align: center;
+  bottom: 10px;
+
+  display: flex !important;
+  align-items: center;       /* vertical centering */
+  justify-content: center;   /* horizontal centering */
+}
+
+/* purple caption (last) */
+.wy-menu-vertical > p.caption:nth-last-of-type(1) {
+  width: 100%; 
+  padding: 0.25em 0.5em;
+  margin-block-start: 0 !important;
+  text-align: center;
+  /* transform: translateX(-1rem); */
+  background-color: #cf501a !important;
+  z-index: 9998;
+  transform: translateY(6px);
+
+  display: flex !important;
+  align-items: center;       /* vertical centering */
+  justify-content: center;   /* horizontal centering */
+}
+
+@media (min-height: 765px) {
+  .wy-menu-vertical > p.caption:nth-last-of-type(2) {
+    position: fixed;
+    width: 300px;
+    bottom: 63px;
+  }
+  .wy-menu-vertical > p.caption:nth-last-of-type(1) {
+    position: fixed;
+    width: 300px;
+    bottom: 37px !important;   
+  }
+}
+
+@media (max-height: 764px) {
+  .wy-menu-vertical > p.caption:nth-last-of-type(1) {
+    position: relative;
+    bottom: 6px
+  }
+  .wy-menu-vertical > p.caption:nth-last-of-type(1) {
+    position: relative;
+    bottom: 6px
+  }
+}
+
+@media (min-height: 720px) {
+.wy-menu.wy-menu-vertical[data-spy="affix"] {
+  position: fixed !important;
+  left: 0;
+}
+}
+
+.wy-nav-side {
+  padding-bottom: 0 !important;
+}
+
+@media (max-width: 770px) {
+  /* By default on narrow screens, hide the sidebar unless the content-wrap has .shift */
+  body:not(:has(.wy-nav-content-wrap.shift)) .wy-nav-side {
+    display: none !important;
+  }
+
+  /* Once .wy-nav-content-wrap gains the .shift class, reveal it again */
+  body:has(.wy-nav-content-wrap.shift) .wy-nav-side {
+    display: block !important;
+  }
+}
+
