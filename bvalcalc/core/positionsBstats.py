@@ -98,6 +98,8 @@ def positionsBstats(args, Bmap_path):
         out_f.close()
         print(f"Wrote CSV to {args.out}")
     else:
-        print(f"Skipping save, to save, add --out and --out_binsize")
+        print(f"Skipping save, to save, add --out")
 
-    return
+    flat_b = np.concatenate(all_b_list) if all_b_list else np.array([], dtype=np.float64)
+    flat_chrom = np.concatenate(all_chrom_list) if all_chrom_list else np.array([], dtype='<U20')
+    return flat_b, flat_chrom

@@ -7,6 +7,7 @@ from bvalcalc.utils.parseArgs import parse_args, parseGenomeArgs, parseRegionArg
 from bvalcalc.core.plotB import plotB
 from bvalcalc.utils.generateParams import SPECIES, generateParams, check_generate_params_args
 from bvalcalc.core.positionsBstats import positionsBstats
+from bvalcalc.core.plotChromB import plotChromB
 
 def main():
     start_time = time.time()
@@ -23,7 +24,9 @@ def main():
     if known_args.Bmap is not None: # if --generate_params
         args = parseBmapArgs(remaining_args)
         print(f"= VCF Utilities for B-maps = = =")
-        positionsBstats(args, known_args.Bmap)
+        flat_b, flat_chrom = positionsBstats(args, known_args.Bmap)
+        if args.plot_distribution:
+            plotChromB(flat_b, flat_chrom, args.plot_distribution)
         return
 
     print(f"= Calculating relative diversity (B) for all neutral sites across the genome. = = =")
