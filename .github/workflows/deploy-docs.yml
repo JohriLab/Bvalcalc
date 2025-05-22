@@ -7,8 +7,8 @@ on:
       - main
 
 permissions:
-  pages: write       # allow this workflow to configure Pages
-  contents: read     # allow reading the repo
+  pages: write # allow this workflow to configure Pages
+  contents: read # allow reading the repo
 
 jobs:
   build-and-deploy:
@@ -18,7 +18,7 @@ jobs:
       - name: Checkout main
         uses: actions/checkout@v3
         with:
-          persist-credentials: true   # so we can push back
+          persist-credentials: true # so we can push back
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -34,9 +34,8 @@ jobs:
           sphinx-build -b html docs/source docs/build/html
 
       - name: Deploy to gh-pages
-        uses: peaceiris/actions-gh-pages@v6
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: docs/build/html
           publish_branch: gh-pages
-
