@@ -49,7 +49,6 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
-    "sphinxarg.ext",  # sphinx-argparse extension
     "myst_parser",
 ]
 
