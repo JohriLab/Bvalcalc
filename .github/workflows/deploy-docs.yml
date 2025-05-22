@@ -1,0 +1,42 @@
+# .github/workflows/deploy-docs.yml
+name: Deploy docs to gh-pages
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  pages: write       # allow this workflow to configure Pages
+  contents: read     # allow reading the repo
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: true   # so we can push back
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install Sphinx & theme
+        run: |
+          pip install sphinx sphinx-book-theme
+
+      - name: Build HTML into docs/build/html
+        run: |
+          sphinx-build -b html docs/source docs/build/html
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v6
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/build/html
+          publish_branch: gh-pages
+
