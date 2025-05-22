@@ -8,7 +8,7 @@ on:
 
 permissions:
   pages: write # allow this workflow to configure Pages
-  contents: read # allow reading the repo
+  contents: write # allow writing to gh-pages repo
 
 jobs:
   build-and-deploy:
