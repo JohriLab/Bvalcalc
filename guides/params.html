@@ -1,0 +1,266 @@
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tailoring Parameters &mdash; Bvalcalc 0.4.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f1b1188b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c87aa342"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Multiple DFEs" href="multiple_dfes.html" />
+    <link rel="prev" title="Quickstart Tutorial" href="quickstart.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Bvalcalc
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/bedgff_input.html">BED/GFF Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/generate_params.html">Generate Parameters</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modes/site.html">Calculate Single Site B</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modes/gene.html">Calculate Gene B Recovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modes/region.html">Calculate Region B-map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modes/genome.html">Calculate Genome B-map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modes/vcf.html">VCF Utilities for B-maps</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart Tutorial</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tailoring Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multiple_dfes.html">Multiple DFEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demography.html">Demographic Inference with B-map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sweepfinder2.html">SweepFinder2 with B-map</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/calculateB.html">Calculate B</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">About BGS and B-values</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../prebuilt_maps/learn.html">Work in Progress…</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Query species B-maps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../prebuilt_maps/query.html">Work in Progress…</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Bvalcalc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Tailoring Parameters</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="tailoring-parameters">
+<h1>Tailoring Parameters<a class="headerlink" href="#tailoring-parameters" title="Link to this heading"></a></h1>
+<p>When using Bvalcalc to study populations beyond the pre-built templates, it’s important to tailor the popgen parameters to your population of interest.</p>
+<p>To save a local copy of one of the templates, see <a class="reference internal" href="../introduction/generate_params.html"><span class="doc">Generate Parameters</span></a> and open up the Params.py file in your text editor of choice.</p>
+<section id="core-parameters">
+<h2>Core parameters<a class="headerlink" href="#core-parameters" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>x</dt><dd><p>Scaling factor that modifies N, u, r, and g. Keep as 1 for empirical analysis, only useful for calculating B to compare against rescaled simulations</p>
+</dd>
+<dt>Nanc</dt><dd><p>Ancestral population size, often reported in literature. Can be roughly estimated from pairwise diversity at neutrally evolving sites, given a mutation rate and no demography (Nanc = pi/4u).</p>
+</dd>
+<dt>r</dt><dd><p>Recombination (crossover) rate per bp, per generation (sex-averaged), often reported in literature from direct measurement (recombination in pedigrees) or inferred from sequence data.</p>
+</dd>
+<dt>u</dt><dd><p>Mutation rate (all types) per bp, per generation, often reported in literature from mutation accumulation experiments. Note that the point mutation rate is typically used, though all mutation types with selective effects may contribute to BGS similarly, if considering different mutation types with different DFEs, see <a class="reference internal" href="multiple_dfes.html"><span class="doc">Multiple DFEs</span></a>.</p>
+</dd>
+<dt>g</dt><dd><p>Gene conversion initiation rate per bp, per generation. Note that on occasion the g * k value is reported in the literature rather than the <em>initiation</em> rate, in which case, the value should be divided by the tract length (k).</p>
+</dd>
+<dt>k</dt><dd><p>Gene conversion tract length (bp). Note that Bvalcalc takes only a single mean value and so does not make assumptions about the distribution.</p>
+</dd>
+</dl>
+</section>
+<section id="dfe-parameters">
+<h2>DFE parameters<a class="headerlink" href="#dfe-parameters" title="Link to this heading"></a></h2>
+<p>A distribution of fitness effects (DFE) describes the probability of different selective effects for new mutations when they arise.
+Bvalcalc models a discretized deleterious DFE consisting of four continuous distributions ranging from effectively neutral (f0), to strongly deleterious (f3); beneficial mutations are currently not supported.</p>
+<p>To specify a DFE, provide f0-f3 proportions that represent the DFE for all annotated regions in the <a class="reference internal" href="../introduction/bedgff_input.html"><span class="doc">BED/GFF input</span></a>. Note that the f0-f3 proportions must sum to 1.</p>
+<dl>
+<dt>f0</dt><dd><p>Proportion of effectively neutral mutations with 0 &lt;= |2Nanc*s| &lt; 1.</p>
+<p>Note that 2Ns&lt;5 does not contribute to BGS (see Johri et al 2020), Bvalcalc will exclude that proportion.</p>
+</dd>
+<dt>f1</dt><dd><p>Proportion of weakly deleterious mutations with 1 &lt;= |2Nanc*s| &lt; 10</p>
+</dd>
+<dt>f2</dt><dd><p>Proportion of moderately deleterious mutations with 10 &lt;= |2Nanc*s| &lt; 100</p>
+</dd>
+<dt>f3</dt><dd><p>Proportion of strongly deleterious mutations with |2Nanc*s| &gt;= 100</p>
+</dd>
+<dt>h</dt><dd><p>Dominance coefficient of selected alleles. Keep at 0.5 (additive effects) unless literature suggests otherwise</p>
+</dd>
+</dl>
+<p>DFE parameters may be reported in the literature as a gamma distribution, which Bvalcalc can take parameters to generate a discretized DFE to replace f0-f3 when <cite>--gamma_dfe</cite> is specified:</p>
+<dl class="simple">
+<dt>mean, shape, proportion_synonymous</dt><dd><p>The mean and shape parameters of the gamma DFE, and the proportion of strictly neutral sites in the annotated regions (e.g. synonymous in exon regions).</p>
+</dd>
+</dl>
+</section>
+<section id="demography">
+<h2>Demography<a class="headerlink" href="#demography" title="Link to this heading"></a></h2>
+<p>Historical population size change as a single step-function can be accounted for with Bvalcalc by adding the <cite>--pop_change</cite> flag, and setting the following parameters:</p>
+<dl class="simple">
+<dt>Ncur</dt><dd><p>Current population size, i.e. over the current epoch.</p>
+</dd>
+<dt>time_of_change</dt><dd><p>Time in <em>Nanc</em> generations ago that effective population size went from Nanc to Ncur.</p>
+</dd>
+</dl>
+</section>
+<section id="selfing-species">
+<h2>Selfing species<a class="headerlink" href="#selfing-species" title="Link to this heading"></a></h2>
+<p>Self-fertilizing (selfing) species have different evolutionary dynamics from obligate outcrosses which impact BGS (i.e., B).</p>
+<p>The parameters file can be modified for selfing populations by altering population size (Nanc/Ncur), crossover rate (r), gene conversion rate (g) and dominance coefficient by an additional parameter: f, which is Wright’s inbreeding coefficient (F). F can be calculated from the selfing rate (F = S/(2-S)). Note that the <cite>arabidopsis</cite> and <cite>pfalciparum</cite> default templates have the inbreeding parameter included.</p>
+<p>For analysis of selfing populations, we recommend tailoring parameters from the <cite>selfing</cite> template.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--generate_params<span class="w"> </span>selfing
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="quickstart.html" class="btn btn-neutral float-left" title="Quickstart Tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="multiple_dfes.html" class="btn btn-neutral float-right" title="Multiple DFEs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Jacob Marsh, Parul Johri.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+   
+  <div class="bee-trail-container">
+    <img
+      src="../_static/Bvalcalc_bee_trail.svg"
+      aria-hidden="true"
+      class="bee-trail-img"
+    />
+    <div class="right-elements-stack">
+      <div class="citation-text">
+        <strong>Citation:</strong><br/>
+        Marsh, JI, Johri, PJ (2025). The B-value calculator:
+        efficient analytical calculation of expected
+        genetic diversity with background selection. <i>bioRxiv</i>, <a
+        href="https://biorxiv"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+      10.1101/2063.10.10.561727
+      </a>.
+      </div>
+      <div class="made-by-sphinx-text">
+        Made with   <a
+        href="https://www.sphinx-doc.org/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Sphinx
+      </a> using an adapted <a
+        href="https://github.com/rtfd/sphinx_rtd_theme"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        theme
+      </a> from <a
+      href="https://readthedocs.org/"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Read the Docs
+    </a><br/>
+      </div>
+
+    <div class="made-by-sphinx-text">
+    <a
+    href="https://test.pypi.org/project/bvalcalc/"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    PyPI
+  </a> | <a
+  href="https://github.com/JohriLab/BvalueCalculator/issues"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+Report a bug
+</a> | <a
+href="https://github.com/JohriLab/BvalueCalculator"
+target="_blank"
+rel="noopener noreferrer"
+>
+Source code
+</a> 
+      </div>
+    </div>
+    
+  </div>
+
+
+</body>
+</html>

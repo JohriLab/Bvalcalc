@@ -1,0 +1,274 @@
+
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculate Genome B-map &mdash; Bvalcalc 0.4.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f1b1188b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c87aa342"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="VCF Utilities for B-maps" href="vcf.html" />
+    <link rel="prev" title="Calculate Region B-map" href="region.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Bvalcalc
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/bedgff_input.html">BED/GFF Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/generate_params.html">Generate Parameters</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="site.html">Calculate Single Site B</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gene.html">Calculate Gene B Recovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="region.html">Calculate Region B-map</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Calculate Genome B-map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vcf.html">VCF Utilities for B-maps</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/quickstart.html">Quickstart Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/params.html">Tailoring Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/multiple_dfes.html">Multiple DFEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/demography.html">Demographic Inference with B-map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/sweepfinder2.html">SweepFinder2 with B-map</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/calculateB.html">Calculate B</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">About BGS and B-values</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../prebuilt_maps/learn.html">Work in Progress…</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Query species B-maps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../prebuilt_maps/query.html">Work in Progress…</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Bvalcalc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Calculate Genome B-map</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="calculate-genome-b-map">
+<h1>Calculate Genome B-map<a class="headerlink" href="#calculate-genome-b-map" title="Link to this heading"></a></h1>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--genome<span class="w"> </span>--pop_params<span class="w"> </span>Params.py<span class="w"> </span>--bedgff_path<span class="w"> </span>CDS.bed
+</pre></div>
+</div>
+<dl class="simple">
+<dt><strong>--genome</strong></dt><dd><p>Calculate a B-map for all neutral and conserved sites across the genome, considering linked and unlinked effects of selection from all conserved elements.</p>
+</dd>
+</dl>
+<section id="core-arguments">
+<h2>Core Arguments<a class="headerlink" href="#core-arguments" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><strong>--pop_params [path/to/YourParams.py]</strong></dt><dd><p>Path to a Python file defining population genetic parameters, see [here for generating a pre-built template] and [here for tailoring your own parameters]</p>
+</dd>
+<dt><strong>--bedgff_path [path/to/example.bed]</strong></dt><dd><p>Path to an annotation file of selected elements, in BED, GFF3 or CSV format (CHR,START,END)</p>
+</dd>
+</dl>
+</section>
+<section id="recommended-arguments">
+<h2>Recommended Arguments<a class="headerlink" href="#recommended-arguments" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><strong>--chr_sizes [path/to/chr_sizes.csv]</strong></dt><dd><p>Path to a file specifying chromosome sizes in CSV format (CHR,END). If not provided, chromosome boundaries will default to the end of the last annotated gene</p>
+</dd>
+<dt><strong>--rec_map [path/to/rec_map.csv]</strong></dt><dd><p>Optional recombination (crossover) map in CSV format (CHR,START,RATE). Note that recombination rates are averaged over chunks.</p>
+</dd>
+<dt><strong>--gc_map [path/to/gc_map.csv]</strong></dt><dd><p>Optional gene conversion map in CSV format (CHR,START,RATE). Note that the same map can be used for crossover and gene conversion rates, rates are averaged over chunks.</p>
+</dd>
+<dt><strong>--pop_change</strong></dt><dd><p>If included, compute current B under a step population size change, see the associated guide on [demography]. Note that <cite>Ncur</cite> and <cite>time_of_change</cite> should be set in the parameters file when active.</p>
+</dd>
+</dl>
+</section>
+<section id="optional-arguments">
+<h2>Optional Arguments<a class="headerlink" href="#optional-arguments" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><strong>--out [path]</strong></dt><dd><p>Write B-values to a CSV file with the specified path (must also provide <code class="docutils literal notranslate"><span class="pre">--out_binsize</span></code>)</p>
+</dd>
+<dt><strong>--out_binsize [int]</strong></dt><dd><p>Bin size to average B-values in the CSV output, required if <code class="docutils literal notranslate"><span class="pre">--out</span></code> is used.</p>
+</dd>
+<dt><strong>--gamma_dfe</strong></dt><dd><p>If included, use a gamma distribution to define the DFE (instead of fixed <cite>f0,f1,f2,f3</cite>). Note that <cite>mean</cite>, <cite>shape</cite> and <cite>proportion_synonymous</cite> should be set in the parameters file when active.</p>
+</dd>
+<dt><strong>--prior_Bmap [path/to/prior_Bmap.csv]</strong></dt><dd><p>Optional prior B-value map (<cite>.csv</cite> format). Used to multiply the newly calculated B-values by a per-site prior (e.g. for regions under different selection parameters). Format: <cite>Chromosome,Position,Conserved,B</cite>. Note that <cite>Conserved</cite> is required for parsing but does not affect output</p>
+</dd>
+<dt><strong>--chunk_size [int]</strong></dt><dd><p>Size of chunks to process in each B calculation (default: <cite>20000</cite>). It may be useful to increase this in large chromosomes with sparse selection for tractability, though consider how this may affect analysis in conjunction with the number of <cite>precise_chunks</cite>.</p>
+</dd>
+<dt><strong>--precise_chunks [int]</strong></dt><dd><p>Number of chunks on either side of a focal chunk to calculate precisely (default: <cite>3</cite>). Increasing this beyond the default will lead to more precise results though reduces tractability, consider how this may affect analysis in conjunction with the <cite>chunk_size</cite>.</p>
+</dd>
+<dt><strong>--verbose</strong></dt><dd><p>Print per-chunk processing summaries (default: False)</p>
+</dd>
+<dt><strong>--quiet</strong></dt><dd><p>Suppress console output</p>
+</dd>
+</dl>
+</section>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--genome<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--pop_params<span class="w"> </span>DrosophilaParams.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--bedgff_path<span class="w"> </span>drosophila_CDS.bed<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--chr_sizes<span class="w"> </span>chrom_sizes.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--out<span class="w"> </span>Bvalues_chr2R.csv<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--out_binsize<span class="w"> </span><span class="m">1000</span>
+</pre></div>
+</div>
+<p>Calculates a B-map for across the genome considering all CDS regions. Output of B values in 1kb bins for the region will be saved.</p>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
+<p>A caveat to the <code class="docutils literal notranslate"><span class="pre">--region</span></code> and <code class="docutils literal notranslate"><span class="pre">--genome</span></code> modes is that by default they combine and simplify distant elements in discrete chunks which can slightly change the distance of distant conserved elements when
+calculating B. The default chunk size is 20kb and the window within which calculations are perfectly precise is three chunks in each direction (140kb total). This allows for vastly improved performance
+and typically will not result in directional biases of B estimates for most analyses.</p>
+<p>To achieve more exact results you can specify the size of the chunks with <code class="docutils literal notranslate"><span class="pre">--chunk_size</span></code>, and the size of the window to
+perform perfectly precise calculations with <code class="docutils literal notranslate"><span class="pre">--precise_chunks</span></code>, though this will come at the cost of perfomance so consider using HPC resources or limiting to a specific region with <code class="docutils literal notranslate"><span class="pre">--region</span></code>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="region.html" class="btn btn-neutral float-left" title="Calculate Region B-map" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="vcf.html" class="btn btn-neutral float-right" title="VCF Utilities for B-maps" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Jacob Marsh, Parul Johri.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+   
+  <div class="bee-trail-container">
+    <img
+      src="../_static/Bvalcalc_bee_trail.svg"
+      aria-hidden="true"
+      class="bee-trail-img"
+    />
+    <div class="right-elements-stack">
+      <div class="citation-text">
+        <strong>Citation:</strong><br/>
+        Marsh, JI, Johri, PJ (2025). The B-value calculator:
+        efficient analytical calculation of expected
+        genetic diversity with background selection. <i>bioRxiv</i>, <a
+        href="https://biorxiv"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+      10.1101/2063.10.10.561727
+      </a>.
+      </div>
+      <div class="made-by-sphinx-text">
+        Made with   <a
+        href="https://www.sphinx-doc.org/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Sphinx
+      </a> using an adapted <a
+        href="https://github.com/rtfd/sphinx_rtd_theme"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        theme
+      </a> from <a
+      href="https://readthedocs.org/"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Read the Docs
+    </a><br/>
+      </div>
+
+    <div class="made-by-sphinx-text">
+    <a
+    href="https://test.pypi.org/project/bvalcalc/"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    PyPI
+  </a> | <a
+  href="https://github.com/JohriLab/BvalueCalculator/issues"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+Report a bug
+</a> | <a
+href="https://github.com/JohriLab/BvalueCalculator"
+target="_blank"
+rel="noopener noreferrer"
+>
+Source code
+</a> 
+      </div>
+    </div>
+    
+  </div>
+
+
+</body>
+</html>
