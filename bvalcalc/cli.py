@@ -3,10 +3,10 @@ import os
 import sys
 import time
 import argparse
-from bvalcalc.utils.parseArgs import parse_args, parseGenomeArgs, parseRegionArgs, parseGeneArgs, parseSiteArgs, parseVcfArgs
+from bvalcalc.utils.parseArgs import parse_args, parseGenomeArgs, parseRegionArgs, parseGeneArgs, parseSiteArgs, parseBmapArgs
 from bvalcalc.core.plotB import plotB
 from bvalcalc.utils.generateParams import SPECIES, generateParams, check_generate_params_args
-from bvalcalc.core.vcfBmap import vcfBmap
+from bvalcalc.core.positionsBstats import positionsBstats
 
 def main():
     start_time = time.time()
@@ -20,10 +20,10 @@ def main():
         generateParams(known_args.generate_params, known_args.dir)
         return
     
-    if known_args.vcf is not None: # if --generate_params
-        args = parseVcfArgs(remaining_args)
+    if known_args.Bmap is not None: # if --generate_params
+        args = parseBmapArgs(remaining_args)
         print(f"= VCF Utilities for B-maps = = =")
-        vcfBmap(args, known_args.vcf)
+        positionsBstats(args, known_args.Bmap)
         return
 
     print(f"= Calculating relative diversity (B) for all neutral sites across the genome. = = =")

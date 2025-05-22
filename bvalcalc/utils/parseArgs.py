@@ -116,9 +116,9 @@ def parseGenomeArgs(argv=None):
         
     return args
 
-def parseVcfArgs(argv=None):
+def parseBmapArgs(argv=None):
     parser = argparse.ArgumentParser(description="B-map utilities for getting B statistics for sites in a VCF/txt file with specific positions.")
-    parser.add_argument('--Bmap', type=str, required=True, help="Path to B map, e.g., allchroms_B.csv")
+    parser.add_argument('--positions', type=str, required=True, help="VCF or  input as following argument")
     parser.add_argument('--plot_distribution', nargs='?', const='B_distribution.png', default=None, help="If set, a plot of the distribution of B in each chromosome will be saved to the provided path.")   
     parser.add_argument('--out', type=str, default=None,
                         help="Path to save per-site B for variant sites in the VCF/txt file. Results are not saved if --out is not specified.")
@@ -138,5 +138,5 @@ def parse_args():
     group.add_argument('--gene', '-g', action='store_true', help="Calculate B values for a neutral region adjacent to a single selected element")
     group.add_argument('--region', '-r', type=str, default=None, help="Calculate B values for a specific chromosomal region, considering genome-wide effects. Provide region as following argument [CHR,START,END].")
     group.add_argument('--genome', '-w', action='store_true', help="Calculate B values genome-wide for all sites considering all selected elements")
-    group.add_argument('--vcf', '-v', type=str, default=None, help="VCF utilities for getting B statistics and filtering using a B-map. Provide VCF input as following argument.")
+    group.add_argument('--Bmap', '-b', type=str, default=None, help="B-map utilities for getting B statistics for specific sites in a VCF/txt file. Provide path to B map, e.g., allchroms_B.csv as following argument.")
     return parser

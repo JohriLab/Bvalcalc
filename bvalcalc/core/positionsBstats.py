@@ -4,10 +4,10 @@ import numpy as np
 import csv
 import sys
 
-def vcfBmap(args, vcf_path):    
+def positionsBstats(args, Bmap_path):    
     # Load info using utils
-    vcf_chroms, vcf_pos = load_vcf(vcf_path)
-    bmap_chroms, bmap_pos, b_values = load_Bmap(file_path=args.Bmap)
+    vcf_chroms, vcf_pos = load_vcf(args.positions)
+    bmap_chroms, bmap_pos, b_values = load_Bmap(file_path=Bmap_path)
 
     # Check for positions beyond B-map range
     max_bmap_pos = bmap_pos[-1]
@@ -71,13 +71,6 @@ def vcfBmap(args, vcf_path):
             print(f"{chrom} positions: {vcf_pos_chr}")
             print(f"{chrom} B-values:  {vcf_b_for_chr}")
 
-    # Close CSV file if used
-    if writer:
-        out_f.close()
-        print(f"Wrote CSV to {args.out}")
-    else:
-        print(f"Skipping save, to save, add --out and --out_binsize")
-
     # Summary statistics
     print(f"====== R E S U L T S ====== S U M M A R Y ==========")
     if all_b_list:
@@ -100,4 +93,11 @@ def vcfBmap(args, vcf_path):
     else:
         print("No B-values to summarize.")
 
-    print("gottem in vcfBmap")
+    # Close CSV file if used
+    if writer:
+        out_f.close()
+        print(f"Wrote CSV to {args.out}")
+    else:
+        print(f"Skipping save, to save, add --out and --out_binsize")
+
+    return
