@@ -117,10 +117,13 @@ def parseGenomeArgs(argv=None):
     return args
 
 def parseVcfArgs(argv=None):
-    parser = argparse.ArgumentParser(description="VCF utilities for getting B statistics and filtering using on a B-map.")
+    parser = argparse.ArgumentParser(description="B-map utilities for getting B statistics for sites in a VCF/txt file with specific positions.")
     parser.add_argument('--Bmap', type=str, required=True, help="Path to B map, e.g., allchroms_B.csv")
+    parser.add_argument('--plot_distribution', nargs='?', const='B_distribution.png', default=None, help="If set, a plot of the distribution of B in each chromosome will be saved to the provided path.")   
     parser.add_argument('--out', type=str, default=None,
-                        help="Out path. If --out is not specified, ")
+                        help="Path to save per-site B for variant sites in the VCF/txt file. Results are not saved if --out is not specified.")
+    parser.add_argument('--out_minimum', action='store_true', help="If set, only the sites ABOVE the given threshold of B will be returned, i.e. B > [threshold].")   
+    parser.add_argument('--out_maximum', action='store_true', help="If set, only the sites BELOW the given threshold of B will be returned, i.e. B < [threshold].")   
     parser.add_argument('--quiet', action='store_true', help="If set, silence print statements.")
     return parser.parse_args(argv)
 
