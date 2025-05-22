@@ -1,46 +1,47 @@
 import matplotlib.pyplot as plt
 import matplotlib as mpl
+import seaborn as sns
 import numpy as np
 
 def plotChromB(flat_b, flat_chrom, output_path):
-    print('====== P L O T T I N G . . . =======================')
+     print('====== P L O T T I N G . . . =======================')
 
-    mpl.rcParams['font.family'] = ['Helvetica', 'DejaVu Sans', 'Arial']
+     # Set overall style
+     sns.set_theme(style="whitegrid", font='Helvetica')
+     mpl.rcParams['axes.edgecolor'] = 'black'
 
-    if 'seaborn-v0_8-whitegrid' in plt.style.available:
-        plt.style.use('seaborn-v0_8-whitegrid')
-    else:
-        print("'seaborn-whitegrid' style not found, using 'ggplot' as fallback.")
-        plt.style.use('ggplot')
-        mpl.rcParams['axes.facecolor']  = 'white'
-        mpl.rcParams['figure.facecolor'] = 'white'
-        mpl.rcParams['grid.color']      = 'grey'
-        mpl.rcParams['grid.linestyle']  = '--'
-        mpl.rcParams['grid.linewidth']  = 0.5
+     fig, ax = plt.subplots(figsize=(12, 6))
 
-    mpl.rcParams['axes.edgecolor'] = 'black'
+     # Unique chromosomes plus an "All" category
+     chroms = list(np.unique(flat_chrom))
+     chroms.append('All')
 
-    fig, ax = plt.subplots(figsize=(10, 6))
+     # Extend arrays to include the combined "All" data
+     all_label = np.array(['All'] * len(flat_b), dtype='<U20')
+     ext_chrom = np.concatenate([flat_chrom, all_label])
+     ext_b = np.concatenate([flat_b, flat_b])
 
-    # Group B-values by chromosome
-    chroms = np.unique(flat_chrom)
-    data   = [flat_b[flat_chrom == chrom] for chrom in chroms]
+     # Boxenplot including the "All" column, with hue to align palette
+     # Use k_depth='tukey' to speed up computation by using Tukey's five-number summary
+     sns.boxenplot(
+         x=ext_chrom,
+         y=ext_b,
+         order=chroms,
+         hue=ext_chrom,
+         palette='pastel',
+         showfliers=False,
+         legend=False,
+         k_depth='tukey',
+         ax=ax
+     )
 
-    # Draw boxplot
-    bp = ax.boxplot(
-        data,
-        labels=chroms,
-        patch_artist=True,
-        boxprops=dict(facecolor='lightblue', edgecolor='black'),
-        medianprops=dict(color='red')
-    )
+     # Final plot adjustments
+     ax.set_xlabel('Chromosome', fontsize=13)
+     ax.set_ylabel('Expected diversity relative to neutral evolution (B)', fontsize=13)
+     ax.set_title('Distribution of B by Chromosome (and All)', fontsize=15, fontweight='bold')
+     ax.tick_params(axis='x', rotation=45, labelsize=10)
+     ax.tick_params(axis='y', labelsize=10)
 
-    ax.set_xlabel('Chromosome', fontsize=13)
-    ax.set_ylabel('Expected diversity relative to neutral evolution (B)', fontsize=13)
-    ax.set_title('Distribution of B by Chromosome', fontsize=15, fontweight='bold')
-    ax.tick_params(axis='both', which='major', labelsize=10)
-    plt.setp(ax.get_xticklabels(), rotation=45, ha='right')
-
-    plt.tight_layout()
-    plt.savefig(output_path, dpi=300)
-    print(f"Plot saved to {output_path}")
+     plt.tight_layout()
+     plt.savefig(output_path, dpi=300)
+     print(f"Plot saved to {output_path}")

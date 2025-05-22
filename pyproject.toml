@@ -16,7 +16,8 @@ authors = [
 dependencies = [
   "numpy",
   "scipy",
-  "matplotlib"
+  "matplotlib",
+  "seaborn (>=0.13.2,<0.14.0)"
 ]
 classifiers = [
   "Development Status :: 4 - Beta",
