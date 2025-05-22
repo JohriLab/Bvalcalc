@@ -38,7 +38,7 @@ def plotChromB(flat_b, flat_chrom, output_path):
      # Final plot adjustments
      ax.set_xlabel('Chromosome', fontsize=13)
      ax.set_ylabel('Expected diversity relative to neutral evolution (B)', fontsize=13)
-     ax.set_title('Distribution of B by Chromosome (and All)', fontsize=15, fontweight='bold')
+     ax.set_title('Distribution of B by Chromosome', fontsize=15, fontweight='bold')
      ax.tick_params(axis='x', rotation=45, labelsize=10)
      ax.tick_params(axis='y', labelsize=10)
 

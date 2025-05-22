@@ -23,7 +23,7 @@ def main():
     
     if known_args.Bmap is not None: # if --generate_params
         args = parseBmapArgs(remaining_args)
-        print(f"= VCF Utilities for B-maps = = =")
+        print(f"= B-map utilities = = =")
         flat_b, flat_chrom = positionsBstats(args, known_args.Bmap)
         if args.plot_distribution:
             plotChromB(flat_b, flat_chrom, args.plot_distribution)
