@@ -1,2 +1,2 @@
-VCF Utilities for B-maps
+B-map Utilities for VCF
 =========================
