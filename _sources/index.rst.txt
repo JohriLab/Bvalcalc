@@ -30,11 +30,11 @@ To learn more about background selection, see :doc:`About BGS and B-values <preb
    :maxdepth: 1
    :caption: Modules
 
-   modes/site
-   modes/gene
-   modes/region
-   modes/genome
-   modes/vcf
+   modules/site
+   modules/gene
+   modules/region
+   modules/genome
+   modules/bmap_utils
 
 .. toctree::
    :maxdepth: 2
