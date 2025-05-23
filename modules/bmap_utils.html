@@ -104,6 +104,45 @@
              
   <section id="b-map-utilities-for-vcf">
 <h1>B-map Utilities for VCF<a class="headerlink" href="#b-map-utilities-for-vcf" title="Link to this heading"></a></h1>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--Bmap<span class="w"> </span>Bmap.csv<span class="w"> </span>--positions<span class="w"> </span>variants.vcf
+</pre></div>
+</div>
+<dl class="simple">
+<dt><strong>--Bmap [path/to/Bmap.csv]</strong></dt><dd><p>B-map utilities for getting B statistics for specific sites in a VCF/txt file. Provide path to B map as following argument.</p>
+</dd>
+</dl>
+<section id="core-arguments">
+<h2>Core Arguments<a class="headerlink" href="#core-arguments" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><strong>--positions</strong></dt><dd><p>VCF or two column CSV file [CHR,POS] with list of positions (typically variants) to get B for from the B-map.</p>
+</dd>
+</dl>
+</section>
+<section id="optional-arguments">
+<h2>Optional Arguments<a class="headerlink" href="#optional-arguments" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><strong>-/-plot_distribution [path]</strong></dt><dd><p>Output path for a plot of the distribution of B across each chromosome (default: <cite>B_distribution.png</cite>).</p>
+</dd>
+</dl>
+<p><strong>-/-out</strong>
+<strong>-/-out_minimum</strong>
+<strong>-/-out_maximum</strong>
+<strong>-/-quiet</strong></p>
+<dl>
+<dt>def parseBmapArgs(argv=None):</dt><dd><p>parser = argparse.ArgumentParser(description=”B-map utilities for getting B statistics for sites in a VCF/txt file with specific positions.”)
+parser.add_argument(’–positions’, type=str, required=True, help=”VCF or  input as following argument”)
+parser.add_argument(’–plot_distribution’, nargs=’?’, const=’B_distribution.png’, default=None, help=””)
+parser.add_argument(’–out’, type=str, default=None,</p>
+<blockquote>
+<div><p>help=”Path to save per-site B for variant sites in the VCF/txt file. Results are not saved if –out is not specified.”)</p>
+</div></blockquote>
+<p>parser.add_argument(’–out_minimum’, action=’store_true’, help=”If set, only the sites ABOVE the given threshold of B will be returned, i.e. B &gt; [threshold].”)
+parser.add_argument(’–out_maximum’, action=’store_true’, help=”If set, only the sites BELOW the given threshold of B will be returned, i.e. B &lt; [threshold].”)
+parser.add_argument(’–quiet’, action=’store_true’, help=”If set, silence print statements.”)
+return parser.parse_args(argv)</p>
+</dd>
+</dl>
+</section>
 </section>
 
 
