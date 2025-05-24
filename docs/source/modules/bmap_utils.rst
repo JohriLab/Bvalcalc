@@ -26,13 +26,13 @@ Optional Arguments
 **-/-out_minimum [float]**
   Filters positions by B so that only the sites ABOVE the given threshold of B will be returned, i.e. B >= [threshold].
   
-**-/-out_maximum [float**
+**-/-out_maximum [float]**
   Filters positions by B so that only the sites BELOW the given threshold of B will be returned, i.e. B <= [threshold].
 
 **-/-quiet**
   Silence print statements.
 
-  Example
+Example
 -----------
 
 .. code-block:: bash
