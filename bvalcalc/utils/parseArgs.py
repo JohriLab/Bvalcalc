@@ -122,8 +122,8 @@ def parseBmapArgs(argv=None):
     parser.add_argument('--plot_distribution', nargs='?', const='B_distribution.png', default=None, help="Output path for a plot of the distribution of B across each chromosome.")   
     parser.add_argument('--out', type=str, default=None,
                         help="Path to save per-site B for variant sites in the VCF/txt file. Results are not saved if --out is not specified.")
-    parser.add_argument('--out_minimum', action='store_true', help="If set, only the sites ABOVE the given threshold of B will be returned, i.e. B > [threshold].")   
-    parser.add_argument('--out_maximum', action='store_true', help="If set, only the sites BELOW the given threshold of B will be returned, i.e. B < [threshold].")   
+    parser.add_argument('--out_minimum', type=float, default=None, help="If set, only the sites ABOVE the given threshold of B will be returned, i.e. B > [threshold].")   
+    parser.add_argument('--out_maximum', type=float, default=None, help="If set, only the sites BELOW the given threshold of B will be returned, i.e. B < [threshold].")   
     parser.add_argument('--quiet', action='store_true', help="If set, silence print statements.")
     return parser.parse_args(argv)
 
