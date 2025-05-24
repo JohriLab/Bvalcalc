@@ -120,28 +120,24 @@
 </section>
 <section id="optional-arguments">
 <h2>Optional Arguments<a class="headerlink" href="#optional-arguments" title="Link to this heading"></a></h2>
-<dl class="simple">
+<dl>
 <dt><strong>-/-plot_distribution [path]</strong></dt><dd><p>Output path for a plot of the distribution of B across each chromosome (default: <cite>B_distribution.png</cite>).</p>
 </dd>
-</dl>
-<p><strong>-/-out</strong>
-<strong>-/-out_minimum</strong>
-<strong>-/-out_maximum</strong>
-<strong>-/-quiet</strong></p>
-<dl>
-<dt>def parseBmapArgs(argv=None):</dt><dd><p>parser = argparse.ArgumentParser(description=”B-map utilities for getting B statistics for sites in a VCF/txt file with specific positions.”)
-parser.add_argument(’–positions’, type=str, required=True, help=”VCF or  input as following argument”)
-parser.add_argument(’–plot_distribution’, nargs=’?’, const=’B_distribution.png’, default=None, help=””)
-parser.add_argument(’–out’, type=str, default=None,</p>
-<blockquote>
-<div><p>help=”Path to save per-site B for variant sites in the VCF/txt file. Results are not saved if –out is not specified.”)</p>
-</div></blockquote>
-<p>parser.add_argument(’–out_minimum’, action=’store_true’, help=”If set, only the sites ABOVE the given threshold of B will be returned, i.e. B &gt; [threshold].”)
-parser.add_argument(’–out_maximum’, action=’store_true’, help=”If set, only the sites BELOW the given threshold of B will be returned, i.e. B &lt; [threshold].”)
-parser.add_argument(’–quiet’, action=’store_true’, help=”If set, silence print statements.”)
-return parser.parse_args(argv)</p>
+<dt><strong>-/-out [path]</strong></dt><dd><p>Path to save per-site B for variant sites in the VCF/txt file. Results are not saved if –out is not specified.</p>
+</dd>
+<dt><strong>-/-out_minimum [float]</strong></dt><dd><p>Filters positions by B so that only the sites ABOVE the given threshold of B will be returned, i.e. B &gt;= [threshold].</p>
+</dd>
+<dt><strong>-/-out_maximum [float</strong></dt><dd><p>Filters positions by B so that only the sites BELOW the given threshold of B will be returned, i.e. B &lt;= [threshold].</p>
+</dd>
+<dt><strong>-/-quiet</strong></dt><dd><p>Silence print statements.</p>
+<p>Example</p>
 </dd>
 </dl>
+<hr class="docutils" />
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--Bmap<span class="w"> </span>Bmap.csv<span class="w"> </span>--positions<span class="w"> </span>variants.vcf<span class="w"> </span>--out<span class="w"> </span>variants_B_above_0.9.csv<span class="w"> </span>--out_minimum<span class="w"> </span><span class="m">0</span>.9
+</pre></div>
+</div>
+<p>This will save a csv file with each position in the VCF with B above or equal 0.9. These variants represent the most  most neutrally-evolving alleles in the VCF and may be useful for demographic inference, see <a class="reference internal" href="../guides/demography.html"><span class="doc">Demographic Inference with B-map</span></a>.</p>
 </section>
 </section>
 
