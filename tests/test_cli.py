@@ -197,5 +197,20 @@ def test_cli_selfing():
     assert "Mean B for flanking region: 0.8043714716235398" in out
     assert "B at start and end of the neutral region: [0.60347707 0.6035028  0.60352854 ... 0.89001725 0.89001929 0.89002133]" in out
 
+def test_cli_positions_minimum_filter():
+    # python -m bvalcalc.cli --Bmap ./examples/false_Bvalues_chr3R.csv --positions ./examples/posfile.csv --out_minimum 0.5
+    bmap_path = Path(__file__).parents[1] / "examples" / "false_Bvalues_chr3R.csv"
+    pos_path  = Path(__file__).parents[1] / "examples" / "posfile.csv"
 
+    cmd = BASE_CMD + [
+        "--Bmap", str(bmap_path),
+        "--positions", str(pos_path),
+        "--out_minimum", "0.5",
+    ]
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    out = result.stdout + result.stderr
 
+    assert result.returncode == 0, f"CLI failed:\n{result.stderr}"
+    assert "Mean B across filtered sites: 0.562500" in out
+    assert "Max B across filtered sites: 0.750000 at chr_2R:20000" in out
+    assert "Min B across filtered sites: 0.500000 at chr_2R:1" in out
