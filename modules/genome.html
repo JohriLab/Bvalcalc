@@ -125,9 +125,9 @@
 <dl class="simple">
 <dt><strong>--chr_sizes [path/to/chr_sizes.csv]</strong></dt><dd><p>Path to a file specifying chromosome sizes in CSV format (CHR,END). If not provided, chromosome boundaries will default to the end of the last annotated gene</p>
 </dd>
-<dt><strong>--rec_map [path/to/rec_map.csv]</strong></dt><dd><p>Optional recombination (crossover) map in CSV format (CHR,START,RATE). Note that recombination rates are averaged over chunks.</p>
+<dt><strong>--rec_map [path/to/rec_map.csv]</strong></dt><dd><p>Optional recombination (crossover) map in CSV format (CHR,START,RATE), where “RATE” is a multiplication factor for <cite>r</cite> in the parameters file. Note that recombination rates are averaged over chunks.</p>
 </dd>
-<dt><strong>--gc_map [path/to/gc_map.csv]</strong></dt><dd><p>Optional gene conversion map in CSV format (CHR,START,RATE). Note that the same map can be used for crossover and gene conversion rates, rates are averaged over chunks.</p>
+<dt><strong>--gc_map [path/to/gc_map.csv]</strong></dt><dd><p>Optional gene conversion initiation rate map in CSV format (CHR,START,RATE), where “RATE” is a multiplication factor for <cite>g</cite> in the parameters file. Note that the same map can be used for crossover and gene conversion rates, rates are averaged over chunks.</p>
 </dd>
 <dt><strong>--pop_change</strong></dt><dd><p>If included, compute current B under a step population size change, see the associated guide on [demography]. Note that <cite>Ncur</cite> and <cite>time_of_change</cite> should be set in the parameters file when active.</p>
 </dd>

@@ -7,17 +7,17 @@ To save a local copy of one of the templates, see :doc:`Generate Parameters <../
 
 Core parameters
 ----------------
-x 
-    Scaling factor that modifies N, u, r, and g. Keep as 1 for empirical analysis, only useful for calculating B to compare against rescaled simulations
-Nanc 
-    Ancestral population size, often reported in literature. Can be roughly estimated from pairwise diversity at neutrally evolving sites, given a mutation rate and no demography (Nanc = pi/4u).
-r
-    Recombination (crossover) rate per bp, per generation (sex-averaged), often reported in literature from direct measurement (recombination in pedigrees) or inferred from sequence data. 
-u   
-    Mutation rate (all types) per bp, per generation, often reported in literature from mutation accumulation experiments. Note that the point mutation rate is typically used, though all mutation types with selective effects may contribute to BGS similarly, if considering different mutation types with different DFEs, see :doc:`Multiple DFEs <../guides/multiple_dfes>`. 
-g 
-    Gene conversion initiation rate per bp, per generation. Note that on occasion the g * k value is reported in the literature rather than the *initiation* rate, in which case, the value should be divided by the tract length (k). 
-k
+``x`` 
+    Scaling factor that modifies ``N``, ``u``, ``r``, and ``g``. Keep as 1 for empirical analysis, only useful for calculating B to compare against rescaled simulations
+``Nanc``
+    Ancestral population size, often reported in literature. Can be roughly estimated from pairwise diversity at neutrally evolving sites, given a mutation rate and no demography (`Nanc = pi/4u`).
+``r``
+    Recombination (crossover) rate per bp, per generation (sex-averaged), often reported in literature from direct measurement (recombination in pedigrees) or inferred from sequence data. Note you can add a crossover rate that can modify `r` across the genome with ``--rec_map``. 
+``u``   
+    Mutation rate (all types) per bp, per generation, often reported in literature from mutation accumulation experiments. Note that the point mutation rate is typically used, though all mutation types with selective effects may contribute to BGS similarly, if considering different mutation types with different DFEs, see :doc:`Multiple DFEs <../guides/multiple_dfes>`. Note you can add a gc initiation rate that can modify `g` across the genome with ``--gc_map``. 
+``g`` 
+    Gene conversion initiation rate per bp, per generation. Note that on occasion the ``g * k`` value is reported in the literature rather than the *initiation* rate, in which case, the value should be divided by the tract length (k). 
+``k``
     Gene conversion tract length (bp). Note that Bvalcalc takes only a single mean value and so does not make assumptions about the distribution.
 
 DFE parameters
@@ -26,25 +26,25 @@ DFE parameters
 A distribution of fitness effects (DFE) describes the probability of different selective effects for new mutations when they arise.
 Bvalcalc models a discretized deleterious DFE consisting of four continuous distributions ranging from effectively neutral (f0), to strongly deleterious (f3); beneficial mutations are currently not supported.
 
-To specify a DFE, provide f0-f3 proportions that represent the DFE for all annotated regions in the :doc:`BED/GFF input <../introduction/bedgff_input>`. Note that the f0-f3 proportions must sum to 1.
+To specify a DFE, provide ``f0,f1,f2,f3`` proportions that represent the DFE for all annotated regions in the :doc:`BED/GFF input <../introduction/bedgff_input>`. Note that the f0-f3 proportions must sum to 1.
 
 
-f0 
-    Proportion of effectively neutral mutations with 0 <= \|2Nanc*s| < 1.
+``f0`` 
+    Proportion of effectively neutral mutations with ``0 <= | 2*Nanc*s | < 1``.
     
-    Note that 2Ns<5 does not contribute to BGS (see Johri et al 2020), Bvalcalc will exclude that proportion.
-f1
-    Proportion of weakly deleterious mutations with 1 <= \|2Nanc*s| < 10
-f2 
-    Proportion of moderately deleterious mutations with 10 <= \|2Nanc*s| < 100
-f3
-    Proportion of strongly deleterious mutations with \|2Nanc*s| >= 100
-h
+    Note that ``2*Nanc*s < 5`` does not contribute to BGS (see Johri et al 2020), Bvalcalc will exclude that proportion.
+``f1``
+    Proportion of weakly deleterious mutations with ``1 <= | 2*Nanc*s | < 10``
+``f2`` 
+    Proportion of moderately deleterious mutations with ``10 <= | 2*Nanc*s | < 100``
+``f3``
+    Proportion of strongly deleterious mutations with ``100 <= | 2*Nanc*s |`` 
+``h``
     Dominance coefficient of selected alleles. Keep at 0.5 (additive effects) unless literature suggests otherwise
 
-DFE parameters may be reported in the literature as a gamma distribution, which Bvalcalc can take parameters to generate a discretized DFE to replace f0-f3 when `-\-gamma_dfe` is specified:
+DFE parameters may be reported in the literature as a gamma distribution, which Bvalcalc can take parameters to generate a discretized DFE to replace ``f0,f1,f2,f3`` when ``--gamma_dfe`` is specified:
 
-mean, shape, proportion_synonymous 
+``mean, shape, proportion_synonymous``
     The mean and shape parameters of the gamma DFE, and the proportion of strictly neutral sites in the annotated regions (e.g. synonymous in exon regions). 
 
 
@@ -56,14 +56,14 @@ Historical population size change as a single step-function can be accounted for
 Ncur 
     Current population size, i.e. over the current epoch.
 time_of_change 
-    Time in *Nanc* generations ago that effective population size went from Nanc to Ncur.
+    Time in ``Nanc`` generations ago that effective population size went from Nanc to Ncur.
 
 Selfing species
 ---------------
 
 Self-fertilizing (selfing) species have different evolutionary dynamics from obligate outcrosses which impact BGS (i.e., B).
 
-The parameters file can be modified for selfing populations by altering population size (Nanc/Ncur), crossover rate (r), gene conversion rate (g) and dominance coefficient by an additional parameter: f, which is Wright's inbreeding coefficient (F). F can be calculated from the selfing rate (F = S/(2-S)). Note that the `arabidopsis` and `pfalciparum` default templates have the inbreeding parameter included.
+The parameters file can be modified for selfing populations by altering population size (``Nanc/Ncur``), crossover rate (``r``), gene conversion rate (``g``) and dominance coefficient by an additional parameter: ``f``, which is Wright's inbreeding coefficient (F). F can be calculated from the selfing rate (F = S/(2-S)). Note that the `arabidopsis` and `pfalciparum` default templates have the inbreeding parameter included.
 
 For analysis of selfing populations, we recommend tailoring parameters from the `selfing` template.
 

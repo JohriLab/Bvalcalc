@@ -24,10 +24,10 @@ Recommended Arguments
     Path to a file specifying chromosome sizes in CSV format (CHR,END). If not provided, chromosome boundaries will default to the end of the last annotated gene
 
 **-\-rec_map [path/to/rec_map.csv]**  
-    Optional recombination (crossover) map in CSV format (CHR,START,RATE). Note that recombination rates are averaged over chunks.
+    Optional recombination (crossover) map in CSV format (CHR,START,RATE), where "RATE" is a multiplication factor for `r` in the parameters file. Note that recombination rates are averaged over chunks.
 
 **-\-gc_map [path/to/gc_map.csv]**  
-    Optional gene conversion map in CSV format (CHR,START,RATE). Note that the same map can be used for crossover and gene conversion rates, rates are averaged over chunks.
+    Optional gene conversion initiation rate map in CSV format (CHR,START,RATE), where "RATE" is a multiplication factor for `g` in the parameters file. Note that the same map can be used for crossover and gene conversion rates, rates are averaged over chunks.
 
 **-\-pop_change**
     If included, compute current B under a step population size change, see the associated guide on [demography]. Note that `Ncur` and `time_of_change` should be set in the parameters file when active.
