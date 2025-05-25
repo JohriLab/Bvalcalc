@@ -114,7 +114,17 @@ a.icon.icon-home {
   .citation-text,
   .made-by-sphinx-text {
     color: #333; line-height: 1.4; white-space: normal;
+  } 
+
+  .on-this-page {
+    position: absolute;
+    width: 100%;
+    height: 100px;
+    left: 0;
+    bottom: calc(100% + 35px);
+    background-color: red;
   }
+
 }
 
 /* Short viewports: stack top-down
