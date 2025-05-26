@@ -29,6 +29,11 @@ jobs:
         run: |
           pip install sphinx sphinx-book-theme myst-parser sphinx_rtd_theme
 
+      - name: Install package and deps
+        run: |
+          pip install -e .
+          pip install numpy scipy
+
       - name: Build HTML into docs/build/html
         run: |
           sphinx-build -b html docs/source docs/build/html
