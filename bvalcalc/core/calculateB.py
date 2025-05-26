@@ -6,8 +6,12 @@ _params_cache: dict | None = None
 
 def get_params(params_path: str | None = None):
     """
-    Return cached DFE params. If cache is empty, load via get_DFE_params,
-    passing through an explicit params_path if provided.
+    Loads DFE parameters from the provided population genetic parameters file.
+
+    Parameters 
+    ----------
+    params_path: str
+        Path to Params.py file
     """
     global _params_cache
     if _params_cache is None:
