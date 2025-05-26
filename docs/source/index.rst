@@ -18,6 +18,8 @@ To learn more about background selection, see :doc:`About BGS and B-values <preb
    --region, -r          Calculate B values for a chromosomal region, considering genome-wide effects
    --genome, -w          Calculate B values genome-wide for all sites considering all elements
 
+Introduction
+-------------
 .. toctree::
    :maxdepth: 1
    :caption: Introduction
@@ -26,6 +28,8 @@ To learn more about background selection, see :doc:`About BGS and B-values <preb
    introduction/bedgff_input
    introduction/generate_params
 
+Modules
+--------
 .. toctree::
    :maxdepth: 1
    :caption: Modules
@@ -36,6 +40,8 @@ To learn more about background selection, see :doc:`About BGS and B-values <preb
    modules/genome
    modules/bmap_utils
 
+Guides
+-------
 .. toctree::
    :maxdepth: 2
    :caption: Guides
@@ -46,6 +52,8 @@ To learn more about background selection, see :doc:`About BGS and B-values <preb
    guides/demography
    guides/sweepfinder2
 
+API
+----
 .. toctree::
    :maxdepth: 1
    :caption: API

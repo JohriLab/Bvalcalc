@@ -259,3 +259,13 @@ a.icon.icon-home {
   }
 }
 
+
+/* only on index.html, hide toctree captions under the main section */
+#bvalcalc-documentation .caption {
+  display: none !important;
+}
+
+/* and nudge those real <h2>s back down a bit */
+#bvalcalc-documentation h2 {
+  margin-bottom: 16px !important;
+}
