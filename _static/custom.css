@@ -138,7 +138,7 @@ a.icon.icon-home {
   }
   .on-this-page a {
     color: #333;
-    opacity: 90%;
+    opacity: 80%;
     text-decoration: none;
     text-emphasis: none;
   }
@@ -273,5 +273,5 @@ a.icon.icon-home {
 /* Bold the active On-this-page link */
 .on-this-page a.active {
   font-weight: bold !important;
-  opacity: 0.85 !important;
+  opacity: 0.9 !important;
 }
