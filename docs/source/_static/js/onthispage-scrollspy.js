@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const sections = links
     .map((link) => {
       const href = link.getAttribute('href');
-      // Map “#” to top-of-page
       const sec =
         href === '#'
           ? document.documentElement
@@ -16,10 +15,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const lastLink = sections[sections.length - 1].link;
 
+  let forcedLink = null;
+  let manualScroll = false;
+
+  // Clicking a TOC link forces that highlight until the first manual scroll
+  links.forEach((link) => {
+    link.addEventListener('click', () => {
+      forcedLink = link;
+      manualScroll = false; // reset our “I’ve scrolled” flag
+      links.forEach((l) => l.classList.toggle('active', l === forcedLink));
+    });
+  });
+
+  // Flag real user scrolls (wheel or touch)
+  window.addEventListener(
+    'wheel',
+    () => {
+      manualScroll = true;
+    },
+    { passive: true }
+  );
+  window.addEventListener(
+    'touchmove',
+    () => {
+      manualScroll = true;
+    },
+    { passive: true }
+  );
+
   const onScroll = () => {
+    // If we’ve forced one but haven’t yet manually scrolled, bail out
+    if (forcedLink && !manualScroll) {
+      return;
+    }
+
+    // Once you *do* manually scroll, we clear the forced state
+    if (forcedLink && manualScroll) {
+      forcedLink = null;
+    }
+
     const scrollY = window.scrollY || window.pageYOffset;
 
-    // At very top: only highlight the “#” link
+    // 1) Top of page → only “#” link
     if (scrollY === 0) {
       links.forEach((l) =>
         l.classList.toggle('active', l.getAttribute('href') === '#')
@@ -30,13 +67,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const viewportBottom = scrollY + window.innerHeight;
     const docHeight = document.documentElement.scrollHeight;
 
-    // At bottom: highlight last
+    // 2) Bottom of page → last link
     if (viewportBottom >= docHeight - 1) {
       links.forEach((l) => l.classList.toggle('active', l === lastLink));
       return;
     }
 
-    // Normal 15%-down logic
+    // 3) Otherwise → your 15%–down trigger
     const triggerPoint = scrollY + window.innerHeight * 0.15;
     let current = null;
     for (const { link, sec } of sections) {
@@ -53,5 +90,6 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   window.addEventListener('scroll', onScroll);
-  onScroll(); // initialize on load
+  window.addEventListener('hashchange', onScroll);
+  onScroll(); // initial run
 });
