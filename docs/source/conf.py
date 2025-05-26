@@ -54,6 +54,8 @@ extensions = [
     "myst_parser",
 ]
 
+autodoc_mock_imports = ["numpy", "scipy"]
+
 myst_enable_extensions = [
   "deflist",
   "html_image",
