@@ -43,7 +43,7 @@ Let's start by calculating B at a site 1kb from the edge of a single conserved e
 
 The B-value for this site should be printed in the console as just above 0.99, which indicates diversity is expecteed to be reduced 1% due to BGS.
 
-Calculating B recovery from a single element
+Calculating B recovery slope
 ---------------------------------------------
 
 Now, let's calculate the recovery of B as a function of distance from the 5kb element so we can plot it (gene_B.png).
@@ -58,7 +58,7 @@ Now, let's calculate the recovery of B as a function of distance from the 5kb el
 
 Have a look at the plot and the results printed to the console, you'll notice B decays with distance from the selected element. It's still a modest reduction (<3.1%), but remember, across a genome ALL selected elements will contribute to B at any given site.
 
-Calculating B for a region of the genome
+Calculating B for a genomic region
 -----------------------------------------
 
 Alright, now let's look at part of a chromosome.  
