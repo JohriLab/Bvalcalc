@@ -1,18 +1,25 @@
 import scipy.stats as st
-import os, importlib.util
-from functools import lru_cache
+import os
+import importlib.util
 from typing import Dict, Any
-GAMMA_DFE = False # Default, instead of prop injected
+from functools import lru_cache
 
-def get_DFE_params() -> Dict[str, Any]:
+GAMMA_DFE = False  # Default, instead of prop injected
+
+def get_DFE_params(params_path: str | None = None) -> Dict[str, Any]:
     """
-    Load and validate population parameters from the file pointed to by BCALC_POP_PARAMS.
+    Load and validate population parameters from the file pointed to by
+    `params_path` or, if None, by the BCALC_POP_PARAMS env var.
     Returns a dictionary of parameters for use in B-value calculations.
     """
-    # 1. Ensure the env var is set
-    params_path = os.environ.get("BCALC_POP_PARAMS")
-    if not params_path:
-        raise KeyError("Environment variable BCALC_POP_PARAMS not set. Cannot load pop-gen parameters.")
+    # 1. Determine the path: either passed in or from the env var
+    if params_path is None:
+        params_path = os.environ.get("BCALC_POP_PARAMS")
+        if not params_path:
+            raise KeyError(
+                "Environment variable BCALC_POP_PARAMS not set. "
+                "Cannot load pop-gen parameters."
+            )
 
     # 2. Load the module
     spec = importlib.util.spec_from_file_location("pop_params", params_path)

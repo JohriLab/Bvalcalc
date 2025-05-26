@@ -273,5 +273,5 @@ a.icon.icon-home {
 /* Bold the active On-this-page link */
 .on-this-page a.active {
   font-weight: bold !important;
-  opacity: 0.9 !important;
+  opacity: 1 !important;
 }

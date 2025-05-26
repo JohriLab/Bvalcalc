@@ -1,8 +1,7 @@
 Calculate B
-=============
-WIP
+===============
 
-.. automodule:: bvalcalc.cli
-   :members:
+.. automodule:: bvalcalc.core.calculateB
+   :members: calculateB_unlinked
    :undoc-members:
    :show-inheritance:
