@@ -269,3 +269,9 @@ a.icon.icon-home {
 #bvalcalc-documentation h2 {
   margin-bottom: 16px !important;
 }
+
+/* Bold the active On-this-page link */
+.on-this-page a.active {
+  font-weight: bold !important;
+  opacity: 0.85 !important;
+}

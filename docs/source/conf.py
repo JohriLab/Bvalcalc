@@ -27,6 +27,9 @@ html_theme_options = {
     'sticky_navigation': True,
     'navigation_depth': 1,
 }
+html_js_files = [
+    "js/onthispage-scrollspy.js",
+]
 html_static_path = ['_static']
 
 templates_path = ['_templates']
