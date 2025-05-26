@@ -212,7 +212,7 @@ a.icon.icon-home {
   justify-content: center;   /* horizontal centering */
 }
 
-@media (min-height: 765px) {
+@media (min-height: 735px) {
   .wy-menu-vertical > p.caption:nth-last-of-type(2) {
     position: fixed;
     width: 300px;
@@ -225,7 +225,7 @@ a.icon.icon-home {
   }
 }
 
-@media (max-height: 764px) {
+@media (max-height: 734px) {
   .wy-menu-vertical > p.caption:nth-last-of-type(1) {
     position: relative;
     bottom: 6px
@@ -236,7 +236,7 @@ a.icon.icon-home {
   }
 }
 
-@media (min-height: 720px) {
+@media (min-height: 720px) { 
 .wy-menu.wy-menu-vertical[data-spy="affix"] {
   position: fixed !important;
   left: 0;
