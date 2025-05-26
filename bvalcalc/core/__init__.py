@@ -6,7 +6,7 @@ from .regionBcalc import regionBcalc
 from .geneBcalc import geneBcalc
 from .siteBcalc import siteBcalc
 from .plotB import plotB
-from .calculateB import calculateB_linear, calculateB_recmap, calculateB_unlinked
+from .calculateB import calculateB_linear, calculateB_recmap, calculateB_unlinked, get_params
 
 __all__ = [
     "genomeBcalc",

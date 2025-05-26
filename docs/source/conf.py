@@ -38,7 +38,6 @@ html_show_sourcelink = False
 
 # html_show_copyright = False
 
-
 html_css_files = [
     'custom.css',
 ]

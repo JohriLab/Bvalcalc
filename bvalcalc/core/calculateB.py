@@ -4,7 +4,7 @@ import sys
 
 _params_cache: dict | None = None
 
-def get_params(params_path: str | None = None) -> dict:
+def get_params(params_path: str | None = None):
     """
     Return cached DFE params. If cache is empty, load via get_DFE_params,
     passing through an explicit params_path if provided.
@@ -14,13 +14,23 @@ def get_params(params_path: str | None = None) -> dict:
         _params_cache = get_DFE_params(params_path)
     return _params_cache
 
-def calculateB_linear(distance_to_element, length_of_element):
+def calculateB_linear(distance_to_element: int, length_of_element: int, params: dict | None = None):
     """
-    Calculate the B value for a single functional element at the focal site,
-    summing over the DFE while consolidating the intermediate calculations.
+    Calculate B due to purifying selection acting on a linked selected element of arbitrary length, assuming a constant crossover and gene conversion rate.
+
+    Parameters 
+    ----------
+    distance_to_element: int
+        Distance (bp) from the neutral site to the nearest edge of the selected element.
+    length_of_element: int
+        Length (bp) of the selected element.
+    params : dict
+        Required parameters from ``get_params()``, only kept as default (None) when being called by CLI,
+        in which case parameters are sourced from the params file directly.
     """    
     with np.errstate(divide='ignore', invalid='ignore'):
-        params = get_params()
+        if params is None:
+            params = get_params()
         r, u, g, k, t1, t1half, t2, t3, t4, f1, f2, f3, f0 = params["r"], params["u"], params["g"], params["k"], params["t1"], params["t1half"], params["t2"], params["t3"], params["t4"], params["f1"], params["f2"], params["f3"], params["f0"]
         C = (1.0 - np.exp(-2.0 * r * distance_to_element)) / 2.0 # cM
         U = length_of_element * u
@@ -48,13 +58,14 @@ def calculateB_linear(distance_to_element, length_of_element):
 
 def calculateB_recmap(distance_to_element, length_of_element, 
                       rec_distances = None, rec_lengths = None, 
-                      gc_distances = None, gc_lengths = None):
+                      gc_distances = None, gc_lengths = None, params = None):
     """
     Calculate the B value WITH REC MAP for a single functional element at the focal site,
     summing over the DFE while consolidating the intermediate calculations.
     """    
     with np.errstate(divide='ignore', invalid='ignore'):
-        params = get_params()
+        if params is None:
+            params = get_params()
         r, u, g, k, t1, t1half, t2, t3, t4, f1, f2, f3, f0 = params["r"], params["u"], params["g"], params["k"], params["t1"], params["t1half"], params["t2"], params["t3"], params["t4"], params["f1"], params["f2"], params["f3"], params["f0"]
         # rec_distances is the length of the element * rec rate in each spanned region. 
         
@@ -94,29 +105,22 @@ def calculateB_recmap(distance_to_element, length_of_element,
         
     return np.where(length_of_element == 0, 1.0, B)
 
-def calculateB_unlinked(
-    unlinked_L: float,
-    params: dict | None = None,
-) -> float:
+def calculateB_unlinked(unlinked_L: int, params: dict | None = None):
     """
-    Calculate the background selection coefficient B at an unlinked site.
+    Calculate B due to purifying selection at unlinked sites.
 
     Parameters
     ----------
     unlinked_L : float
         Cumulative count of selected sites in unlinked regions.
-    params : dict, optional
-        If provided, uses this dict of DFE parameters;
-        otherwise loads defaults via get_params().
+    params : dict
+        Required parameters from ``get_params()``, only kept as default (None) when being called by CLI,
+        in which case parameters are sourced from the params file directly.
     """
     if params is None:
         params = get_params()
 
-    u, t1, t1half, t2, t3, t4, f0, f1, f2, f3 = (
-        params["u"], params["t1"], params["t1half"],
-        params["t2"], params["t3"], params["t4"],
-        params["f0"], params["f1"], params["f2"], params["f3"],
-    )
+    u, t1, t1half, t2, t3, t4, f0, f1, f2, f3 = params["u"], params["t1"], params["t1half"], params["t2"], params["t3"], params["t4"], params["f0"], params["f1"], params["f2"], params["f3"]
 
     sum_f = (
         f0 * 0.0
