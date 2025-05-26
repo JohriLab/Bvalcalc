@@ -107,6 +107,48 @@
 <h1>Calculate B<a class="headerlink" href="#calculate-b" title="Link to this heading"></a></h1>
 <section id="python-functions">
 <h2>Python functions<a class="headerlink" href="#python-functions" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="bvalcalc.get_params">
+<span class="sig-prename descclassname"><span class="pre">bvalcalc.</span></span><span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bvalcalc/core/calculateB.html#get_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bvalcalc.get_params" title="Link to this definition"></a></dt>
+<dd><p>Loads DFE parameters from the provided population genetic parameters file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>params_path</strong> (<em>str</em>) – Path to Params.py file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bvalcalc.calculateB_linear">
+<span class="sig-prename descclassname"><span class="pre">bvalcalc.</span></span><span class="sig-name descname"><span class="pre">calculateB_linear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance_to_element</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length_of_element</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bvalcalc/core/calculateB.html#calculateB_linear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bvalcalc.calculateB_linear" title="Link to this definition"></a></dt>
+<dd><p>Calculate B due to purifying selection acting on a linked selected element of arbitrary length, assuming a constant crossover and gene conversion rate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>distance_to_element</strong> (<em>int</em>) – Distance (bp) from the neutral site to the nearest edge of the selected element.</p></li>
+<li><p><strong>length_of_element</strong> (<em>int</em>) – Length (bp) of the selected element.</p></li>
+<li><p><strong>params</strong> (<em>dict</em>) – Required parameters from <code class="docutils literal notranslate"><span class="pre">get_params()</span></code>, only kept as default (None) when being called by CLI,
+in which case parameters are sourced from the params file directly.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bvalcalc.calculateB_unlinked">
+<span class="sig-prename descclassname"><span class="pre">bvalcalc.</span></span><span class="sig-name descname"><span class="pre">calculateB_unlinked</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unlinked_L</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bvalcalc/core/calculateB.html#calculateB_unlinked"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bvalcalc.calculateB_unlinked" title="Link to this definition"></a></dt>
+<dd><p>Calculate B due to purifying selection at unlinked sites.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>unlinked_L</strong> (<em>float</em>) – Cumulative count of selected sites in unlinked regions.</p></li>
+<li><p><strong>params</strong> (<em>dict</em>) – Required parameters from <code class="docutils literal notranslate"><span class="pre">get_params()</span></code>, only kept as default (None) when being called by CLI,
+in which case parameters are sourced from the params file directly.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
@@ -157,7 +199,12 @@ the more complex function <code class="docutils literal notranslate"><span class
     <div class="on-this-page">
         <ul>
 <li><a class="reference internal" href="#">Calculate B</a><ul>
-<li><a class="reference internal" href="#python-functions">Python functions</a></li>
+<li><a class="reference internal" href="#python-functions">Python functions</a><ul>
+<li><a class="reference internal" href="#bvalcalc.get_params"><code class="docutils literal notranslate"><span class="pre">get_params()</span></code></a></li>
+<li><a class="reference internal" href="#bvalcalc.calculateB_linear"><code class="docutils literal notranslate"><span class="pre">calculateB_linear()</span></code></a></li>
+<li><a class="reference internal" href="#bvalcalc.calculateB_unlinked"><code class="docutils literal notranslate"><span class="pre">calculateB_unlinked()</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#example">Example</a></li>
 </ul>
 </li>
