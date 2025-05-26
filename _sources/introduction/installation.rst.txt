@@ -8,17 +8,17 @@ Install **Bvalcalc** via pip from PyPI:
 
 .. code-block:: bash
 
-   pip install bvalcalc
+   pip install Bvalcalc
 
-(or: ``python -m pip install bvalcalc``)
+(or: ``python -m pip install Bvalcalc``)
 
 Verify the install worked by running the CLI “help”:
 
 .. code-block:: bash
 
-   bvalcalc --help
+   Bvalcalc --help
 
-You should see usage modes listed (“--site”, “--gene”, etc.).
+You should see usage modes listed (``--site``, ``--gene``, etc.).
 
 Dependencies
 ------------

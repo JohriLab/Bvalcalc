@@ -105,7 +105,17 @@
              
   <section id="multiple-dfes">
 <h1>Multiple DFEs<a class="headerlink" href="#multiple-dfes" title="Link to this heading"></a></h1>
-<p>WIP</p>
+<p>Different annotated genomic elements that are expected to be under evolutionary constraint (e.g. CDS, UTRs, promoters, enhancers etc.) will have different distributions of fitness of effects (DFEs).</p>
+<p>To account for different DFEs that may affect different annotated regions, you can run <strong>Bvalcalc</strong> for each DFE iteratively with the help of the <code class="docutils literal notranslate"><span class="pre">--prior_Bmap</span></code> flag in the <code class="docutils literal notranslate"><span class="pre">--genome</span></code> mode.</p>
+<dl>
+<dt><strong>--prior_Bmap [path/to/prior_Bmap.csv]</strong></dt><dd><p>Optional prior B-value map (<cite>.csv</cite> format). Used to multiply the newly calculated B-values by a per-site prior (e.g. for regions under different selection parameters).</p>
+<p>Format: <cite>Chromosome,Position,Conserved,B</cite>. Note that <cite>Conserved</cite> is required for parsing but does not affect output</p>
+</dd>
+</dl>
+<section id="walkthrough">
+<h2>Walkthrough<a class="headerlink" href="#walkthrough" title="Link to this heading"></a></h2>
+<p>Let’s briefly walk through how you would generate a B-map that considers the combined effects of CDS (strongly deleterious DFE) and UTRs (moderately deleterious DFE).</p>
+</section>
 </section>
 
 
@@ -138,7 +148,10 @@
   <div class="bee-trail-container">
     <div class="on-this-page">
         <ul>
-<li><a class="reference internal" href="#">Multiple DFEs</a></li>
+<li><a class="reference internal" href="#">Multiple DFEs</a><ul>
+<li><a class="reference internal" href="#walkthrough">Walkthrough</a></li>
+</ul>
+</li>
 </ul>
 
     </div>
