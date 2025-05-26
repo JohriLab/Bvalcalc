@@ -105,7 +105,10 @@
              
   <section id="generate-parameters">
 <h1>Generate Parameters<a class="headerlink" href="#generate-parameters" title="Link to this heading"></a></h1>
-<p>Population parameter files can be retrieved from one of the pre-built templates with the following commands.</p>
+<p>Population parameter files can be retrieved from one of the pre-built templates with the following command. The templates are example parameters for your convenience and should be tailored to your population of interest where appropriate.</p>
+<p>To learn more about what the parameters represent and how to optimize them for your analysis see the guide <a class="reference internal" href="../guides/params.html"><span class="doc">Tailoring Parameters</span></a>.</p>
+<section id="arguments">
+<h2>Arguments<a class="headerlink" href="#arguments" title="Link to this heading"></a></h2>
 <dl>
 <dt><strong>--generate_params [SPECIES]</strong></dt><dd><p>Save a local copy of a population parameter file from a chosen species template.</p>
 <p>Available species: <cite>human</cite>, <cite>drosophila</cite>, <cite>arabidopsis</cite>, <cite>mouse</cite>, <cite>pfalciparum</cite>, <cite>celegans</cite>, <cite>selfing</cite></p>
@@ -113,15 +116,13 @@
 <dt><strong>--dir [path/to/NewParams.py]</strong></dt><dd><p>Optional path to save parameters (defaults to <cite>./SpeciesParams.py</cite>).</p>
 </dd>
 </dl>
-<p>The python file provides parameters that are used to calculate B such as the effective population size and per-base mutation/recombination rates.</p>
-<p>These are example parameters for your convenience and should be tailored to your population of interest where appropriate.</p>
-<p>To learn more about what the parameters represent and how to optimize them for your analysis see the guide <a class="reference internal" href="../guides/params.html"><span class="doc">Tailoring Parameters</span></a>.</p>
+</section>
 <section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--generate_params<span class="w"> </span>human
 </pre></div>
 </div>
-<p>This will save a copy of <cite>HumanParams.py</cite> with population parameters specific to humans in the current folder</p>
+<p>This will save a copy of <cite>HumanParams.py</cite> with population parameters specific to humans in the current folder, ready for calculating B</p>
 </section>
 </section>
 
@@ -156,6 +157,7 @@
     <div class="on-this-page">
         <ul>
 <li><a class="reference internal" href="#">Generate Parameters</a><ul>
+<li><a class="reference internal" href="#arguments">Arguments</a></li>
 <li><a class="reference internal" href="#example">Example</a></li>
 </ul>
 </li>
