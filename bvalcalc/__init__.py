@@ -6,7 +6,7 @@ __version__ = "0.3.1"
 
 # Expose main entry point
 from .cli import main
-from .core import calculateB_linear, calculateB_recmap, calculateB_unlinked, get_params
+from .core.calculateB import calculateB_linear, calculateB_recmap, calculateB_unlinked, get_params
 
 
 __all__ = [
