@@ -105,6 +105,25 @@
              
   <section id="calculate-b">
 <h1>Calculate B<a class="headerlink" href="#calculate-b" title="Link to this heading"></a></h1>
+<section id="python-functions">
+<h2>Python functions<a class="headerlink" href="#python-functions" title="Link to this heading"></a></h2>
+</section>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">bvalcalc</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_params</span><span class="p">,</span> <span class="n">calculateB_unlinked</span><span class="p">,</span> <span class="n">calculateB_linear</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="n">get_params</span><span class="p">(</span><span class="s2">&quot;bvalcalc/templates/DrosophilaParams.py&quot;</span><span class="p">)</span>
+
+<span class="n">calculateB_unlinked</span><span class="p">(</span><span class="n">unlinked_L</span> <span class="o">=</span> <span class="mi">200000</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="p">)</span>
+
+<span class="n">calculateB_linear</span><span class="p">(</span><span class="n">distance_to_element</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span> <span class="n">length_of_element</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This will import the relevant functions, get the popgen parameters from a relevant params file, see <a class="reference internal" href="../introduction/generate_params.html"><span class="doc">Generate Parameters</span></a>.
+Then B will be calculated from 200kb of unlinked sites using <code class="docutils literal notranslate"><span class="pre">calculateB_unlinked</span></code>, and B from a linked selected element of length 10kb, 500bp away is calculated using <code class="docutils literal notranslate"><span class="pre">calculateB_linear</span></code>.</p>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">calculateB_linear</span></code> assumes a consistent crossover and gene conversion rate across both the length of and distance to the selected element, in CLI, variable recombination rates are accounted for with
+the more complex function <code class="docutils literal notranslate"><span class="pre">calculateB_recmap</span></code>; if accessing this function is important for your work please get in contact with me (Jacob Marsh) as I could add it as a public API.</p>
+</section>
 </section>
 
 
@@ -137,7 +156,11 @@
   <div class="bee-trail-container">
     <div class="on-this-page">
         <ul>
-<li><a class="reference internal" href="#">Calculate B</a></li>
+<li><a class="reference internal" href="#">Calculate B</a><ul>
+<li><a class="reference internal" href="#python-functions">Python functions</a></li>
+<li><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
 </ul>
 
     </div>
