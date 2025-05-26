@@ -10,6 +10,7 @@ from .core import calculateB_linear, calculateB_recmap, calculateB_unlinked, get
 
 
 __all__ = [
+    "get_params", "calculateB_linear", "calculateB_unlinked",
     "main",
     "__version__",
 ]
