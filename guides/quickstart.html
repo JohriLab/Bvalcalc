@@ -10,7 +10,7 @@
   <title>Quickstart Tutorial &mdash; Bvalcalc 0.4.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=ca897140" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=83d19ae0" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
@@ -135,8 +135,8 @@ When calculating B for a new species you’ll need to check the literature and u
 </div>
 <p>The B-value for this site should be printed in the console as just above 0.99, which indicates diversity is expecteed to be reduced 1% due to BGS.</p>
 </section>
-<section id="calculating-b-recovery-from-a-single-element">
-<h2>Calculating B recovery from a single element<a class="headerlink" href="#calculating-b-recovery-from-a-single-element" title="Link to this heading"></a></h2>
+<section id="calculating-b-recovery-slope">
+<h2>Calculating B recovery slope<a class="headerlink" href="#calculating-b-recovery-slope" title="Link to this heading"></a></h2>
 <p>Now, let’s calculate the recovery of B as a function of distance from the 5kb element so we can plot it (gene_B.png).</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span><span class="se">\</span>
 --gene<span class="w"> </span><span class="se">\</span>
@@ -147,8 +147,8 @@ When calculating B for a new species you’ll need to check the literature and u
 </div>
 <p>Have a look at the plot and the results printed to the console, you’ll notice B decays with distance from the selected element. It’s still a modest reduction (&lt;3.1%), but remember, across a genome ALL selected elements will contribute to B at any given site.</p>
 </section>
-<section id="calculating-b-for-a-region-of-the-genome">
-<h2>Calculating B for a region of the genome<a class="headerlink" href="#calculating-b-for-a-region-of-the-genome" title="Link to this heading"></a></h2>
+<section id="calculating-b-for-a-genomic-region">
+<h2>Calculating B for a genomic region<a class="headerlink" href="#calculating-b-for-a-genomic-region" title="Link to this heading"></a></h2>
 <p>Alright, now let’s look at part of a chromosome.
 We can use a BED file (or GFF/CSV) that specifies which genomic ranges are conserved to calculate B for a region in the genome.
 Let’s calculate B for a 1Mb region in the middle of chromosome 2R [9500000-10500000] and save it to 1Mb_B.png.</p>
@@ -207,6 +207,18 @@ That’s all that’s necessary for many analyses, especially if you’re only i
    
   <div class="bee-trail-container">
     <div class="on-this-page">
+      <div><ul>
+<li><a class="reference internal" href="#">Quickstart Tutorial</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#specifying-popgen-parameters">Specifying popgen parameters</a></li>
+<li><a class="reference internal" href="#calculating-a-b-value">Calculating a B value</a></li>
+<li><a class="reference internal" href="#calculating-b-recovery-slope">Calculating B recovery slope</a></li>
+<li><a class="reference internal" href="#calculating-b-for-a-genomic-region">Calculating B for a genomic region</a></li>
+<li><a class="reference internal" href="#calculating-a-complete-b-map">Calculating a complete B-map</a></li>
+</ul>
+</li>
+</ul>
+</div>
     </div>
     <img
       src="../_static/Bvalcalc_bee_trail.svg"

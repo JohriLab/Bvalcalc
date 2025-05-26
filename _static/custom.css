@@ -119,10 +119,30 @@ a.icon.icon-home {
   .on-this-page {
     position: absolute;
     width: 100%;
-    height: 100px;
+    height: 140px;
     left: 0;
-    bottom: calc(100% + 35px);
-    background-color: red;
+    bottom: 211px;
+    /* bottom: calc(100% + 35px); */
+    text-align: left;
+    padding-right: 5px;
+  }
+
+  .on-this-page ul {
+    list-style: none;
+    padding-left: 15px;
+    margin: 0;
+  }
+  .on-this-page li {
+    margin: 5px 0;
+  }
+  .on-this-page a {
+    color: #333;
+    opacity: 85%;
+    text-decoration: none;
+    text-emphasis: none;
+  }
+  .on-this-page a[href="#"] {
+    font-weight: bold;
   }
 
 }
@@ -150,7 +170,8 @@ a.icon.icon-home {
 /* -------------------------------------------------------------------------- */
 
 .caption {
-  margin-block-start: 6px !important;
+  margin-block-start: -2px !important;
+  transform: translateY(2px);
 }
 
 /* hide their ULs */
