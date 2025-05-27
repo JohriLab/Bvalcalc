@@ -1,6 +1,8 @@
 Calculate B
 ===============
 
+The Python API can be used to access core B calculation functions that take vectorized inputs.
+
 Python functions
 -----------------
 
