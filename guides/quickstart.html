@@ -10,7 +10,7 @@
   <title>Quickstart Tutorial &mdash; Bvalcalc 0.4.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=de480d50" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=6acc7d16" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
@@ -136,8 +136,8 @@ When calculating B for a new species you’ll need to check the literature and u
 </div>
 <p>The B-value for this site should be printed in the console as just above 0.99, which indicates diversity is expecteed to be reduced 1% due to BGS.</p>
 </section>
-<section id="calculating-b-recovery-slope">
-<h2>Calculating B recovery slope<a class="headerlink" href="#calculating-b-recovery-slope" title="Link to this heading"></a></h2>
+<section id="b-recovery-from-one-element">
+<h2>B recovery from one element<a class="headerlink" href="#b-recovery-from-one-element" title="Link to this heading"></a></h2>
 <p>Now, let’s calculate the recovery of B as a function of distance from the 5kb element so we can plot it (gene_B.png).</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span><span class="se">\</span>
 --gene<span class="w"> </span><span class="se">\</span>
@@ -148,8 +148,8 @@ When calculating B for a new species you’ll need to check the literature and u
 </div>
 <p>Have a look at the plot and the results printed to the console, you’ll notice B decays with distance from the selected element. It’s still a modest reduction (&lt;3.1%), but remember, across a genome ALL selected elements will contribute to B at any given site.</p>
 </section>
-<section id="calculating-b-for-a-genomic-region">
-<h2>Calculating B for a genomic region<a class="headerlink" href="#calculating-b-for-a-genomic-region" title="Link to this heading"></a></h2>
+<section id="b-in-a-genomic-region">
+<h2>B in a genomic region<a class="headerlink" href="#b-in-a-genomic-region" title="Link to this heading"></a></h2>
 <p>Alright, now let’s look at part of a chromosome.
 We can use a BED file (or GFF/CSV) that specifies which genomic ranges are conserved to calculate B for a region in the genome.
 Let’s calculate B for a 1Mb region in the middle of chromosome 2R [9500000-10500000] and save it to 1Mb_B.png.</p>
@@ -163,8 +163,8 @@ Let’s calculate B for a 1Mb region in the middle of chromosome 2R [9500000-105
 <p>Have a look at the plots: the blue sections of the graph indicate neutral regions and black indicates conserved elements.
 That’s all that’s necessary for many analyses, especially if you’re only interested in B values for a specific region of the genome, or are testing against simulated results.</p>
 </section>
-<section id="calculating-a-complete-b-map">
-<h2>Calculating a complete B-map<a class="headerlink" href="#calculating-a-complete-b-map" title="Link to this heading"></a></h2>
+<section id="calculating-a-b-map">
+<h2>Calculating a B-map<a class="headerlink" href="#calculating-a-b-map" title="Link to this heading"></a></h2>
 <p>If you wanted to generate a complete B-map for all sites across all chromosomes you would use the following command, though note it’s a lot more data to crunch and maps are already available for Drosophila so no need to run it!</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span><span class="se">\</span>
 --genome<span class="w"> </span><span class="se">\</span>
@@ -213,9 +213,9 @@ That’s all that’s necessary for many analyses, especially if you’re only i
 <li><a class="reference internal" href="#installation">Installation</a></li>
 <li><a class="reference internal" href="#specifying-popgen-parameters">Specifying popgen parameters</a></li>
 <li><a class="reference internal" href="#calculating-a-b-value">Calculating a B value</a></li>
-<li><a class="reference internal" href="#calculating-b-recovery-slope">Calculating B recovery slope</a></li>
-<li><a class="reference internal" href="#calculating-b-for-a-genomic-region">Calculating B for a genomic region</a></li>
-<li><a class="reference internal" href="#calculating-a-complete-b-map">Calculating a complete B-map</a></li>
+<li><a class="reference internal" href="#b-recovery-from-one-element">B recovery from one element</a></li>
+<li><a class="reference internal" href="#b-in-a-genomic-region">B in a genomic region</a></li>
+<li><a class="reference internal" href="#calculating-a-b-map">Calculating a B-map</a></li>
 </ul>
 </li>
 </ul>
@@ -229,16 +229,19 @@ That’s all that’s necessary for many analyses, especially if you’re only i
     <div class="right-elements-stack">
       <div class="citation-text">
         <strong>Citation:</strong><br/>
-        Marsh, JI, Johri, PJ (2025). The B-value calculator:
-        efficient analytical calculation of expected
-        genetic diversity with background selection. <i>bioRxiv</i>, <a
-        href="https://biorxiv"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-      10.1101/2063.10.10.561727
-      </a>.
-      </div>
+        Marsh, JI, Johri, PJ (2025).
+        <span class="citation-title">
+          The B-value calculator: efficient analytical calculation of expected
+          genetic diversity with background selection. <i>bioRxiv</i>. 
+        </span>
+        <a
+          href="https://biorxiv"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          10.1101/2063.10.10.561727
+        </a>
+      </div>      
       <div class="made-by-sphinx-text">
         Made with   <a
         href="https://www.sphinx-doc.org/"
@@ -261,7 +264,7 @@ That’s all that’s necessary for many analyses, especially if you’re only i
     </a><br/>
       </div>
 
-    <div class="made-by-sphinx-text">
+    <div class="links-textt">
     <a
     href="https://test.pypi.org/project/bvalcalc/"
     target="_blank"

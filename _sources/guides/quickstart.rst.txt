@@ -43,8 +43,8 @@ Let's start by calculating B at a site 1kb from the edge of a single conserved e
 
 The B-value for this site should be printed in the console as just above 0.99, which indicates diversity is expecteed to be reduced 1% due to BGS.
 
-Calculating B recovery slope
----------------------------------------------
+B recovery from one element
+-----------------------------
 
 Now, let's calculate the recovery of B as a function of distance from the 5kb element so we can plot it (gene_B.png).
 
@@ -58,7 +58,7 @@ Now, let's calculate the recovery of B as a function of distance from the 5kb el
 
 Have a look at the plot and the results printed to the console, you'll notice B decays with distance from the selected element. It's still a modest reduction (<3.1%), but remember, across a genome ALL selected elements will contribute to B at any given site.
 
-Calculating B for a genomic region
+B in a genomic region
 -----------------------------------------
 
 Alright, now let's look at part of a chromosome.  
@@ -76,7 +76,7 @@ Let's calculate B for a 1Mb region in the middle of chromosome 2R [9500000-10500
 Have a look at the plots: the blue sections of the graph indicate neutral regions and black indicates conserved elements.  
 That's all that's necessary for many analyses, especially if you're only interested in B values for a specific region of the genome, or are testing against simulated results.
 
-Calculating a complete B-map
+Calculating a B-map
 -----------------------------
 
 If you wanted to generate a complete B-map for all sites across all chromosomes you would use the following command, though note it's a lot more data to crunch and maps are already available for Drosophila so no need to run it!

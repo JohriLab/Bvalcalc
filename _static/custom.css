@@ -79,14 +79,15 @@ a.icon.icon-home {
 /* -------------------------------------------------------------------------- */
 
 /* Large viewports: fluid & capped container */
-@media (min-width: 1400px) {
+@media (min-width: 1300px) {
   .bee-trail-container {
-    position: fixed; top: 50%; left: 1120px;
+    position: fixed; top: 50%; left: 1100px;
     transform: translateY(-50%);
-    width: 20vw; max-width: 320px;
+    width: 282px; max-width: 320px;
     text-align: center;
     pointer-events: none; 
     z-index: 9999;
+    align-items: center;
   }
   .bee-trail-container a {
     pointer-events: auto;
@@ -98,6 +99,7 @@ a.icon.icon-home {
   
   .bee-trail-img {
     display: block; width: 100%; height: auto;
+    max-width: 120px;
   }
     .right-elements-stack {
       position: absolute;
@@ -112,7 +114,7 @@ a.icon.icon-home {
       margin-top: 35px; 
         }
   .citation-text,
-  .made-by-sphinx-text {
+  .made-by-sphinx-text, .links-text {
     color: #333; line-height: 1.4; white-space: normal;
   } 
 
@@ -124,8 +126,8 @@ a.icon.icon-home {
     bottom: 211px;
     /* bottom: calc(100% + 35px); */
     text-align: left;
-    padding-right: 2px;
-    font-size: 0.92rem;
+    padding-right: 3px;
+    font-size: 1rem;
   }
 
   .on-this-page ul {
@@ -135,6 +137,7 @@ a.icon.icon-home {
   }
   .on-this-page li {
     margin: 5px 0;
+    margin-right: 2.5px;
   }
   .on-this-page a {
     color: #333;
@@ -147,6 +150,13 @@ a.icon.icon-home {
   }
 
 }
+
+@media (max-width: 1399px), (max-height: 699px) {
+  .citation-text .citation-title, .made-by-sphinx-text {
+    display: none;
+  }
+}
+
 
 /* Short viewports: stack top-down
 @media (max-height: 670px) {
@@ -274,4 +284,35 @@ a.icon.icon-home {
 .on-this-page a.active {
   font-weight: bold !important;
   opacity: 1 !important;
+}
+
+
+/* -------------------------------------------------------------------------- */
+/*                        SCROLL BAR                                          */
+/* -------------------------------------------------------------------------- */
+
+
+/* Window‐only scrollbar styling */
+html::-webkit-scrollbar {
+  width: 12px;
+}
+
+html::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* default thumb with half-opacity via RGBA */
+html::-webkit-scrollbar-thumb {
+  background-color: rgba(250, 170, 6, 0.6);
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+/* full-opacity on hover/active */
+html::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(250, 170, 6, 0.8);    /* 100% opacity */
+}
+/* full-opacity on hover/active */
+html::-webkit-scrollbar-thumb:active {
+  background-color: rgba(250, 170, 6, 1);    /* 100% opacity */
 }
