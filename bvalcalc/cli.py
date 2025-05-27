@@ -23,10 +23,9 @@ def main():
     
     if known_args.Bmap is not None: # if --generate_params
         args = parseBmapArgs(remaining_args)
-        print(f"= B-map utilities = = =")
         flat_b, flat_chrom = positionsBstats(args, known_args.Bmap)
         if args.plot_distribution:
-            plotChromB(flat_b, flat_chrom, args.plot_distribution)
+            plotChromB(flat_b, flat_chrom, args.plot_distribution, args.quiet)
         return
 
     print(f"= Calculating relative diversity (B) for all neutral sites across the genome. = = =")

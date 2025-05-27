@@ -3,8 +3,8 @@ import matplotlib as mpl
 import seaborn as sns
 import numpy as np
 
-def plotChromB(flat_b, flat_chrom, output_path):
-     print('====== P L O T T I N G . . . =======================')
+def plotChromB(flat_b, flat_chrom, output_path, quiet):
+     if not quiet: print('====== P L O T T I N G . . . =======================')
 
      # Set overall style
      sns.set_theme(style="whitegrid", font='Helvetica')
