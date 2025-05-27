@@ -83,11 +83,10 @@ a.icon.icon-home {
   .bee-trail-container {
     position: fixed; top: 50%; left: 1100px;
     transform: translateY(-50%);
-    width: 282px; max-width: 320px;
+    width: 14vw; max-width: 320px;
     text-align: center;
     pointer-events: none; 
     z-index: 9999;
-    align-items: center;
   }
   .bee-trail-container a {
     pointer-events: auto;
@@ -99,7 +98,6 @@ a.icon.icon-home {
   
   .bee-trail-img {
     display: block; width: 100%; height: auto;
-    max-width: 120px;
   }
     .right-elements-stack {
       position: absolute;
