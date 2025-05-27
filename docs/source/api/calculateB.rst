@@ -28,5 +28,8 @@ Example
 This will import the relevant functions, get the popgen parameters from a relevant params file, see :doc:`Generate Parameters <../introduction/generate_params>`. 
 Then B will be calculated from 200kb of unlinked sites using ``calculateB_unlinked``, and B from a linked selected element of length 10kb, 500bp away is calculated using ``calculateB_linear``.
 
+Notes
+---------
+
 Note that ``calculateB_linear`` assumes a consistent crossover and gene conversion rate across both the length of and distance to the selected element, in CLI, variable recombination rates are accounted for with 
 the more complex function ``calculateB_recmap``; if accessing this function is important for your work feel free to raise it as an issue on GitHub as I could add it as a public API.
