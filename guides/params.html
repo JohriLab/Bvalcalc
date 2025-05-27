@@ -114,11 +114,11 @@
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">Nanc</span></code></dt><dd><p>Ancestral population size, often reported in literature. Can be roughly estimated from pairwise diversity at neutrally evolving sites, given a mutation rate and no demography (<cite>Nanc = pi/4u</cite>).</p>
 </dd>
-<dt><code class="docutils literal notranslate"><span class="pre">r</span></code></dt><dd><p>Recombination (crossover) rate per bp, per generation (sex-averaged), often reported in literature from direct measurement (recombination in pedigrees) or inferred from sequence data. Note you can add a crossover rate that can modify <cite>r</cite> across the genome with <code class="docutils literal notranslate"><span class="pre">--rec_map</span></code>.</p>
+<dt><code class="docutils literal notranslate"><span class="pre">r</span></code></dt><dd><p>Recombination (crossover) rate per bp, per generation (sex-averaged), often reported in literature from direct measurement (recombination in pedigrees) or inferred from sequence data. Note you can add a crossover rate that can modify <code class="docutils literal notranslate"><span class="pre">r</span></code> across the genome with <code class="docutils literal notranslate"><span class="pre">--rec_map</span></code>.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">u</span></code></dt><dd><p>Mutation rate (all types) per bp, per generation, often reported in literature from mutation accumulation experiments. Note that the point mutation rate is typically used, though all mutation types with selective effects may contribute to BGS similarly, if considering different mutation types with different DFEs, see <a class="reference internal" href="multiple_dfes.html"><span class="doc">Multiple DFEs</span></a>. Note you can add a gc initiation rate that can modify <cite>g</cite> across the genome with <code class="docutils literal notranslate"><span class="pre">--gc_map</span></code>.</p>
 </dd>
-<dt><code class="docutils literal notranslate"><span class="pre">g</span></code></dt><dd><p>Gene conversion initiation rate per bp, per generation. Note that on occasion the <code class="docutils literal notranslate"><span class="pre">g</span> <span class="pre">*</span> <span class="pre">k</span></code> value is reported in the literature rather than the <em>initiation</em> rate, in which case, the value should be divided by the tract length (k).</p>
+<dt><code class="docutils literal notranslate"><span class="pre">g</span></code></dt><dd><p>Gene conversion initiation rate per bp, per generation. Note that on occasion the <code class="docutils literal notranslate"><span class="pre">g</span> <span class="pre">*</span> <span class="pre">k</span></code> value is reported in the literature rather than the <em>initiation</em> rate, in which case, the value should be divided by the tract length (<code class="docutils literal notranslate"><span class="pre">k</span></code>).</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">k</span></code></dt><dd><p>Gene conversion tract length (bp). Note that Bvalcalc takes only a single mean value and so does not make assumptions about the distribution.</p>
 </dd>
@@ -127,8 +127,8 @@
 <section id="dfe-parameters">
 <h2>DFE parameters<a class="headerlink" href="#dfe-parameters" title="Link to this heading"></a></h2>
 <p>A distribution of fitness effects (DFE) describes the probability of different selective effects for new mutations when they arise.
-Bvalcalc models a discretized deleterious DFE consisting of four continuous distributions ranging from effectively neutral (f0), to strongly deleterious (f3); beneficial mutations are currently not supported.</p>
-<p>To specify a DFE, provide <code class="docutils literal notranslate"><span class="pre">f0,f1,f2,f3</span></code> proportions that represent the DFE for all annotated regions in the <a class="reference internal" href="../introduction/bedgff_input.html"><span class="doc">BED/GFF input</span></a>. Note that the f0-f3 proportions must sum to 1.</p>
+Bvalcalc models a discretized deleterious DFE consisting of four continuous distributions ranging from effectively neutral (<code class="docutils literal notranslate"><span class="pre">f0</span></code>), to strongly deleterious (<code class="docutils literal notranslate"><span class="pre">f3</span></code>); beneficial mutations are currently not supported.</p>
+<p>To specify a DFE, provide <code class="docutils literal notranslate"><span class="pre">f0</span></code>, <code class="docutils literal notranslate"><span class="pre">f1</span></code>, <code class="docutils literal notranslate"><span class="pre">f2</span></code>, <code class="docutils literal notranslate"><span class="pre">f3</span></code> proportions that represent the DFE for all annotated regions in the <a class="reference internal" href="../introduction/bedgff_input.html"><span class="doc">BED/GFF input</span></a>. Note that the proportions must sum to 1, i.e. <code class="docutils literal notranslate"><span class="pre">f0+f1+f2+f3</span> <span class="pre">=</span> <span class="pre">1</span></code>.</p>
 <dl>
 <dt><code class="docutils literal notranslate"><span class="pre">f0</span></code></dt><dd><p>Proportion of effectively neutral mutations with <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">|</span> <span class="pre">2*Nanc*s</span> <span class="pre">|</span> <span class="pre">&lt;</span> <span class="pre">1</span></code>.</p>
 <p>Note that <code class="docutils literal notranslate"><span class="pre">2*Nanc*s</span> <span class="pre">&lt;</span> <span class="pre">5</span></code> does not contribute to BGS (see Johri et al 2020), Bvalcalc will exclude that proportion.</p>
@@ -142,7 +142,7 @@ Bvalcalc models a discretized deleterious DFE consisting of four continuous dist
 <dt><code class="docutils literal notranslate"><span class="pre">h</span></code></dt><dd><p>Dominance coefficient of selected alleles. Keep at 0.5 (additive effects) unless literature suggests otherwise</p>
 </dd>
 </dl>
-<p>DFE parameters may be reported in the literature as a gamma distribution, which Bvalcalc can take parameters to generate a discretized DFE to replace <code class="docutils literal notranslate"><span class="pre">f0,f1,f2,f3</span></code> when <code class="docutils literal notranslate"><span class="pre">--gamma_dfe</span></code> is specified:</p>
+<p>DFE parameters may be reported in the literature as a gamma distribution, which Bvalcalc can take parameters to generate a discretized DFE to replace <code class="docutils literal notranslate"><span class="pre">f0</span></code>, <code class="docutils literal notranslate"><span class="pre">f1</span></code>, <code class="docutils literal notranslate"><span class="pre">f2</span></code>, <code class="docutils literal notranslate"><span class="pre">f3</span></code> when <code class="docutils literal notranslate"><span class="pre">--gamma_dfe</span></code> is specified:</p>
 <dl class="simple">
 <dt><code class="docutils literal notranslate"><span class="pre">mean,</span> <span class="pre">shape,</span> <span class="pre">proportion_synonymous</span></code></dt><dd><p>The mean and shape parameters of the gamma DFE, and the proportion of strictly neutral sites in the annotated regions (e.g. synonymous in exon regions).</p>
 </dd>
@@ -150,19 +150,19 @@ Bvalcalc models a discretized deleterious DFE consisting of four continuous dist
 </section>
 <section id="demography">
 <h2>Demography<a class="headerlink" href="#demography" title="Link to this heading"></a></h2>
-<p>Historical population size change as a single step-function can be accounted for with Bvalcalc by adding the <cite>--pop_change</cite> flag, and setting the following parameters:</p>
+<p>Historical population size change as a single step-function can be accounted for with Bvalcalc by adding the <code class="docutils literal notranslate"><span class="pre">--pop_change</span></code> flag, and setting the following parameters:</p>
 <dl class="simple">
-<dt>Ncur</dt><dd><p>Current population size, i.e. over the current epoch.</p>
+<dt><code class="docutils literal notranslate"><span class="pre">Ncur</span></code></dt><dd><p>Current population size, i.e. over the current epoch.</p>
 </dd>
-<dt>time_of_change</dt><dd><p>Time in <code class="docutils literal notranslate"><span class="pre">Nanc</span></code> generations ago that effective population size went from Nanc to Ncur.</p>
+<dt><code class="docutils literal notranslate"><span class="pre">time_of_change</span></code></dt><dd><p>Time in <code class="docutils literal notranslate"><span class="pre">Nanc</span></code> generations ago that effective population size went from <code class="docutils literal notranslate"><span class="pre">Nanc</span></code> to <code class="docutils literal notranslate"><span class="pre">Ncur</span></code>.</p>
 </dd>
 </dl>
 </section>
 <section id="selfing-species">
 <h2>Selfing species<a class="headerlink" href="#selfing-species" title="Link to this heading"></a></h2>
 <p>Self-fertilizing (selfing) species have different evolutionary dynamics from obligate outcrosses which impact BGS (i.e., B).</p>
-<p>The parameters file can be modified for selfing populations by altering population size (<code class="docutils literal notranslate"><span class="pre">Nanc/Ncur</span></code>), crossover rate (<code class="docutils literal notranslate"><span class="pre">r</span></code>), gene conversion rate (<code class="docutils literal notranslate"><span class="pre">g</span></code>) and dominance coefficient by an additional parameter: <code class="docutils literal notranslate"><span class="pre">f</span></code>, which is Wright’s inbreeding coefficient (F). F can be calculated from the selfing rate (F = S/(2-S)). Note that the <cite>arabidopsis</cite> and <cite>pfalciparum</cite> default templates have the inbreeding parameter included.</p>
-<p>For analysis of selfing populations, we recommend tailoring parameters from the <cite>selfing</cite> template.</p>
+<p>The parameters file can be modified for selfing populations by altering population size (<code class="docutils literal notranslate"><span class="pre">Nanc/Ncur</span></code>), crossover rate (<code class="docutils literal notranslate"><span class="pre">r</span></code>), gene conversion rate (<code class="docutils literal notranslate"><span class="pre">g</span></code>) and dominance coefficient by an additional parameter: <code class="docutils literal notranslate"><span class="pre">f</span></code>, which is Wright’s inbreeding coefficient (F). F can be calculated from the selfing rate (F = S/(2-S)). Note that the <code class="docutils literal notranslate"><span class="pre">arabidopsis</span></code> and <code class="docutils literal notranslate"><span class="pre">pfalciparum</span></code> default templates have the inbreeding parameter included.</p>
+<p>For analysis of selfing populations, we recommend tailoring parameters from the <code class="docutils literal notranslate"><span class="pre">selfing</span></code> template.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--generate_params<span class="w"> </span>selfing
 </pre></div>
 </div>
