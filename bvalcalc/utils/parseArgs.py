@@ -124,6 +124,7 @@ def parseBmapArgs(argv=None):
                         help="Path to save per-site B for variant sites in the VCF/txt file. Results are not saved if --out is not specified.")
     parser.add_argument('--out_minimum', type=float, default=None, help="If set, only the sites ABOVE the given threshold of B will be returned, i.e. B > [threshold].")   
     parser.add_argument('--out_maximum', type=float, default=None, help="If set, only the sites BELOW the given threshold of B will be returned, i.e. B < [threshold].")   
+    parser.add_argument('--bcftools_format', action='store_true', help="If set, removes the B value column and reformats the output for filter with bcftools view.")
     parser.add_argument('--quiet', action='store_true', help="If set, silence print statements.")
     return parser.parse_args(argv)
 

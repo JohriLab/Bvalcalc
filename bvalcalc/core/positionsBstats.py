@@ -4,7 +4,7 @@ import sys
 from bvalcalc.utils.load_vcf import load_vcf
 from bvalcalc.utils.load_Bmap import load_Bmap
 
-def positionsBstats(args, Bmap_path):    
+def positionsBstats(args, Bmap_path):
     # Load VCF and B-map
     vcf_chroms, vcf_pos = load_vcf(args.positions)
     print(f"loading B-map: {Bmap_path}")
@@ -17,42 +17,43 @@ def positionsBstats(args, Bmap_path):
     bmap_unique = np.unique(bmap_chroms)
     vcf_unique = np.unique(vcf_chroms)
 
-    # Report mismatches (plain strings)
+    # Report mismatches
     missing_bmap = set(vcf_unique.astype(str)) - set(bmap_unique.astype(str))
-    missing_vcf = set(bmap_unique.astype(str)) - set(vcf_unique.astype(str))
+    missing_vcf  = set(bmap_unique.astype(str)) - set(vcf_unique.astype(str))
     if missing_bmap:
         print("WARNING: Chromosomes in VCF/CSV but not B-map: " + ", ".join(sorted(missing_bmap)))
     if missing_vcf:
         print("WARNING: Chromosomes in B-map but not VCF/CSV: " + ", ".join(sorted(missing_vcf)))
 
-    # Filter out VCF entries with chromosomes not in B-map
+    # Filter out VCF entries not in B-map
     if missing_bmap:
         keep_mask = np.isin(vcf_chroms, bmap_unique)
-        vcf_chroms = vcf_chroms[keep_mask]
-        vcf_pos = vcf_pos[keep_mask]
+        vcf_chroms, vcf_pos = vcf_chroms[keep_mask], vcf_pos[keep_mask]
         vcf_unique = np.unique(vcf_chroms)
 
-    # Pre-allocate flat arrays
+    # Prepare flat arrays
     n = vcf_pos.size
     flat_b     = np.empty(n, dtype=np.float64)
     flat_chrom = np.empty(n, dtype='<U20')
 
-    # Prepare CSV writer
+    # Prepare output file if requested
     writer = None
     if args.out:
         out_f = open(args.out, 'w', newline='')
-        writer = csv.writer(out_f)
-        writer.writerow(['chromosome','position','B'])
+        if not args.bcftools_format:
+            # standard CSV with header
+            writer = csv.writer(out_f)
+            writer.writerow(['chromosome','position','B'])
+        # else: we'll write plain "chromosome:position" lines, no header
 
-    # Map B-values per chromosome with per-chrom overflow warnings
+    # Map B-values per chromosome
     for chrom in vcf_unique:
         mask_v  = (vcf_chroms == chrom)
         pos_chr = vcf_pos[mask_v]
         mask_b  = (bmap_chroms == chrom)
-        starts  = bmap_pos[mask_b]
-        vals    = b_values[mask_b]
+        starts, vals = bmap_pos[mask_b], b_values[mask_b]
 
-        # Per-chromosome overflow warning
+        # Overflow warning
         max_start = int(starts.max())
         above_count_chr = int(np.count_nonzero(pos_chr > max_start))
         if above_count_chr > 0:
@@ -64,14 +65,20 @@ def positionsBstats(args, Bmap_path):
         flat_b[mask_v]     = vals[idx]
         flat_chrom[mask_v] = chrom
 
-        # Write to CSV if requested, applying thresholds
+        # Write out
         if writer:
             for p, b in zip(pos_chr, vals[idx]):
                 if (args.out_minimum is None or b >= args.out_minimum) and \
                    (args.out_maximum is None or b <= args.out_maximum):
                     writer.writerow([chrom, p, b])
+        elif args.bcftools_format and args.out:
+            for p, b in zip(pos_chr, vals[idx]):
+                if (args.out_minimum is None or b >= args.out_minimum) and \
+                   (args.out_maximum is None or b <= args.out_maximum):
+                    # one region per line, no header
+                    out_f.write(f"{chrom}:{p}\n")
 
-    # Apply out_minimum / out_maximum filters to the full result arrays
+    # Summary stats
     filter_mask = np.ones(n, dtype=bool)
     if args.out_minimum is not None:
         filter_mask &= (flat_b >= args.out_minimum)
@@ -83,16 +90,15 @@ def positionsBstats(args, Bmap_path):
     filtered_pos   = vcf_pos[filter_mask]
     n_filtered     = filtered_b.size
 
-    # Summary stats header
     print("====== R E S U L T S ====== S U M M A R Y ==========")
     if n_filtered > 0:
-        mean_B = float(filtered_b.mean())
-        idx_max = int(filtered_b.argmax())
-        idx_min = int(filtered_b.argmin())
-        max_B = float(filtered_b[idx_max])
-        min_B = float(filtered_b[idx_min])
-        pos_max = int(filtered_pos[idx_max])
-        pos_min = int(filtered_pos[idx_min])
+        mean_B    = float(filtered_b.mean())
+        idx_max   = int(filtered_b.argmax())
+        idx_min   = int(filtered_b.argmin())
+        max_B     = float(filtered_b[idx_max])
+        min_B     = float(filtered_b[idx_min])
+        pos_max   = int(filtered_pos[idx_max])
+        pos_min   = int(filtered_pos[idx_min])
         chrom_max = filtered_chrom[idx_max]
         chrom_min = filtered_chrom[idx_min]
 
@@ -102,11 +108,11 @@ def positionsBstats(args, Bmap_path):
     else:
         print("No B-values to summarize after applying thresholds.")
 
-    # Close CSV and finalize
-    if writer:
+    # Close file if open
+    if args.out:
         out_f.close()
-        print(f"Wrote CSV to {args.out}")
+        print(f"Wrote CSV to {args.out}" if not args.bcftools_format else f"Wrote regions to {args.out}")
     else:
-        print("Skipping save (use --out to write CSV)")
+        print("Skipping save (use --out to write CSV or regions file)")
 
     return filtered_b, filtered_chrom
