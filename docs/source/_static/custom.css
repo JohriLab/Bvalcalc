@@ -16,8 +16,6 @@
   margin-bottom: 0;
 }
 
-
-
 /* Sidebar link & text colors */
 .wy-menu.wy-menu-vertical a,
 .wy-menu.wy-menu-vertical p {
@@ -75,20 +73,20 @@ a.icon.icon-home {
 
 
 /* -------------------------------------------------------------------------- */
-/*                               Bee-trail UX                                 */
+/*                               Right elements UX                            */
 /* -------------------------------------------------------------------------- */
 
 /* Large viewports: fluid & capped container */
 @media (min-width: 1300px) {
-  .bee-trail-container {
+  .right-elements-container {
     position: fixed; top: 50%; left: 1100px;
     transform: translateY(-50%);
     width: 14vw; max-width: 320px;
     text-align: center;
-    pointer-events: none; 
+    pointer-events: none;     
     z-index: 9999;
   }
-  .bee-trail-container a {
+  .right-elements-container a {
     pointer-events: auto;
   }
 
@@ -99,7 +97,7 @@ a.icon.icon-home {
   .bee-trail-img {
     display: block; width: 100%; height: auto;
   }
-    .right-elements-stack {
+    .bottom-right-elements {
       position: absolute;
       top: 100%;    
       left: 50%;
@@ -148,31 +146,12 @@ a.icon.icon-home {
   }
 
 }
+@media (max-width: 1299px) {
+  .right-elements-container {display: none;}}
 
 @media (max-width: 1399px), (max-height: 699px) {
   .citation-text .citation-title, .made-by-sphinx-text {
-    display: none;
-  }
-}
-
-
-/* Short viewports: stack top-down
-@media (max-height: 670px) {
-  .bee-trail-container {
-    position: fixed; top: 0; right: 50px;
-    width: 20vw; transform: none;
-    display: flex; flex-direction: column-reverse;
-    align-items: center; gap: 25px;
-    pointer-events: none; z-index: 9999;
-  }
-  .bee-trail-container a {
-    pointer-events: auto;
-  }
-  .right-elements-stack,
-  .bee-trail-img {
-    position: static; transform: none; width: 100%;
-  }
-} */
+    display: none;}}
 
 /* -------------------------------------------------------------------------- */
 /*                        Sidebar “Learn more” & “Query”                       */
@@ -195,10 +174,8 @@ a.icon.icon-home {
   background-color: #f47201 !important;
   margin-block-start: 0 !important;
   z-index: 9998;
-  /* transform: translateX(-1rem); */
   text-align: center;
   bottom: 10px;
-
   display: flex !important;
   align-items: center;       /* vertical centering */
   justify-content: center;   /* horizontal centering */
