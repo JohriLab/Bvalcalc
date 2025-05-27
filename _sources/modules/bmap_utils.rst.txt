@@ -42,4 +42,4 @@ Example
       --out variants_B_above_0.9.csv \
       --out_minimum 0.9
 
-This will save a csv file with each position in the VCF with B above or equal 0.9. These variants represent the most  most neutrally-evolving alleles in the VCF and may be useful for demographic inference, see :doc:`Demographic Inference with B-map <../guides/demography>`.
+This will save a csv file with each position in the VCF with B above or equal 0.9. These variants represent the most neutrally-evolving alleles in the VCF and may be useful for demographic inference, see :doc:`Demographic Inference with B-map <../guides/demography>`.

@@ -105,9 +105,9 @@
              
   <section id="demographic-inference-with-b-map">
 <h1>Demographic Inference with B-map<a class="headerlink" href="#demographic-inference-with-b-map" title="Link to this heading"></a></h1>
-<p>Demographic inference tools are confounded by the linked effects of selection; see Johri et al. (2021) for biases in SFS-based approaches, and Marsh et al. (2024) for biases in ARG-based approaches.</p>
+<p>Demographic inference tools are confounded by the linked effects of selection; see Johri et al. (2021) for biases in MSMC-like and SFS-based approaches, and Marsh et al. (2024) for biases in ARG-based approaches.</p>
 <p>To best avoid biases, it is essential to only use the most neutrally-evolving sites for demographic inference , i.e. the sites least affected by sweeps and BGS (highest B).</p>
-<p>Using the <code class="docutils literal notranslate"><span class="pre">--Bmap</span></code> utilities mode, we can get the B of a list of positions from a VCF or CSV from a B-map (e.g. from <code class="docutils literal notranslate"><span class="pre">--genome</span></code>) to help select the most neutrally evolving sites.</p>
+<p>Using <code class="docutils literal notranslate"><span class="pre">--Bmap</span></code> (see <a class="reference internal" href="../modules/bmap_utils.html"><span class="doc">B-map Utilities for VCF</span></a>), we can use a B-map from <code class="docutils literal notranslate"><span class="pre">--genome</span></code> to filter a VCF or CSV to keep only the most neutrally evolving sites.</p>
 <section id="plotting-the-b-distribition">
 <h2>Plotting the B Distribition<a class="headerlink" href="#plotting-the-b-distribition" title="Link to this heading"></a></h2>
 <p>The following command will find the B of each position in the VCF using the B-map, print a brief summary to standard out and save a simple plot (<cite>B_distribution.png</cite>) of the results.</p>
@@ -122,7 +122,7 @@
 </section>
 <section id="saving-positions-with-high-b">
 <h2>Saving Positions with high B<a class="headerlink" href="#saving-positions-with-high-b" title="Link to this heading"></a></h2>
-<p>Next, we can pick a cut-off and filter our list of positions to keep only sites with B &gt;= 0.9 and save the output, we add the <code class="docutils literal notranslate"><span class="pre">bcftools_format</span></code> so it’s easier to filter in the next step.</p>
+<p>Next, we can pick a cut-off and filter our list of positions to keep only sites with B &gt;= 0.9 and save the output to <cite>filtered_positions.csv</cite>.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--Bmap<span class="w"> </span>your_B_map.csv<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--positions<span class="w"> </span>your.vcf<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--out_minimum<span class="w"> </span><span class="m">0</span>.9
@@ -130,17 +130,17 @@
 <span class="w">    </span>--bcftools_format
 </pre></div>
 </div>
-<p>This will save <cite>filtered_positions.csv</cite> which lists positions with B &gt;= 0.9 in the right format to filter our VCF with a tool like <code class="docutils literal notranslate"><span class="pre">bcftools</span> <span class="pre">view</span></code></p>
+<p>Adding the <code class="docutils literal notranslate"><span class="pre">--bcftools_format</span></code> option removes the B value column and reformats the output so it’s easier to filter with bcftools.</p>
 </section>
 <section id="filtering-a-vcf">
 <h2>Filtering a VCF<a class="headerlink" href="#filtering-a-vcf" title="Link to this heading"></a></h2>
-<p>Using the newly saved <cite>filtered_positions.csv</cite> and our original VCF:</p>
+<p>Using the newly saved <cite>filtered_positions.csv</cite> and our original VCF we can filter using bcftools:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bcftools<span class="w"> </span>view<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>-R<span class="w"> </span>variants_B_above_0.9.txt<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>your.vcf<span class="w"> </span>-Ov<span class="w"> </span>-o<span class="w"> </span>filtered.vcf
 </pre></div>
 </div>
-<p>Now your <cite>filtered.vcf</cite> only contains sites with B &gt;= 0.9 and is ready for more accurate demographic inference with your tool of choice!</p>
+<p>Now the <cite>filtered.vcf</cite> only contains sites with B &gt;= 0.9 and is ready for more accurate demographic inference with your tool of choice!</p>
 </section>
 </section>
 
