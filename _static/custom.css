@@ -71,7 +71,6 @@ a.icon.icon-home {
   background-color: #fff;
 }
 
-
 /* -------------------------------------------------------------------------- */
 /*                               Right elements UX                            */
 /* -------------------------------------------------------------------------- */
@@ -81,76 +80,63 @@ a.icon.icon-home {
   .right-elements-container {
     position: fixed; top: 50%; left: 1100px;
     transform: translateY(-50%);
-    width: 14vw; max-width: 320px;
+    width: 15vw; max-width: 320px;
     text-align: center;
     pointer-events: none;     
     z-index: 9999;
   }
-  .right-elements-container a {
+  .right-elements-container a, .citation-text {
     pointer-events: auto;
   }
-
-  .citation-text {
-    pointer-events: all;
-  }
   
+    .on-this-page {
+      position: absolute;
+      width: 100%; 
+      height: 125px; left: 25px; bottom: 211px;
+      text-align: left; font-size: 1rem;
+      padding-right: 3px;
+    }
+    .on-this-page ul {
+      padding-left: 12px;
+    }
+    .on-this-page li {
+      margin: 5px 0; margin-right: 2.5px;
+    }
+    .on-this-page a {
+      color: #333; opacity: 80%;
+      text-decoration: none; text-emphasis: none;
+    }
+    .on-this-page a[href="#"] {
+      text-decoration: underline;
+    }
+
   .bee-trail-img {
     display: block; width: 100%; height: auto;
   }
-    .bottom-right-elements {
-      position: absolute;
-      top: 100%;    
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column-reverse;
-      align-items: center;
-      gap: 20px;
-      width: 100%;
-      margin-top: 35px; 
-        }
-  .citation-text,
-  .made-by-sphinx-text, .links-text {
+  
+  .bottom-right-elements {
+    position: absolute;
+    top: 100%;    
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    margin-top: 35px; 
+      }
+
+  .citation-text, .made-by-sphinx-text, .links-text {
     color: #333; line-height: 1.4; white-space: normal;
   } 
-
-  .on-this-page {
-    position: absolute;
-    width: 100%;
-    height: 125px;
-    left: 25px;
-    bottom: 211px;
-    /* bottom: calc(100% + 35px); */
-    text-align: left;
-    padding-right: 3px;
-    font-size: 1rem;
-  }
-
-  .on-this-page ul {
-    list-style: none;
-    padding-left: 15px;
-    margin: 0;
-  }
-  .on-this-page li {
-    margin: 5px 0;
-    margin-right: 2.5px;
-  }
-  .on-this-page a {
-    color: #333;
-    opacity: 80%;
-    text-decoration: none;
-    text-emphasis: none;
-  }
-  .on-this-page a[href="#"] {
-    text-decoration: underline;
-  }
 
 }
 @media (max-width: 1299px) {
   .right-elements-container {display: none;}}
 
 @media (max-width: 1399px), (max-height: 699px) {
-  .citation-text .citation-title, .made-by-sphinx-text {
+  .citation-text .citation-body, .made-by-sphinx-text {
     display: none;}}
 
 /* -------------------------------------------------------------------------- */
