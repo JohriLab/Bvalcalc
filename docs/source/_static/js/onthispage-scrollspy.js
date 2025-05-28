@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('hashchange', onScroll);
   onScroll(); // initial run
 
-  // ——— Scroll-to-bottom button handler ———
+  // Scroll-to-bottom click handler
   const scrollBtn = document.querySelector('.scroll-to-bottom-btn');
   const scroller = document.querySelector('.wy-side-scroll');
   if (scrollBtn && scroller) {
@@ -104,5 +104,16 @@ document.addEventListener('DOMContentLoaded', () => {
         behavior: 'smooth',
       });
     });
+  }
+
+  // Hide button when scroller is at (or within 10px of) its bottom
+  if (scroller && scrollBtn) {
+    const updateBtn = () => {
+      const distanceFromBottom =
+        scroller.scrollHeight - scroller.clientHeight - scroller.scrollTop;
+      scrollBtn.style.display = distanceFromBottom <= 36 ? 'none' : '';
+    };
+    updateBtn();
+    scroller.addEventListener('scroll', updateBtn, { passive: true });
   }
 });
