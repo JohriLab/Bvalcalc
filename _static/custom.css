@@ -150,6 +150,9 @@ a.icon.icon-home {
   .right-elements-container {
     font-size: 0.8rem !important;
   }
+  .on-this-page {    
+    left: 20px;
+  }
 }
 
 @media (max-width: 1400px), (max-height: 699px) {
@@ -216,11 +219,8 @@ a.icon.icon-home {
 @media (max-height: 734px) {
   .wy-menu-vertical > p.caption:nth-last-of-type(1) {
     position: relative;
-    bottom: 6px
-  }
-  .wy-menu-vertical > p.caption:nth-last-of-type(1) {
-    position: relative;
-    bottom: 6px
+    bottom: 6px;
+    margin-bottom: 24px;
   }
 }
 
