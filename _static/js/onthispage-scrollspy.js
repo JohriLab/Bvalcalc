@@ -92,4 +92,17 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('scroll', onScroll);
   window.addEventListener('hashchange', onScroll);
   onScroll(); // initial run
+
+  // ——— Scroll-to-bottom button handler ———
+  const scrollBtn = document.querySelector('.scroll-to-bottom-btn');
+  const scroller = document.querySelector('.wy-side-scroll');
+  if (scrollBtn && scroller) {
+    scrollBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      scroller.scrollTo({
+        top: scroller.scrollHeight,
+        behavior: 'smooth',
+      });
+    });
+  }
 });
