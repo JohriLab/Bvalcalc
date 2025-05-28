@@ -1,8 +1,16 @@
 {# docs/source/_templates/layout.html #}
 {% extends "!layout.html" %}
 
-{% block footer %}
+
+  {% block footer %}
   {{ super() }}
+  <!-- To bottom button -->
+  <div class="scroll-bottom-wrapper">
+    <button class="scroll-to-bottom-btn" aria-label="Scroll to bottom">
+      <span class="scroll-to-bottom-btn-text">↓ ↓ ↓</span>
+    </button>
+  </div>
+  <!-- Right elements -->
   <div class="right-elements-container">
     <div class="on-this-page">
         {{ toc }}
