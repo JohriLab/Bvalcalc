@@ -216,6 +216,7 @@ a.icon.icon-home {
   }
 }
 
+
 @media (max-height: 734px) {
   .wy-menu-vertical > p.caption:nth-last-of-type(1) {
     position: relative;
@@ -293,4 +294,61 @@ html::-webkit-scrollbar-thumb:hover {
 /* full-opacity on hover/active */
 html::-webkit-scrollbar-thumb:active {
   background-color: rgba(250, 170, 6, 1);    /* 100% opacity */
+}
+
+
+/* -------------------------------------------------------------------------- */
+/*                  Scroll‐to‐bottom Button Styles 🐝                         */
+/* -------------------------------------------------------------------------- */
+
+/* Always position it bottom-left and size it to match the menu strip */
+.scroll-to-bottom-btn {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 300px;
+  height: 40px;
+  padding-bottom: 4px;
+
+  /* semi-transparent honey-yellow background */
+  background: rgba(255, 195, 11, 0.4);
+  
+  /* a bit of blur behind the button for depth */
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  border: none;
+  color: black;
+  font-size: 1.5rem;
+  
+  text-align: center;
+  letter-spacing: 7px;
+  cursor: pointer;
+  text-shadow:
+  0.4px 0 currentColor,
+ -0.4px 0 currentColor,
+  0 0.4px currentColor,
+  0 -0.4px currentColor;
+  
+  /* above everything else */
+  z-index: 10001;
+  pointer-events: auto;
+}
+
+/* hide on taller screens */
+@media (min-height: 700px), (max-width: 770px) {
+  .scroll-to-bottom-btn {
+    display: none;
+  }
+}
+
+/* optional hover state for better affordance */
+.scroll-to-bottom-btn:hover {
+  /* background: rgba(255, 195, 11, 1); */
+  background: rgba(250, 170, 6, 0.8);
+    text-shadow:
+    0.5px 0 currentColor,
+    -0.5px 0 currentColor,
+    0 0.5px currentColor,
+    0 -0.5px currentColor;
 }
