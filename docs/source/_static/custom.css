@@ -78,7 +78,7 @@ a.icon.icon-home {
 /* Large viewports: fluid & capped container */
 @media (min-width: 1305px) {
   .right-elements-container {
-    position: fixed; top: 50%; left: 1100px;
+    position: fixed; top: 45%; left: 1100px;
     transform: translateY(-50%);
     width: calc((100vw - 900px) * 0.5);; 
     max-width: 320px;
@@ -96,8 +96,7 @@ a.icon.icon-home {
     bottom: 125px;     /* fixed gap above the image */
 
     text-align: left;
-    font-size: 1rem;
-    padding-right: 3px;
+    /* padding-right: 3px;x */
   
     /* nice-to-have: wrap long lines rather than overflow */
     overflow-wrap: break-word;
@@ -108,7 +107,7 @@ a.icon.icon-home {
       padding-left: 12px;
     }
     .on-this-page li {
-      margin: 5px 0; margin-right: 2.5px;
+      margin: 5px 0; margin-right: 2px;
     }
     .on-this-page a {
       color: #333; opacity: 80%;
@@ -146,6 +145,12 @@ a.icon.icon-home {
 }
 @media (max-width: 1304px) {
   .right-elements-container {display: none;}}
+
+@media (max-width: 1350px) {
+  .right-elements-container {
+    font-size: 0.8rem !important;
+  }
+}
 
 @media (max-width: 1400px), (max-height: 699px) {
   .citation-text .citation-body, .made-by-sphinx-text {
