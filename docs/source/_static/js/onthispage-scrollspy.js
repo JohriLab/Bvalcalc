@@ -116,4 +116,41 @@ document.addEventListener('DOMContentLoaded', () => {
     updateBtn();
     scroller.addEventListener('scroll', updateBtn, { passive: true });
   }
+
+  // ─────────────── Extra Footer Injection ───────────────
+  const contentInfo = document.querySelector('div[role="contentinfo"]');
+  if (contentInfo) {
+    // Build the extra text container
+    const extra = document.createElement('div');
+    extra.className = 'extra-footer-text';
+    extra.innerHTML = `
+      <p>
+        Citation: Marsh JI, Johri, PJ. The B-value calculator: efficient analytical calculation of expected
+        genetic diversity with background selection. bioRxiv. doi:
+          <a href="https://biorxiv" target="_blank" rel="noopener noreferrer">10.1101/2063.10.10.561727</a>
+      </p>
+      <div class="links-text>      
+        <div>
+          Made with <a href="https://www.sphinx-doc.org/" target="_blank" rel="noopener noreferrer">Sphinx</a>
+          using an adapted <a href="https://github.com/rtfd/sphinx_rtd_theme" target="_blank" rel="noopener noreferrer">theme</a> 
+          from <a href="https://readthedocs.org/" target="_blank" rel="noopener noreferrer">Read the Docs</a> <br/>
+        </div>
+        <a href="https://test.pypi.org/project/bvalcalc/" target="_blank" rel="noopener noreferrer">PyPI</a> | 
+        <a href="https://github.com/JohriLab/BvalueCalculator/issues" target="_blank" rel="noopener noreferrer">Report a bug</a> | 
+        <a href="https://github.com/JohriLab/BvalueCalculator" target="_blank" rel="noopener noreferrer">Source code</a> 
+      </div>
+    `;
+
+    // Show/remove based on viewport width
+    function updateFooterExtras() {
+      if (window.innerWidth <= 1304) {
+        if (!contentInfo.contains(extra)) contentInfo.appendChild(extra);
+      } else {
+        if (contentInfo.contains(extra)) contentInfo.removeChild(extra);
+      }
+    }
+
+    updateFooterExtras();
+    window.addEventListener('resize', updateFooterExtras);
+  }
 });

@@ -352,3 +352,10 @@ html::-webkit-scrollbar-thumb:active {
     0 0.5px currentColor,
     0 -0.5px currentColor;
 }
+/* 
+.extra-footer-text {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: #333;
+} */
