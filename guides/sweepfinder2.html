@@ -18,7 +18,7 @@
       <script src="../_static/documentation_options.js?v=c87aa342"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-      <script src="../_static/js/onthispage-scrollspy.js?v=9ea4c7c5"></script>
+      <script src="../_static/js/onthispage-scrollspy.js?v=b3e49b19"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -105,7 +105,54 @@
              
   <section id="sweepfinder2-with-b-map">
 <h1>SweepFinder2 with B-map<a class="headerlink" href="#sweepfinder2-with-b-map" title="Link to this heading"></a></h1>
-<p>WIP</p>
+<p><strong>SweepFinder2</strong> (<strong>SF2</strong>; DeGiorgio et al. 2016) is a population genetic program for performing genome-wide scans to identify selective sweeps, which uses a B-map to avoid confounding effects of BGS.</p>
+<p>A B-map calculated by <strong>Bvalcalc</strong>’s <code class="docutils literal notranslate"><span class="pre">--genome</span></code> or <code class="docutils literal notranslate"><span class="pre">--region</span></code> module can be used as the B-value file input to <strong>SF2</strong> (see 3.3. B-value file in the <strong>SF2</strong> manual).</p>
+<section id="sf2-b-map-format">
+<h2>SF2 B-map format<a class="headerlink" href="#sf2-b-map-format" title="Link to this heading"></a></h2>
+<p>The required format for <strong>SF2</strong> is a tab-delimited file for a single chromosome with a header (position   bvalue), e.g.:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>SF2<span class="w"> </span>B-value<span class="w"> </span>file<span class="w"> </span>format
+<span class="go">position    bvalue</span>
+<span class="go">340001  0.2</span>
+<span class="go">560010  0.5</span>
+<span class="go">780210  0.95</span>
+
+<span class="gp"># </span>Bvalcalc<span class="w"> </span>B-map<span class="w"> </span>format
+<span class="go">Chromosome,Position,B</span>
+<span class="go">chr1,1,0.7</span>
+<span class="go">chr1,1001,0.6</span>
+<span class="go">chr1,2001,0.5</span>
+</pre></div>
+</div>
+<p>Note that this is different from the B-map format output of <strong>Bvalcalc</strong> which is a CSV and has an additional column with “chromosome”. Also, it requires pulling out the B-values of specific positions, rather than a genome-wide map.</p>
+</section>
+<section id="bvalcalc-to-sf2-format">
+<h2>Bvalcalc to SF2 format<a class="headerlink" href="#bvalcalc-to-sf2-format" title="Link to this heading"></a></h2>
+<p>First, assuming you have a B-map from <strong>Bvalcalc</strong> you’ll need to get the B-values for your variant positions (the SF2 grid file).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># First add a chromosome column to your grid file for chr1 and save to a new file</span>
+sed<span class="w"> </span><span class="s1">&#39;s/^/chr1,/&#39;</span><span class="w"> </span>chr1_grid.txt<span class="w"> </span>&gt;<span class="w"> </span>chr1_positions.csv
+
+<span class="c1"># Then get their B-values from the B-map</span>
+Bvalcalc<span class="w"> </span>--Bmap<span class="w"> </span>B_map.csv<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--positions<span class="w"> </span>chr1_positions.csv<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--out<span class="w"> </span>chr1_bvalues.csv
+</pre></div>
+</div>
+<p>This will save the B-values for your list of chromosome 1 positions (chr1_positions.csv) to chr1_bvalues.csv.</p>
+<p>Now, using awk we can pull out positions for a single chromosome and reformat it to the SF2 B-value format</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add a header to a new file</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;position\tbvalue&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>chr1_bvalues.tsv
+
+<span class="c1"># Reformat for SF2-format and append</span>
+awk<span class="w"> </span>-F,<span class="w"> </span><span class="s1">&#39;BEGIN { OFS=&quot;\t&quot; } \</span>
+<span class="s1"> $1==&quot;chr1&quot; { print $2,$3 }&#39;</span><span class="w"> </span>chr1_bvalues.csv<span class="w"> </span>&gt;&gt;<span class="w"> </span>chr1_bvalues.tsv
+</pre></div>
+</div>
+<p>Now you have chr1_bvalues.tsv ready as input to SF2!</p>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
+<p><strong>SF2</strong> analyses typically require a recombination map, so you can use the same recombination map when calculating the B-map by adding <code class="docutils literal notranslate"><span class="pre">--rec_map</span> <span class="pre">your.map</span></code>, just note you’ll need to convert between centiMorgan and rate format.</p>
+</section>
 </section>
 
 
@@ -145,7 +192,12 @@
   <div class="right-elements-container">
     <div class="on-this-page">
         <ul>
-<li><a class="reference internal" href="#">SweepFinder2 with B-map</a></li>
+<li><a class="reference internal" href="#">SweepFinder2 with B-map</a><ul>
+<li><a class="reference internal" href="#sf2-b-map-format">SF2 B-map format</a></li>
+<li><a class="reference internal" href="#bvalcalc-to-sf2-format">Bvalcalc to SF2 format</a></li>
+<li><a class="reference internal" href="#notes">Notes</a></li>
+</ul>
+</li>
 </ul>
 
     </div>

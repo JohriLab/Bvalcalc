@@ -7,7 +7,7 @@ To best avoid biases, it is essential to only use the most neutrally-evolving si
 
 Using ``--Bmap`` (see :doc:`B-map Utilities for VCF <../modules/bmap_utils>`), we can use a B-map from ``--genome`` to filter a VCF or CSV to keep only the most neutrally evolving sites.
 
-Plotting the B Distribition
+Plotting the B distribution
 ----------------------------
 
 The following command will find the B of each position in the VCF using the B-map, print a brief summary to standard out and save a simple plot (`B_distribution.png`) of the results.
@@ -23,7 +23,7 @@ Now we can open up `B_distribution.png` which will help decide on a minimum B cu
 
 In addition we have `variants_B.csv` which lists the B for each position in case you'd like to run your own stats or do your own plotting of the results.
 
-Saving Positions with high B
+Saving positions with high B
 -----------------------------
 
 Next, we can pick a cut-off and filter our list of positions to keep only sites with B >= 0.9 and save the output to `filtered_positions.csv`.

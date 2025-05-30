@@ -30,15 +30,15 @@ To specify a DFE, provide ``f0``, ``f1``, ``f2``, ``f3`` proportions that repres
 
 
 ``f0`` 
-    Proportion of effectively neutral mutations with ``0 <= | 2*Nanc*s | < 1``.
+    Proportion of effectively neutral mutations with `0 <= | 2*Nanc*s | < 1`.
     
-    Note that ``2*Nanc*s < 5`` does not contribute to BGS (see Johri et al 2020), Bvalcalc will exclude that proportion.
+    Note that `2*Nanc*s < 5` does not contribute to BGS (see Johri et al 2020), Bvalcalc will exclude that proportion.
 ``f1``
-    Proportion of weakly deleterious mutations with ``1 <= | 2*Nanc*s | < 10``
+    Proportion of weakly deleterious mutations with `1 <= | 2*Nanc*s | < 10`
 ``f2`` 
-    Proportion of moderately deleterious mutations with ``10 <= | 2*Nanc*s | < 100``
+    Proportion of moderately deleterious mutations with `10 <= | 2*Nanc*s | < 100`
 ``f3``
-    Proportion of strongly deleterious mutations with ``100 <= | 2*Nanc*s |`` 
+    Proportion of strongly deleterious mutations with `100 <= | 2*Nanc*s |` 
 ``h``
     Dominance coefficient of selected alleles. Keep at 0.5 (additive effects) unless literature suggests otherwise
 

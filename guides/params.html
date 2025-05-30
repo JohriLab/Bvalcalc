@@ -18,7 +18,7 @@
       <script src="../_static/documentation_options.js?v=c87aa342"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-      <script src="../_static/js/onthispage-scrollspy.js?v=9ea4c7c5"></script>
+      <script src="../_static/js/onthispage-scrollspy.js?v=b3e49b19"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -130,14 +130,14 @@
 Bvalcalc models a discretized deleterious DFE consisting of four continuous distributions ranging from effectively neutral (<code class="docutils literal notranslate"><span class="pre">f0</span></code>), to strongly deleterious (<code class="docutils literal notranslate"><span class="pre">f3</span></code>); beneficial mutations are currently not supported.</p>
 <p>To specify a DFE, provide <code class="docutils literal notranslate"><span class="pre">f0</span></code>, <code class="docutils literal notranslate"><span class="pre">f1</span></code>, <code class="docutils literal notranslate"><span class="pre">f2</span></code>, <code class="docutils literal notranslate"><span class="pre">f3</span></code> proportions that represent the DFE for all annotated regions in the <a class="reference internal" href="../introduction/bedgff_input.html"><span class="doc">BED/GFF input</span></a>. Note that the proportions must sum to 1, i.e. <code class="docutils literal notranslate"><span class="pre">f0+f1+f2+f3</span> <span class="pre">=</span> <span class="pre">1</span></code>.</p>
 <dl>
-<dt><code class="docutils literal notranslate"><span class="pre">f0</span></code></dt><dd><p>Proportion of effectively neutral mutations with <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">|</span> <span class="pre">2*Nanc*s</span> <span class="pre">|</span> <span class="pre">&lt;</span> <span class="pre">1</span></code>.</p>
-<p>Note that <code class="docutils literal notranslate"><span class="pre">2*Nanc*s</span> <span class="pre">&lt;</span> <span class="pre">5</span></code> does not contribute to BGS (see Johri et al 2020), Bvalcalc will exclude that proportion.</p>
+<dt><code class="docutils literal notranslate"><span class="pre">f0</span></code></dt><dd><p>Proportion of effectively neutral mutations with <cite>0 &lt;= | 2*Nanc*s | &lt; 1</cite>.</p>
+<p>Note that <cite>2*Nanc*s &lt; 5</cite> does not contribute to BGS (see Johri et al 2020), Bvalcalc will exclude that proportion.</p>
 </dd>
-<dt><code class="docutils literal notranslate"><span class="pre">f1</span></code></dt><dd><p>Proportion of weakly deleterious mutations with <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">&lt;=</span> <span class="pre">|</span> <span class="pre">2*Nanc*s</span> <span class="pre">|</span> <span class="pre">&lt;</span> <span class="pre">10</span></code></p>
+<dt><code class="docutils literal notranslate"><span class="pre">f1</span></code></dt><dd><p>Proportion of weakly deleterious mutations with <cite>1 &lt;= | 2*Nanc*s | &lt; 10</cite></p>
 </dd>
-<dt><code class="docutils literal notranslate"><span class="pre">f2</span></code></dt><dd><p>Proportion of moderately deleterious mutations with <code class="docutils literal notranslate"><span class="pre">10</span> <span class="pre">&lt;=</span> <span class="pre">|</span> <span class="pre">2*Nanc*s</span> <span class="pre">|</span> <span class="pre">&lt;</span> <span class="pre">100</span></code></p>
+<dt><code class="docutils literal notranslate"><span class="pre">f2</span></code></dt><dd><p>Proportion of moderately deleterious mutations with <cite>10 &lt;= | 2*Nanc*s | &lt; 100</cite></p>
 </dd>
-<dt><code class="docutils literal notranslate"><span class="pre">f3</span></code></dt><dd><p>Proportion of strongly deleterious mutations with <code class="docutils literal notranslate"><span class="pre">100</span> <span class="pre">&lt;=</span> <span class="pre">|</span> <span class="pre">2*Nanc*s</span> <span class="pre">|</span></code></p>
+<dt><code class="docutils literal notranslate"><span class="pre">f3</span></code></dt><dd><p>Proportion of strongly deleterious mutations with <cite>100 &lt;= | 2*Nanc*s |</cite></p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">h</span></code></dt><dd><p>Dominance coefficient of selected alleles. Keep at 0.5 (additive effects) unless literature suggests otherwise</p>
 </dd>

@@ -18,7 +18,7 @@
       <script src="../_static/documentation_options.js?v=c87aa342"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-      <script src="../_static/js/onthispage-scrollspy.js?v=9ea4c7c5"></script>
+      <script src="../_static/js/onthispage-scrollspy.js?v=b3e49b19"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -108,8 +108,8 @@
 <p>Demographic inference tools are confounded by the linked effects of selection; see Johri et al. (2021) for biases in MSMC-like and SFS-based approaches, and Marsh et al. (2024) for biases in ARG-based approaches.</p>
 <p>To best avoid biases, it is essential to only use the most neutrally-evolving sites for demographic inference , i.e. the sites least affected by sweeps and BGS (highest B).</p>
 <p>Using <code class="docutils literal notranslate"><span class="pre">--Bmap</span></code> (see <a class="reference internal" href="../modules/bmap_utils.html"><span class="doc">B-map Utilities for VCF</span></a>), we can use a B-map from <code class="docutils literal notranslate"><span class="pre">--genome</span></code> to filter a VCF or CSV to keep only the most neutrally evolving sites.</p>
-<section id="plotting-the-b-distribition">
-<h2>Plotting the B Distribition<a class="headerlink" href="#plotting-the-b-distribition" title="Link to this heading"></a></h2>
+<section id="plotting-the-b-distribution">
+<h2>Plotting the B distribution<a class="headerlink" href="#plotting-the-b-distribution" title="Link to this heading"></a></h2>
 <p>The following command will find the B of each position in the VCF using the B-map, print a brief summary to standard out and save a simple plot (<cite>B_distribution.png</cite>) of the results.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--Bmap<span class="w"> </span>your_B_map.csv<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--positions<span class="w"> </span>your.vcf<span class="w"> </span><span class="se">\</span>
@@ -121,7 +121,7 @@
 <p>In addition we have <cite>variants_B.csv</cite> which lists the B for each position in case you’d like to run your own stats or do your own plotting of the results.</p>
 </section>
 <section id="saving-positions-with-high-b">
-<h2>Saving Positions with high B<a class="headerlink" href="#saving-positions-with-high-b" title="Link to this heading"></a></h2>
+<h2>Saving positions with high B<a class="headerlink" href="#saving-positions-with-high-b" title="Link to this heading"></a></h2>
 <p>Next, we can pick a cut-off and filter our list of positions to keep only sites with B &gt;= 0.9 and save the output to <cite>filtered_positions.csv</cite>.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--Bmap<span class="w"> </span>your_B_map.csv<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--positions<span class="w"> </span>your.vcf<span class="w"> </span><span class="se">\</span>
@@ -182,8 +182,8 @@
     <div class="on-this-page">
         <ul>
 <li><a class="reference internal" href="#">Demographic Inference with B-map</a><ul>
-<li><a class="reference internal" href="#plotting-the-b-distribition">Plotting the B Distribition</a></li>
-<li><a class="reference internal" href="#saving-positions-with-high-b">Saving Positions with high B</a></li>
+<li><a class="reference internal" href="#plotting-the-b-distribution">Plotting the B distribution</a></li>
+<li><a class="reference internal" href="#saving-positions-with-high-b">Saving positions with high B</a></li>
 <li><a class="reference internal" href="#filtering-a-vcf">Filtering a VCF</a></li>
 </ul>
 </li>
