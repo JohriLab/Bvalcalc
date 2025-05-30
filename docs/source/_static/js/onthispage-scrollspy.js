@@ -129,9 +129,9 @@ document.addEventListener('DOMContentLoaded', () => {
         genetic diversity with background selection. bioRxiv. doi:
           <a href="https://biorxiv" target="_blank" rel="noopener noreferrer">10.1101/2063.10.10.561727</a>
       </p>
-      <div class="links-text>      
+      <div>      
         <div>
-          Made with <a href="https://www.sphinx-doc.org/" target="_blank" rel="noopener noreferrer">Sphinx</a>
+        Made with <a href="https://www.sphinx-doc.org/" target="_blank" rel="noopener noreferrer">Sphinx</a>
           using an adapted <a href="https://github.com/rtfd/sphinx_rtd_theme" target="_blank" rel="noopener noreferrer">theme</a> 
           from <a href="https://readthedocs.org/" target="_blank" rel="noopener noreferrer">Read the Docs</a> <br/>
         </div>
