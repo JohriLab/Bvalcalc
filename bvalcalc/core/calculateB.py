@@ -131,7 +131,7 @@ def calculateB_unlinked(unlinked_L: int, params: dict | None = None):
         + f1 * ((t1half - t1) / (t2 - t1)) * 0.0
         + f1 * ((t2 - t1half) / (t2 - t1)) * (t2 + t1half) / 2
         + f2 * (t2 + t3) / 2
-        + f3 * (t3 + t4) / 2
+        + 0.575 * f3 * (t3 + t4) / 2 # *0.575 to account for transition from exp(-4Ush) to exp(-Ush) as sh approaches 1
     )
 
     return np.exp(-8 * u * unlinked_L * sum_f)

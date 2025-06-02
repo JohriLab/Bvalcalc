@@ -33,7 +33,7 @@ First, assuming you have a B-map from **Bvalcalc** you'll need to get the B-valu
 
 .. code-block:: bash
 
-    # First add a chromosome column to your grid file for chr1 and save to a new file
+    # Add a chromosome column to your grid file and save to a new file
     sed 's/^/chr1,/' chr1_grid.txt > chr1_positions.csv
 
     # Then get their B-values from the B-map

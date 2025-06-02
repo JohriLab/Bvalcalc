@@ -46,3 +46,5 @@ docs/_build/
 # Example or local-only data
 exampleData/
 trash/
+
+examples/
