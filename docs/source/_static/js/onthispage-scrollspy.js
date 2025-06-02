@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const updateBtn = () => {
       const distanceFromBottom =
         scroller.scrollHeight - scroller.clientHeight - scroller.scrollTop;
-      scrollBtn.style.display = distanceFromBottom <= 36 ? 'none' : '';
+      scrollBtn.style.display = distanceFromBottom <= 8 ? 'none' : '';
     };
     updateBtn();
     scroller.addEventListener('scroll', updateBtn, { passive: true });
@@ -195,4 +195,8 @@ document.addEventListener('DOMContentLoaded', () => {
         a.style.setProperty('background-color', '#fff', 'important');
       }
     });
+
+  const protector = document.createElement('div');
+  protector.id = 'bottom-left-protector';
+  document.body.appendChild(protector);
 });
