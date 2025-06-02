@@ -10,7 +10,7 @@
   <title>SweepFinder2 with B-map &mdash; Bvalcalc 0.4.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=531c19e9" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=cd6166b7" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
@@ -18,7 +18,7 @@
       <script src="../_static/documentation_options.js?v=c87aa342"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-      <script src="../_static/js/onthispage-scrollspy.js?v=b3e49b19"></script>
+      <script src="../_static/js/onthispage-scrollspy.js?v=1ca1b5d1"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -128,7 +128,7 @@
 <section id="bvalcalc-to-sf2-format">
 <h2>Bvalcalc to SF2 format<a class="headerlink" href="#bvalcalc-to-sf2-format" title="Link to this heading"></a></h2>
 <p>First, assuming you have a B-map from <strong>Bvalcalc</strong> you’ll need to get the B-values for your variant positions (the SF2 grid file).</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># First add a chromosome column to your grid file for chr1 and save to a new file</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add a chromosome column to your grid file and save to a new file</span>
 sed<span class="w"> </span><span class="s1">&#39;s/^/chr1,/&#39;</span><span class="w"> </span>chr1_grid.txt<span class="w"> </span>&gt;<span class="w"> </span>chr1_positions.csv
 
 <span class="c1"># Then get their B-values from the B-map</span>

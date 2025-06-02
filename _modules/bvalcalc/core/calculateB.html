@@ -9,7 +9,7 @@
   <title>bvalcalc.core.calculateB &mdash; Bvalcalc 0.4.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=531c19e9" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=cd6166b7" />
 
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
@@ -17,7 +17,7 @@
       <script src="../../../_static/documentation_options.js?v=c87aa342"></script>
       <script src="../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
-      <script src="../../../_static/js/onthispage-scrollspy.js?v=b3e49b19"></script>
+      <script src="../../../_static/js/onthispage-scrollspy.js?v=1ca1b5d1"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -243,7 +243,7 @@
         <span class="o">+</span> <span class="n">f1</span> <span class="o">*</span> <span class="p">((</span><span class="n">t1half</span> <span class="o">-</span> <span class="n">t1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">t2</span> <span class="o">-</span> <span class="n">t1</span><span class="p">))</span> <span class="o">*</span> <span class="mf">0.0</span>
         <span class="o">+</span> <span class="n">f1</span> <span class="o">*</span> <span class="p">((</span><span class="n">t2</span> <span class="o">-</span> <span class="n">t1half</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">t2</span> <span class="o">-</span> <span class="n">t1</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">t2</span> <span class="o">+</span> <span class="n">t1half</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
         <span class="o">+</span> <span class="n">f2</span> <span class="o">*</span> <span class="p">(</span><span class="n">t2</span> <span class="o">+</span> <span class="n">t3</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
-        <span class="o">+</span> <span class="n">f3</span> <span class="o">*</span> <span class="p">(</span><span class="n">t3</span> <span class="o">+</span> <span class="n">t4</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="o">+</span> <span class="mf">0.575</span> <span class="o">*</span> <span class="n">f3</span> <span class="o">*</span> <span class="p">(</span><span class="n">t3</span> <span class="o">+</span> <span class="n">t4</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="c1"># *0.575 to account for transition from exp(-4Ush) to exp(-Ush) as sh approaches 1</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">8</span> <span class="o">*</span> <span class="n">u</span> <span class="o">*</span> <span class="n">unlinked_L</span> <span class="o">*</span> <span class="n">sum_f</span><span class="p">)</span></div>

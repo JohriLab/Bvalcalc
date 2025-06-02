@@ -216,6 +216,25 @@ a.icon.icon-home {
   }
 }
 
+.wy-menu-vertical p.caption .caption-text a {
+  font-size: inherit;
+  font-family: inherit;
+  font-weight: inherit;
+  color: inherit;    /* if you want it to match the caption color exactly */
+  text-decoration: none;
+}
+
+/* …and stretch the <a> to fill it completely */
+.wy-menu-vertical p.caption .caption-text a {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: block;
+}
+
+
 
 @media (max-height: 734px) {
   .wy-menu-vertical > p.caption:nth-last-of-type(1) {
@@ -359,3 +378,30 @@ html::-webkit-scrollbar-thumb:active {
   line-height: 1.4;
   color: #333;
 } */
+
+
+/* ───────────────────────────────────────────────────────────────── */
+/* Caption link hover/active in yellow theme                         */
+/* ───────────────────────────────────────────────────────────────── */
+
+.wy-menu-vertical p.caption .caption-text a:hover {
+  background-color: #ff8c28;
+}
+
+/* .wy-menu-vertical p.caption .caption-text a:active,
+.wy-menu-vertical p.caption .caption-text a:focus {
+  background-color: #fff !important;
+  outline: none !important;
+} */
+
+/* .wy-menu-vertical p.caption .caption-text a {
+  color: black !important; */
+/* } */
+
+/* .wy-menu-vertical p.caption .caption-text a.current {
+  background-color: #fff !important;
+  color: black !important;
+} */
+
+
+/* #cf501a  */

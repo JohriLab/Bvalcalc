@@ -115,6 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     updateBtn();
     scroller.addEventListener('scroll', updateBtn, { passive: true });
+    window.addEventListener('resize', updateBtn, { passive: true });
   }
 
   // ─────────────── Extra Footer Injection ───────────────
@@ -153,4 +154,45 @@ document.addEventListener('DOMContentLoaded', () => {
     updateFooterExtras();
     window.addEventListener('resize', updateFooterExtras);
   }
+
+  // ── Make the bottom two captions clickable ──
+  document
+    .querySelectorAll('.wy-menu-vertical > p.caption:nth-last-of-type(-n+2)')
+    .forEach((cap) => {
+      const nextUL = cap.nextElementSibling;
+      if (!nextUL || nextUL.tagName.toLowerCase() !== 'ul') return;
+
+      const childLink = nextUL.querySelector('li > a.reference.internal');
+      if (!childLink) return;
+
+      const href = childLink.getAttribute('href');
+      const span = cap.querySelector('span.caption-text');
+      if (!span) return;
+
+      const text = span.textContent.trim();
+      span.textContent = '';
+
+      const a = document.createElement('a');
+      a.href = href;
+      a.textContent = text;
+
+      // ── copy “current” if the hidden link already has it ──
+      if (childLink.classList.contains('current')) {
+        a.classList.add('current');
+      }
+
+      span.appendChild(a);
+    });
+  document
+    .querySelectorAll('.wy-menu-vertical > p.caption .caption-text a')
+    .forEach((a) => {
+      const href = a.getAttribute('href');
+      if (
+        window.location.pathname.endsWith(href) ||
+        window.location.href.endsWith(href)
+      ) {
+        // Force white background even if CSS has higher specificity
+        a.style.setProperty('background-color', '#fff', 'important');
+      }
+    });
 });
