@@ -21,7 +21,7 @@ def main():
         generateParams(known_args.generate_params, known_args.dir)
         return
     
-    if known_args.Bmap is not None: # if --generate_params
+    if known_args.Bmap is not None: # if --Bmap
         args = parseBmapArgs(remaining_args)
         flat_b, flat_chrom = positionsBstats(args, known_args.Bmap)
         if args.plot_distribution:
@@ -32,13 +32,13 @@ def main():
 
     if known_args.genome: # Run genome Bcalc
         args = parseGenomeArgs(remaining_args)
-        os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Handle Params file
+        os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Save params to global
         from bvalcalc.core.genomeBcalc import genomeBcalc
         genomeBcalc(args)
 
     elif known_args.region: # Run region Bcalc
         args = parseRegionArgs(remaining_args)
-        os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Handle Params file
+        os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Save params to global
         from bvalcalc.core.regionBcalc import regionBcalc
         output_data, block_ranges = regionBcalc(args, known_args.region)
         if getattr(args, 'plot_output', True):
@@ -46,7 +46,7 @@ def main():
 
     elif known_args.gene: # Run gene Bcalc
         args = parseGeneArgs(remaining_args)
-        os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Handle Params file
+        os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Save params to global
         from bvalcalc.core.geneBcalc import geneBcalc
         output_data = geneBcalc(args) # Capture the output from geneBcalc
         if getattr(args, 'plot_output', False): # If the --plot_basic flag was provided, call plotB with geneBcalc's output.
@@ -54,7 +54,7 @@ def main():
 
     elif known_args.site: # Run single site Bcalc
         args = parseSiteArgs(remaining_args)
-        os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Handle Params file
+        os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Save params to global
         from bvalcalc.core.siteBcalc import siteBcalc
         siteBcalc(args)
 
