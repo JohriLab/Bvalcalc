@@ -43,7 +43,6 @@ def calculateB_linear(distance_to_element: int, length_of_element: int, params: 
             b = C + (r * length_of_element) # RECOMBINATION IN X
         elif g > 0:
             a, b = get_a_b_with_GC(C, distance_to_element, length_of_element)
-        # print(a, b, C, U)
 
         E_f1 = calculate_exponent(t1half, t2, U, a, b)
         E_f2 = calculate_exponent(t2, t3, U, a, b)
@@ -143,13 +142,23 @@ def calculate_exponent(t_start, t_end, U, a, b):
     """"
     Helper to calculate the exponent using "a" and "b"
     """
-    E1 = ((U * a) 
-            / ((1 - a) * (a - b) * (t_end - t_start))) * np.log((a + (t_end * (1 - a))) 
-            / (a + (t_start * (1 - a))))
-    E2 = -1.0 * ((U * b) 
-            / ((1 - b) * (a - b) * (t_end - t_start))) * np.log((b + ((1 - b) * t_end)) 
-            / (b + ((1 - b) * t_start)))
-    return E1 + E2 # = E
+    if a == b: # If recombination rate = 0 between the gene and the distance from the gene
+        E = U / (t_end - t_start) * (np.log((a + (1 - a) * t_end) / 
+                                    (a + (1 - a) * t_start)) / 
+                                    (1 - a) ** 2 + 
+        (a / (1 - a)) * ((1 - t_end) / 
+                     (a + (1 - a) * t_end) - 
+                    (1 - t_start) / 
+                    (a + (1 - a) * t_start)))
+        return E
+    else:
+        E1 = ((U * a) 
+                / ((1 - a) * (a - b) * (t_end - t_start))) * np.log((a + (t_end * (1 - a))) 
+                / (a + (t_start * (1 - a))))
+        E2 = -1.0 * ((U * b) 
+                / ((1 - b) * (a - b) * (t_end - t_start))) * np.log((b + ((1 - b) * t_end)) 
+                / (b + ((1 - b) * t_start)))
+        return E1 + E2 # = E
 
 def get_a_b_with_GC(C, y, l):
         with np.errstate(divide='ignore', invalid='ignore'):

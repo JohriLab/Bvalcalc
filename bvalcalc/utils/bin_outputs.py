@@ -33,7 +33,4 @@ def bin_outputs(b_values: np.ndarray,
     # record the first genomic position in each bin
     binned_positions = positions[bin_idx]
 
-    # print(len(binned_positions), len(binned_b_values))
-    # sys.exit()
-
     return binned_b_values, binned_positions
