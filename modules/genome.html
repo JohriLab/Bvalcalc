@@ -126,11 +126,11 @@
 <dl class="simple">
 <dt><strong>--chr_sizes [path/to/chr_sizes.csv]</strong></dt><dd><p>Path to a file specifying chromosome sizes in CSV format (CHR,END). If not provided, chromosome boundaries will default to the end of the last annotated gene</p>
 </dd>
-<dt><strong>--rec_map [path/to/rec_map.csv]</strong></dt><dd><p>Optional recombination (crossover) map in CSV format (CHR,START,RATE), where “RATE” is a multiplication factor for <cite>r</cite> in the parameters file. Note that recombination rates are averaged over chunks.</p>
+<dt><strong>--rec_map [path/to/rec_map.csv]</strong></dt><dd><p>Optional recombination (crossover) map in CSV format (CHR,START,RATE), where “RATE” is a multiplication factor for <code class="docutils literal notranslate"><span class="pre">r</span></code> in the parameters file. Note that recombination rates are averaged over chunks.</p>
 </dd>
-<dt><strong>--gc_map [path/to/gc_map.csv]</strong></dt><dd><p>Optional gene conversion initiation rate map in CSV format (CHR,START,RATE), where “RATE” is a multiplication factor for <cite>g</cite> in the parameters file. Note that the same map can be used for crossover and gene conversion rates, rates are averaged over chunks.</p>
+<dt><strong>--gc_map [path/to/gc_map.csv]</strong></dt><dd><p>Optional gene conversion initiation rate map in CSV format (CHR,START,RATE), where “RATE” is a multiplication factor for <code class="docutils literal notranslate"><span class="pre">g</span></code> in the parameters file. Note that the same map can be used for crossover and gene conversion rates, rates are averaged over chunks.</p>
 </dd>
-<dt><strong>--pop_change</strong></dt><dd><p>If included, compute current B under a step population size change, see the associated guide on [demography]. Note that <cite>Ncur</cite> and <cite>time_of_change</cite> should be set in the parameters file when active.</p>
+<dt><strong>--pop_change</strong></dt><dd><p>If included, compute current B under a step population size change, see the associated guide on [demography]. Note that <code class="docutils literal notranslate"><span class="pre">Ncur</span></code> and <code class="docutils literal notranslate"><span class="pre">time_of_change</span></code> should be set in the parameters file when active.</p>
 </dd>
 </dl>
 </section>
@@ -141,15 +141,16 @@
 </dd>
 <dt><strong>--out_binsize [int]</strong></dt><dd><p>Bin size to average B-values in the CSV output, required if <code class="docutils literal notranslate"><span class="pre">--out</span></code> is used.</p>
 </dd>
-<dt><strong>--gamma_dfe</strong></dt><dd><p>If included, use a gamma distribution to define the DFE (instead of fixed <cite>f0,f1,f2,f3</cite>). Note that <cite>mean</cite>, <cite>shape</cite> and <cite>proportion_synonymous</cite> should be set in the parameters file when active.</p>
+<dt><strong>--gamma_dfe</strong></dt><dd><p>If included, use a gamma distribution to define the DFE (instead of fixed <code class="docutils literal notranslate"><span class="pre">f0</span></code>, <code class="docutils literal notranslate"><span class="pre">f1</span></code>, <code class="docutils literal notranslate"><span class="pre">f2</span></code>, <code class="docutils literal notranslate"><span class="pre">f3</span></code>).
+Note that <code class="docutils literal notranslate"><span class="pre">mean</span></code>, <code class="docutils literal notranslate"><span class="pre">shape</span></code> and <code class="docutils literal notranslate"><span class="pre">proportion_synonymous</span></code> should be set in the parameters file when active.</p>
 </dd>
-<dt><strong>--prior_Bmap [path/to/prior_Bmap.csv]</strong></dt><dd><p>Optional prior B-value map (<cite>.csv</cite> format). Used to multiply the newly calculated B-values by a per-site prior (e.g. for regions under different selection parameters). Format: <cite>Chromosome,Position,Conserved,B</cite>. Note that <cite>Conserved</cite> is required for parsing but does not affect output</p>
+<dt><strong>--prior_Bmap [path/to/prior_Bmap.csv]</strong></dt><dd><p>Optional prior B-value map (<code class="docutils literal notranslate"><span class="pre">.csv</span></code> format). Used to multiply the newly calculated B-values by a per-site prior (e.g. for regions under different selection parameters). Format: <code class="docutils literal notranslate"><span class="pre">Chromosome,Position,Conserved,B</span></code>. Note that <code class="docutils literal notranslate"><span class="pre">Conserved</span></code> is required for parsing but does not affect output</p>
 </dd>
-<dt><strong>--chunk_size [int]</strong></dt><dd><p>Size of chunks to process in each B calculation (default: <cite>20000</cite>). It may be useful to increase this in large chromosomes with sparse selection for tractability, though consider how this may affect analysis in conjunction with the number of <cite>precise_chunks</cite>.</p>
+<dt><strong>--chunk_size [int]</strong></dt><dd><p>Size of chunks to process in each B calculation (default: <code class="docutils literal notranslate"><span class="pre">20000</span></code>). It may be useful to increase this in large chromosomes with sparse selection for tractability, though consider how this may affect analysis in conjunction with the number of <code class="docutils literal notranslate"><span class="pre">precise_chunks</span></code>.</p>
 </dd>
-<dt><strong>--precise_chunks [int]</strong></dt><dd><p>Number of chunks on either side of a focal chunk to calculate precisely (default: <cite>3</cite>). Increasing this beyond the default will lead to more precise results though reduces tractability, consider how this may affect analysis in conjunction with the <cite>chunk_size</cite>.</p>
+<dt><strong>--precise_chunks [int]</strong></dt><dd><p>Number of chunks on either side of a focal chunk to calculate precisely (default: <code class="docutils literal notranslate"><span class="pre">3</span></code>). Increasing this beyond the default will lead to more precise results though reduces tractability, consider how this may affect analysis in conjunction with the <code class="docutils literal notranslate"><span class="pre">chunk_size</span></code>.</p>
 </dd>
-<dt><strong>--verbose</strong></dt><dd><p>Print per-chunk processing summaries (default: False)</p>
+<dt><strong>--verbose</strong></dt><dd><p>Print per-chunk processing summaries (default: <cite>False</cite>)</p>
 </dd>
 <dt><strong>--quiet</strong></dt><dd><p>Suppress console output</p>
 </dd>

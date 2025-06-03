@@ -29,7 +29,7 @@ Note that this is different from the B-map format output of **Bvalcalc** which i
 Bvalcalc to SF2 format
 -------------------------
 
-First, assuming you have a B-map from **Bvalcalc** you'll need to get the B-values for your variant positions (the SF2 grid file).
+First, assuming you have a B-map from **Bvalcalc** you'll need to get the B-values for your variant positions (the **SF2** grid file).
 
 .. code-block:: bash
 
@@ -41,9 +41,9 @@ First, assuming you have a B-map from **Bvalcalc** you'll need to get the B-valu
         --positions chr1_positions.csv \
         --out chr1_bvalues.csv
 
-This will save the B-values for your list of chromosome 1 positions (chr1_positions.csv) to chr1_bvalues.csv. 
+This will save the B-values for the provided chromosome 1 positions to ``chr1_bvalues.csv``. 
 
-Now, using awk we can pull out positions for a single chromosome and reformat it to the SF2 B-value format
+Now, using awk we can pull out positions for a single chromosome and reformat it to the **SF2** B-value format
 
 .. code-block:: bash
 
@@ -54,7 +54,7 @@ Now, using awk we can pull out positions for a single chromosome and reformat it
     awk -F, 'BEGIN { OFS="\t" } \
      $1=="chr1" { print $2,$3 }' chr1_bvalues.csv >> chr1_bvalues.tsv
 
-Now you have chr1_bvalues.tsv ready as input to SF2!
+Now you have chr1_bvalues.tsv ready as input to **SF2**!
 
 Notes
 ------

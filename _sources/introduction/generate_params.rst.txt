@@ -11,7 +11,7 @@ Arguments
 **-\-generate_params [SPECIES]**
     Save a local copy of a population parameter file from a chosen species template.
     
-    Available species: `human`, `drosophila`, `arabidopsis`, `mouse`, `pfalciparum`, `celegans`, `selfing`
+    Available species: ``human``, ``drosophila``, ``arabidopsis``, ``mouse``, ``pfalciparum``, ``celegans``, ``selfing``
 
 **-\-dir [path/to/NewParams.py]**
     Optional path to save parameters (defaults to `./SpeciesParams.py`).
