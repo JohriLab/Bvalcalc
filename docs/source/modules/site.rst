@@ -24,12 +24,12 @@ Optional Arguments
 ------------------
 
 **-\-pop_change**
-  If included, compute current B (`Bcur`) under a step population size change, see the associated guide on [demography]. 
-  Note that `Bcur` and `time_of_change` should be set in the parameters file when active.
+  If included, compute current B (``Bcur``) under a step population size change, see the associated guide on [demography]. 
+  Note that ``Bcur`` and ``time_of_change`` should be set in the parameters file when active.
 
 **-\-gamma_dfe**
-  If included, use a gamma distribution to define the DFE (instead of fixed `f0,f1,f2,f3`). 
-  Note that `mean`, `shape` and `proportion_synonymous` should be set in the parameters file when active.
+  If included, use a gamma distribution to define the DFE (instead of fixed ``f0``, ``f1``, ``f2``, ``f3``). 
+  Note that ``mean``, ``shape`` and ``proportion_synonymous`` should be set in the parameters file when active.
 
 **-\-quiet**
   Suppress console output

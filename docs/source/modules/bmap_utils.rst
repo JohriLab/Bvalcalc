@@ -21,13 +21,13 @@ Optional Arguments
   Output path for a plot of the distribution of B across each chromosome (default: `B_distribution.png`).
   
 **-\-out [path]**
-  Path to save per-site B for variant sites in the VCF/txt file. Results are not saved if --out is not specified.
+  Path to save per-site B for variant sites in the VCF/txt file. Results are not saved if ``--out`` is not specified.
 
 **-\-out_minimum [float]**
-  Filters positions by B so that only the sites ABOVE the given threshold of B will be returned, i.e. B >= [threshold].
+  Filters positions by B so that only the sites ABOVE the given threshold of B will be returned, i.e. when B >= [out_minimum] is True.
   
 **-\-out_maximum [float]**
-  Filters positions by B so that only the sites BELOW the given threshold of B will be returned, i.e. B <= [threshold].
+  Filters positions by B so that only the sites BELOW the given threshold of B will be returned, i.e. when B <= [out_maximum] is True.
 
 **-\-quiet**
   Silence print statements.

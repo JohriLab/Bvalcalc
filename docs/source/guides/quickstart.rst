@@ -46,7 +46,7 @@ The B-value for this site should be printed in the console as just above 0.99, w
 B recovery from one element
 -----------------------------
 
-Now, let's calculate the recovery of B as a function of distance from the 5kb element so we can plot it (gene_B.png).
+Now, let's calculate the recovery of B as a function of distance from the 5kb element so we can plot it (``gene_B.png``).
 
 .. code-block:: bash
 
@@ -63,7 +63,7 @@ B in a genomic region
 
 Alright, now let's look at part of a chromosome.  
 We can use a BED file (or GFF/CSV) that specifies which genomic ranges are conserved to calculate B for a region in the genome.  
-Let's calculate B for a 1Mb region in the middle of chromosome 2R [9500000-10500000] and save it to 1Mb_B.png.
+Let's calculate B for a 1 Mb region in the middle of chromosome 2R [9500000-10500000] and save it to ``1Mb_B.png``.
 
 .. code-block:: bash
 
@@ -92,4 +92,4 @@ If you wanted to generate a complete B-map for all sites across all chromosomes 
 
 If you had run that command, you'd get a B-map! 
 
-B-maps are useful to identify highly conserved regions of the genome, as a null-model for inference, e.g. :doc:`SweepFinder2 with B-map <./sweepfinder2>`, or to select the most neutrally-evolving sites for e.g. demographic inference, see :doc:`Demographic Inferece with B-map <./demography>`.
+B-maps are useful to identify highly conserved regions of the genome, as a null-model for inference, e.g. :doc:`SweepFinder2 with B-map <./sweepfinder2>`, or to select the most neutrally-evolving sites for e.g. demographic inference, see :doc:`Demographic Inference with B-map <./demography>`.
