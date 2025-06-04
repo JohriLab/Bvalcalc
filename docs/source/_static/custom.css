@@ -255,7 +255,7 @@ a.icon.icon-home {
   padding-bottom: 0 !important;
 }
 
-@media (max-width: 770px) {
+@media (max-width: 768px) {
   /* By default on narrow screens, hide the sidebar unless the content-wrap has .shift */
   body:not(:has(.wy-nav-content-wrap.shift)) .wy-nav-side {
     display: none !important;
@@ -264,6 +264,9 @@ a.icon.icon-home {
   /* Once .wy-nav-content-wrap gains the .shift class, reveal it again */
   body:has(.wy-nav-content-wrap.shift) .wy-nav-side {
     display: block !important;
+  }
+  #bottom-left-protector {
+    display: none;
   }
 }
 
@@ -355,7 +358,7 @@ html::-webkit-scrollbar-thumb:active {
 }
 
 /* hide on taller screens */
-@media (min-height: 720px), (max-width: 770px) {
+@media (min-height: 720px) {
   .scroll-to-bottom-btn {
     display: none;
   }
@@ -416,4 +419,14 @@ html::-webkit-scrollbar-thumb:active {
   background-color: #FFC30B;
   pointer-events: none; /* so clicks still go through to nav below */
   z-index: 9999;      /* high enough that the hover-URL sits on top of it */
+}
+
+
+/* ============================================= */
+/* Re-add scrolling on the left navbar now that sticky-navigation is False
+/* ============================================= */
+
+.wy-nav-side .wy-side-scroll {
+  max-height: 100vh;
+  overflow-y: auto;
 }
