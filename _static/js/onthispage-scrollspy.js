@@ -183,6 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       span.appendChild(a);
     });
+
   document
     .querySelectorAll('.wy-menu-vertical > p.caption .caption-text a')
     .forEach((a) => {
@@ -199,4 +200,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const protector = document.createElement('div');
   protector.id = 'bottom-left-protector';
   document.body.appendChild(protector);
+
+  // …your existing code…
 });
