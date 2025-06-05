@@ -39,6 +39,8 @@ def calculateB_linear(distance_to_element: int, length_of_element: int, params: 
         r, u, g, k, t1, t1half, t2, t3, t4, f1, f2, f3, f0 = params["r"], params["u"], params["g"], params["k"], params["t1"], params["t1half"], params["t2"], params["t3"], params["t4"], params["f1"], params["f2"], params["f3"], params["f0"]
         C = (1.0 - np.exp(-2.0 * r * distance_to_element)) / 2.0 # cM
         U = length_of_element * u
+        # print("Haii", length_of_element, u)
+        # sys.exit()
         if g == 0:
             a = C # RECOMBINATION IN Y
             b = C + (r * length_of_element) # RECOMBINATION IN X
@@ -48,6 +50,7 @@ def calculateB_linear(distance_to_element: int, length_of_element: int, params: 
         E_f1 = calculate_exponent(t1half, t2, U, a, b)
         E_f2 = calculate_exponent(t2, t3, U, a, b)
         E_f3 = calculate_exponent(t3, t4, U, a, b)
+
 
         E_bar = ( # Sum over the DFE
             f0 * 0.0
@@ -84,7 +87,7 @@ def calculateB_recmap(distance_to_element, length_of_element,
             local_g = (gc_lengths + gc_distances)/(length_of_element + distance_to_element) * g
         else:
             local_g = g
-            
+        
         C = (1.0 - np.exp(-2.0 * r * rec_adjusted_distance_to_element)) / 2.0 # cM
         U = length_of_element * u
         if g == 0:
@@ -153,6 +156,14 @@ def calculate_exponent(t_start, t_end, U, a, b):
     """"
     Helper to calculate the exponent using "a" and "b"
     """
+    print("E")
+    a = np.asarray(a)
+    b = np.asarray(b)
+    U = np.asarray(U)
+    if U.size == 0: 
+        return 0# If e.g. f1 proportion is 0, so this is called but  bin is 
+    print(t_start, t_end, np.size(a))
+    print("D")
     E1 = ((U * a) 
             / ((1 - a) * (a - b) * (t_end - t_start))) * np.log((a + (t_end * (1 - a))) 
             / (a + (t_start * (1 - a))))
@@ -161,18 +172,28 @@ def calculate_exponent(t_start, t_end, U, a, b):
             / (b + ((1 - b) * t_start)))
 
     E = E1 + E2
-    rec_0_mask = (b == a) # Get mask for where recombination rate = 0 between gene and distance from gene
-    
-    if rec_0_mask.any(): # If True for any element in the array
-        E_limit = (1 / (t_end - t_start)) * ( # Calculate exponent with 0 recombination between gene and site, avoiding limits
-            np.log((a + (1 - a) * t_end) 
-                   / (a + (1 - a) * t_start)) / (1 - a) ** 2
-            + (a / (1 - a)) * (
-                (1 - t_end) / (a + (1 - a) * t_end)
-                - (1 - t_start) / (a + (1 - a) * t_start)
-            )
-        )
-        E[rec_0_mask] = U[rec_0_mask] * E_limit  # Get corresponding U for the numerator and plug back into E array to replace nan's
+
+    rec_0_mask = np.isclose(a, b)  # Get mask for where recombination rate = 0 within the gene
+    if rec_0_mask.any(): # 4a) If a_arr is scalar (0‐d), compute limit once as scalar
+        if a.ndim == 0:
+            limit_factor = (1 / (t_end - t_start)) * ( # Calculate exponent with 0 recombination between gene and site, avoiding limits
+                np.log((a + (1 - a) * t_end) 
+                       / (a + (1 - a) * t_start)) / (1 - a) ** 2
+                + (a / (1 - a)) * (
+                    (1 - t_end) / (a + (1 - a) * t_end)
+                    - (1 - t_start) / (a + (1 - a) * t_start)))
+            # Broadcast scalar limit_factor to all masked positions
+            E[rec_0_mask] = U[rec_0_mask] * limit_factor  # Get corresponding U for the numerator and plug back into E array to replace nan's
+
+        else: # 4b) If a_arr is array, compute limit for each masked element
+            ae = a[rec_0_mask]  # array of a_i where a_i ≈ b_i
+            limit_factor = (1 / (t_end - t_start)) * ( # Calculate exponent with 0 recombination between gene and site, avoiding limits
+                np.log((ae + (1 - ae) * t_end) 
+                       / (ae + (1 - ae) * t_start)) / (1 - ae) ** 2
+                + (ae / (1 - ae)) * (
+                    (1 - t_end) / (ae + (1 - ae) * t_end)
+                    - (1 - t_start) / (ae + (1 - ae) * t_start)))  # (limit_factor here is an array of length ae)
+            E[rec_0_mask] = U[rec_0_mask] * limit_factor  # Get corresponding U for the numerator and plug back into E array to replace nan's
 
     return E
 
