@@ -109,6 +109,17 @@ def calculateB_recmap(distance_to_element, length_of_element,
         
     return np.where(length_of_element == 0, 1.0, B)
 
+def integrate_unlinked_B(f, t_a, t_b, u, unlinked_L):
+    """
+    Gets B for uniform DFE from t_a to t_b (e.g. t_a=0.01 to t_b=0.5) with frequency f 
+    For example, 30% of the DFE is f3 so f = 0.3, and t_a = 0.0025 and t_b = 0.5 (s = -1, h = 0.5). 
+    """
+    integrand = lambda t: np.exp(-8 * u * unlinked_L * f * t / (1 + t)**2)
+    integral_f, _ = quad(integrand, t_a, t_b)
+    B_f = integral_f / (t_b - t_a)
+
+    return B_f
+
 def calculateB_unlinked(unlinked_L: int, params: dict | None = None):
     """
     Calculate B due to purifying selection at unlinked sites (numerical integration over DFE).
@@ -126,20 +137,11 @@ def calculateB_unlinked(unlinked_L: int, params: dict | None = None):
 
     u, t1, t1half, t2, t3, t4, f0, f1, f2, f3 = params["u"], params["t1"], params["t1half"], params["t2"], params["t3"], params["t4"], params["f0"], params["f1"], params["f2"], params["f3"]
 
-    def integrate_unlinked_B(f, t_a, t_b):
-        """
-        Gets B for uniform DFE from t_a to t_b (e.g. t_a=0.01 to t_b=0.5) with frequency f 
-        For example, 30% of the DFE is f3 so f = 0.3, and t_a = 0.0025 and t_b = 0.5 (s = -1, h = 0.5). 
-        """
-        integrand = lambda t: np.exp(-8 * u * unlinked_L * f3 * t / (1 + t)**2)
-        integral_f, _ = quad(integrand, t_a, t_b)
-        B_f = integral_f / (t_b - t_a)
+    f1_above_cutoff = f1 * ((t1half - t1) / (t2 - t1))
 
-        return B_f
-
-    B_from_f1 = integrate_unlinked_B(f1, t1half, t2)
-    B_from_f2 = integrate_unlinked_B(f2, t2, t3)
-    B_from_f3 = integrate_unlinked_B(f3, t3, t4)
+    B_from_f1 = integrate_unlinked_B(f1_above_cutoff, t1half, t2, u, unlinked_L)
+    B_from_f2 = integrate_unlinked_B(f2, t2, t3, u, unlinked_L)
+    B_from_f3 = integrate_unlinked_B(f3, t3, t4, u, unlinked_L)
 
     return B_from_f1 * B_from_f2 * B_from_f3
 
