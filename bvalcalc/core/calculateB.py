@@ -155,9 +155,9 @@ def calculate_exponent(t_start, t_end, U, a, b):
     Helper to calculate the exponent using "a" and "b"
     """
     a, b, U = np.asarray(a), np.asarray(b), np.asarray(U)
-    if U.size == 0: 
-        return 0# If e.g. f1 proportion is 0, so this is called but  bin is 
-    print(t_start, t_end, np.size(a))
+
+    if U.size == 0: return 0 # If e.g. f1 proportion is 0, no need to calculate exponent
+    
     E1 = ((U * a) 
             / ((1 - a) * (a - b) * (t_end - t_start))) * np.log((a + (t_end * (1 - a))) 
             / (a + (t_start * (1 - a))))
@@ -170,23 +170,22 @@ def calculate_exponent(t_start, t_end, U, a, b):
     rec_0_mask = np.isclose(a, b)  # Get mask for where recombination rate = 0 within the gene
     if rec_0_mask.any(): # 4a) If a_arr is scalar (0‐d), compute limit once as scalar
         if a.ndim == 0:
-            limit_factor = (1 / (t_end - t_start)) * ( # Calculate exponent with 0 recombination between gene and site, avoiding limits
+            limit_factor = (1 / ((t_end - t_start)*(1-a)**2)) * ( # Calculate exponent with 0 recombination between gene and site, avoiding limits
                 np.log((a + (1 - a) * t_end) 
-                       / (a + (1 - a) * t_start)) / (1 - a) ** 2
-                + (a / (1 - a)) * (
-                    (1 - t_end) / (a + (1 - a) * t_end)
-                    - (1 - t_start) / (a + (1 - a) * t_start)))
+                       / (a + (1 - a) * t_start))
+                + a / (a + (1 - a) * t_end)
+                - a / (a + (1 - a) * t_start))
             # Broadcast scalar limit_factor to all masked positions
             E[rec_0_mask] = U[rec_0_mask] * limit_factor  # Get corresponding U for the numerator and plug back into E array to replace nan's
 
         else: # 4b) If a_arr is array, compute limit for each masked element
             ae = a[rec_0_mask]  # array of a_i where a_i ≈ b_i
-            limit_factor = (1 / (t_end - t_start)) * ( # Calculate exponent with 0 recombination between gene and site, avoiding limits
+            limit_factor = (1 / ((t_end - t_start)*(1-ae)**2)) * ( # Calculate exponent with 0 recombination between gene and site, avoiding limits
                 np.log((ae + (1 - ae) * t_end) 
-                       / (ae + (1 - ae) * t_start)) / (1 - ae) ** 2
-                + (ae / (1 - ae)) * (
-                    (1 - t_end) / (ae + (1 - ae) * t_end)
-                    - (1 - t_start) / (ae + (1 - ae) * t_start)))  # (limit_factor here is an array of length ae)
+                       / (ae + (1 - ae) * t_start))
+                + ae / (ae + (1 - ae) * t_end)
+                - ae / (ae + (1 - ae) * t_start))
+            # Match array of limit_factor to corresponding positions in E (where rec_0_mask has True);'l;'l''
             E[rec_0_mask] = U[rec_0_mask] * limit_factor  # Get corresponding U for the numerator and plug back into E array to replace nan's
 
     return E
