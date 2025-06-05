@@ -113,6 +113,7 @@ def integrate_unlinked_B(f, t_a, t_b, u, unlinked_L):
     """
     Gets B for uniform DFE from t_a to t_b (e.g. t_a=0.01 to t_b=0.5) with frequency f 
     For example, 30% of the DFE is f3 so f = 0.3, and t_a = 0.0025 and t_b = 0.5 (s = -1, h = 0.5). 
+    unlinked_L is the cumulative count of selected sites in unlinked regions.
     """
     integrand = lambda t: np.exp(-8 * u * unlinked_L * f * t / (1 + t)**2)
     integral_f, _ = quad(integrand, t_a, t_b)
@@ -152,23 +153,28 @@ def calculate_exponent(t_start, t_end, U, a, b):
     """"
     Helper to calculate the exponent using "a" and "b"
     """
-    if a == b: # If recombination rate = 0 between the gene and the distance from the gene
-        E = U / (t_end - t_start) * (np.log((a + (1 - a) * t_end) / 
-                                    (a + (1 - a) * t_start)) / 
-                                    (1 - a) ** 2 + 
-        (a / (1 - a)) * ((1 - t_end) / 
-                     (a + (1 - a) * t_end) - 
-                    (1 - t_start) / 
-                    (a + (1 - a) * t_start)))
-        return E
-    else:
-        E1 = ((U * a) 
-                / ((1 - a) * (a - b) * (t_end - t_start))) * np.log((a + (t_end * (1 - a))) 
-                / (a + (t_start * (1 - a))))
-        E2 = -1.0 * ((U * b) 
-                / ((1 - b) * (a - b) * (t_end - t_start))) * np.log((b + ((1 - b) * t_end)) 
-                / (b + ((1 - b) * t_start)))
-        return E1 + E2 # = E
+    E1 = ((U * a) 
+            / ((1 - a) * (a - b) * (t_end - t_start))) * np.log((a + (t_end * (1 - a))) 
+            / (a + (t_start * (1 - a))))
+    E2 = -1.0 * ((U * b) 
+            / ((1 - b) * (a - b) * (t_end - t_start))) * np.log((b + ((1 - b) * t_end)) 
+            / (b + ((1 - b) * t_start)))
+
+    E = E1 + E2
+    rec_0_mask = (b == a) # Get mask for where recombination rate = 0 between gene and distance from gene
+    
+    if rec_0_mask.any(): # If True for any element in the array
+        E_limit = (1 / (t_end - t_start)) * ( # Calculate exponent with 0 recombination between gene and site, avoiding limits
+            np.log((a + (1 - a) * t_end) 
+                   / (a + (1 - a) * t_start)) / (1 - a) ** 2
+            + (a / (1 - a)) * (
+                (1 - t_end) / (a + (1 - a) * t_end)
+                - (1 - t_start) / (a + (1 - a) * t_start)
+            )
+        )
+        E[rec_0_mask] = U[rec_0_mask] * E_limit  # Get corresponding U for the numerator and plug back into E array to replace nan's
+
+    return E
 
 def get_a_b_with_GC(C, y, l):
         with np.errstate(divide='ignore', invalid='ignore'):
