@@ -39,8 +39,6 @@ def calculateB_linear(distance_to_element: int, length_of_element: int, params: 
         r, u, g, k, t1, t1half, t2, t3, t4, f1, f2, f3, f0 = params["r"], params["u"], params["g"], params["k"], params["t1"], params["t1half"], params["t2"], params["t3"], params["t4"], params["f1"], params["f2"], params["f3"], params["f0"]
         C = (1.0 - np.exp(-2.0 * r * distance_to_element)) / 2.0 # cM
         U = length_of_element * u
-        # print("Haii", length_of_element, u)
-        # sys.exit()
         if g == 0:
             a = C # RECOMBINATION IN Y
             b = C + (r * length_of_element) # RECOMBINATION IN X
@@ -156,14 +154,10 @@ def calculate_exponent(t_start, t_end, U, a, b):
     """"
     Helper to calculate the exponent using "a" and "b"
     """
-    print("E")
-    a = np.asarray(a)
-    b = np.asarray(b)
-    U = np.asarray(U)
+    a, b, U = np.asarray(a), np.asarray(b), np.asarray(U)
     if U.size == 0: 
         return 0# If e.g. f1 proportion is 0, so this is called but  bin is 
     print(t_start, t_end, np.size(a))
-    print("D")
     E1 = ((U * a) 
             / ((1 - a) * (a - b) * (t_end - t_start))) * np.log((a + (t_end * (1 - a))) 
             / (a + (t_start * (1 - a))))
