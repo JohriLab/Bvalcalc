@@ -65,7 +65,7 @@ def calc_B_in_genes(
         elif rec_rate_per_chunk is not None and gc_rate_per_chunk is not None:
             focal_block_reclength = masked_rec_lengths[gene_idx]
             focal_block_gclength = masked_gc_lengths[gene_idx]
-
+            # Fix needed here for RuntimeWarning: invalid value encountered in scalar divide
             rec_scale = focal_block_reclength / focal_block_physlength
             gc_scale = focal_block_gclength / focal_block_physlength
 

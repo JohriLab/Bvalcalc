@@ -15,6 +15,7 @@ def bin_outputs(b_values: np.ndarray,
         The first position in each bin (i.e. positions[0], positions[binsize], …).
     """
     if b_values.shape[0] != positions.shape[0]:
+        print("Shapes", b_values.shape[0], positions.shape[0])
         raise ValueError("`b_values` and `positions` must be the same length")
 
     N = b_values.shape[0]

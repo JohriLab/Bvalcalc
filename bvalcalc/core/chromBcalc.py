@@ -16,7 +16,10 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
     #Arguments specific to regionBcalc
     if caller == "regionBcalc":
         calc_start, calc_end = calc_start, calc_end
-        chr_size = None
+        if calc_end > blockend[-1]:
+            chr_size = calc_end
+        else:
+            chr_size = None
 
     if not args.quiet: 
         print(f"====== P A R A M E T E R S =========================")
