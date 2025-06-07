@@ -77,22 +77,33 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
     if verbose: print(f"====== R E S U L T S == P E R == C H U N K =========")
     elif not quiet: print(f"To print per-chunk summaries, add --verbose.")
 
-    with ThreadPoolExecutor() as executor:
-        futures = {
-            executor.submit(process_single_chunk, chunk_idx,
-                            chunk_size, blockstart, blockend, chr_start, chr_size, calc_start,
-                            calc_end, num_chunks, precise_chunks, lperchunk, b_values,
-                            rec_rate_per_chunk, gc_rate_per_chunk, quiet, verbose): chunk_idx
-            for chunk_idx in calc_chunks
-        }
-        if not quiet and not verbose:
-            completed = 0 # Print progress
-            for future in as_completed(futures):
-                completed += 1
-                progress = int((completed / len(calc_chunks)) * 100)
-                sys.stdout.write(f"\rProgress: {progress}% ({completed}/{len(calc_chunks)} chunks [{chunk_size}])")
-                sys.stdout.flush()
-            print()  # Move to the next line after progress printing
+    import gc
+    BATCH_SIZE = 500
+    total_chunks = len(calc_chunks)
+    completed = 0
+
+    for batch_start in range(0, total_chunks, BATCH_SIZE):
+        batch = calc_chunks[batch_start : batch_start + BATCH_SIZE]
+        with ThreadPoolExecutor() as executor:
+            futures = {
+                executor.submit(process_single_chunk, chunk_idx,
+                                chunk_size, blockstart, blockend, chr_start, chr_size, calc_start,
+                                calc_end, num_chunks, precise_chunks, lperchunk, b_values,
+                                rec_rate_per_chunk, gc_rate_per_chunk, quiet, verbose): chunk_idx
+                for chunk_idx in batch
+            }
+            if not quiet and not verbose:
+                for future in as_completed(futures):
+                    completed += 1
+                    progress = int((completed / total_chunks) * 100)
+                    sys.stdout.write(f"\rProgress: {progress}% ({completed}/{total_chunks} chunks [{chunk_size}])")
+                    sys.stdout.flush()
+                # After batch is done, cleanup
+                del futures
+                gc.collect()
+
+    print()  # Move to the next line after progress printing
+
 
     b_values = b_values[calc_start:(calc_end+1)] # Trim b_values array to only calculated region
     b_values = b_values * unlinked_B
