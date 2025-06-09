@@ -61,7 +61,7 @@ def test_cli_gene_gcparams(tmp_path):
     assert plot_path.exists(), f"Expected plot at {plot_path}, but not found"
 
 def test_cli_genome_basic(tmp_path):
-    # python -m bvalcalc.cli --genome --pop_params tests/testparams/nogcBasicParams.py --bedgff_path tests/testfiles/200kb_slimtest.csv --chr_sizes examples/test_sizes.txt --out <tmp>/200kb_dfe5.bvals --out_binsize 1
+    # poetry run bvalcalc --genome --pop_params tests/testparams/nogcBasicParams.py --bedgff_path tests/testfiles/200kb_slimtest.csv --chr_sizes examples/test_sizes.txt
     params         = Path(__file__).parents[1] / "tests" / "testparams" / "nogcBasicParams.py"
     bed_path       = Path(__file__).parents[1] / "tests" / "testfiles" / "200kb_slimtest.csv"
     chr_sizes_path = Path(__file__).parents[1] / "examples" / "test_sizes.txt"

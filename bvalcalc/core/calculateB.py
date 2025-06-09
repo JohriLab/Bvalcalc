@@ -45,11 +45,9 @@ def calculateB_linear(distance_to_element: int, length_of_element: int, params: 
         elif g > 0:
             a, b = get_a_b_with_GC(C, distance_to_element, length_of_element)
 
-        print("HAi", t1half, t2, U, a, b)
         E_f1 = calculate_exponent(t1half, t2, U, a, b)
         E_f2 = calculate_exponent(t2, t3, U, a, b)
         E_f3 = calculate_exponent(t3, t4, U, a, b)
-
 
         E_bar = ( # Sum over the DFE
             f0 * 0.0
