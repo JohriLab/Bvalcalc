@@ -40,9 +40,9 @@ def main():
         args = parseRegionArgs(remaining_args)
         os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Save params to global
         from bvalcalc.core.regionBcalc import regionBcalc
-        output_data, block_ranges = regionBcalc(args, known_args.region)
+        output_data, block_ranges, rec_rate_per_chunk = regionBcalc(args, known_args.region)
         if getattr(args, 'plot_output', True):
-            plotB(b_values_input=output_data, caller="chromosome", output_path=args.plot_output, quiet=args.quiet, gene_ranges=block_ranges, neutral_only=args.neutral_only)
+            plotB(b_values_input=output_data, caller="chromosome", output_path=args.plot_output, quiet=args.quiet, gene_ranges=block_ranges, neutral_only=args.neutral_only, rec_rates=rec_rate_per_chunk)
 
     elif known_args.gene: # Run gene Bcalc
         args = parseGeneArgs(remaining_args)

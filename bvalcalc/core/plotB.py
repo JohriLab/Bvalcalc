@@ -4,7 +4,7 @@ import matplotlib.ticker as ticker
 import numpy as np
 from matplotlib.collections import LineCollection
 
-def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_only=False):
+def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_only=False, rec_rates=None):
     if not quiet: 
         print('====== P L O T T I N G . . . =======================')
 
@@ -57,7 +57,6 @@ def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_
 
             if len(x) > 0:
                 ax.set_xlim(x.min() - 1, x.max())
-
         else:
             x = positions
             y = b_vals
@@ -89,6 +88,7 @@ def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_
 
     ax.tick_params(axis='both', which='major', labelsize=10)
 
+    print("gotye, lets turn em purple")  
     if gene_ranges is not None and len(gene_ranges) > 0:
         ymin, ymax = ax.get_ylim()
         bar_y = ymin - (ymax - ymin) * 0.05

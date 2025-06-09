@@ -155,6 +155,6 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
             print("No output CSV requested; skipping save.")
 
     if caller == "regionBcalc":
-        return output_data, block_ranges
+        return output_data, block_ranges, rec_rate_per_chunk
     else: #caller should be genomeBcalc
         return
