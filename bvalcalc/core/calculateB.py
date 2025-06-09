@@ -45,6 +45,7 @@ def calculateB_linear(distance_to_element: int, length_of_element: int, params: 
         elif g > 0:
             a, b = get_a_b_with_GC(C, distance_to_element, length_of_element)
 
+        print("HAi", t1half, t2, U, a, b)
         E_f1 = calculate_exponent(t1half, t2, U, a, b)
         E_f2 = calculate_exponent(t2, t3, U, a, b)
         E_f3 = calculate_exponent(t3, t4, U, a, b)
@@ -165,7 +166,7 @@ def calculate_exponent(t_start, t_end, U, a, b):
             / ((1 - b) * (a - b) * (t_end - t_start))) * np.log((b + ((1 - b) * t_end)) 
             / (b + ((1 - b) * t_start)))
 
-    E = E1 + E2
+    E = np.asarray(E1 + E2)
 
     rec_0_mask = np.isclose(a, b)  # Get mask for where recombination rate = 0 within the gene
     if rec_0_mask.any(): # 4a) If a_arr is scalar (0‐d), compute limit once as scalar

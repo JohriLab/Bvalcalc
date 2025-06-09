@@ -24,7 +24,7 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
     if not args.quiet: 
         print(f"====== P A R A M E T E R S =========================")
         print(f"BED/GFF file for regions under selection: {file_path}")
-        if chr_size is not None: print(f"Last position in chromosome: {calc_end}")
+        if chr_size is not None: print(f"Last position in chromosome {chromosome}: {calc_end}")
         print(f"Size of chunks to calculate B in per iteration: {chunk_size}bp")
         print(f"Number of adjacent chunks to calculate B precisely for: {precise_chunks}")
 
@@ -32,10 +32,10 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
         raise ValueError(f"chr_size provided is less than gene position for chromosome {chromosome}")
     if chr_size is None: # Default chr_size to last value in blockend if not given
         if len(blockend) == 0 and caller != "regionBcalc":
-            raise ValueError("chr_size was not provided and gene position ends not computed. Check BED/GFF input, and specify chr_size if needed")
+            raise ValueError("chr_size was not provided for chromosome: {chromosome} and gene position ends not computed. Check BED/GFF input, and specify chr_size if needed")
         chr_size = blockend[-1]
         if calc_end is None and not args.quiet:
-            print(f"No --chr_size provided. Using last position in BED/GFF: {chr_size}")
+            print(f"No --chr_size provided for chromosome: {chromosome}. Using last position in BED/GFF: {chr_size}")
     if calc_start is None:
         calc_start = 1
     if calc_end is None:
@@ -96,7 +96,7 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
                 for future in as_completed(futures):
                     completed += 1
                     progress = int((completed / total_chunks) * 100)
-                    sys.stdout.write(f"\rProgress: {progress}% ({completed}/{total_chunks} chunks [{chunk_size}])")
+                    sys.stdout.write(f"\rProgress ({chromosome}): {progress}% ({completed}/{total_chunks} chunks [{chunk_size}])")
                     sys.stdout.flush()
                 # After batch is done, cleanup
                 del futures
