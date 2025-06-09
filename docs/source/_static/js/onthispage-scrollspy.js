@@ -137,8 +137,8 @@ document.addEventListener('DOMContentLoaded', () => {
           from <a href="https://readthedocs.org/" target="_blank" rel="noopener noreferrer">Read the Docs</a> <br/>
         </div>
         <a href="https://test.pypi.org/project/bvalcalc/" target="_blank" rel="noopener noreferrer">PyPI</a> | 
-        <a href="https://github.com/JohriLab/BvalueCalculator/issues" target="_blank" rel="noopener noreferrer">Report a bug</a> | 
-        <a href="https://github.com/JohriLab/BvalueCalculator" target="_blank" rel="noopener noreferrer">Source code</a> 
+        <a href="https://github.com/JohriLab/Bvalcalc/issues" target="_blank" rel="noopener noreferrer">Report a bug</a> | 
+        <a href="https://github.com/JohriLab/B" target="_blank" rel="noopener noreferrer">Source code</a> 
       </div>
     `;
 
