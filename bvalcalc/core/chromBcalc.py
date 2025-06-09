@@ -78,7 +78,7 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
     elif not quiet: print(f"To print per-chunk summaries, add --verbose.")
 
     import gc
-    BATCH_SIZE = 500
+    BATCH_SIZE = args.chunk_batch_size
     total_chunks = len(calc_chunks)
     completed = 0
 
