@@ -54,7 +54,7 @@ def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start,
             np.nan)
         flat_rec_distances = rec_distances[flanking_mask]
         flat_rec_lengths   = np.repeat(rec_lengths, flanking_mask.sum(axis=1))
-        nonzero_rec_mask = flat_rec_lengths != 0 # Remove genes of length 0
+        nonzero_rec_mask = flat_lengths != 0 # Remove genes of length 0
         flat_rec_distances = flat_rec_distances[nonzero_rec_mask]
         flat_rec_lengths   = flat_rec_lengths[nonzero_rec_mask]
 
@@ -68,7 +68,7 @@ def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start,
             np.nan)
         flat_gc_distances = gc_distances[flanking_mask]
         flat_gc_lengths   = np.repeat(gc_lengths, flanking_mask.sum(axis=1))
-        nonzero_gc_mask = flat_gc_lengths != 0 # Remove genes of length 0
+        nonzero_gc_mask = flat_lengths != 0 # Remove genes of length 0
         flat_gc_distances = flat_gc_distances[nonzero_gc_mask]
         flat_gc_lengths   = flat_gc_lengths[nonzero_gc_mask]
 
