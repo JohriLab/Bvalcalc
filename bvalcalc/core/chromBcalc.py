@@ -99,11 +99,9 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
                     sys.stdout.write(f"\rProgress ({chromosome}): {progress}% ({completed}/{total_chunks} chunks [{chunk_size}])")
                     sys.stdout.flush()
                 # After batch is done, cleanup
+                print()  # Move to the next line after progress printing
                 del futures
                 gc.collect()
-
-    print()  # Move to the next line after progress printing
-
 
     b_values = b_values[calc_start:(calc_end+1)] # Trim b_values array to only calculated region
     b_values = b_values * unlinked_B
