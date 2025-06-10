@@ -132,7 +132,7 @@ def test_cli_genome_with_recmap_plot(tmp_path):
     assert output_path.stat().st_size > 0, "Output file is empty"
 
 def test_cli_mean_b_value(tmp_path):
-    # python -m bvalcalc.cli --region chr_200kb:1514-62456 --pop_params tests/testparams/nogcBasicParams.py --bedgff_path tests/testfiles/200kb_slimtest.csv --plot_output tests/testout/genome_test.png 
+    # poetry run bvalcalc --region chr_200kb:1514-62456 --pop_params tests/testparams/nogcBasicParams.py --bedgff_path tests/testfiles/200kb_slimtest.csv --plot_output tests/testout/genome_test.png 
     params = "tests/testparams/nogcBasicParams.py"
     cmd = BASE_CMD + [
         "--region", "chr_200kb:1514-62456",
