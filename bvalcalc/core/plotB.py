@@ -82,7 +82,10 @@ def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_
     ax.set_ylabel('Expected diversity relative to neutral evolution (B)', fontsize=13)
     if caller == "chromosome":
         ax.set_title(f'B for chromosome {chrom} ({positions.min()}–{positions.max()} bp)', fontsize=15, fontweight='bold')
-        ax.set_xlabel('Chromosomal position (bp)', fontsize=13, labelpad=40)
+        if rec_rates is not None:
+            ax.set_xlabel('Chromosomal position (bp)', fontsize=13, labelpad=40)
+        else:
+            ax.set_xlabel('Chromosomal position (bp)', fontsize=13)
     else:
         ax.set_xlabel('Distance from single selected element of size', fontsize=13)
         ax.set_title('B recovery from single element', fontsize=15, fontweight='bold')
