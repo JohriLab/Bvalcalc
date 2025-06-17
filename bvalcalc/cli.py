@@ -5,6 +5,7 @@ import time
 import argparse
 from bvalcalc.utils.parseArgs import parse_args, parseGenomeArgs, parseRegionArgs, parseGeneArgs, parseSiteArgs, parseBmapArgs
 from bvalcalc.core.plotB import plotB
+from bvalcalc.core.deprecated.plotB_figures import plotB_figures
 from bvalcalc.utils.generateParams import SPECIES, generateParams, check_generate_params_args
 from bvalcalc.core.positionsBstats import positionsBstats
 from bvalcalc.core.plotChromB import plotChromB
@@ -50,7 +51,7 @@ def main():
         from bvalcalc.core.geneBcalc import geneBcalc
         output_data = geneBcalc(args) # Capture the output from geneBcalc
         if getattr(args, 'plot_output', False): # If the --plot_basic flag was provided, call plotB with geneBcalc's output.
-            plotB(b_values_input=output_data, caller="gene", output_path=args.plot_output, quiet=args.quiet)
+            plotB_figures(b_values_input=output_data, caller="gene", output_path=args.plot_output, quiet=args.quiet)
 
     elif known_args.site: # Run single site Bcalc
         args = parseSiteArgs(remaining_args)
