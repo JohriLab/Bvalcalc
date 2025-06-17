@@ -3,6 +3,7 @@
 ##
 ## Usage: ./Bvalcalc --region --pop_params ExampleParams.py
 ##        ./Bvalcalc --genome --pop_params ExampleParams.py
+## poetry run bvalcalc --gene --pop_params tests/testparams/SelfParams_0.9S_0.5h.py
 
 ## Core parameters
 f = 0.9 # Selfing rate (F = S/(2-S); Wright's inbreeding coefficient)

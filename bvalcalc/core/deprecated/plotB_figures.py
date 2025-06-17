@@ -4,6 +4,7 @@ import matplotlib.ticker as ticker
 import numpy as np
 from matplotlib.collections import LineCollection
 from matplotlib import gridspec  # for rec rate strip
+import sys
 
 def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_only=False, rec_rates=None):
     if not quiet:
@@ -30,6 +31,7 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
     legend_name_orange = "Calculated (no GC)"
     legend_name_dot = "Observed (simulations)"
     title_name = 'B recovery from single element with gene conversion'
+    Genome = None
 
     # expand_5N_1T AKA Demography
     # poetry run bvalcalc --gene --pop_params tests/testparams/ExpandParams_5N_1T.py --pop_change --plot_output /Users/jmarsh96/Desktop/Bcalc/Figures/expand_5N_1T.png
@@ -40,7 +42,24 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
     legend_name_dot = "Observed (simulations)"
     title_name = 'B recovery from single element (5X Expansion 1N_anc generations ago)'
 
-    # Rename to reflect the actual parameter change
+    # SelfParams_0.9S_0.5h AKA Selfing
+    # poetry run bvalcalc --gene --pop_params tests/testparams/SelfParams_0.9S_0.5h.py --plot_output /Users/jmarsh96/Desktop/Bcalc/Figures/SelfParams_0.9S_0.5h.png
+    B_uncorrected = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/nogcBasicParams.B"
+    B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/40kb_f0.9_h0.5_all.pi"
+    legend_name_blue = "Calculated (with selfing)"
+    legend_name_orange = "Calculated (no selfing)"
+    legend_name_dot = "Observed (simulations)"
+    title_name = 'B recovery from single element with selfing (S = 0.9)'
+
+    # chr_200kb AKA 200kb Genome
+    # poetry run bvalcalc --region chr_200kb:1-200000 --pop_params tests/testparams/nogcBasicParams.py --bedgff_path tests/testfiles/200kb_slimtest.csv --plot_output
+    Genome = True
+    B_uncorrected = None
+    B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/200kb_all.pi"
+    legend_name_blue = "Calculated B"
+    legend_name_orange = "None"
+    legend_name_dot = "Observed (simulations)"
+    title_name = 'B for 200 kb genome with 10 selected elements'
 
     if B_uncorrected is not None: load_B_uncorrected(B_uncorrected)
     if B_observed is not None: load_B_observed(B_observed)
@@ -117,7 +136,7 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
     # Labels and title
     ax.set_ylabel('Expected diversity relative to neutral evolution (B)', fontsize=13)
     if caller == "chromosome":
-        ax.set_title(f'B for chromosome {chrom} ({positions.min()}–{positions.max()} bp)', fontsize=15, fontweight='bold')
+        ax.set_title(f'{title_name}', fontsize=15, fontweight='bold')
         if rec_rates is not None:
             ax.set_xlabel('Chromosomal position (bp)', fontsize=13, labelpad=40)
         else:
@@ -139,18 +158,23 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
                 label=legend_name_orange
             )
         # Plot B_uncorrected if provided
-    if B_observed is not None:
-        observed_data = load_B_observed(B_observed)
-        if observed_data is not None and len(observed_data) > 0:
-            ax.scatter(
-                observed_data["Distance"],
-                observed_data["B"],
-                color='black',
-                s=10,
-                alpha=0.8,
-                label=legend_name_dot#"Observed B (simulations)"
-            )
+    if Genome is True: # If plotting for --region output
+        if B_observed is not None:
+            print(f"Add code here please")
+            observed_data = load_B_observed(B_observed)
+    else:
+        if B_observed is not None:
+            observed_data = load_B_observed(B_observed)
 
+    if observed_data is not None and len(observed_data) > 0:
+        ax.scatter(
+            observed_data["Distance"],
+            observed_data["B"],
+            color='black',
+            s=10,
+            alpha=0.8,
+            label=legend_name_dot#"Observed B (simulations)"
+        )
 
     ax.tick_params(axis='both', which='major', labelsize=10)
 
@@ -255,11 +279,12 @@ def load_B_observed(file_path):
         import pandas as pd
         df = pd.DataFrame(raw)
         grouped = df.groupby("start", as_index=False)["pi"].mean()
-        grouped["Distance"] = grouped["start"] - 9999
-        grouped["pi"] = grouped["pi"] / 0.012
+        grouped["Distance"] = grouped["start"] #- 9999
+        grouped["pi"] = grouped["pi"] / 0.00631579 # for selfing, / 0.00631579, else 0.012
         grouped.rename(columns={"pi": "B"}, inplace=True)
         result = grouped[["Distance", "B"]].to_records(index=False)
         return result
     except Exception as e:
         print(f"Error reading B_uncorrected file: {file_path}")
         raise e
+    
