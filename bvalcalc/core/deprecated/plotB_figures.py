@@ -15,17 +15,30 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
     legend_name_orange = "Uncorrected B"
     legend_name_dot = "Observed B"
 
-    # nogcBasicParams
+    # nogcBasicParams AKA Normal
     # poetry run Bvalcalc --gene --pop_params ./tests/testparams/nogcBasicParams.py --plot_output /Users/jmarsh96/Desktop/Bcalc/Figures/nogcBasicParams.png
-    # B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/all.pi"
+    B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/all.pi"
+    legend_name_blue = "Calculated"
+    legend_name_dot = "Observed (simulations)"
+    title_name = 'B recovery from single element with DFE'
 
-    # gcBasicParams
+    # gcBasicParams AKA with GC
     # poetry run Bvalcalc --gene --pop_params ./tests/testparams/gcBasicParams.py --plot_output /Users/jmarsh96/Desktop/Bcalc/Figures/gcBasicParams.png
     B_uncorrected = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/nogcBasicParams.B"
     B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/40kb_gc_all.pi"
-    legend_name_blue = "Calculated B"
-    legend_name_orange = "Uncorrected B"
-    legend_name_dot = "Observed B"
+    legend_name_blue = "Calculated (with GC)"
+    legend_name_orange = "Calculated (no GC)"
+    legend_name_dot = "Observed (simulations)"
+    title_name = 'B recovery from single element with gene conversion'
+
+    # expand_5N_1T AKA Demography
+    # poetry run bvalcalc --gene --pop_params tests/testparams/ExpandParams_5N_1T.py --pop_change --plot_output /Users/jmarsh96/Desktop/Bcalc/Figures/expand_5N_1T.png
+    B_uncorrected = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/c40kb_expand_5N_1T.bvals"
+    B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/OBS_Expand_5N_1T.csv"
+    legend_name_blue = "Calculated (with demography)"
+    legend_name_orange = "Calculated (no demography)"
+    legend_name_dot = "Observed (simulations)"
+    title_name = 'B recovery from single element (5X Expansion 1N_anc generations ago)'
 
     # Rename to reflect the actual parameter change
 
@@ -80,7 +93,7 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
             print(f"Plotting {len(x)} neutral positions in {len(x_segments)} segments.")
             for xs, ys in zip(x_segments, y_segments):
                 if len(xs) > 1:
-                    ax.plot(xs, ys, color='blue', lw=1.5, alpha=0.8, label="Calculated B")
+                    ax.plot(xs, ys, color='blue', lw=1.5, alpha=0.8, label=legend_name_blue)#"Calculated B")
 
             if len(x) > 0:
                 ax.set_xlim(x.min() - 1, x.max())
@@ -92,13 +105,13 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
                 idx = np.linspace(0, len(x) - 1, max_points).astype(int)
                 x = x[idx]
                 y = y[idx]
-            ax.plot(x, y, color='blue', lw=1.5, alpha=0.8, label="Calculated B")
+            ax.plot(x, y, color='blue', lw=1.5, alpha=0.8, label=legend_name_blue)#"Calculated B")
             ax.set_xlim(x.min() - 1, x.max())
 
     elif caller == "gene":
         x = b_values_input[:, 0]
         y = b_values_input[:, 1]
-        ax.plot(x, y, color='blue', lw=1.5, alpha=0.8, label="Calculated B")
+        ax.plot(x, y, color='blue', lw=1.5, alpha=0.8, label=legend_name_blue)#"Calculated B")
         ax.set_xlim(x.min() - 1, x.max())
 
     # Labels and title
@@ -111,7 +124,7 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
             ax.set_xlabel('Chromosomal position (bp)', fontsize=13)
     else:
         ax.set_xlabel('Distance from single selected element of size 10 kb', fontsize=13)
-        ax.set_title('B recovery from single element', fontsize=15, fontweight='bold')
+        ax.set_title(title_name, fontsize=15, fontweight='bold')
 
         # Plot B_uncorrected if provided
     if B_uncorrected is not None:
@@ -123,7 +136,7 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
                 color='orange',
                 lw=1.5,
                 alpha=0.5,
-                label="Uncorrected B"
+                label=legend_name_orange
             )
         # Plot B_uncorrected if provided
     if B_observed is not None:
@@ -135,7 +148,7 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
                 color='black',
                 s=10,
                 alpha=0.8,
-                label="Observed B (simulations)"
+                label=legend_name_dot#"Observed B (simulations)"
             )
 
 
