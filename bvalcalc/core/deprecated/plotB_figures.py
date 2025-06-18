@@ -64,6 +64,7 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
     if B_uncorrected is not None: load_B_uncorrected(B_uncorrected)
     if B_observed is not None: load_B_observed(B_observed)
 
+
     # Configure fonts and styles
     mpl.rcParams['font.family'] = ['Helvetica', 'DejaVu Sans', 'Arial']
     if 'seaborn-v0_8-whitegrid' in plt.style.available:
@@ -92,6 +93,7 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
         positions = b_values_input['Position']
         b_vals = b_values_input['B']
         chrom = b_values_input['Chromosome'][0] if 'Chromosome' in b_values_input.dtype.names else 'unknown'
+
 
         if neutral_only:
             conserved = b_values_input['Conserved']
@@ -160,8 +162,25 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
         # Plot B_uncorrected if provided
     if Genome is True: # If plotting for --region output
         if B_observed is not None:
-            print(f"Add code here please")
+            print(f"Add code")
             observed_data = load_B_observed(B_observed)
+
+            # Remove observed points that fall within genic regions (based on coordinates)
+            if gene_ranges is not None and len(gene_ranges) > 0:
+                obs_x = observed_data["Distance"]
+                keep_mask = np.ones(len(obs_x), dtype=bool)
+                for _, start, end in gene_ranges:
+                    start = int(start)
+                    end = int(end) + 1  # Make the end exclusive to preserve last neutral point
+                    keep_mask &= ~((obs_x >= start + 2) & (obs_x < end - 2))
+
+                observed_data = observed_data[keep_mask]
+
+            # Optional: also remove any exact B == 0.0 points
+            observed_data = observed_data[observed_data["B"] > 0.001]
+
+
+
     else:
         if B_observed is not None:
             observed_data = load_B_observed(B_observed)
@@ -280,7 +299,7 @@ def load_B_observed(file_path):
         df = pd.DataFrame(raw)
         grouped = df.groupby("start", as_index=False)["pi"].mean()
         grouped["Distance"] = grouped["start"] #- 9999
-        grouped["pi"] = grouped["pi"] / 0.00631579 # for selfing, / 0.00631579, else 0.012
+        grouped["pi"] = grouped["pi"] / 0.012#/ 0.00631579 # for selfing, / 0.00631579, else 0.012
         grouped.rename(columns={"pi": "B"}, inplace=True)
         result = grouped[["Distance", "B"]].to_records(index=False)
         return result
