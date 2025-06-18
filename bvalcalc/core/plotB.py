@@ -124,6 +124,9 @@ def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_
         )
     )
 
+    from matplotlib.colors import LinearSegmentedColormap
+    magenta_map = LinearSegmentedColormap.from_list("custom_magenta", ["white", "#C54B8C"])
+    
     # Recombination rate strip
     if rec_rates is not None and caller == "chromosome":
         ax_rec = fig.add_subplot(gs[1], sharex=ax)
@@ -132,7 +135,7 @@ def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_
         rec_img = np.expand_dims(rec_rates, axis=0)
         min_pos = positions.min()
         extent = [min_pos, min_pos + len(rec_rates) * 20000, 0, 1]
-        ax_rec.imshow(rec_img, aspect='auto', extent=extent, cmap='Purples', origin='lower')
+        ax_rec.imshow(rec_img, aspect='auto', extent=extent, cmap=magenta_map, origin='lower', zorder=2, vmin=0, vmax=np.max(rec_rates))
         ax_rec.set_frame_on(False)
         plt.setp(ax.get_xticklabels(), visible=False)
 

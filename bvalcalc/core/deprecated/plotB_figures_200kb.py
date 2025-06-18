@@ -21,8 +21,12 @@ def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=
     # chr_200kb AKA 200kb Genome
     # poetry run bvalcalc --region chr_200kb:1-200000 --pop_params tests/testparams/nogcBasicParams.py --bedgff_path tests/testfiles/200kb_slimtest.csv --plot_output /Users/jmarsh96/Desktop/Bcalc/Figures/chr_200kb.png
     B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/200kb_all.pi"
-    B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/200kb_all_recmap.pi"
     title_name = 'B for 200 kb genome with 10 selected elements'
+
+    # chr_200kb_recmap AKA 200kb Rec Map
+    # poetry run bvalcalc --region chr_200kb:1-200000 --pop_params tests/testparams/nogcBasicParams.py --bedgff_path tests/testfiles/200kb_slimtest.csv --plot_output /Users/jmarsh96/Desktop/Bcalc/Figures/chr_200kb_recmap.png
+    # B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/200kb_recmap_all.pi"
+    # title_name = 'B for 200 kb genome with recombination map'
     Genome = True
 
     if B_uncorrected is not None:
@@ -67,14 +71,14 @@ def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=
         ax.plot(x, y, color='black', lw=1.5, alpha=1, zorder=1, label=legend_name_black)
         ax.plot(x, y, color='blue', lw=1.5, alpha=1, zorder=2, label=legend_name_blue)
         ax.set_xlim(x.min() - 1, x.max())
-        ax.set_ylim(0.5, 1.0)
+        ax.set_ylim(0.4, 1.0)
 
     elif caller == "gene":
         x = b_values_input[:, 0]
         y = b_values_input[:, 1]
         ax.plot(x, y, color='blue', lw=1.5, alpha=0.8, label=legend_name_blue)
         ax.set_xlim(x.min() - 1, x.max())
-        ax.set_ylim(0.5, 1.0)
+        ax.set_ylim(0.4, 1.0)
 
     ax.set_ylabel('Expected diversity relative to neutral evolution (B)', fontsize=13)
     if caller == "chromosome":
@@ -150,6 +154,9 @@ def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=
             )
         )
     )
+    from matplotlib.colors import LinearSegmentedColormap
+    magenta_map = LinearSegmentedColormap.from_list("custom_magenta", ["white", "#C54B8C"])
+
 
     if rec_rates is not None and caller == "chromosome":
         ax_rec = fig.add_subplot(gs[1], sharex=ax)
@@ -158,7 +165,7 @@ def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=
         rec_img = np.expand_dims(rec_rates, axis=0)
         min_pos = positions.min()
         extent = [min_pos, min_pos + len(rec_rates) * 20000, 0, 1]
-        ax_rec.imshow(rec_img, aspect='auto', extent=extent, cmap='Purples', origin='lower')
+        ax_rec.imshow(rec_img, aspect='auto', extent=extent, cmap=magenta_map, origin='lower', zorder=2, vmin=0, vmax=np.max(rec_rates))
         ax_rec.set_frame_on(False)
         plt.setp(ax.get_xticklabels(), visible=False)
 
@@ -167,7 +174,7 @@ def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=
     else:
         fig.subplots_adjust(hspace=0.01, bottom=0.12)
 
-    ax.legend(loc="lower right", bbox_to_anchor=(1, 0.1), fontsize=10, frameon=True)
+    ax.legend(loc="lower right", bbox_to_anchor=(1, 0.04), fontsize=10, frameon=True)
 
     print("Observed dot at:", observed_data)
     print("Calculated B at 19999 and 20000:", b_values_input[19997:20101])
