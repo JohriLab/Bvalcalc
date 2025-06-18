@@ -6,6 +6,7 @@ import argparse
 from bvalcalc.utils.parseArgs import parse_args, parseGenomeArgs, parseRegionArgs, parseGeneArgs, parseSiteArgs, parseBmapArgs
 from bvalcalc.core.plotB import plotB
 from bvalcalc.core.deprecated.plotB_figures import plotB_figures
+from bvalcalc.core.deprecated.plotB_figures_200kb import plotB_figures_200kb
 from bvalcalc.utils.generateParams import SPECIES, generateParams, check_generate_params_args
 from bvalcalc.core.positionsBstats import positionsBstats
 from bvalcalc.core.plotChromB import plotChromB
@@ -43,7 +44,7 @@ def main():
         from bvalcalc.core.regionBcalc import regionBcalc
         output_data, block_ranges, rec_rate_per_chunk = regionBcalc(args, known_args.region)
         if getattr(args, 'plot_output', True):
-            plotB_figures(b_values_input=output_data, caller="chromosome", output_path=args.plot_output, quiet=args.quiet, gene_ranges=block_ranges, neutral_only=args.neutral_only, rec_rates=rec_rate_per_chunk)
+            plotB_figures_200kb(b_values_input=output_data, caller="chromosome", output_path=args.plot_output, quiet=args.quiet, gene_ranges=block_ranges, neutral_only=args.neutral_only, rec_rates=rec_rate_per_chunk)
 
     elif known_args.gene: # Run gene Bcalc
         args = parseGeneArgs(remaining_args)

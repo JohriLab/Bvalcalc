@@ -6,7 +6,7 @@ from matplotlib.collections import LineCollection
 from matplotlib import gridspec  # for rec rate strip
 import sys
 
-def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_only=False, rec_rates=None):
+def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_only=False, rec_rates=None):
     if not quiet:
         print('====== P L O T T I N G . . . =======================ss')
 
@@ -66,14 +66,14 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
             y = y[idx]
         ax.plot(x, y, color='blue', lw=1.5, alpha=0.8, label=legend_name_blue)
         ax.set_xlim(x.min() - 1, x.max())
-        ax.set_ylim(0.5, 1.1)
+        ax.set_ylim(0.5, 1.0)
 
     elif caller == "gene":
         x = b_values_input[:, 0]
         y = b_values_input[:, 1]
         ax.plot(x, y, color='blue', lw=1.5, alpha=0.8, label=legend_name_blue)
         ax.set_xlim(x.min() - 1, x.max())
-        ax.set_ylim(0.5, 1.1)
+        ax.set_ylim(0.5, 1.0)
 
     ax.set_ylabel('Expected diversity relative to neutral evolution (B)', fontsize=13)
     if caller == "chromosome":
