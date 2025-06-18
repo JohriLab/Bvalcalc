@@ -5,6 +5,7 @@ import numpy as np
 from matplotlib.collections import LineCollection
 from matplotlib import gridspec  # for rec rate strip
 import sys
+from matplotlib.lines import Line2D
 
 def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_only=False, rec_rates=None):
     if not quiet:
@@ -12,16 +13,15 @@ def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=
 
     B_uncorrected = None
     B_observed = None
-    legend_name_blue = "Calculated B"
+    legend_name_blue = "Calculated B (intergenic)"
     legend_name_orange = "Uncorrected B"
-    legend_name_dot = "Observed B"
+    legend_name_dot = "Observed (simulations)"
+    legend_name_black = "Calculated B (synonymous)"
 
     # chr_200kb AKA 200kb Genome
     # poetry run bvalcalc --region chr_200kb:1-200000 --pop_params tests/testparams/nogcBasicParams.py --bedgff_path tests/testfiles/200kb_slimtest.csv --plot_output /Users/jmarsh96/Desktop/Bcalc/Figures/chr_200kb.png
     B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/200kb_all.pi"
-    legend_name_blue = "Calculated B"
-    legend_name_orange = "None"
-    legend_name_dot = "Observed (simulations)"
+    B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/200kb_all_recmap.pi"
     title_name = 'B for 200 kb genome with 10 selected elements'
     Genome = True
 
@@ -64,7 +64,8 @@ def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=
             idx = np.linspace(0, len(x) - 1, max_points).astype(int)
             x = x[idx]
             y = y[idx]
-        ax.plot(x, y, color='blue', lw=1.5, alpha=0.8, label=legend_name_blue)
+        ax.plot(x, y, color='black', lw=1.5, alpha=1, zorder=1, label=legend_name_black)
+        ax.plot(x, y, color='blue', lw=1.5, alpha=1, zorder=2, label=legend_name_blue)
         ax.set_xlim(x.min() - 1, x.max())
         ax.set_ylim(0.5, 1.0)
 
@@ -110,12 +111,13 @@ def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=
 
     if observed_data is not None and len(observed_data) > 0:
         ax.scatter(
-            observed_data["Distance"],
+            observed_data["Distance"] + 500,
             observed_data["B"],
-            color='black',
-            s=10,
-            alpha=0.8,
-            label=legend_name_dot
+            color='#f57616',
+            s=20,
+            alpha=0.9,
+            label=legend_name_dot,
+            zorder=3
         )
 
     ax.tick_params(axis='both', which='major', labelsize=10)
@@ -128,7 +130,6 @@ def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=
         segments = [((int(start), bar_y), (int(end), bar_y)) for _, start, end in gene_ranges]
         ax.add_collection(LineCollection(segments, colors='black', linewidths=30))
 
-        # Ensure x is numeric
         x = np.asarray(x, dtype=float)
         gene_mask = np.zeros_like(x, dtype=bool)
         for _, start, end in gene_ranges:
@@ -140,7 +141,7 @@ def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=
         for seg in np.split(idx, splits):
             if len(seg) > 1:
                 coords = np.column_stack((x[seg], y[seg]))
-                ax.add_collection(LineCollection([coords], colors='black', linewidths=1.5))
+                ax.add_collection(LineCollection([coords], colors='black', linewidths=1.5, label=legend_name_black if seg is splits[0] else "_nolegend_", zorder=2))
 
     ax.xaxis.set_major_formatter(
         ticker.FuncFormatter(lambda value, pos:
@@ -167,6 +168,9 @@ def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=
         fig.subplots_adjust(hspace=0.01, bottom=0.12)
 
     ax.legend(loc="lower right", bbox_to_anchor=(1, 0.1), fontsize=10, frameon=True)
+
+    print("Observed dot at:", observed_data)
+    print("Calculated B at 19999 and 20000:", b_values_input[19997:20101])
 
     plt.savefig(output_path, dpi=300)
     print(f"Plot saved to {output_path}")

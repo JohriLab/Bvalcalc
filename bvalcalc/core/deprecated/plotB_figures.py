@@ -24,21 +24,30 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
 
     # gcBasicParams AKA with GC
     # poetry run Bvalcalc --gene --pop_params ./tests/testparams/gcBasicParams.py --plot_output /Users/jmarsh96/Desktop/Bcalc/Figures/gcBasicParams.png
-    B_uncorrected = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/nogcBasicParams.B"
-    B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/40kb_gc_all.pi"
-    legend_name_blue = "Calculated (with GC)"
-    legend_name_orange = "Calculated (no GC)"
-    legend_name_dot = "Observed (simulations)"
-    title_name = 'B recovery from single element with gene conversion'
+    # B_uncorrected = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/nogcBasicParams.B"
+    # B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/40kb_gc_all.pi"
+    # legend_name_blue = "Calculated (with GC)"
+    # legend_name_orange = "Calculated (no GC)"
+    # legend_name_dot = "Observed (simulations)"
+    # title_name = 'B recovery from single element with gene conversion'
 
     # expand_5N_1T AKA Demography
     # poetry run bvalcalc --gene --pop_params tests/testparams/ExpandParams_5N_1T.py --pop_change --plot_output /Users/jmarsh96/Desktop/Bcalc/Figures/expand_5N_1T.png
-    B_uncorrected = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/c40kb_expand_5N_1T.bvals"
-    B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/OBS_Expand_5N_1T.csv"
-    legend_name_blue = "Calculated (with demography)"
-    legend_name_orange = "Calculated (no demography)"
-    legend_name_dot = "Observed (simulations)"
-    title_name = 'B recovery from single element (5X Expansion 1N_anc generations ago)'
+    # B_uncorrected = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/c40kb_expand_5N_1T.bvals"
+    # B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/OBS_Expand_5N_1T.csv"
+    # legend_name_blue = "Calculated (with demography)"
+    # legend_name_orange = "Calculated (no demography)"
+    # legend_name_dot = "Observed (simulations)"
+    # title_name = 'B recovery from single element (5X Expansion 1N_anc generations ago)'
+
+    # SelfParams_0.9S_0.5h AKA Selfing
+    # poetry run bvalcalc --gene --pop_params tests/testparams/SelfParams_0.9S_0.5h.py --plot_output /Users/jmarsh96/Desktop/Bcalc/Figures/SelfParams_0.9S_0.5h.png
+    # B_uncorrected = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/nogcBasicParams.B"
+    # B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/40kb_f0.9_h0.5_all.pi"
+    # legend_name_blue = "Calculated (with selfing)"
+    # legend_name_orange = "Calculated (no selfing)"
+    # legend_name_dot = "Observed (simulations)"
+    # title_name = 'B recovery from single element with selfing (S = 0.9)'
 
     # Rename to reflect the actual parameter change
 
@@ -93,7 +102,7 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
             print(f"Plotting {len(x)} neutral positions in {len(x_segments)} segments.")
             for xs, ys in zip(x_segments, y_segments):
                 if len(xs) > 1:
-                    ax.plot(xs, ys, color='blue', lw=1.5, alpha=0.8, label=legend_name_blue)#"Calculated B")
+                    ax.plot(xs, ys, color='blue', lw=2, zorder=1, alpha=0.8, label=legend_name_blue)#"Calculated B")
 
             if len(x) > 0:
                 ax.set_xlim(x.min() - 1, x.max())
@@ -105,13 +114,13 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
                 idx = np.linspace(0, len(x) - 1, max_points).astype(int)
                 x = x[idx]
                 y = y[idx]
-            ax.plot(x, y, color='blue', lw=1.5, alpha=0.8, label=legend_name_blue)#"Calculated B")
+            ax.plot(x, y, color='blue', lw=2, zorder=1, alpha=0.8, label=legend_name_blue)#"Calculated B")
             ax.set_xlim(x.min() - 1, x.max())
 
     elif caller == "gene":
         x = b_values_input[:, 0]
         y = b_values_input[:, 1]
-        ax.plot(x, y, color='blue', lw=1.5, alpha=0.8, label=legend_name_blue)#"Calculated B")
+        ax.plot(x, y, color='blue', lw=2, zorder=1, alpha=0.8, label=legend_name_blue)#"Calculated B")
         ax.set_xlim(x.min() - 1, x.max())
 
     # Labels and title
@@ -133,8 +142,8 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
             ax.plot(
                 uncorrected_data["Distance"],
                 uncorrected_data["B"],
-                color='orange',
-                lw=1.5,
+                color='black',
+                lw=2,
                 alpha=0.5,
                 label=legend_name_orange
             )
@@ -145,9 +154,9 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
             ax.scatter(
                 observed_data["Distance"],
                 observed_data["B"],
-                color='black',
-                s=10,
-                alpha=0.8,
+                color='#f57616',
+                s=12,
+                alpha=0.9,
                 label=legend_name_dot#"Observed B (simulations)"
             )
 
@@ -256,7 +265,7 @@ def load_B_observed(file_path):
         df = pd.DataFrame(raw)
         grouped = df.groupby("start", as_index=False)["pi"].mean()
         grouped["Distance"] = grouped["start"] - 9999
-        grouped["pi"] = grouped["pi"] / 0.012
+        grouped["pi"] = grouped["pi"] / 0.012 #/ 0.00631579 # for selfing, / 0.00631579, else 0.012
         grouped.rename(columns={"pi": "B"}, inplace=True)
         result = grouped[["Distance", "B"]].to_records(index=False)
         return result
