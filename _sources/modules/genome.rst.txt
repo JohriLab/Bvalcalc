@@ -12,7 +12,7 @@ Core Arguments
 --------------
 
 **-\-pop_params [path/to/YourParams.py]** 
-  Path to a Python file defining population genetic parameters, see [here for generating a pre-built template] and [here for tailoring your own parameters]
+  Path to a Python file defining population genetic parameters, see here for accessing pre-built templates, :doc:`Generate Parameters <../introduction/generate_params>`, and here for adjusting parameters to new species/populations, :doc:`Tailoring Parameters <../guides/params>`.
 
 **-\-bedgff_path [path/to/example.bed]**  
     Path to an annotation file of selected elements, in BED, GFF3 or CSV format (CHR,START,END)
@@ -30,7 +30,7 @@ Recommended Arguments
     Optional gene conversion initiation rate map in CSV format (CHR,START,RATE), where "RATE" is a multiplication factor for ``g`` in the parameters file. Note that the same map can be used for crossover and gene conversion rates, rates are averaged over chunks.
 
 **-\-pop_change**
-    If included, compute current B under a step population size change, see the associated guide on [demography]. Note that ``Ncur`` and ``time_of_change`` should be set in the parameters file when active.
+    If included, compute current B under a step population size change, as described in Johri et al 2021 (MBE). Note that ``Ncur`` and ``time_of_change`` should be set in the parameters file when active.
 
 Optional Arguments
 ------------------

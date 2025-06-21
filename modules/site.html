@@ -115,7 +115,7 @@
 <section id="core-arguments">
 <h2>Core Arguments<a class="headerlink" href="#core-arguments" title="Link to this heading"></a></h2>
 <dl class="simple">
-<dt><strong>--pop_params [path/to/YourParams.py]</strong></dt><dd><p>Path to a Python file defining population genetic parameters, see [here for generating a pre-built template] and [here for tailoring your own parameters]</p>
+<dt><strong>--pop_params [path/to/YourParams.py]</strong></dt><dd><p>Path to a Python file defining population genetic parameters, see here for accessing pre-built templates, <a class="reference internal" href="../introduction/generate_params.html"><span class="doc">Generate Parameters</span></a>, and here for adjusting parameters to new species/populations, <a class="reference internal" href="../guides/params.html"><span class="doc">Tailoring Parameters</span></a>.</p>
 </dd>
 <dt><strong>--gene_size [int]</strong></dt><dd><p>Total length of the selected region, e.g. gene or CDS, (default: <cite>10000</cite>)</p>
 </dd>
@@ -126,7 +126,7 @@
 <section id="optional-arguments">
 <h2>Optional Arguments<a class="headerlink" href="#optional-arguments" title="Link to this heading"></a></h2>
 <dl class="simple">
-<dt><strong>--pop_change</strong></dt><dd><p>If included, compute current B (<code class="docutils literal notranslate"><span class="pre">Bcur</span></code>) under a step population size change, see the associated guide on [demography].
+<dt><strong>--pop_change</strong></dt><dd><p>If included, compute current B (<code class="docutils literal notranslate"><span class="pre">Bcur</span></code>) under a step population size change, as described in Johri et al 2021 (MBE).
 Note that <code class="docutils literal notranslate"><span class="pre">Bcur</span></code> and <code class="docutils literal notranslate"><span class="pre">time_of_change</span></code> should be set in the parameters file when active.</p>
 </dd>
 <dt><strong>--gamma_dfe</strong></dt><dd><p>If included, use a gamma distribution to define the DFE (instead of fixed <code class="docutils literal notranslate"><span class="pre">f0</span></code>, <code class="docutils literal notranslate"><span class="pre">f1</span></code>, <code class="docutils literal notranslate"><span class="pre">f2</span></code>, <code class="docutils literal notranslate"><span class="pre">f3</span></code>).

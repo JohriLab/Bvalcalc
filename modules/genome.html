@@ -115,7 +115,7 @@
 <section id="core-arguments">
 <h2>Core Arguments<a class="headerlink" href="#core-arguments" title="Link to this heading"></a></h2>
 <dl class="simple">
-<dt><strong>--pop_params [path/to/YourParams.py]</strong></dt><dd><p>Path to a Python file defining population genetic parameters, see [here for generating a pre-built template] and [here for tailoring your own parameters]</p>
+<dt><strong>--pop_params [path/to/YourParams.py]</strong></dt><dd><p>Path to a Python file defining population genetic parameters, see here for accessing pre-built templates, <a class="reference internal" href="../introduction/generate_params.html"><span class="doc">Generate Parameters</span></a>, and here for adjusting parameters to new species/populations, <a class="reference internal" href="../guides/params.html"><span class="doc">Tailoring Parameters</span></a>.</p>
 </dd>
 <dt><strong>--bedgff_path [path/to/example.bed]</strong></dt><dd><p>Path to an annotation file of selected elements, in BED, GFF3 or CSV format (CHR,START,END)</p>
 </dd>
@@ -130,7 +130,7 @@
 </dd>
 <dt><strong>--gc_map [path/to/gc_map.csv]</strong></dt><dd><p>Optional gene conversion initiation rate map in CSV format (CHR,START,RATE), where “RATE” is a multiplication factor for <code class="docutils literal notranslate"><span class="pre">g</span></code> in the parameters file. Note that the same map can be used for crossover and gene conversion rates, rates are averaged over chunks.</p>
 </dd>
-<dt><strong>--pop_change</strong></dt><dd><p>If included, compute current B under a step population size change, see the associated guide on [demography]. Note that <code class="docutils literal notranslate"><span class="pre">Ncur</span></code> and <code class="docutils literal notranslate"><span class="pre">time_of_change</span></code> should be set in the parameters file when active.</p>
+<dt><strong>--pop_change</strong></dt><dd><p>If included, compute current B under a step population size change, as described in Johri et al 2021 (MBE). Note that <code class="docutils literal notranslate"><span class="pre">Ncur</span></code> and <code class="docutils literal notranslate"><span class="pre">time_of_change</span></code> should be set in the parameters file when active.</p>
 </dd>
 </dl>
 </section>
