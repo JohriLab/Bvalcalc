@@ -15,7 +15,7 @@ Core Arguments
   Path to a Python file defining population genetic parameters, see here for accessing pre-built templates, :doc:`Generate Parameters <../introduction/generate_params>`, and here for adjusting parameters to new species/populations, :doc:`Tailoring Parameters <../guides/params>`.
 
 **-\-gene_size [int]**
-  Total length of the selected region, e.g. gene or exon, (default: `10000`)
+  Total length of the selected region, e.g. gene or exon, (default: `10000`).
 
 **-\-flank_len [int]**
   Length of the flanking neutral region to calculate B (default: `40000`)
