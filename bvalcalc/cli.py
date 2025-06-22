@@ -44,15 +44,15 @@ def main():
         from bvalcalc.core.regionBcalc import regionBcalc
         output_data, block_ranges, rec_rate_per_chunk = regionBcalc(args, known_args.region)
         if getattr(args, 'plot_output', True):
-            plotB_figures_200kb(b_values_input=output_data, caller="chromosome", output_path=args.plot_output, quiet=args.quiet, gene_ranges=block_ranges, neutral_only=args.neutral_only, rec_rates=rec_rate_per_chunk)
+            plotB(b_values_input=output_data, caller="chromosome", output_path=args.plot_output, quiet=args.quiet, gene_ranges=block_ranges, neutral_only=args.neutral_only, rec_rates=rec_rate_per_chunk)
 
     elif known_args.gene: # Run gene Bcalc
         args = parseGeneArgs(remaining_args)
         os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Save params to global
         from bvalcalc.core.geneBcalc import geneBcalc
         output_data = geneBcalc(args) # Capture the output from geneBcalc
-        if getattr(args, 'plot_output', False): # If the --plot_basic flag was provided, call plotB with geneBcalc's output.
-            plotB_figures(b_values_input=output_data, caller="gene", output_path=args.plot_output, quiet=args.quiet)
+        if getattr(args, 'plot_output', False): # If the --plot_output flag was provided, call plotB with geneBcalc's output.
+            plotB(b_values_input=output_data, caller="gene", output_path=args.plot_output, quiet=args.quiet)
 
     elif known_args.site: # Run single site Bcalc
         args = parseSiteArgs(remaining_args)
