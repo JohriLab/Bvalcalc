@@ -236,7 +236,6 @@ def load_B_uncorrected(file_path):
     """
     try:
         data = np.genfromtxt(file_path, delimiter=",", names=True, dtype=[("Distance", float), ("B", float)])
-        # print("gotye", data)
         return data
     except Exception as e:
         print(f"Error reading B_observed file: {file_path}")
