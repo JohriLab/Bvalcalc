@@ -1,7 +1,7 @@
 from bvalcalc.core.helpers.demography_helpers import get_Bcur
 from bvalcalc.utils.bin_outputs import bin_outputs
 import numpy as np
-import os
+import os, sys
 
 def geneBcalc(args):    
     gene_size, flank_len, quiet = args.gene_size, args.flank_len, args.quiet
@@ -17,7 +17,20 @@ def geneBcalc(args):
         print(f"Length of flanking neutral region: {flank_len}bp")
 
     print(f"====== S T A R T I N G ===== C A L C ===============")
-    b_values = calculateB_linear(np.arange(1, flank_len, 1, dtype = int), gene_size)
+    b_values = calculateB_linear(np.arange(1, flank_len, 1, dtype = int), gene_size) # B for flank region
+
+    gene_size = gene_size - 1
+    distance_to_middle_of_gene = int((gene_size)/2)
+    left_gene_lengths = np.arange(distance_to_middle_of_gene, gene_size, 1, dtype = int)[::-1]
+    right_gene_lengths = np.arange(1, distance_to_middle_of_gene, 1, dtype = int)
+
+    right_gene_b_values = calculateB_linear(distance_to_element = 0, length_of_element = right_gene_lengths) #Distance = 0 to assume direct selection at focal site
+    left_gene_b_values = calculateB_linear(distance_to_element = 1, length_of_element = left_gene_lengths) #Flip array at the end 
+    
+    print(gene_size, distance_to_middle_of_gene, left_gene_b_values, right_gene_b_values, left_gene_lengths, right_gene_lengths)
+    
+    sys.exit()
+    b_values = calculateB_linear()
     print(f"====== F I N I S H E D ===== C A L C ===============")
 
     if not quiet:
