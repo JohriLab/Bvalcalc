@@ -24,7 +24,7 @@ Optional Arguments
 ------------------
 
 **-\-pop_change**
-  If included, compute current B (``Bcur``) under a step population size change, as described in Johri et al 2021 (MBE). 
+  If included, compute current B (``Bcur``) under a step population size change, as described in `Johri et al. (2021) <https://doi.org/10.1093/molbev/msab050>`_. 
   Note that ``Bcur`` and ``time_of_change`` should be set in the parameters file when active.
 
 **-\-gamma_dfe**
