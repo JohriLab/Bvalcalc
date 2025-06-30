@@ -19,15 +19,16 @@ def geneBcalc(args):
     print(f"====== S T A R T I N G ===== C A L C ===============")
     b_values = calculateB_linear(np.arange(1, flank_len, 1, dtype = int), gene_size) # B for flank region
 
-    gene_size = gene_size - 1
     distance_to_middle_of_gene = int((gene_size)/2)
-    left_gene_lengths = np.arange(distance_to_middle_of_gene, gene_size, 1, dtype = int)[::-1]
-    right_gene_lengths = np.arange(1, distance_to_middle_of_gene, 1, dtype = int)
+    left_gene_lengths = np.arange(distance_to_middle_of_gene, distance_to_middle_of_gene*2, 1, dtype = int)[::-1]
+    right_gene_lengths = np.arange(1, distance_to_middle_of_gene + 1, 1, dtype = int)
 
-    right_gene_b_values = calculateB_linear(distance_to_element = 0, length_of_element = right_gene_lengths) #Distance = 0 to assume direct selection at focal site
+    right_gene_b_values = calculateB_linear(distance_to_element = 0, length_of_element = right_gene_lengths) 
+    ##Distance = 0 includes BGS from focal site, doesn't make logical sense but avoids weird increase in B as selected elements have 1 less site when calculating within them
     left_gene_b_values = calculateB_linear(distance_to_element = 1, length_of_element = left_gene_lengths) #Flip array at the end 
     
-    print(gene_size, distance_to_middle_of_gene, left_gene_b_values, right_gene_b_values, left_gene_lengths, right_gene_lengths)
+    in_gene_b_values = right_gene_b_values*left_gene_b_values
+    # print(gene_size, distance_to_middle_of_gene, np.shape(left_gene_b_values), np.shape(right_gene_b_values), left_gene_lengths, right_gene_lengths, in_gene_b_values)
     
     sys.exit()
     b_values = calculateB_linear()
