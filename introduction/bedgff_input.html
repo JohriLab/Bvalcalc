@@ -105,7 +105,7 @@
              
   <section id="bed-gff-input">
 <h1>BED/GFF Input<a class="headerlink" href="#bed-gff-input" title="Link to this heading"></a></h1>
-<p>Bvalcalc estimates the effects of BGS on linked (and unlinked) sites due to direct purifying selection in conserved regions of the genome.</p>
+<p><strong>Bvalcalc</strong> estimates the effects of BGS on linked (and unlinked) sites due to direct purifying selection in conserved regions of the genome.</p>
 <p>When using the <code class="docutils literal notranslate"><span class="pre">--region</span></code> and <code class="docutils literal notranslate"><span class="pre">genome</span></code> modules, these conserved regions are indicated by a BED/GFF/CSV annotation file:</p>
 <dl class="simple">
 <dt><strong>--bedgff_path [path/to/example.bed]</strong></dt><dd><p>Path to an annotation file of selected elements, in BED, GFF3 or CSV format (CHR,START,END). Header information, indicated by <code class="docutils literal notranslate"><span class="pre">#</span></code>, is ignored.</p>
@@ -114,8 +114,8 @@
 <section id="annotations">
 <h2>Annotations<a class="headerlink" href="#annotations" title="Link to this heading"></a></h2>
 <p>The annotations indicated in the BED/GFF/CSV input will all be assumed to have the same distribution of fitness effects (DFE), though this may not always be the case.</p>
-<p>Typical annotations that are expected to experience purifying selection are exons and regulatory regions. Inferred conserved elements such as phastCons or GERP elements can make for excellent inputs for Bvalcalc.</p>
-<p>If you have DFE information for the different annotation types (e.g., CDS and UTRs), consider running Bvalcalc separately for each and combining the results, see <a class="reference internal" href="../guides/multiple_dfes.html"><span class="doc">Multiple DFEs</span></a>.</p>
+<p>Typical annotations that are expected to experience purifying selection are exons and regulatory regions. Inferred conserved elements such as phastCons or GERP elements can make for excellent inputs for <strong>Bvalcalc</strong>.</p>
+<p>If you have DFE information for the different annotation types (e.g., CDS and UTRs), consider running <strong>Bvalcalc</strong> separately for each and combining the results, see <a class="reference internal" href="../guides/multiple_dfes.html"><span class="doc">Multiple DFEs</span></a>.</p>
 </section>
 <section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h2>

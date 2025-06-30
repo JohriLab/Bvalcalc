@@ -1,7 +1,7 @@
 SweepFinder2 with B-map
 ============================
 
-**SweepFinder2** (**SF2**; DeGiorgio et al. 2016) is a population genetic program for performing genome-wide scans to identify selective sweeps, which uses a B-map to avoid confounding effects of BGS.
+**SweepFinder2** (**SF2**; `DeGiorgio et al. 2016 <https://degiorgiogroup.fau.edu/sf2.html>`_) is a population genetic program for performing genome-wide scans to identify selective sweeps, which uses a B-map to avoid confounding effects of BGS.
 
 A B-map calculated by **Bvalcalc**'s ``--genome`` or ``--region`` module can be used as the B-value file input to **SF2** (see 3.3. B-value file in the **SF2** manual).
 

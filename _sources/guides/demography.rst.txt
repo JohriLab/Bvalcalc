@@ -1,7 +1,7 @@
 Demographic Inference with B-map
 ========================================
 
-Demographic inference tools are confounded by the linked effects of selection; see Johri et al. (2021) for biases in MSMC-like and SFS-based approaches, and Marsh et al. (2024) for biases in ARG-based approaches.
+Demographic inference is confounded by the linked effects of selection; see `Johri et al. (2021) <https://doi.org/10.1093/molbev/msab050>`_ for biases in MSMC-like and SFS-based approaches, and `Marsh and Johri. (2024) <https://doi.org/10.1093/molbev/msae118>`_ for biases in ARG-based approaches.
 
 To best avoid biases, it is essential to only use the most neutrally-evolving sites for demographic inference , i.e. the sites least affected by sweeps and BGS (highest B). 
 

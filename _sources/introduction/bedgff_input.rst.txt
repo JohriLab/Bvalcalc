@@ -1,7 +1,7 @@
 BED/GFF Input
 =============
 
-Bvalcalc estimates the effects of BGS on linked (and unlinked) sites due to direct purifying selection in conserved regions of the genome.
+**Bvalcalc** estimates the effects of BGS on linked (and unlinked) sites due to direct purifying selection in conserved regions of the genome.
 
 When using the ``--region`` and ``genome`` modules, these conserved regions are indicated by a BED/GFF/CSV annotation file:
 
@@ -13,9 +13,9 @@ Annotations
 
 The annotations indicated in the BED/GFF/CSV input will all be assumed to have the same distribution of fitness effects (DFE), though this may not always be the case.
 
-Typical annotations that are expected to experience purifying selection are exons and regulatory regions. Inferred conserved elements such as phastCons or GERP elements can make for excellent inputs for Bvalcalc.
+Typical annotations that are expected to experience purifying selection are exons and regulatory regions. Inferred conserved elements such as phastCons or GERP elements can make for excellent inputs for **Bvalcalc**.
 
-If you have DFE information for the different annotation types (e.g., CDS and UTRs), consider running Bvalcalc separately for each and combining the results, see :doc:`Multiple DFEs <../guides/multiple_dfes>`.
+If you have DFE information for the different annotation types (e.g., CDS and UTRs), consider running **Bvalcalc** separately for each and combining the results, see :doc:`Multiple DFEs <../guides/multiple_dfes>`.
 
 Example
 ------------

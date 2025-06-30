@@ -105,7 +105,7 @@
              
   <section id="tailoring-parameters">
 <h1>Tailoring Parameters<a class="headerlink" href="#tailoring-parameters" title="Link to this heading"></a></h1>
-<p>When using Bvalcalc to study populations beyond the pre-built templates, it’s important to tailor the popgen parameters to your population of interest.</p>
+<p>When using <strong>Bvalcalc</strong> to study populations beyond the pre-built templates, it’s important to tailor the popgen parameters to your population of interest.</p>
 <p>To save a local copy of one of the templates, see <a class="reference internal" href="../introduction/generate_params.html"><span class="doc">Generate Parameters</span></a> and open up the Params.py file in your text editor of choice.</p>
 <section id="core-parameters">
 <h2>Core parameters<a class="headerlink" href="#core-parameters" title="Link to this heading"></a></h2>
@@ -120,19 +120,19 @@
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">g</span></code></dt><dd><p>Gene conversion initiation mean rate per bp, per generation. Note that on occasion the <code class="docutils literal notranslate"><span class="pre">g</span> <span class="pre">*</span> <span class="pre">k</span></code> value is reported in the literature rather than the <em>initiation</em> rate, in which case, the value should be divided by the tract length (<code class="docutils literal notranslate"><span class="pre">k</span></code>). You can add a gc initiation rate map that can modify <cite>g</cite> across the genome with <code class="docutils literal notranslate"><span class="pre">--gc_map</span></code>.</p>
 </dd>
-<dt><code class="docutils literal notranslate"><span class="pre">k</span></code></dt><dd><p>Gene conversion tract length (bp). Note that Bvalcalc takes only a single mean value and so does not model a distribution of tract lengths.</p>
+<dt><code class="docutils literal notranslate"><span class="pre">k</span></code></dt><dd><p>Gene conversion tract length (bp). Note that <strong>Bvalcalc</strong> takes only a single mean value and so does not model a distribution of tract lengths.</p>
 </dd>
 </dl>
 </section>
 <section id="dfe-parameters">
 <h2>DFE parameters<a class="headerlink" href="#dfe-parameters" title="Link to this heading"></a></h2>
 <p>A distribution of fitness effects (DFE) describes the probability of different selective effects for new mutations when they arise.
-Bvalcalc models a discretized deleterious DFE consisting of four uniform distributions ranging from effectively neutral (<code class="docutils literal notranslate"><span class="pre">f0</span></code>), to strongly deleterious (<code class="docutils literal notranslate"><span class="pre">f3</span></code>); beneficial mutations are currently not supported.</p>
+<strong>Bvalcalc</strong> models a discretized deleterious DFE consisting of four uniform distributions ranging from effectively neutral (<code class="docutils literal notranslate"><span class="pre">f0</span></code>), to strongly deleterious (<code class="docutils literal notranslate"><span class="pre">f3</span></code>); beneficial mutations are currently not supported.</p>
 <p>See Figure 1 in <a class="reference external" href="https://doi.org/10.1534/genetics.119.303002">Johri et al. 2020</a> for a more detailed explanation of the discretized DFE.</p>
 <p>To specify a DFE, provide <code class="docutils literal notranslate"><span class="pre">f0</span></code>, <code class="docutils literal notranslate"><span class="pre">f1</span></code>, <code class="docutils literal notranslate"><span class="pre">f2</span></code>, <code class="docutils literal notranslate"><span class="pre">f3</span></code> proportions that represent the DFE for all annotated regions in the <a class="reference internal" href="../introduction/bedgff_input.html"><span class="doc">BED/GFF input</span></a>. Note that the proportions must sum to 1, i.e. <code class="docutils literal notranslate"><span class="pre">f0+f1+f2+f3</span> <span class="pre">=</span> <span class="pre">1</span></code>.</p>
 <dl>
 <dt><code class="docutils literal notranslate"><span class="pre">f0</span></code></dt><dd><p>Proportion of effectively neutral mutations with <cite>0 &lt;= | 2*Nanc*s | &lt; 1</cite>.</p>
-<p>Note that <cite>2*Nanc*s &lt; 5</cite> does not contribute to BGS, see <a class="reference external" href="https://doi.org/10.1534/genetics.119.303002">Johri et al. 2020</a>, Bvalcalc will exclude the f0 proportion from BGS calculations.</p>
+<p>Note that <cite>2*Nanc*s &lt; 5</cite> does not contribute to BGS, see <a class="reference external" href="https://doi.org/10.1534/genetics.119.303002">Johri et al. 2020</a>, <strong>Bvalcalc</strong> will exclude the f0 proportion from BGS calculations.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">f1</span></code></dt><dd><p>Proportion of weakly deleterious mutations with <cite>1 &lt;= | 2*Nanc*s | &lt; 10</cite></p>
 </dd>
@@ -143,7 +143,7 @@ Bvalcalc models a discretized deleterious DFE consisting of four uniform distrib
 <dt><code class="docutils literal notranslate"><span class="pre">h</span></code></dt><dd><p>Dominance coefficient of selected alleles. Keep at 0.5 (additive effects) unless literature suggests otherwise</p>
 </dd>
 </dl>
-<p>DFE parameters may be reported in the literature as a gamma distribution. Bvalcalc can take gamma distribution parameters which is converted to a discretized DFE to overwrite <code class="docutils literal notranslate"><span class="pre">f0</span></code>, <code class="docutils literal notranslate"><span class="pre">f1</span></code>, <code class="docutils literal notranslate"><span class="pre">f2</span></code>, <code class="docutils literal notranslate"><span class="pre">f3</span></code> when <code class="docutils literal notranslate"><span class="pre">--gamma_dfe</span></code> is specified:</p>
+<p>DFE parameters may be reported in the literature as a gamma distribution. <strong>Bvalcalc</strong> can take gamma distribution parameters which is converted to a discretized DFE to overwrite <code class="docutils literal notranslate"><span class="pre">f0</span></code>, <code class="docutils literal notranslate"><span class="pre">f1</span></code>, <code class="docutils literal notranslate"><span class="pre">f2</span></code>, <code class="docutils literal notranslate"><span class="pre">f3</span></code> when <code class="docutils literal notranslate"><span class="pre">--gamma_dfe</span></code> is specified:</p>
 <dl class="simple">
 <dt><code class="docutils literal notranslate"><span class="pre">mean,</span> <span class="pre">shape,</span> <span class="pre">proportion_synonymous</span></code></dt><dd><p>The mean and shape parameters of the gamma DFE, and the proportion of strictly neutral sites in the annotated regions (e.g. synonymous in exon regions).</p>
 </dd>
@@ -151,7 +151,7 @@ Bvalcalc models a discretized deleterious DFE consisting of four uniform distrib
 </section>
 <section id="demography">
 <h2>Demography<a class="headerlink" href="#demography" title="Link to this heading"></a></h2>
-<p>Historical population size change as a single step-function can be accounted for with Bvalcalc by adding the <code class="docutils literal notranslate"><span class="pre">--pop_change</span></code> flag, and setting the following parameters:</p>
+<p>Historical population size change as a single step-function can be accounted for with <strong>Bvalcalc</strong> by adding the <code class="docutils literal notranslate"><span class="pre">--pop_change</span></code> flag, and setting the following parameters:</p>
 <dl class="simple">
 <dt><code class="docutils literal notranslate"><span class="pre">Ncur</span></code></dt><dd><p>Current population size, i.e. in the current epoch.</p>
 </dd>
