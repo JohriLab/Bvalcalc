@@ -31,6 +31,15 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
     # legend_name_dot = "Observed (simulations)"
     # title_name = 'B recovery from single element with gene conversion'
 
+    # SelfParams_0.9S_0.5h AKA Selfing
+    # poetry run bvalcalc --gene --pop_params tests/testparams/SelfParams_0.9S_0.5h.py --plot_output /Users/jmarsh96/Desktop/Bcalc/Figures/SelfParams_0.9S_0.5h.png
+    # B_uncorrected = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/nogcBasicParams.B"
+    # B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/40kb_f0.9_h0.5_all.pi"
+    # legend_name_blue = "Calculated (with selfing)"
+    # legend_name_orange = "Calculated (no selfing)"
+    # legend_name_dot = "Observed (simulations)"
+    # title_name = 'B recovery from single element with selfing (S = 0.9)'
+
     # expand_5N_1T AKA Demography
     # poetry run bvalcalc --gene --pop_params tests/testparams/ExpandParams_5N_1T.py --pop_change --plot_output /Users/jmarsh96/Desktop/Bcalc/Figures/expand_5N_1T.png
     # B_uncorrected = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/c40kb_expand_5N_1T.bvals"
@@ -40,14 +49,32 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
     # legend_name_dot = "Observed (simulations)"
     # title_name = 'B recovery from single element (5X Expansion 1N_anc generations ago)'
 
-    # SelfParams_0.9S_0.5h AKA Selfing
-    # poetry run bvalcalc --gene --pop_params tests/testparams/SelfParams_0.9S_0.5h.py --plot_output /Users/jmarsh96/Desktop/Bcalc/Figures/SelfParams_0.9S_0.5h.png
-    # B_uncorrected = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/nogcBasicParams.B"
-    # B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/40kb_f0.9_h0.5_all.pi"
-    # legend_name_blue = "Calculated (with selfing)"
-    # legend_name_orange = "Calculated (no selfing)"
+    # contract_5N_1T AKA Demography
+    # poetry run bvalcalc --gene --pop_params tests/testparams/ContractParams_5N_1T.py --pop_change --plot_output /Users/jmarsh96/Desktop/Bcalc/Figures/contract_5N_1T.png
+    B_uncorrected = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/c40kb_contract_5N_1T.bvals"
+    B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/OBS_Contract_5N_1T.csv"
+    legend_name_blue = "Calculated (with demography)"
+    legend_name_orange = "Calculated (no demography)"
+    legend_name_dot = "Observed (simulations)"
+    title_name = 'B recovery from single element (5X Contraction 1N_anc generations ago)'
+
+    # expand_5N_0.2T AKA Demography
+    # poetry run bvalcalc --gene --pop_params tests/testparams/ExpandParams_5N_0.2T.py --pop_change --plot_output /Users/jmarsh96/Desktop/Bcalc/Figures/expand_5N_0.2T.png
+    # B_uncorrected = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/c40kb_expand_5N_0.2T.bvals"
+    # B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/OBS_Expand_5N_0.2T.csv"
+    # legend_name_blue = "Calculated (with demography)"
+    # legend_name_orange = "Calculated (no demography)"
     # legend_name_dot = "Observed (simulations)"
-    # title_name = 'B recovery from single element with selfing (S = 0.9)'
+    # title_name = 'B recovery from single element (5X Expansion 0.2N_anc generations ago)'
+
+    # contract_5N_0.2T AKA Demography
+    # poetry run bvalcalc --gene --pop_params tests/testparams/ContractParams_5N_0.2T.py --pop_change --plot_output /Users/jmarsh96/Desktop/Bcalc/Figures/contract_5N_0.2T.png
+    # B_uncorrected = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/c40kb_contract_5N_0.2T.bvals"
+    # B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/OBS_Contract_5N_0.2T.csv"
+    # legend_name_blue = "Calculated (with demography)"
+    # legend_name_orange = "Calculated (no demography)"
+    # legend_name_dot = "Observed (simulations)"
+    # title_name = 'B recovery from single element (5X Contraction 0.2N_anc generations ago)'
 
     # Rename to reflect the actual parameter change
 
