@@ -1,5 +1,4 @@
 from bvalcalc.core.helpers.process_single_chunk import process_single_chunk
-from bvalcalc.utils.load_bed_gff import load_bed_gff
 from bvalcalc.core.helpers.calc_L_per_chunk import calculate_L_per_chunk
 from bvalcalc.core.helpers.demography_helpers import get_Bcur
 from bvalcalc.utils.load_rec_map import load_rec_map
@@ -156,5 +155,5 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
 
     if caller == "regionBcalc":
         return output_data, block_ranges, rec_rate_per_chunk
-    else: #caller should be genomeBcalc
+    else: #caller is genomeBcalc
         return

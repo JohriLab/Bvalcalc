@@ -1,4 +1,3 @@
-import sys
 import numpy as np
 
 def load_vcf(vcf_path):

@@ -1,7 +1,5 @@
 import numpy as np
 from bvalcalc.utils.dfe_helper import get_DFE_params
-from scipy.integrate import quad
-import sys
 
 _params_cache: dict | None = None
 

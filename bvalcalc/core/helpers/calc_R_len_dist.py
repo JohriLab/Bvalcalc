@@ -1,5 +1,4 @@
 import numpy as np
-import sys
 
 def calc_R_lengths(blockstart, blockend, rec_rate_per_chunk, calc_start, calc_end, chunk_size):
     """

@@ -4,7 +4,6 @@ from bvalcalc.core.helpers.calc_R_len_dist import calc_R_lengths
 from bvalcalc.core.helpers.calc_R_len_dist import calc_R_distances
 from bvalcalc.core.helpers.calc_B_in_genes import calc_B_in_genes
 import numpy as np
-import sys
 
 def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start, chr_size,
                          calc_start, calc_end, num_chunks, precise_chunks,lperchunk, 

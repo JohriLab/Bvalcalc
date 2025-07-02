@@ -4,7 +4,6 @@ from bvalcalc.utils.load_chr_sizes import load_chr_sizes
 from bvalcalc.utils.load_Bmap import load_Bmap
 from bvalcalc.core.calculateB import calculateB_unlinked
 import numpy as np
-import sys
 
 def genomeBcalc(args):    
 
@@ -26,7 +25,6 @@ def genomeBcalc(args):
     if args.out is not None: # Overwrite existing file with header
         with open(args.out, 'w') as out_f:
             out_f.write("Chromosome,Position,B\n")
-    
 
     for i in np.arange(0,len(unique_chromosomes)):
 

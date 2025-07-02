@@ -3,7 +3,6 @@ from bvalcalc.utils.load_bed_gff import load_bed_gff
 from bvalcalc.utils.load_Bmap import load_Bmap
 from bvalcalc.core.calculateB import calculateB_unlinked
 import numpy as np
-import sys
 
 def regionBcalc(args, region):    
 

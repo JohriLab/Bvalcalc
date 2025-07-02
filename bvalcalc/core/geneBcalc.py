@@ -1,7 +1,7 @@
 from bvalcalc.core.helpers.demography_helpers import get_Bcur
 from bvalcalc.utils.bin_outputs import bin_outputs
 import numpy as np
-import os, sys
+import os
 
 def geneBcalc(args):    
     gene_size, flank_len, quiet = args.gene_size, args.flank_len, args.quiet
@@ -18,8 +18,6 @@ def geneBcalc(args):
 
     print(f"====== S T A R T I N G ===== C A L C ===============")
     b_values = calculateB_linear(np.arange(1, flank_len, 1, dtype = int), gene_size) # B for flank region
-
-
 
     print(f"====== F I N I S H E D ===== C A L C ===============")
 
@@ -51,9 +49,9 @@ def geneBcalc(args):
         if not args.quiet:
             print("No output CSV requested; skipping save.")
     
-    ## The following (prior to return) calculates output_data WITH the sites in the gene from the edge to the middle of the gene
-    ## Not currently supported because it'll require major updates to plotting --gene, worth adding when plotB is refactored
-    
+    ## !!The following (prior to return) calculates output_data WITH the sites in the gene from the edge to the middle of the gene
+    ## !!Not currently supported because it'll require major updates to plotting --gene, worth adding when plotB is refactored
+
         # distance_to_middle_of_gene = int((gene_size)/2)
         # left_gene_lengths = np.arange(distance_to_middle_of_gene, distance_to_middle_of_gene*2, 1, dtype = int)
         # right_gene_lengths = np.arange(1, distance_to_middle_of_gene + 1, 1, dtype = int)[::-1] #Flip array at the end so it starts with center point

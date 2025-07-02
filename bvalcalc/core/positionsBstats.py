@@ -1,6 +1,5 @@
 import numpy as np
 import csv
-import sys
 from bvalcalc.utils.load_vcf import load_vcf
 from bvalcalc.utils.load_Bmap import load_Bmap
 
