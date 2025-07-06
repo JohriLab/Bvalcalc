@@ -1,6 +1,7 @@
 import csv
 import os
 import numpy as np
+import sys
 
 def load_bed_gff(file_path):
     """
@@ -57,6 +58,10 @@ def load_bed_gff(file_path):
             # ensure start <= end
             if end < start:
                 start, end = end, start
+            # if start == end: # Remove 0-length exons
+            #     continue
+            if start == end: # skip zero-length elements
+                continue
 
             # deduplicate
             if (start, end) not in seen_blocks:
