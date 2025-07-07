@@ -31,7 +31,7 @@ def regionBcalc(args, region):
 
     if args.out is not None: # Overwrite existing file with header
         with open(args.out, 'w') as out_f:
-            out_f.write("Chromosome,Position,Conserved,B\n")
+            out_f.write("Chromosome,Position,B\n")
     output_data, block_ranges, rec_rate_per_chunk = chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos, prior_b, calc_start, calc_end, caller="regionBcalc")
 
     return  output_data, block_ranges, rec_rate_per_chunk
