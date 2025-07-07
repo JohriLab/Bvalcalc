@@ -94,26 +94,47 @@ def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_
 
     # Gene-range bars
     if gene_ranges is not None and len(gene_ranges) > 0:
-        ymin, ymax = ax.get_ylim()
-        bar_y = ymin - (ymax - ymin) * 0.05
-        ax.set_ylim(bar_y, ymax)
+        if caller == "chromosome":
+            ymin, ymax = ax.get_ylim()
+            bar_y = ymin - (ymax - ymin) * 0.05
 
-        # convert start/end to int for plotting
-        segments = [((int(start), bar_y), (int(end), bar_y)) for _, start, end in gene_ranges]
-        ax.add_collection(LineCollection(segments, colors='black', linewidths=30))
+            # compute the current x-range
+            xlim = ax.get_xlim()
+            xrange = xlim[1] - xlim[0]
+            fig_width_in_pixels = fig.bbox.width
+            min_width = xrange / fig_width_in_pixels
 
-        if caller == "chromosome" and not neutral_only:
-            gene_mask = np.zeros_like(x, dtype=bool)
+            # convert start/end to int for plotting, ensuring min width
+            segments = []
             for _, start, end in gene_ranges:
-                start = int(start)
-                end = int(end)
-                gene_mask |= (x >= start) & (x <= end)
-            idx = np.where(gene_mask)[0]
-            splits = np.where(np.diff(idx) != 1)[0] + 1
-            for seg in np.split(idx, splits):
-                if len(seg) > 1:
-                    coords = np.column_stack((x[seg], y[seg]))
-                    ax.add_collection(LineCollection([coords], colors='black', linewidths=1.5))
+                s = float(start)
+                e = float(end)
+                if (e - s) < min_width:
+                    e = s + min_width
+                segments.append(((s, bar_y), (e, bar_y)))
+
+            ax.set_ylim(bar_y, ymax)
+            ax.add_collection(LineCollection(segments, colors='black', linewidths=30))
+
+            if not neutral_only:
+                gene_mask = np.zeros_like(x, dtype=bool)
+                for _, start, end in gene_ranges:
+                    start = int(start)
+                    end = int(end)
+                    gene_mask |= (x >= start) & (x <= end)
+                idx = np.where(gene_mask)[0]
+                splits = np.where(np.diff(idx) != 1)[0] + 1
+                for seg in np.split(idx, splits):
+                    if len(seg) > 1:
+                        coords = np.column_stack((x[seg], y[seg]))
+                        ax.add_collection(LineCollection([coords], colors='black', linewidths=1.5))
+        else:
+            # For caller != chromosome, keep original behavior (no min width enforcement)
+            ymin, ymax = ax.get_ylim()
+            bar_y = ymin - (ymax - ymin) * 0.05
+            ax.set_ylim(bar_y, ymax)
+            segments = [((int(start), bar_y), (int(end), bar_y)) for _, start, end in gene_ranges]
+            ax.add_collection(LineCollection(segments, colors='black', linewidths=30))
 
     # X-axis formatting
     ax.xaxis.set_major_formatter(
