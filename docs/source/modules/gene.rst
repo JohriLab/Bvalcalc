@@ -54,6 +54,9 @@ Example
         --flank_len 40000 \
         --plot_output ./Bplot.png
 
+    # B for adjacent site: 0.9634908092757006
+    # Mean B for flanking region: 0.9808824926142455
+
 Calculates B for a 40 kb neutral region flanking a single gene under selection of length 10 kb using example human parameters, and plot the output.
 
 .. image:: /_static/images/gene_Bplot.png

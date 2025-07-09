@@ -69,7 +69,7 @@ Example
       --pop_params DrosophilaParams.py \
       --bedgff_path drosophila_CDS.bed \
       --chr_sizes chrom_sizes.txt \
-      --out Bvalues_chr2R.csv \
+      --out Bvalues_drosophila_CDS.csv \
       --out_binsize 1000
 
 Calculates a B-map for across the genome considering all CDS regions. Output of B values in 1kb bins for the region will be saved.
