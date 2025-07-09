@@ -19,11 +19,14 @@ Example
 
    from bvalcalc import get_params, calculateB_unlinked, calculateB_linear
 
-   params = get_params("bvalcalc/templates/DrosophilaParams.py")
+   # Path to your Params.py file
+   params = get_params("./DrosophilaParams.py")
 
    calculateB_unlinked(unlinked_L = 200000, params = params)
+   # 0.9998476570803477
 
    calculateB_linear(distance_to_element = 500, length_of_element = 10000, params = params)
+   # array(0.98721754)
 
 This will import the relevant functions, get the popgen parameters from a relevant params file, see :doc:`Generate Parameters <../introduction/generate_params>`. 
 Then B will be calculated from 200kb of unlinked sites using ``calculateB_unlinked``, and B from a linked selected element of length 10kb, 500bp away is calculated using ``calculateB_linear``.
