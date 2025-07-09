@@ -155,11 +155,14 @@ in which case parameters are sourced from the params file directly.</p></li>
 <h2>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">bvalcalc</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_params</span><span class="p">,</span> <span class="n">calculateB_unlinked</span><span class="p">,</span> <span class="n">calculateB_linear</span>
 
-<span class="n">params</span> <span class="o">=</span> <span class="n">get_params</span><span class="p">(</span><span class="s2">&quot;bvalcalc/templates/DrosophilaParams.py&quot;</span><span class="p">)</span>
+<span class="c1"># Path to your Params.py file</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">get_params</span><span class="p">(</span><span class="s2">&quot;./DrosophilaParams.py&quot;</span><span class="p">)</span>
 
 <span class="n">calculateB_unlinked</span><span class="p">(</span><span class="n">unlinked_L</span> <span class="o">=</span> <span class="mi">200000</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="p">)</span>
+<span class="c1"># 0.9998476570803477</span>
 
 <span class="n">calculateB_linear</span><span class="p">(</span><span class="n">distance_to_element</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span> <span class="n">length_of_element</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="p">)</span>
+<span class="c1"># array(0.98721754)</span>
 </pre></div>
 </div>
 <p>This will import the relevant functions, get the popgen parameters from a relevant params file, see <a class="reference internal" href="../introduction/generate_params.html"><span class="doc">Generate Parameters</span></a>.
