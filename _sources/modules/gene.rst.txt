@@ -55,3 +55,8 @@ Example
         --plot_output ./Bplot.png
 
 Calculates B for a 40 kb neutral region flanking a single gene under selection of length 10 kb using example human parameters, and plot the output.
+
+.. image:: /_static/images/gene_Bplot.png
+   :alt: B region example
+   :class: with-shadow
+   :align: center
