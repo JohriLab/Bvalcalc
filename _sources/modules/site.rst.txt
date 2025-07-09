@@ -40,4 +40,6 @@ Example
 
     Bvalcalc --site --pop_params HumanParams.py --distance 1500 --gene_size 10000
 
+    # B for site 1500bp away from 10000bp region: 0.9670029436948963
+
 Calculates B for a single site 1500bp away from a gene under selection of length 10kb using example human parameters.

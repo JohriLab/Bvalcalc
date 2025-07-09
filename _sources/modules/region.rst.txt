@@ -69,14 +69,24 @@ Example
 
 .. code-block:: bash
 
-    Bvalcalc --region 2R:9260000-11700000 \
-      --pop_params DrosophilaParams.py \
-      --bedgff_path drosophila_CDS.bed \
-      --out Bvalues_chr2R_region.csv \
-      --out_binsize 1000 \
-      --plot_output B_region_plot.png
 
-Calculates a B-map for the specified 2.44 Mb region on chromosome 2R considering BGS from CDS across the genome, plotting the output. Output of B values in 1 kb bins for the region will be saved.
+    Bvalcalc --region 21:30326675-36709983 \
+      --bedgff_path exons.accessible.21.bed \
+      --pop_params HumanParams.py \
+      --out Bvalues_chr21_region.csv \
+      --out_binsize 1000 \
+      --plot_output B_chr21_region.png
+
+    # Cumulative length of calculated region under selection: 724516bp (11.35%)
+    # Cumulative length of chromosome under selection: 3279253bp (7.02%)
+    # Mean B of neutral sites across specified region: 0.9192038071047087
+
+Calculates a B-map for the specified ~6 Mb region on human chromosome 21 considering BGS from exons across the accessible region, plotting the output. Output of B values in 1 kb bins for the region will be saved. In this case, unlinked B will not be applied because only the chromosome 21 exons were provided.
+
+.. image:: /_static/images/B_chr21.png
+   :alt: B region example
+   :class: with-shadow
+   :align: center
 
 Notes
 ------
