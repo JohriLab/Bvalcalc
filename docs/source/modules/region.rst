@@ -83,7 +83,7 @@ Example
 
 Calculates a B-map for the specified ~6 Mb region on human chromosome 21 considering BGS from exons across the accessible region, plotting the output. Output of B values in 1 kb bins for the region will be saved. In this case, unlinked B will not be applied because only the chromosome 21 exons were provided.
 
-.. image:: ../_static/images/B_chr21.png
+.. image:: /_static/images/B_chr21.png
    :alt: B region example
    :class: with-shadow
    :align: center
