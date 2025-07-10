@@ -1,7 +1,7 @@
 import numpy as np
 import csv
-from bvalcalc.utils.load_vcf import load_vcf
-from bvalcalc.utils.load_Bmap import load_Bmap
+from Bvalcalc.utils.load_vcf import load_vcf
+from Bvalcalc.utils.load_Bmap import load_Bmap
 
 def positionsBstats(args, Bmap_path):
 

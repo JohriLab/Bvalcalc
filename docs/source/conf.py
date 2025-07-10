@@ -44,7 +44,7 @@ html_css_files = [
 
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../..'))  # so it can find bvalcalc/
+sys.path.insert(0, os.path.abspath('../..'))  # so it can find Bvalcalc/
 html_output = os.path.join(os.path.dirname(__file__), "..", "docs")
 
 extensions = [

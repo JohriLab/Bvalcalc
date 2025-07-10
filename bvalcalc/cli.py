@@ -3,13 +3,13 @@ import os
 import sys
 import time
 import argparse
-from bvalcalc.utils.parseArgs import parse_args, parseGenomeArgs, parseRegionArgs, parseGeneArgs, parseSiteArgs, parseBmapArgs
-from bvalcalc.core.plotB import plotB
-from bvalcalc.core.deprecated.plotB_figures import plotB_figures
-from bvalcalc.core.deprecated.plotB_figures_200kb import plotB_figures_200kb
-from bvalcalc.utils.generateParams import SPECIES, generateParams, check_generate_params_args
-from bvalcalc.core.positionsBstats import positionsBstats
-from bvalcalc.core.plotChromB import plotChromB
+from Bvalcalc.utils.parseArgs import parse_args, parseGenomeArgs, parseRegionArgs, parseGeneArgs, parseSiteArgs, parseBmapArgs
+from Bvalcalc.core.plotB import plotB
+from Bvalcalc.core.deprecated.plotB_figures import plotB_figures
+from Bvalcalc.core.deprecated.plotB_figures_200kb import plotB_figures_200kb
+from Bvalcalc.utils.generateParams import SPECIES, generateParams, check_generate_params_args
+from Bvalcalc.core.positionsBstats import positionsBstats
+from Bvalcalc.core.plotChromB import plotChromB
 
 def main():
     start_time = time.time()
@@ -35,13 +35,13 @@ def main():
     if known_args.genome: # Run genome Bcalc
         args = parseGenomeArgs(remaining_args)
         os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Save params to global
-        from bvalcalc.core.genomeBcalc import genomeBcalc
+        from Bvalcalc.core.genomeBcalc import genomeBcalc
         genomeBcalc(args)
 
     elif known_args.region: # Run region Bcalc
         args = parseRegionArgs(remaining_args)
         os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Save params to global
-        from bvalcalc.core.regionBcalc import regionBcalc
+        from Bvalcalc.core.regionBcalc import regionBcalc
         output_data, block_ranges, rec_rate_per_chunk = regionBcalc(args, known_args.region)
         if getattr(args, 'plot_output', True):
             plotB(b_values_input=output_data, caller="chromosome", output_path=args.plot_output, quiet=args.quiet, gene_ranges=block_ranges, neutral_only=args.neutral_only, rec_rates=rec_rate_per_chunk)
@@ -49,7 +49,7 @@ def main():
     elif known_args.gene: # Run gene Bcalc
         args = parseGeneArgs(remaining_args)
         os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Save params to global
-        from bvalcalc.core.geneBcalc import geneBcalc
+        from Bvalcalc.core.geneBcalc import geneBcalc
         output_data = geneBcalc(args) # Capture the output from geneBcalc
         if getattr(args, 'plot_output', False): # If the --plot_output flag was provided, call plotB with geneBcalc's output.
             plotB(b_values_input=output_data, caller="gene", output_path=args.plot_output, quiet=args.quiet)
@@ -57,7 +57,7 @@ def main():
     elif known_args.site: # Run single site Bcalc
         args = parseSiteArgs(remaining_args)
         os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Save params to global
-        from bvalcalc.core.siteBcalc import siteBcalc
+        from Bvalcalc.core.siteBcalc import siteBcalc
         siteBcalc(args)
 
     print(f"= B value calculated in {time.time() - start_time:.2f} seconds. = = =")

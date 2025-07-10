@@ -1,4 +1,4 @@
-## poetry run bvalcalc --gene --pop_params tests/testparams/ExpandParams_5N_1T.py --plot_output --out ../sim_testing/calculatedBfiles/40kb_expand_5N_1T.bvals --pop_change
+## poetry run Bvalcalc --gene --pop_params tests/testparams/ExpandParams_5N_1T.py --plot_output --out ../sim_testing/calculatedBfiles/40kb_expand_5N_1T.bvals --pop_change
 
 ## Core parameters
 x = 100 # Scaling factor (N,u,r), keep as 1 unless calculating for rescaled simulations

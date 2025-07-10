@@ -4,7 +4,7 @@
 ## Usage: ./Bvalcalc --region --pop_params ExampleParams.py
 ##        ./Bvalcalc --genome --pop_params ExampleParams.py
 ##
-##  poetry run bvalcalc --site --pop_params tests/testparams/norecBasicParams.py
+##  poetry run Bvalcalc --site --pop_params tests/testparams/norecBasicParams.py
 
 ## Core parameters
 x = 100 # Scaling factor (N,u,r), keep as 1 unless calculating for rescaled simulations

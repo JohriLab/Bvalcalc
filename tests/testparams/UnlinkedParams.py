@@ -4,7 +4,7 @@
 ## Usage: ./Bvalcalc --region --pop_params ExampleParams.py
 ##        ./Bvalcalc --genome --pop_params ExampleParams.py
 
-#poetry run bvalcalc --region chr_neutral:1-1 --pop_params tests/testparams/UnlinkedParams.py --bedgff_path tests/testfiles/200kb_unlinked.csv
+#poetry run Bvalcalc --region chr_neutral:1-1 --pop_params tests/testparams/UnlinkedParams.py --bedgff_path tests/testfiles/200kb_unlinked.csv
 
 ## Core parameters
 x = 100 # Scaling factor (N,u,r), keep as 1 unless calculating for rescaled simulations

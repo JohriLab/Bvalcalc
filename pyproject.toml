@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "bvalcalc"
+name = "Bvalcalc"
 version = "0.4.2"
 description = "Calculate relative diversity (B) under background selection"
 readme = "README.md"
@@ -44,12 +44,12 @@ docs = [
 ]
 
 [project.scripts]
-bvalcalc = "bvalcalc.cli:main"
+Bvalcalc = "Bvalcalc.cli:main"
 
 [tool.setuptools.packages.find]
 
 where   = ["."]
-include = ["bvalcalc", "bvalcalc.*"]
+include = ["Bvalcalc", "Bvalcalc.*"]
 exclude = ["trash*"]
 [tool.poetry.group.docs.dependencies]
 sphinx = "^7.2"

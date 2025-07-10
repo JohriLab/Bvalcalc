@@ -1,5 +1,5 @@
 import numpy as np
-from bvalcalc.utils.dfe_helper import get_DFE_params
+from Bvalcalc.utils.dfe_helper import get_DFE_params
 
 _params_cache: dict | None = None
 

@@ -1,8 +1,8 @@
-from bvalcalc.core.calculateB import calculateB_linear, calculateB_recmap
-from bvalcalc.core.helpers.calc_B_from_chunks import calc_B_from_chunks
-from bvalcalc.core.helpers.calc_R_len_dist import calc_R_lengths
-from bvalcalc.core.helpers.calc_R_len_dist import calc_R_distances
-from bvalcalc.core.helpers.calc_B_in_genes import calc_B_in_genes
+from Bvalcalc.core.calculateB import calculateB_linear, calculateB_recmap
+from Bvalcalc.core.helpers.calc_B_from_chunks import calc_B_from_chunks
+from Bvalcalc.core.helpers.calc_R_len_dist import calc_R_lengths
+from Bvalcalc.core.helpers.calc_R_len_dist import calc_R_distances
+from Bvalcalc.core.helpers.calc_B_in_genes import calc_B_in_genes
 import numpy as np
 
 def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start, chr_size,

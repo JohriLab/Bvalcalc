@@ -1,5 +1,5 @@
 """
-Helper modules for core calculations in bvalcalc.
+Helper modules for core calculations in Bvalcalc.
 """
 from .calc_B_from_chunks import calc_B_from_chunks
 from .calc_B_in_genes   import calc_B_in_genes

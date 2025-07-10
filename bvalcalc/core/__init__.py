@@ -1,5 +1,5 @@
 """
-Core calculation modules for bvalcalc.
+Core calculation modules for Bvalcalc.
 """
 from .genomeBcalc import genomeBcalc
 from .regionBcalc import regionBcalc

@@ -19,12 +19,12 @@ def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=
     legend_name_black = "Calculated B (synonymous)"
 
     # chr_200kb AKA 200kb Genome
-    # poetry run bvalcalc --region chr_200kb:1-200000 --pop_params tests/testparams/nogcBasicParams.py --bedgff_path tests/testfiles/200kb_slimtest.csv --plot_output /Users/jmarsh96/Desktop/Bcalc/Figures/chr_200kb.png
+    # poetry run Bvalcalc --region chr_200kb:1-200000 --pop_params tests/testparams/nogcBasicParams.py --bedgff_path tests/testfiles/200kb_slimtest.csv --plot_output /Users/jmarsh96/Desktop/Bcalc/Figures/chr_200kb.png
     B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/200kb_all.pi"
     title_name = 'B for 200 kb genome with 10 selected elements'
 
     # chr_200kb_recmap AKA 200kb Rec Map
-    # poetry run bvalcalc --region chr_200kb:1-200000 --pop_params tests/testparams/nogcBasicParams.py --bedgff_path tests/testfiles/200kb_slimtest.csv --plot_output /Users/jmarsh96/Desktop/Bcalc/Figures/chr_200kb_recmap.png
+    # poetry run Bvalcalc --region chr_200kb:1-200000 --pop_params tests/testparams/nogcBasicParams.py --bedgff_path tests/testfiles/200kb_slimtest.csv --plot_output /Users/jmarsh96/Desktop/Bcalc/Figures/chr_200kb_recmap.png
     # B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/200kb_recmap_all.pi"
     # title_name = 'B for 200 kb genome with recombination map'
     Genome = True
