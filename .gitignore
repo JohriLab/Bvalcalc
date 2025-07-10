@@ -12,6 +12,9 @@ __pycache__/
 *.Params.py
 *.tmp
 *~
+# Ignore all PNGs except in docs/_static/images
+*.png
+!docs/source/_static/images/*.png
 
 # Editor/project files
 .vscode/
