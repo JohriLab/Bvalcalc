@@ -11,11 +11,13 @@ from Bvalcalc.utils.generateParams import SPECIES, generateParams, check_generat
 from Bvalcalc.core.positionsBstats import positionsBstats
 from Bvalcalc.core.plotChromB import plotChromB
 
+__version__ = "0.5.2"
+
 def main():
     start_time = time.time()
 
     check_generate_params_args() # Unique error message for --generate_params to print species names
-    parser = parse_args()
+    parser = parse_args(__version__)
     known_args, remaining_args = parser.parse_known_args()
 
     if known_args.generate_params is not None: # if --generate_params

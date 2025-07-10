@@ -130,8 +130,8 @@ def parseBmapArgs(argv=None):
     parser.add_argument('--quiet', action='store_true', help="If set, silence print statements.")
     return parser.parse_args(argv)
 
-def parse_args():
-    parser = argparse.ArgumentParser(description="Welcome to Bvalcalc! Please specify a mode to calculate B.")
+def parse_args(version):
+    parser = argparse.ArgumentParser(description=f"Welcome to Bvalcalc {version}! Please specify a mode to calculate B.")
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('--generate_params', metavar='SPECIES', nargs='?', const='template', default=None,
                        choices=['selfing', 'human', 'drosophila', 'arabidopsis', 'mouse', 'pfalciparum', 'celegans', 'template'],
