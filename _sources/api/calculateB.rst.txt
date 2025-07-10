@@ -6,18 +6,18 @@ The Python API can be used to access core B calculation functions that take vect
 Python functions
 -----------------
 
-.. autofunction:: bvalcalc.get_params
+.. autofunction:: Bvalcalc.get_params
 
-.. autofunction:: bvalcalc.calculateB_linear
+.. autofunction:: Bvalcalc.calculateB_linear
 
-.. autofunction:: bvalcalc.calculateB_unlinked
+.. autofunction:: Bvalcalc.calculateB_unlinked
 
 Example
 ---------
 
 .. code-block:: python
 
-   from bvalcalc import get_params, calculateB_unlinked, calculateB_linear
+   from Bvalcalc import get_params, calculateB_unlinked, calculateB_linear
 
    # Path to your Params.py file
    params = get_params("./DrosophilaParams.py")
