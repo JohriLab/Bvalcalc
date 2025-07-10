@@ -7,7 +7,6 @@ __pycache__/
 *.out
 *.log
 *.txt
-*.png
 *.B
 *.bvals
 *.Params.py
