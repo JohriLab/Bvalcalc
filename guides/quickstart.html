@@ -119,6 +119,8 @@
 <p>To calculate B, we need evolutionary information about the species of the population in a parameters file.</p>
 <p>Copy population genetic parameters from one of the templates, e.g. Drosophila.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--generate_params<span class="w"> </span>drosophila
+
+<span class="c1"># Wrote parameters to: ./DrosophilaParams.py</span>
 </pre></div>
 </div>
 <p>Open <code class="docutils literal notranslate"><span class="pre">./DrosophilaParams.py</span></code> in your text editor of choice. This file contains example popgen parameters that allow us to accurately calculate B.
@@ -132,6 +134,8 @@ When calculating B for a new species you’ll need to check the literature and u
 --pop_params<span class="w"> </span>./DrosophilaParams.py<span class="w"> </span><span class="se">\</span>
 --gene_size<span class="w"> </span><span class="m">5000</span><span class="w"> </span><span class="se">\</span>
 --distance<span class="w"> </span><span class="m">1000</span>
+
+<span class="c1"># B for site 1000bp away from 5000bp region: 0.9919234623753387</span>
 </pre></div>
 </div>
 <p>The B-value for this site should be printed in the console as just above 0.99, which indicates diversity is expecteed to be reduced 1% due to BGS.</p>
@@ -144,9 +148,13 @@ When calculating B for a new species you’ll need to check the literature and u
 --gene_size<span class="w"> </span><span class="m">5000</span><span class="w"> </span><span class="se">\</span>
 --pop_params<span class="w"> </span>./DrosophilaParams.py<span class="w"> </span><span class="se">\</span>
 --plot_output<span class="w"> </span>gene_B.png
+
+<span class="c1"># B for adjacent site: 0.973696017863886</span>
+<span class="c1"># Mean B for flanking region: 0.9988920361466203</span>
 </pre></div>
 </div>
-<p>Have a look at the plot and the results printed to the console, you’ll notice B decays with distance from the selected element. It’s still a modest reduction (&lt;3.1%), but remember, across a genome ALL selected elements will contribute to B at any given site.</p>
+<p>Have a look at the plot and the results printed to the console, you’ll notice B decays with distance from the selected element. It’s a modest reduction, but remember, across a genome ALL selected elements will contribute to B at any given site.</p>
+<img alt="B gene tutorial example" class="with-shadow align-center" src="_static/images/gene_B_tutorial.png" />
 </section>
 <section id="b-in-a-genomic-region">
 <h2>B in a genomic region<a class="headerlink" href="#b-in-a-genomic-region" title="Link to this heading"></a></h2>
@@ -158,10 +166,13 @@ Let’s calculate B for a 1 Mb region in the middle of chromosome 2R [9500000-10
 --pop_params<span class="w"> </span>./DrosophilaParams.py<span class="w"> </span><span class="se">\</span>
 --bedgff_path<span class="w"> </span>examples/dmel6_2R_genes.csv<span class="w"> </span><span class="se">\</span>
 --plot_output<span class="w"> </span>1Mb_B.png
+
+<span class="c1"># Mean B of neutral sites across specified region: 0.910805643014426</span>
 </pre></div>
 </div>
-<p>Have a look at the plots: the blue sections of the graph indicate neutral regions and black indicates conserved elements.
-That’s all that’s necessary for many analyses, especially if you’re only interested in B values for a specific region of the genome, or are testing against simulated results.</p>
+<p>Have a look at the plot: the blue sections of the graph indicate neutral regions and black indicates conserved elements (in this case genes).</p>
+<img alt="B region tutorial example" class="with-shadow align-center" src="_static/images/1Mb_B.png" />
+<p>That’s all that’s necessary for many analyses, especially if you’re only interested in B values for a specific region of the genome, or are testing against simulated results.</p>
 </section>
 <section id="calculating-a-b-map">
 <h2>Calculating a B-map<a class="headerlink" href="#calculating-a-b-map" title="Link to this heading"></a></h2>
