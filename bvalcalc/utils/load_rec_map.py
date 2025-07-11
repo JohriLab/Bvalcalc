@@ -1,5 +1,6 @@
 import csv
 import numpy as np
+import sys
 
 def load_rec_map(rec_map, calc_start, calc_end, chunk_size, chromosome):
     """

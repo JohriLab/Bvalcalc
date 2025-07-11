@@ -5,7 +5,7 @@ import numpy as np
 from matplotlib.collections import LineCollection
 from matplotlib import gridspec  # for rec rate strip
 
-def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_only=False, rec_rates=None):
+def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_only=False, rec_rates=None, chunk_size=None):
     if not quiet:
         print('====== P L O T T I N G . . . =======================')
 
@@ -155,7 +155,7 @@ def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_
         ax_rec.tick_params(axis='x', which='major', labelsize=9)
         rec_img = np.expand_dims(rec_rates, axis=0)
         min_pos = positions.min()
-        extent = [min_pos, min_pos + len(rec_rates) * 20000, 0, 1]
+        extent = [min_pos, min_pos + len(rec_rates) * chunk_size, 0, 1]
         ax_rec.imshow(rec_img, aspect='auto', extent=extent, cmap=magenta_map, origin='lower', zorder=2, vmin=0, vmax=np.max(rec_rates))
         ax_rec.set_frame_on(False)
         plt.setp(ax.get_xticklabels(), visible=False)
