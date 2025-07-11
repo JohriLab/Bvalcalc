@@ -147,9 +147,8 @@ def parse_args(version):
     group.add_argument('--genome', '-w', action='store_true', help="Calculate B values genome-wide for all sites considering all selected elements")
     group.add_argument('--Bmap', '-b', type=str, help="B-map lookup for sites in a VCF/txt file")
 
-    # 🐝 If no args, print help and exit
+    # If no args provided, print help and exit
     if len(sys.argv) == 1:
-        print(f"Welcome to Bvalcalc {version}!\n")
         parser.print_help()
         sys.exit(0)
 
