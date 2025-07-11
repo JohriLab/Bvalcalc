@@ -63,13 +63,29 @@ def load_bed_gff(file_path):
                 longest_blocks[key] = (end, chrom)
 
     # Unpack results
-    blockstart = []
-    blockend = []
-    chromosomes = []
+    # Convert dict to list of (chrom, start, end)
+    raw_blocks = [(chrom, start, end)
+                  for (chrom, start), (end, _) in longest_blocks.items()]
 
-    for (chrom, start), (end, chrom_val) in longest_blocks.items():
-        blockstart.append(start)
-        blockend.append(end)
-        chromosomes.append(chrom_val)
+    # Sort by chrom, start, then descending end
+    raw_blocks.sort(key=lambda x: (x[0], x[1], -x[2]))
 
-    return np.array(blockstart), np.array(blockend), np.array(chromosomes)
+    # Remove overlapping entries (keep longest non-overlapping)
+    filtered = []
+    current_end = {}
+
+    for chrom, start, end in raw_blocks:
+        if chrom in current_end and start < current_end[chrom]:
+            continue
+        filtered.append((chrom, start, end))
+        current_end[chrom] = end
+
+    # Unpack and return
+    if filtered:
+        chromosomes, blockstart, blockend = zip(*filtered)
+        return np.array(blockstart), np.array(blockend), np.array(chromosomes)
+    else:
+        return np.array([]), np.array([]), np.array([])
+
+
+    # return np.array(blockstart), np.array(blockend), np.array(chromosomes)

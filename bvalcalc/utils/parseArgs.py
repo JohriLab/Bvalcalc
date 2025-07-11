@@ -133,7 +133,7 @@ def parseBmapArgs(argv=None):
 def parse_args(version):
     parser = argparse.ArgumentParser(
         prog="Bvalcalc",
-        description=f"Welcome to Bvalcalc {version}! Please specify a mode to calculate B."
+        description=f"Welcome to Bvalcalc v{version}! Please specify a mode to calculate B."
     )
 
     group = parser.add_mutually_exclusive_group(required=True)
