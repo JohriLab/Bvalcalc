@@ -162,7 +162,11 @@ def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_
 
     # Final layout and save
     if rec_rates is None:
-        plt.tight_layout()
+        try:
+            plt.savefig(output_path, dpi=300)
+        except Exception as e:           # you could catch TimeoutError specifically if you prefer
+            import sys
+            print(f"Warning: could not save plot to {output_path!r}: {e}", file=sys.stderr)
     else:
         fig.subplots_adjust(hspace=0.01, bottom=0.12)
 

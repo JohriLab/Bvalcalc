@@ -67,9 +67,6 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
     else:
         rec_rate_per_chunk = None
 
-    # print(rec_rate_per_chunk, len(rec_rate_per_chunk), num_chunks)
-    # sys.exit()
-
     if args.gc_map:
         if not quiet: print(f"Using gene conversion map from {args.gc_map}")
         gc_rate_per_chunk = load_rec_map(args.gc_map, chr_start, chr_size, chunk_size, chromosome)
@@ -157,7 +154,9 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
             print("No output CSV requested; skipping save.")
 
     if caller == "regionBcalc":
-        rec_rate_per_chunk_in_region = rec_rate_per_chunk[calc_start // chunk_size:] # Slice rec_rate_per_chunk from region start onward
+        if rec_rate_per_chunk is not None:
+            rec_rate_per_chunk_in_region = rec_rate_per_chunk[calc_start // chunk_size:] # Slice rec_rate_per_chunk from region start onward
+        else: rec_rate_per_chunk_in_region = None
         return output_data, block_ranges, rec_rate_per_chunk_in_region, chunk_size
     else: #caller is genomeBcalc
         return
