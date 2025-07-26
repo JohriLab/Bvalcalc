@@ -25,8 +25,6 @@ To learn more about background selection, see :doc:`About BGS and B-values <preb
 
 *B-values from linked CDS across ~6 Mb of human chromosome 21, calculated with the -\-region module in 13.16 seconds*
 
-Introduction
--------------
 .. toctree::
    :maxdepth: 1
    :caption: Introduction
@@ -35,8 +33,6 @@ Introduction
    introduction/bedgff_input
    introduction/generate_params
 
-Modules
---------
 .. toctree::
    :maxdepth: 1
    :caption: Modules
@@ -47,8 +43,6 @@ Modules
    modules/genome
    modules/bmap_utils
 
-Guides
--------
 .. toctree::
    :maxdepth: 2
    :caption: Guides
@@ -59,8 +53,6 @@ Guides
    guides/demography
    guides/sweepfinder2
 
-API
-----
 .. toctree::
    :maxdepth: 1
    :caption: API
