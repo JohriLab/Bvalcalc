@@ -172,7 +172,11 @@ def calculate_exponent(t_start, t_end, U, a, b):
                 + ae / (ae + (1 - ae) * t_end)
                 - ae / (ae + (1 - ae) * t_start))
             # Match array of limit_factor to corresponding positions in E (where rec_0_mask has True);'l;'l''
-            E[rec_0_mask] = U[rec_0_mask] * limit_factor  # Get corresponding U for the numerator and plug back into E array to replace nan's
+            if len(rec_0_mask[False]) == 0:
+                print(f"Need to fix --gene when r = 0, see calculateB ~line 176")
+                E[rec_0_mask] = U * limit_factor
+            else:
+                E[rec_0_mask] = U[rec_0_mask] * limit_factor  # Get corresponding U for the numerator and plug back into E array to replace nan's
 
     return E
 

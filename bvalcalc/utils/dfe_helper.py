@@ -5,6 +5,7 @@ from typing import Dict, Any
 from functools import lru_cache
 
 GAMMA_DFE = False  # Default, instead of prop injected
+CONSTANT_DFE = False
 
 def get_DFE_params(params_path: str | None = None) -> Dict[str, Any]:
     """
@@ -52,6 +53,7 @@ def get_DFE_params(params_path: str | None = None) -> Dict[str, Any]:
         f0, f1, f2, f3 = gammaDFE_to_discretized(mean, shape, prop_syn)
         params.update({"f0": f0, "f1": f1, "f2": f2, "f3": f3})
 
+
     # 5. Set derived parameters and thresholds
     params["gamma_cutoff"] = 5
     params["t0"] = 0.0
@@ -63,6 +65,10 @@ def get_DFE_params(params_path: str | None = None) -> Dict[str, Any]:
     params["t2"] = h * (10.0 / (2.0 * Nanc))
     params["t3"] = h * (100.0 / (2.0 * Nanc))
     params["t4"] = h * 1.0
+
+    if CONSTANT_DFE:
+        ## Set t here using s instead of 
+        params["t_constant"] = h * (params["s"] / (2.0 * Nanc))
 
     return params
 
