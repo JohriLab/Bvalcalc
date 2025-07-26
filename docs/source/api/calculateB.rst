@@ -1,7 +1,7 @@
 Calculate B
 ===============
 
-The Python API can be used to access core B calculation functions that take vectorized inputs.
+The Python API can be used to access core B calculation functions that take vectorized inputs. Here we show how to calculate B from linked sites (``calculateB_linear``) and unlinked sites (``calculateB_unlinked``).
 
 Python functions
 -----------------
