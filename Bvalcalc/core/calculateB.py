@@ -178,6 +178,7 @@ def calculate_exponent(t_start, t_end, U, a, b):
                        / (a + (1 - a) * t_start))
                 + a / (a + (1 - a) * t_end)
                 - a / (a + (1 - a) * t_start))
+            if t_start == t_end: limit_factor = t_start / (a + (1 - a) * t_start)**2 # If --constant_dfe
             # Broadcast scalar limit_factor to all masked positions
             E[rec_0_mask] = U[rec_0_mask] * limit_factor  # Get corresponding U for the numerator and plug back into E array to replace nan's
 
@@ -188,9 +189,10 @@ def calculate_exponent(t_start, t_end, U, a, b):
                        / (ae + (1 - ae) * t_start))
                 + ae / (ae + (1 - ae) * t_end)
                 - ae / (ae + (1 - ae) * t_start))
+            if t_start == t_end: limit_factor = t_start / (ae + (1 - ae) * t_start)**2 # If --constant_dfe
             # Match array of limit_factor to corresponding positions in E (where rec_0_mask has True);'l;'l''
             if len(rec_0_mask[False]) == 0:
-                print(f"Need to fix --gene when r = 0, see calculateB ~line 176")
+                # print(f"Need to fix --gene when r = 0, see calculateB ~line 176") Fixed??
                 E[rec_0_mask] = U * limit_factor
             else:
                 E[rec_0_mask] = U[rec_0_mask] * limit_factor  # Get corresponding U for the numerator and plug back into E array to replace nan's
