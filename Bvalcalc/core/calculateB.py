@@ -45,6 +45,13 @@ def calculateB_linear(distance_to_element: int, length_of_element: int, params: 
         elif g > 0:
             a, b = get_a_b_with_GC(C, distance_to_element, length_of_element)
 
+        if t_constant: #If --
+            print("Hai")
+            E_constant = calculate_exponent(t_constant, t_constant, U, a, b)
+            print("whynan", E_constant)
+            B = np.exp(-1.0 * E_constant)
+            return np.where(length_of_element == 0, 1.0, B)
+        
         E_f1 = calculate_exponent(t1half, t2, U, a, b)
         E_f2 = calculate_exponent(t2, t3, U, a, b)
         E_f3 = calculate_exponent(t3, t4, U, a, b)
@@ -144,16 +151,24 @@ def calculate_exponent(t_start, t_end, U, a, b):
     """
     a, b, U = np.asarray(a), np.asarray(b), np.asarray(U)
 
+    # t_end = t_start * 1.000000001
+
     if U.size == 0: return 0 # If e.g. f1 proportion is 0, no need to calculate exponent
     
-    E1 = ((U * a) 
-            / ((1 - a) * (a - b) * (t_end - t_start))) * np.log((a + (t_end * (1 - a))) 
-            / (a + (t_start * (1 - a))))
-    E2 = -1.0 * ((U * b) 
-            / ((1 - b) * (a - b) * (t_end - t_start))) * np.log((b + ((1 - b) * t_end)) 
-            / (b + ((1 - b) * t_start)))
-
-    E = np.asarray(E1 + E2)
+    if t_end == t_start: # If --constant_dfe
+        E = (U / (a - b)) * (
+            a / (a + (1 - a) * t_start) -
+            b / (b + (1 - b) * t_start)
+        )
+    else: # Using discretized DFE
+        E1 = ((U * a) 
+                / ((1 - a) * (a - b) * (t_end - t_start))) * np.log((a + (t_end * (1 - a))) 
+                / (a + (t_start * (1 - a))))
+        E2 = -1.0 * ((U * b) 
+                / ((1 - b) * (a - b) * (t_end - t_start))) * np.log((b + ((1 - b) * t_end)) 
+                / (b + ((1 - b) * t_start)))
+    
+        E = np.asarray(E1 + E2)
 
     rec_0_mask = np.isclose(a, b)  # Get mask for where recombination rate = 0 within the gene
     if rec_0_mask.any(): # 4a) If a_arr is scalar (0‐d), compute limit once as scalar
