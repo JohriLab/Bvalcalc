@@ -75,7 +75,10 @@ def get_DFE_params(params_path: str | None = None) -> Dict[str, Any]:
             )
         ## Set t here using s instead of 
         print("constant DFEing")
-        params["t_constant"] = h * (params["s"])
+        params["t_constant"] = h * s
+        print(s)
+    else:         
+        params["t_constant"] = None
 
     return params
 
