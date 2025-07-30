@@ -49,6 +49,10 @@ DFE parameters may be reported in the literature as a gamma distribution. **Bval
 ``mean, shape, proportion_synonymous``
     The mean and shape parameters of the gamma DFE, and the proportion of strictly neutral sites in the annotated regions (e.g. synonymous in exon regions). 
 
+Similarly, a fixed constant selective strength may be used for all selected sites, replacing the discretized DFE when ``--constant_dfe`` is active:
+
+``s, proportion_synonymous``
+    A single selective strength to use for all selected mutations, and the proportion of strictly neutral sites in annotated regions (e.g. synonymous).
 
 Demography
 -----------
