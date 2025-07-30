@@ -40,6 +40,10 @@ Optional Arguments
   If included, use a gamma distribution to define the DFE (instead of fixed ``f0``, ``f1``, ``f2``, ``f3``). 
   Note that ``mean``, ``shape`` and ``proportion_synonymous`` should be set in the parameters file when active.
 
+**-\-constant_dfe**
+  If included, use a constant fixed ``s`` value as the DFE of selected sites (instead of fixed ``f0``, ``f1``, ``f2``, ``f3``). 
+  Note that ``s`` and ``proportion_synonymous`` should be set in the parameters file when active.
+  
 **-\-quiet**
   Suppress console output
 
