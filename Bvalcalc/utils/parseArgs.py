@@ -8,6 +8,7 @@ def parseSiteArgs(argv=None):
     parser.add_argument('--distance', type=int, default=1, help="Length of single region (e.g. gene) under selection. [5000]")
     parser.add_argument('--pop_change', action='store_true', help="If set, B will reflect the current B after a step change in population size, rather than ancestral B.")
     parser.add_argument('--gamma_dfe', action='store_true', help="If set, gamma distribution parameters will be used to define DFE's discretized f0-f3 proportions")
+    parser.add_argument('--constant_dfe', action='store_true', help="If set, the constant `s` and `neu_prop` parameters in the params file will be used for all conserved regions instead of discretized f0-f3 proportions")   
     parser.add_argument('--quiet', action='store_true', help="If set, silence print statements.")
     return parser.parse_args(argv)
 
@@ -18,6 +19,7 @@ def parseGeneArgs(argv=None):
     parser.add_argument('--flank_len', type=int, default=40000, help="Length of flanking neutral region for which to calcuate recovery of B. [25000]")
     parser.add_argument('--pop_change', action='store_true', help="If set, B will reflect the current B after a step change in population size, rather than ancestral B.")
     parser.add_argument('--gamma_dfe', action='store_true', help="If set, gamma distribution parameters will be used to define DFE's discretized f0-f3 proportions")
+    parser.add_argument('--constant_dfe', action='store_true', help="If set, the constant `s` and `neu_prop` parameters in the params file will be used for all conserved regions instead of discretized f0-f3 proportions")   
     parser.add_argument('--plot_output', nargs='?', const='Bplot.png', default=None, 
                         help="Generate a B recovery slope output"
                             "Provide path to plot output.")
@@ -55,6 +57,7 @@ def parseRegionArgs(argv=None):
                              "Format should be a two column csv with the header: 'start,rate'. "
                              "Note that gene conversion rates will be averaged within each chunk.")    
     parser.add_argument('--gamma_dfe', action='store_true', help="If set, gamma distribution parameters will be used to define DFE's discretized f0-f3 proportions")
+    parser.add_argument('--constant_dfe', action='store_true', help="If set, the constant `s` and `neu_prop` parameters in the params file will be used for all conserved regions instead of discretized f0-f3 proportions")   
     parser.add_argument('--plot_output', nargs='?', const='genome_plot.png', default=None, 
                         help="Generate a basic plot using `Bvalcalc.py --genome` output"
                             "Provide path to plot output.")
@@ -101,6 +104,7 @@ def parseGenomeArgs(argv=None):
                              "Format should be a two column csv with the header: 'start,rate'. "
                              "Note that gene conversion rates will be averaged within each chunk.") 
     parser.add_argument('--gamma_dfe', action='store_true', help="If set, gamma distribution parameters will be used to define DFE's discretized f0-f3 proportions")   
+    parser.add_argument('--constant_dfe', action='store_true', help="If set, the constant `s` and `neu_prop` parameters in the params file will be used for all conserved regions instead of discretized f0-f3 proportions")   
     parser.add_argument('--neutral_only', action='store_true', help="If set, plot_output will only show neutral sites.")
     parser.add_argument('--out', type=str, default=None,
                         help="Required path to output CSV file. If --out is specified but no file name is given, "

@@ -34,7 +34,7 @@ def calculateB_linear(distance_to_element: int, length_of_element: int, params: 
     with np.errstate(divide='ignore', invalid='ignore'):
         if params is None:
             params = get_params()
-        r, u, g, k, t1, t1half, t2, t3, t4, f1, f2, f3, f0 = params["r"], params["u"], params["g"], params["k"], params["t1"], params["t1half"], params["t2"], params["t3"], params["t4"], params["f1"], params["f2"], params["f3"], params["f0"]
+        r, u, g, k, t1, t1half, t2, t3, t4, f1, f2, f3, f0, t_constant = params["r"], params["u"], params["g"], params["k"], params["t1"], params["t1half"], params["t2"], params["t3"], params["t4"], params["f1"], params["f2"], params["f3"], params["f0"], params["t_constant"]
         C = (1.0 - np.exp(-2.0 * r * distance_to_element)) / 2.0 # cM
         U = length_of_element * u
         if g == 0:

@@ -5,7 +5,7 @@ from typing import Dict, Any
 from functools import lru_cache
 
 GAMMA_DFE = False  # Default, instead of prop injected
-CONSTANT_DFE = False
+CONSTANT_DFE = False # Default, instead of prop injected
 
 def get_DFE_params(params_path: str | None = None) -> Dict[str, Any]:
     """
@@ -47,7 +47,7 @@ def get_DFE_params(params_path: str | None = None) -> Dict[str, Any]:
         prop_syn = getattr(pop, 'proportion_synonymous', None)
         if mean is None or shape is None or prop_syn is None:
             raise AttributeError(
-                "pop_params must define 'mean', 'shape' and 'proportion_synonymous' when GAMMA_DFE=True"
+                "pop_params must define 'mean', 'shape' and 'proportion_synonymous' when --gamma_dfe is active"
             )
         from .dfe_helper import gammaDFE_to_discretized
         f0, f1, f2, f3 = gammaDFE_to_discretized(mean, shape, prop_syn)
@@ -67,8 +67,15 @@ def get_DFE_params(params_path: str | None = None) -> Dict[str, Any]:
     params["t4"] = h * 1.0
 
     if CONSTANT_DFE:
+        s = getattr(pop, "s", None)
+        prop_syn = getattr(pop, 'proportion_synonymous', None)
+        if s is None or prop_syn is None:
+            raise AttributeError(
+                "pop_params must define 's' and 'proportion_synonymous' when --constant_dfe is active"
+            )
         ## Set t here using s instead of 
-        params["t_constant"] = h * (params["s"] / (2.0 * Nanc))
+        print("constant DFEing")
+        params["t_constant"] = h * (params["s"])
 
     return params
 
