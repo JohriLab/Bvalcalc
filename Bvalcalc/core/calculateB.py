@@ -36,7 +36,6 @@ def calculateB_linear(distance_to_element: int, length_of_element: int, params: 
             params = get_params()
         r, u, g, k, t1, t1half, t2, t3, t4, f1, f2, f3, f0, t_constant = params["r"], params["u"], params["g"], params["k"], params["t1"], params["t1half"], params["t2"], params["t3"], params["t4"], params["f1"], params["f2"], params["f3"], params["f0"], params["t_constant"]
 
-        print("TEE CONSTANTING", t_constant)
         C = (1.0 - np.exp(-2.0 * r * distance_to_element)) / 2.0 # cM
         U = length_of_element * u
         if g == 0:
@@ -45,10 +44,8 @@ def calculateB_linear(distance_to_element: int, length_of_element: int, params: 
         elif g > 0:
             a, b = get_a_b_with_GC(C, distance_to_element, length_of_element)
 
-        if t_constant: #If --
-            print("Hai")
+        if t_constant: #If --constant_dfe is active
             E_constant = calculate_exponent(t_constant, t_constant, U, a, b)
-            print("whynan", E_constant)
             B = np.exp(-1.0 * E_constant)
             return np.where(length_of_element == 0, 1.0, B)
         
@@ -77,7 +74,7 @@ def calculateB_recmap(distance_to_element, length_of_element,
     with np.errstate(divide='ignore', invalid='ignore'):
         if params is None:
             params = get_params()
-        r, u, g, k, t1, t1half, t2, t3, t4, f1, f2, f3, f0 = params["r"], params["u"], params["g"], params["k"], params["t1"], params["t1half"], params["t2"], params["t3"], params["t4"], params["f1"], params["f2"], params["f3"], params["f0"]
+        r, u, g, k, t1, t1half, t2, t3, t4, f1, f2, f3, f0, t_constant = params["r"], params["u"], params["g"], params["k"], params["t1"], params["t1half"], params["t2"], params["t3"], params["t4"], params["f1"], params["f2"], params["f3"], params["f0"], params["t_constant"]
         # rec_distances is the length of the element * rec rate in each spanned region. 
         
         if rec_distances is not None:
@@ -101,6 +98,11 @@ def calculateB_recmap(distance_to_element, length_of_element,
              a, b = get_a_b_with_GC_andMaps(C, y=distance_to_element, l=length_of_element, 
                                             rec_l=rec_adjusted_length_of_element, local_g = local_g)
 
+        if t_constant: #If --constant_dfe is active
+            E_constant = calculate_exponent(t_constant, t_constant, U, a, b)
+            B = np.exp(-1.0 * E_constant)
+            return np.where(length_of_element == 0, 1.0, B)
+        
         E_f1 = calculate_exponent(t1half, t2, U, a, b)
         E_f2 = calculate_exponent(t2, t3, U, a, b)
         E_f3 = calculate_exponent(t3, t4, U, a, b)
@@ -151,8 +153,6 @@ def calculate_exponent(t_start, t_end, U, a, b):
     """
     a, b, U = np.asarray(a), np.asarray(b), np.asarray(U)
 
-    # t_end = t_start * 1.000000001
-
     if U.size == 0: return 0 # If e.g. f1 proportion is 0, no need to calculate exponent
     
     if t_end == t_start: # If --constant_dfe
@@ -160,7 +160,7 @@ def calculate_exponent(t_start, t_end, U, a, b):
             a / (a + (1 - a) * t_start) -
             b / (b + (1 - b) * t_start)
         )
-    else: # Using discretized DFE
+    else: # Using discretized DFE (f0,f1,f2,f3 or --gamma_dfe)
         E1 = ((U * a) 
                 / ((1 - a) * (a - b) * (t_end - t_start))) * np.log((a + (t_end * (1 - a))) 
                 / (a + (t_start * (1 - a))))

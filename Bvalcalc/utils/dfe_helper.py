@@ -73,10 +73,7 @@ def get_DFE_params(params_path: str | None = None) -> Dict[str, Any]:
             raise AttributeError(
                 "pop_params must define 's' and 'proportion_synonymous' when --constant_dfe is active"
             )
-        ## Set t here using s instead of 
-        print("constant DFEing")
-        params["t_constant"] = h * s
-        print(s)
+        params["t_constant"] = h * s # Set parameter to be exported to calculateB
     else:         
         params["t_constant"] = None
 
