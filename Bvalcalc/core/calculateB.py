@@ -3,7 +3,7 @@ from Bvalcalc.utils.dfe_helper import get_DFE_params
 
 _params_cache: dict | None = None
 
-def get_params(params_path: str | None = None):
+def get_params(params_path: str | None = None, gamma_dfe: bool = False, constant_dfe: bool = False):
     """
     Loads DFE parameters from the provided population genetic parameters file.
 
@@ -14,7 +14,8 @@ def get_params(params_path: str | None = None):
     """
     global _params_cache
     if _params_cache is None:
-        _params_cache = get_DFE_params(params_path)
+        print("ah")
+        _params_cache = get_DFE_params(params_path, gamma_dfe, constant_dfe)
     return _params_cache
 
 def calculateB_linear(distance_to_element: int, length_of_element: int, params: dict | None = None):

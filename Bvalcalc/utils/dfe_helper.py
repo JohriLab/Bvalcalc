@@ -7,7 +7,7 @@ from functools import lru_cache
 GAMMA_DFE = False  # Default, instead of prop injected
 CONSTANT_DFE = False # Default, instead of prop injected
 
-def get_DFE_params(params_path: str | None = None) -> Dict[str, Any]:
+def get_DFE_params(params_path: str | None = None, gamma_dfe: bool = False, constant_dfe: bool = False) -> Dict[str, Any]:
     """
     Load and validate population parameters from the file pointed to by
     `params_path` or, if None, by the BCALC_POP_PARAMS env var.
@@ -41,7 +41,7 @@ def get_DFE_params(params_path: str | None = None) -> Dict[str, Any]:
         params[name] = float(val)
 
     # 4. Optional gamma-DFE override
-    if GAMMA_DFE:
+    if GAMMA_DFE or gamma_dfe is not False: # The GAMMA_DFE is prop injected by CLI, gamma_dfe is provided by API
         mean = getattr(pop, 'mean', None)
         shape = getattr(pop, 'shape', None)
         prop_syn = getattr(pop, 'proportion_synonymous', None)
@@ -66,7 +66,7 @@ def get_DFE_params(params_path: str | None = None) -> Dict[str, Any]:
     params["t3"] = h * (100.0 / (2.0 * Nanc))
     params["t4"] = h * 1.0
 
-    if CONSTANT_DFE:
+    if CONSTANT_DFE or constant_dfe is not False: # The CONSTANT_DFE is prop injected by CLI, constant_dfe is provided by API
         s = getattr(pop, "s", None)
         prop_syn = getattr(pop, 'proportion_synonymous', None)
         if s is None or prop_syn is None:
