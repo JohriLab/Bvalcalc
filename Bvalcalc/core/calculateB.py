@@ -14,11 +14,11 @@ def get_params(
     Caches on (params_path, gamma_dfe, constant_dfe) and rebuilds whenever
     any of those three inputs change.
     """
-    global _params_cache, _cache_args
+    global _params_cache#, _cache_args
     key = (params_path, gamma_dfe, constant_dfe)
-    if _cache_args != key:
-        _params_cache = get_DFE_params(params_path, gamma_dfe, constant_dfe)
-        _cache_args = key
+    # if _cache_args != key:
+    _params_cache = get_DFE_params(params_path, gamma_dfe, constant_dfe)
+    # _cache_args = key
     return _params_cache
 
 def calculateB_linear(distance_to_element: int, length_of_element: int, params: dict | None = None):
@@ -137,7 +137,12 @@ def calculateB_unlinked(unlinked_L: int, params: dict | None = None):
     if params is None:
         params = get_params()
 
-    u, t1, t1half, t2, t3, t4, f0, f1, f2, f3 = params["u"], params["t1"], params["t1half"], params["t2"], params["t3"], params["t4"], params["f0"], params["f1"], params["f2"], params["f3"]
+    u, t1, t1half, t2, t3, t4, f0, f1, f2, f3, t_constant = params["u"], params["t1"], params["t1half"], params["t2"], params["t3"], params["t4"], params["f0"], params["f1"], params["f2"], params["f3"], params["t_constant"]
+    
+    if t_constant: #If --constant_dfe is active    
+
+        unlinked_B  = np.exp(-8 * u * 1.0 * unlinked_L * (t_constant/(1 + t_constant)**2))
+        return unlinked_B    
 
     f1_above_cutoff = f1 * ((t1half - t1) / (t2 - t1))
 
