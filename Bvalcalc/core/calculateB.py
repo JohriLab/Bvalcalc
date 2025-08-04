@@ -160,22 +160,31 @@ def calculateB_unlinked(unlinked_L: int, params: dict | None = None):
 ##
 
 
-def calculateB_hri(f1,f2,u,interfering_L,h,N0,t1,t2,t3,t_constant = None):
+def calculateB_hri(interfering_L: int, params: dict | None = None):
+
+    if params is None:
+        params = get_params()
+
+    Nanc, u, t1, t1half, t2, t3, t4, f0, f1, f2, f3, t_constant = params["Nanc"], params["u"], params["t1"], params["t1half"], params["t2"], params["t3"], params["t4"], params["f0"], params["f1"], params["f2"], params["f3"], params["t_constant"]
+ 
+    h = 0.5
+    u = 2 * u
     # Mutation rates for f1 and f2
     u1 = f1 * u    # f1 mut rate
     u2 = f2 * u    # f2 mut rate
+    print(f1,f2,u,interfering_L,h,Nanc,t1,t2,t3, "gotye")
 
     # DFE ranges in terms of 2Ns
-    a1, b1 = t1, t2     # f1: uniform 2Ns ∈ [1, 10]
-    a2, b2 = t2, t3    # f2: uniform 2Ns ∈ [10, 100]
+    a1, b1 = 1, 10     # f1: uniform 2Ns ∈ [1, 10]
+    a2, b2 = 10, 100    # f2: uniform 2Ns ∈ [10, 100]
 
     # Compute E[(2Ns)^2] for each uniform DFE: E[X^2] = (b^2 + b*a + a^2)/3
     E_X2_f1 = (b1**2 + b1*a1 + a1**2) / 3
     E_X2_f2 = (b2**2 + b2*a2 + a2**2) / 3
 
     # Convert to E[s^2]: s = h * (2Ns)/(2N0) => s^2 = h^2 * X^2 / (4 * N0^2)
-    t_sq1 = (h**2 * E_X2_f1) / (4 * N0**2)
-    t_sq2 = (h**2 * E_X2_f2) / (4 * N0**2)
+    t_sq1 = (h**2 * E_X2_f1) / (4 * Nanc**2)
+    t_sq2 = (h**2 * E_X2_f2) / (4 * Nanc**2)
 
     # Total HRI related mutation rate per site
     u = u1 + u2
@@ -186,9 +195,9 @@ def calculateB_hri(f1,f2,u,interfering_L,h,N0,t1,t2,t3,t_constant = None):
     kappa = 1         # Mutational bias parameter
 
     # Scaling parameters
-    gamma = 2 * N0 * t
+    gamma = 2 * Nanc * t
     U = u * interfering_L
-    alpha2 = 2 * N0 * U
+    alpha2 = 2 * Nanc * U
 
     # ======================== EQ4: Solve for B ========================
     def eq4(B):

@@ -7,8 +7,12 @@ def siteBcalc(args):
     dfe_helper.GAMMA_DFE = args.gamma_dfe # Update DFE if --gamma_dfe
     dfe_helper.CONSTANT_DFE = args.constant_dfe # Update DFE if --constant_dfe
     from Bvalcalc.core.calculateB import calculateB_linear
+    from Bvalcalc.core.calculateB import calculateB_hri
+    # f1,f2,u,t1,t2,t3,N0,h
+    interfering_L = 10000
 
-    b_values = calculateB_linear(distance, gene_size)
+    b_values = calculateB_hri(interfering_L)
+    # b_values = calculateB_linear(distance, gene_size)
     print(f"B for site {distance}bp away from {gene_size}bp region: {b_values}")
 
     if args.pop_change:
