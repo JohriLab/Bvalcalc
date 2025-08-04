@@ -160,13 +160,15 @@ def calculateB_unlinked(unlinked_L: int, params: dict | None = None):
 ##
 
 
-def calculateB_hri(interfering_L: int, params: dict | None = None):
+def calculateB_hri(prior_B: float, interfering_L: int, params: dict | None = None):
 
     if params is None:
         params = get_params()
 
     Nanc, u, t1, t1half, t2, t3, t4, f0, f1, f2, f3, t_constant = params["Nanc"], params["u"], params["t1"], params["t1half"], params["t2"], params["t3"], params["t4"], params["f0"], params["f1"], params["f2"], params["f3"], params["t_constant"]
  
+    N0 = prior_B * Nanc
+
     h = 0.5
     u = 2 * u
     # Mutation rates for f1 and f2
@@ -183,8 +185,8 @@ def calculateB_hri(interfering_L: int, params: dict | None = None):
     E_X2_f2 = (b2**2 + b2*a2 + a2**2) / 3
 
     # Convert to E[s^2]: s = h * (2Ns)/(2N0) => s^2 = h^2 * X^2 / (4 * N0^2)
-    t_sq1 = (h**2 * E_X2_f1) / (4 * Nanc**2)
-    t_sq2 = (h**2 * E_X2_f2) / (4 * Nanc**2)
+    t_sq1 = (h**2 * E_X2_f1) / (4 * N0**2)
+    t_sq2 = (h**2 * E_X2_f2) / (4 * N0**2)
 
     # Total HRI related mutation rate per site
     u = u1 + u2
@@ -195,9 +197,9 @@ def calculateB_hri(interfering_L: int, params: dict | None = None):
     kappa = 1         # Mutational bias parameter
 
     # Scaling parameters
-    gamma = 2 * Nanc * t
+    gamma = 2 * N0 * t
     U = u * interfering_L
-    alpha2 = 2 * Nanc * U
+    alpha2 = 2 * N0 * U
 
     # ======================== EQ4: Solve for B ========================
     def eq4(B):
