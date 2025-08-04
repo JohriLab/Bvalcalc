@@ -11,7 +11,15 @@ def siteBcalc(args):
 ## To delete
     from Bvalcalc.core.calculateB import calculateB_hri
 
-    # First we need to identify our linkage block of interest 
+
+    # r = 1e-8
+    # chunk_size = 20000
+    # First we need to identify our linkage block of interest, which will be the area within a cM recombint length region, though when its shorter than 
+    # linkage_block_max_rec_length = r * chunk_size # r * l
+    # linkage_block_min_physical_length = 100000
+
+
+    ## THEN RUN
     interfering_L = 10000
     prior_B = 0.9
 
