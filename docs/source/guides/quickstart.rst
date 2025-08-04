@@ -13,13 +13,14 @@ You can install **Bvalcalc** on the command line via pip:
 .. code-block:: bash
 
    pip install Bvalcalc
+   
 
 Specifying popgen parameters
 ------------------------------
 
 To calculate B, we need evolutionary information about the species of the population in a parameters file.
 
-Copy population genetic parameters from one of the templates, e.g. Drosophila.  
+Copy population genetic parameters from one of the templates, e.g. `Drosophila melanogaster`
 
 .. code-block:: bash
 

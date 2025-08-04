@@ -10,7 +10,11 @@ Install **Bvalcalc** via pip from PyPI:
 
    pip install Bvalcalc
 
-(or: ``python -m pip install Bvalcalc``)
+... or for the dev version!
+
+.. code-block:: bash
+
+   pip install --index-url https://test.pypi.org/simple --extra-index-url https://pypi.org/simple --upgrade Bvalcalc
 
 Verify the install worked by running the CLI “help”:
 
