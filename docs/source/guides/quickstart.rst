@@ -45,7 +45,7 @@ Let's start by calculating B at a site 1kb from the edge of a single conserved e
 
    # B for site 1000bp away from 5000bp region: 0.9919234623753387
 
-The B-value for this site should be printed in the console as just above 0.99, which indicates diversity is expecteed to be reduced 1% due to BGS.
+The B-value for this site should be printed in the console as just above 0.99, which indicates diversity at your focal site is reduced ~1% by BGS from the 5kb conserved element.
 
 B recovery from one element
 -----------------------------

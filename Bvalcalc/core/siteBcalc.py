@@ -10,6 +10,8 @@ def siteBcalc(args):
 
 ## To delete
     from Bvalcalc.core.calculateB import calculateB_hri
+
+    # First we need to identify our linkage block of interest 
     interfering_L = 10000
     prior_B = 0.9
 
