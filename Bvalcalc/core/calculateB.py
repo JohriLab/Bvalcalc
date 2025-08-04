@@ -1,5 +1,7 @@
 import numpy as np
 from Bvalcalc.utils.dfe_helper import get_DFE_params
+from scipy.optimize import root_scalar
+from scipy.integrate import trapezoid
 
 _params_cache: dict | None = None
 _cache_args: tuple[str | None, bool, bool] | None = None
@@ -14,8 +16,8 @@ def get_params(
     Caches on (params_path, gamma_dfe, constant_dfe) and rebuilds whenever
     any of those three inputs change.
     """
-    global _params_cache#, _cache_args
-    key = (params_path, gamma_dfe, constant_dfe)
+    global _params_cache#, _cache_args # COMMENTED OUT CACHING FOR API USAGE, CAN RE-IMPLEMENT FOR CLI IF IT SLOWS IT DOWN
+    # key = (params_path, gamma_dfe, constant_dfe)
     # if _cache_args != key:
     _params_cache = get_DFE_params(params_path, gamma_dfe, constant_dfe)
     # _cache_args = key
@@ -153,6 +155,91 @@ def calculateB_unlinked(unlinked_L: int, params: dict | None = None):
     unlinked_B  = np.exp(-8 * u * 1.0 * unlinked_L * (sum_f1 + sum_f2 + sum_f3))
 
     return unlinked_B
+
+
+##
+
+
+def calculateB_hri(f1,f2,u,interfering_L,h,N0,t1,t2,t3,t_constant = None):
+    # Mutation rates for f1 and f2
+    u1 = f1 * u    # f1 mut rate
+    u2 = f2 * u    # f2 mut rate
+
+    # DFE ranges in terms of 2Ns
+    a1, b1 = t1, t2     # f1: uniform 2Ns ∈ [1, 10]
+    a2, b2 = t2, t3    # f2: uniform 2Ns ∈ [10, 100]
+
+    # Compute E[(2Ns)^2] for each uniform DFE: E[X^2] = (b^2 + b*a + a^2)/3
+    E_X2_f1 = (b1**2 + b1*a1 + a1**2) / 3
+    E_X2_f2 = (b2**2 + b2*a2 + a2**2) / 3
+
+    # Convert to E[s^2]: s = h * (2Ns)/(2N0) => s^2 = h^2 * X^2 / (4 * N0^2)
+    t_sq1 = (h**2 * E_X2_f1) / (4 * N0**2)
+    t_sq2 = (h**2 * E_X2_f2) / (4 * N0**2)
+
+    # Total HRI related mutation rate per site
+    u = u1 + u2
+
+    # RMS selection coefficient over both DFEs
+    t = np.sqrt((u1 * t_sq1 + u2 * t_sq2) / u)
+
+    kappa = 1         # Mutational bias parameter
+
+    # Scaling parameters
+    gamma = 2 * N0 * t
+    U = u * interfering_L
+    alpha2 = 2 * N0 * U
+
+    # ======================== EQ4: Solve for B ========================
+    def eq4(B):
+        return (
+            -np.log(B)
+            - (0.5 * U * (1 - np.exp(-gamma * B))**3)
+            / (t * (1 + kappa * np.exp(-gamma * B))**3)
+        )
+
+    sol = root_scalar(eq4, bracket=[1e-10, 1], method='bisect')
+    Bval = sol.root
+
+    # ======================== EQ5: Vectorized double-trapz for B' ========================
+    def eq5(B, Tmax=100.0, n_steps=2000):
+        # precompute coefficients
+        f1 = 1 - np.exp(-gamma * B)
+        f2 = 1 + kappa * np.exp(-gamma * B)
+        A  = f1 / f2
+        c  = 0.5 * alpha2 / gamma * A**3
+        d  = 2 * gamma * B * (f2 / f1)
+
+        # grid from 0 to Tmax
+        x = np.linspace(0, Tmax, n_steps)
+
+        # inner integrand g(x)
+        gx = np.exp(c * (1 - np.exp(-d * x))**2)
+
+        # cumulative ∫₀ˣ g(t) dt via trapezoid rule
+        cumI = np.concatenate((
+            [0.0],
+            np.cumsum((gx[:-1] + gx[1:]) * 0.5 * np.diff(x))
+        ))
+
+        # outer integrand and final trapezoid
+        hx = np.exp(-B * cumI)
+        return B * trapezoid(hx, x)
+
+    # ======================== RUN & PRINT ========================
+    Bprime = eq5(Bval)
+
+    print(f"Total per-site u    = {u:.2e}")
+    print(f"E[s^2]_f1           = {t_sq1:.2e}")
+    print(f"E[s^2]_f2           = {t_sq2:.2e}")
+    print(f"RMS selection s_eff = {t:.2e}")
+    print(f"Dip B (from eq4)    = {Bval:.5f}")
+    print(f"Dip B' (from eq5)   = {Bprime:.5f}")
+
+    return Bprime
+
+##
+
 
 ## Helper functions
 
