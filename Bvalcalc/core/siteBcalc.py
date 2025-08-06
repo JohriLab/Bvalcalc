@@ -9,22 +9,38 @@ def siteBcalc(args):
     from Bvalcalc.core.calculateB import calculateB_linear
 
 # ## To delete
-#     from Bvalcalc.core.calculateB import calculateB_hri
+    from Bvalcalc.core.calculateB import calculateB_hri
 
 
-#     ## r = 1e-8
-#     ## chunk_size = 20000
-#     ## First we need to identify our linkage block of interest, which will be the area within a cM recombint length region, though when its shorter than 
-#     ## linkage_block_max_rec_length = r * chunk_size # r * l
-#     ## linkage_block_min_physical_length = 100000
+    ## Get normal B
+
+    ## r = 1e-8
+    ## chunk_size = 20000
+    ## First we need to identify our linkage block of interest, which will be the area within a cM recombint length region, with a minimum U
+
+    ##      0. Make a normal B-map.
+
+    ##      1. Find consecutive chunks with local rec_rate below 0.1 * r with int_L > 0 to have interference calculation applied within them.
+    ## 
+    ##      2. Re-calculate B from everything EXCEPT within the region (distant B)
+    ##
+    ##      3. Calculate interference B within the 0rec region
+    ##
+    ##      4. For regions with r between 0.1 and >0, compare result to normal calculateB and keep biggest result
+    ##
+    ##      5. Update B_values array
 
 
-#     ### THEN RUN
-#     interfering_L = 10000
-#     prior_B = 0.9
+    ## linkage_block_max_rec_length = r * 100 # r * l
+    ## linkage_block_min_selected_length = u * 10000
 
-#     b_values = calculateB_hri(interfering_L, prior_B)
-#     return
+
+    ### THEN RUN
+    interfering_L = 10000
+    prior_B = 0.9
+
+    b_values = calculateB_hri(interfering_L, prior_B)
+    return
 # ## To delete
 
     b_values = calculateB_linear(distance, gene_size)
