@@ -202,12 +202,14 @@ def calculateB_hri(prior_B: float, interfering_L: int, params: dict | None = Non
     alpha2 = 2 * N0 * U
 
     # ======================== EQ4: Solve for B ========================
-    def eq4(B):
-        return (
-            -np.log(B)
-            - (0.5 * U * (1 - np.exp(-gamma * B))**3)
-            / (t * (1 + kappa * np.exp(-gamma * B))**3)
-        )
+    def eq4(B, U, gamma, t, kappa=1):
+        
+        exp_term = np.exp(-gamma * B)
+        numerator = 0.5 * U * (1 - exp_term)**3
+        denominator = t * (1 + kappa * exp_term)**3
+
+        return -np.log(B) - numerator / denominator
+
 
     sol = root_scalar(eq4, bracket=[1e-10, 1], method='bisect')
     Bval = sol.root

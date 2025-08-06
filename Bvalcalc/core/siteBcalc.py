@@ -30,6 +30,7 @@ def siteBcalc(args):
     import sys
     sys.exit()
 
+    ##      1b. Combine the single chunks with adjacent chunks   
     ## 
     ##      2. Re-calculate B from everything EXCEPT within the region (distant B)
     ##

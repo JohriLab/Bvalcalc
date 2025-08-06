@@ -13,7 +13,10 @@ def calc_Bprime_per_chunk(
     ):
 
 
+    calculateB_hri()
+
     print("gotcha")
+
     import sys
     sys.exit()
 

@@ -149,8 +149,22 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
         from Bvalcalc.core.helpers.calc_Bprime_per_chunk import calc_Bprime_per_chunk
 
         rec_rate_per_chunk_in_region = rec_rate_per_chunk[calc_start // chunk_size:] # Slice rec_rate_per_chunk from region start onward
-        chunks_with_low_rec = rec_rate_per_chunk_in_region[rec_rate_per_chunk_in_region < 0.1 * r]
-        calc_Bprime_per_chunk()
+        r = 1e-8
+        low_rec_chunk_ids = rec_rate_per_chunk_in_region < 0.1 * r
+
+        # if 
+
+        U_lengths_in_low_rec_chunks = lperchunk[low_rec_chunk_ids]
+        print("Hi in chromBcalc", low_rec_chunk_ids, U_lengths_in_low_rec_chunks)
+
+        from Bvalcalc.core.calculateB import calculateB_hri
+
+        calculateB_hri(prior_B=low_rec_chunk_ids, interfering_L=U_lengths_in_low_rec_chunks)
+        print("Hai")
+        sys.exit()
+
+        interference_Bvals_per_chunk = calc_Bprime_per_chunk(prior_B=low_rec_chunk_ids, interfering_L=U_lengths_in_low_rec_chunks)
+
 
     if args.out is not None: # Write to CSV
         print(f"Writing B output to file...")
