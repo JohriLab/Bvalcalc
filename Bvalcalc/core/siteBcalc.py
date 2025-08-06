@@ -16,11 +16,20 @@ def siteBcalc(args):
 
     ## r = 1e-8
     ## chunk_size = 20000
-    ## First we need to identify our linkage block of interest, which will be the area within a cM recombint length region, with a minimum U
 
     ##      0. Make a normal B-map.
 
     ##      1. Find consecutive chunks with local rec_rate below 0.1 * r with int_L > 0 to have interference calculation applied within them.
+    import numpy as np
+    r = 1e-8
+    r_hri_threshold = 0.1 # only run HRI B when chunk r is less than: r * r_hri_threshold
+
+    chunk_rec_rate = np.array([0.001 * r, 0.5 * r])
+    print(chunk_rec_rate[chunk_rec_rate > r_hri_threshold * r], 'Hi')
+
+    import sys
+    sys.exit()
+
     ## 
     ##      2. Re-calculate B from everything EXCEPT within the region (distant B)
     ##

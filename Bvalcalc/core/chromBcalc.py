@@ -141,8 +141,11 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
     chrom_col = np.full(binned_positions.shape, chromosome, dtype="<U20")
 
     output_data = np.core.records.fromarrays(
-    [chrom_col,binned_positions.astype(int),binned_b_values.astype(float)],
-    names='Chromosome,Position,B',formats='U20,i8,f8')
+        [chrom_col,binned_positions.astype(int),binned_b_values.astype(float)],
+        names='Chromosome,Position,B',formats='U20,i8,f8')
+
+    from Bvalcalc.core.helpers import calc_Bprime_per_chunk
+    calc_Bprime_per_chunk()
 
     if args.out is not None: # Write to CSV
         print(f"Writing B output to file...")
