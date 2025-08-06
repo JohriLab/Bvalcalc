@@ -315,12 +315,14 @@
     <span class="n">alpha2</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">N0</span> <span class="o">*</span> <span class="n">U</span>
 
     <span class="c1"># ======================== EQ4: Solve for B ========================</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">eq4</span><span class="p">(</span><span class="n">B</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">(</span>
-            <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
-            <span class="o">-</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">U</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">B</span><span class="p">))</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span>
-            <span class="o">/</span> <span class="p">(</span><span class="n">t</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">kappa</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">B</span><span class="p">))</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span>
-        <span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">eq4</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">kappa</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        
+        <span class="n">exp_term</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">B</span><span class="p">)</span>
+        <span class="n">numerator</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">U</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">exp_term</span><span class="p">)</span><span class="o">**</span><span class="mi">3</span>
+        <span class="n">denominator</span> <span class="o">=</span> <span class="n">t</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">kappa</span> <span class="o">*</span> <span class="n">exp_term</span><span class="p">)</span><span class="o">**</span><span class="mi">3</span>
+
+        <span class="k">return</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">B</span><span class="p">)</span> <span class="o">-</span> <span class="n">numerator</span> <span class="o">/</span> <span class="n">denominator</span>
+
 
     <span class="n">sol</span> <span class="o">=</span> <span class="n">root_scalar</span><span class="p">(</span><span class="n">eq4</span><span class="p">,</span> <span class="n">bracket</span><span class="o">=</span><span class="p">[</span><span class="mf">1e-10</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;bisect&#39;</span><span class="p">)</span>
     <span class="n">Bval</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">root</span>
