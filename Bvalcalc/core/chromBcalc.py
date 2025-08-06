@@ -144,8 +144,13 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
         [chrom_col,binned_positions.astype(int),binned_b_values.astype(float)],
         names='Chromosome,Position,B',formats='U20,i8,f8')
 
-    from Bvalcalc.core.helpers import calc_Bprime_per_chunk
-    calc_Bprime_per_chunk()
+
+    if args.hri is not None:
+        from Bvalcalc.core.helpers.calc_Bprime_per_chunk import calc_Bprime_per_chunk
+
+        rec_rate_per_chunk_in_region = rec_rate_per_chunk[calc_start // chunk_size:] # Slice rec_rate_per_chunk from region start onward
+        chunks_with_low_rec = rec_rate_per_chunk_in_region[rec_rate_per_chunk_in_region < 0.1 * r]
+        calc_Bprime_per_chunk()
 
     if args.out is not None: # Write to CSV
         print(f"Writing B output to file...")

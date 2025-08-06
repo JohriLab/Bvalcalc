@@ -1,9 +1,21 @@
 from Bvalcalc.core.calculateB import calculateB_linear, calculateB_hri
 import numpy as np
 
-def calc_Bprime_per_chunk():
+def calc_Bprime_per_chunk(
+        calc_chunks
+        l_per_chunk,
+        chunks_with_low_rec
+    chunk_size,
+    blockstart,
+    blockend,
+    chr_start,
+    chr_size,
+    ):
+
 
     print("gotcha")
+    import sys
+    sys.exit()
 
 
     return

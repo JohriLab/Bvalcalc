@@ -1,0 +1,6 @@
+chromosome,start,rate
+chr_200kb,0,0
+chr_200kb,40001,2
+chr_200kb,80001, 0.15
+chr_200kb,120001,2
+chr_200kb,160001,0.05
