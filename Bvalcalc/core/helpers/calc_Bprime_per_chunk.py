@@ -2,9 +2,9 @@ from Bvalcalc.core.calculateB import calculateB_linear, calculateB_hri
 import numpy as np
 
 def calc_Bprime_per_chunk(
-        calc_chunks
+        calc_chunks,
         l_per_chunk,
-        chunks_with_low_rec
+        chunks_with_low_rec,
     chunk_size,
     blockstart,
     blockend,

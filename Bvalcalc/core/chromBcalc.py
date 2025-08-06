@@ -145,7 +145,7 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
         names='Chromosome,Position,B',formats='U20,i8,f8')
 
 
-    if args.hri is not None:
+    if args.no_hri is False: # As in, skip this if user has --no_hri active
         from Bvalcalc.core.helpers.calc_Bprime_per_chunk import calc_Bprime_per_chunk
 
         rec_rate_per_chunk_in_region = rec_rate_per_chunk[calc_start // chunk_size:] # Slice rec_rate_per_chunk from region start onward

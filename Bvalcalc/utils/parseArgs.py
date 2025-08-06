@@ -61,6 +61,7 @@ def parseRegionArgs(argv=None):
     parser.add_argument('--plot_output', nargs='?', const='genome_plot.png', default=None, 
                         help="Generate a basic plot using `Bvalcalc.py --genome` output"
                             "Provide path to plot output.")
+    parser.add_argument('--no_hri', action='store_false', help="If set, will cancel post-hoc calculation of B under HRI (Bprime; Becher and Charlesworth 2025), for low recombination regions")   
     parser.add_argument('--neutral_only', action='store_true', help="If set, plot_output will only show neutral sites.")
     parser.add_argument('--out', type=str, default=None,
                         help="Required path to output CSV file. If --out is specified but no file name is given, "
@@ -105,6 +106,7 @@ def parseGenomeArgs(argv=None):
                              "Note that gene conversion rates will be averaged within each chunk.") 
     parser.add_argument('--gamma_dfe', action='store_true', help="If set, gamma distribution parameters will be used to define DFE's discretized f0-f3 proportions")   
     parser.add_argument('--constant_dfe', action='store_true', help="If set, the constant `s` and `neu_prop` parameters in the params file will be used for all conserved regions instead of discretized f0-f3 proportions")   
+    parser.add_argument('--no_hri', action='store_true', help="If set, will cancel post-hoc calculation of B under HRI (Bprime; Becher and Charlesworth 2025), for low recombination regions")   
     parser.add_argument('--neutral_only', action='store_true', help="If set, plot_output will only show neutral sites.")
     parser.add_argument('--out', type=str, default=None,
                         help="Required path to output CSV file. If --out is specified but no file name is given, "
