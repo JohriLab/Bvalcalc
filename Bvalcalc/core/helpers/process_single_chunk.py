@@ -116,9 +116,30 @@ def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start,
         and rec_rate_per_chunk is not None
         and rec_rate_per_chunk[chunk_idx] < hri_r_threshold): # Skip this if user has --no_hri active
 
-        if not quiet: print(f"Correcting low recombination chunk {chunk_idx}, local r modifier = {rec_rate_per_chunk[chunk_idx]}, which is below 0.1 threshold. Calculating Bprime (Becher and Charlesworth, 2025). To skip add --no_hri")
+        if quiet: print(f"Chunk {chunk_idx}: r modifier = {rec_rate_per_chunk[chunk_idx]}, which is at or below 0.1 threshold. Calculating B'. To skip add --no_hri")
+        low_rec_chunk_ids = rec_rate_per_chunk < hri_r_threshold
 
-        print("Hai", chunk_idx, rec_rate_per_chunk[chunk_idx])#, prior_B_for_low_rec_chunks, U_lengths_in_low_rec_chunks, interference_Bvals_per_chunk)
+        this_chunk_interfering_L = lperchunk[chunk_idx]
+
+        # extend left, then right til there's a chunk with recombination
+        interference_region_start_idx, interference_region_end_idx = chunk_idx, chunk_idx
+        while interference_region_start_idx > 0 and low_rec_chunk_ids[interference_region_start_idx - 1]:
+            interference_region_start_idx -= 1
+        while interference_region_end_idx < low_rec_chunk_ids.size - 1 and low_rec_chunk_ids[interference_region_end_idx + 1]:
+            interference_region_end_idx += 1
+        total_interfering_L = lperchunk[interference_region_start_idx : interference_region_end_idx + 1].sum()## get combined 
+        if quiet: print(f"Contiguous low‐rec run: chunks {interference_region_start_idx}–{interference_region_end_idx}, interfering sites L = {total_interfering_L:.1f}")
+
+        ## If adjacent chunks are also in low_rec_chunk_ids, combine their lperchunk into the total interfering_L
+
+
+        # Get distant B
+        # distant_B_arr = calc_distant_B_values(np.array([interfering_L]))
+
+        print("Hai", chunk_idx, rec_rate_per_chunk[chunk_idx], total_interfering_L)#, prior_B_for_low_rec_chunks, U_lengths_in_low_rec_chunks, interference_Bvals_per_chunk)
+
+              # 1) get this chunk’s U‐length
+
         import sys
         sys.exit()
 
