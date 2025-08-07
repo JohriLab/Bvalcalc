@@ -144,8 +144,9 @@ def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start,
 
          # # Drop-in here, don't change anywhere else
                  # === DROP-IN: trim any part inside the interference region ===
-        B_noninterfering_in_precise_region = calc_B_precise_noninterfering(precise_blockstart, precise_blockend, pos_chunk, chr_start, 
-                                  chunk_size, chr_size, local_interference_indices, chunk_idx)
+        B_noninterfering_in_precise_region = calc_B_precise_noninterfering(precise_blockstart, precise_blockend, pos_chunk,
+                                                                           chr_start, chunk_size, chr_size, local_interference_indices, chunk_idx, 
+                                                                           rec_rate_per_chunk, gc_rate_per_chunk)
 
 
         total_interfering_L
