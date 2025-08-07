@@ -160,99 +160,6 @@ def calculateB_unlinked(unlinked_L: int, params: dict | None = None):
 ##
 
 
-def calculateB_hri(prior_B: float, interfering_L: int, params: dict | None = None):
-
-    if params is None:
-        params = get_params()
-
-    Nanc, u, t1, t1half, t2, t3, t4, f0, f1, f2, f3, t_constant = params["Nanc"], params["u"], params["t1"], params["t1half"], params["t2"], params["t3"], params["t4"], params["f0"], params["f1"], params["f2"], params["f3"], params["t_constant"]
- 
-    N0 = prior_B * Nanc
-
-    h = 0.5
-    u = 2 * u
-    # Mutation rates for f1 and f2
-    u1 = f1 * u    # f1 mut rate
-    u2 = f2 * u    # f2 mut rate
-    print(f1,f2,u,interfering_L,h,Nanc,t1,t2,t3, "gotye")
-
-    # DFE ranges in terms of 2Ns
-    a1, b1 = 1, 10     # f1: uniform 2Ns ∈ [1, 10]
-    a2, b2 = 10, 100    # f2: uniform 2Ns ∈ [10, 100]
-
-    # Compute E[(2Ns)^2] for each uniform DFE: E[X^2] = (b^2 + b*a + a^2)/3
-    E_X2_f1 = (b1**2 + b1*a1 + a1**2) / 3
-    E_X2_f2 = (b2**2 + b2*a2 + a2**2) / 3
-
-    # Convert to E[s^2]: s = h * (2Ns)/(2N0) => s^2 = h^2 * X^2 / (4 * N0^2)
-    t_sq1 = (h**2 * E_X2_f1) / (4 * N0**2)
-    t_sq2 = (h**2 * E_X2_f2) / (4 * N0**2)
-
-    # Total HRI related mutation rate per site
-    u = u1 + u2
-
-    # RMS selection coefficient over both DFEs
-    t = np.sqrt((u1 * t_sq1 + u2 * t_sq2) / u)
-
-    kappa = 1         # Mutational bias parameter
-
-    # Scaling parameters
-    gamma = 2 * N0 * t
-    U = u * interfering_L
-    alpha2 = 2 * N0 * U
-
-    # ======================== EQ4: Solve for B ========================
-    def eq4(B, U, gamma, t, kappa=1):
-        
-        exp_term = np.exp(-gamma * B)
-        numerator = 0.5 * U * (1 - exp_term)**3
-        denominator = t * (1 + kappa * exp_term)**3
-
-        return -np.log(B) - numerator / denominator
-
-
-    sol = root_scalar(eq4, bracket=[1e-10, 1], method='bisect')
-    Bval = sol.root
-
-    # ======================== EQ5: Vectorized double-trapz for B' ========================
-    def eq5(B, Tmax=100.0, n_steps=2000):
-        # precompute coefficients
-        f1 = 1 - np.exp(-gamma * B)
-        f2 = 1 + kappa * np.exp(-gamma * B)
-        A  = f1 / f2
-        c  = 0.5 * alpha2 / gamma * A**3
-        d  = 2 * gamma * B * (f2 / f1)
-
-        # grid from 0 to Tmax
-        x = np.linspace(0, Tmax, n_steps)
-
-        # inner integrand g(x)
-        gx = np.exp(c * (1 - np.exp(-d * x))**2)
-
-        # cumulative ∫₀ˣ g(t) dt via trapezoid rule
-        cumI = np.concatenate((
-            [0.0],
-            np.cumsum((gx[:-1] + gx[1:]) * 0.5 * np.diff(x))
-        ))
-
-        # outer integrand and final trapezoid
-        hx = np.exp(-B * cumI)
-        return B * trapezoid(hx, x)
-
-    # ======================== RUN & PRINT ========================
-    Bprime = eq5(Bval)
-
-    print(f"Total per-site u    = {u:.2e}")
-    print(f"E[s^2]_f1           = {t_sq1:.2e}")
-    print(f"E[s^2]_f2           = {t_sq2:.2e}")
-    print(f"RMS selection s_eff = {t:.2e}")
-    print(f"Dip B (from eq4)    = {Bval:.5f}")
-    print(f"Dip B' (from eq5)   = {Bprime:.5f}")
-
-    return Bprime
-
-##
-
 
 ## Helper functions
 
@@ -356,3 +263,106 @@ def get_a_b_with_GC_andMaps(C, y, l, rec_l, local_g):
         b = C + (r * rec_l) + (2 * local_g * k) * (1 - (1-proportion_nogc_a)*proportion_nogc_b) #* prop k out
 
         return a, b
+
+
+def calculateB_hri(distant_B, interfering_L, params: dict | None = None):
+    """
+    Fully vectorized calculation of B' under Hill-Robertson interference.
+
+    Supports both scalar and numpy array inputs for distant_B and interfering_L.
+
+    Parameters
+    ----------
+    distant_B : float or np.ndarray
+        Prior B value (unlinked) for each chunk.
+    interfering_L : int or np.ndarray
+        Selected length in the chunk under interference.
+    params : dict, optional
+        Demographic and DFE parameters (see get_params()).
+
+    Returns
+    -------
+    Bprime : float or np.ndarray
+        B' values per chunk.
+    """
+    if params is None:
+        params = get_DFE_params()
+
+    # Unpack parameters
+    Nanc, u, f1, f2 = params["Nanc"], params["u"], params["f1"], params["f2"]
+
+    # Broadcast prior_B and interfering_L
+    distant_B = np.atleast_1d(distant_B).astype(float)
+    interfering_L = np.atleast_1d(interfering_L).astype(float)
+
+    scalar_input = distant_B.shape == () or distant_B.shape == (1,)
+
+    N0 = distant_B * Nanc
+    h = 0.5
+    u = 2 * u
+    u1 = f1 * u
+    u2 = f2 * u
+    u_total = u1 + u2
+
+    # E[X^2] for uniform DFEs
+    E_X2_f1 = (1**2 + 1*10 + 10**2) / 3
+    E_X2_f2 = (10**2 + 10*100 + 100**2) / 3
+
+    t_sq1 = (h**2 * E_X2_f1) / (4 * N0**2)
+    t_sq2 = (h**2 * E_X2_f2) / (4 * N0**2)
+    t = np.sqrt((u1 * t_sq1 + u2 * t_sq2) / u_total)
+
+    gamma = 2 * N0 * t
+    U = u_total * interfering_L
+    alpha2 = 2 * N0 * U
+    kappa = 1.0
+
+    # Bisection-style batched solver for eq4
+    def eq4(B, U, gamma, t):
+        exp_term = np.exp(-gamma * B)
+        num = 0.5 * U * (1 - exp_term)**3
+        denom = t * (1 + kappa * exp_term)**3
+        return -np.log(B) - num / denom
+
+    def solve_eq4_batched(U, gamma, t, n=500):
+        Bgrid = np.linspace(1e-10, 1.0, n)
+        Bgrid = Bgrid[None, :]
+        U, gamma, t = [x[:, None] for x in (U, gamma, t)]
+        fvals = eq4(Bgrid, U, gamma, t)
+        signs = np.sign(fvals)
+        crossing = np.diff(signs, axis=1) < 0
+        idx = np.argmax(crossing, axis=1)
+
+        B_left = Bgrid[0, idx]
+        B_right = Bgrid[0, idx + 1]
+        f_left = fvals[np.arange(len(U)), idx]
+        f_right = fvals[np.arange(len(U)), idx + 1]
+
+        B_root = B_left - f_left * (B_right - B_left) / (f_right - f_left)
+        return B_root
+
+    Bval = solve_eq4_batched(U, gamma, t)
+
+    def eq5_vectorized(B, alpha2, gamma, Tmax=100.0, n_steps=2000):
+        x = np.linspace(0, Tmax, n_steps)
+        dx = x[1] - x[0]
+
+        B, alpha2, gamma = [z[:, None] for z in (B, alpha2, gamma)]
+        f1 = 1 - np.exp(-gamma * B)
+        f2 = 1 + kappa * np.exp(-gamma * B)
+        A = f1 / f2
+        c = 0.5 * alpha2 / gamma * A**3
+        d = 2 * gamma * B * (f2 / f1)
+
+        gx = np.exp(c * (1 - np.exp(-d * x))**2)
+        cumI = np.cumsum((gx[:, :-1] + gx[:, 1:]) * 0.5 * dx, axis=1)
+        cumI = np.hstack([np.zeros((gx.shape[0], 1)), cumI])
+
+        hx = np.exp(-B * cumI)
+        Bprime = B[:, 0] * trapezoid(hx, x, axis=1)
+        return Bprime
+
+    Bprime = eq5_vectorized(Bval, alpha2, gamma)
+    return Bprime[0] if scalar_input else Bprime
+
+##

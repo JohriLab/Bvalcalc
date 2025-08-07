@@ -146,7 +146,7 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
 
 
     if args.no_hri is False: # As in, skip this if user has --no_hri active
-        from Bvalcalc.core.helpers.calc_Bprime_per_chunk import calc_Bprime_per_chunk
+        from Bvalcalc.core.helpers.calc_distant_B_values import calc_distant_B_values
 
         rec_rate_per_chunk_in_region = rec_rate_per_chunk[calc_start // chunk_size:] # Slice rec_rate_per_chunk from region start onward
         r = 1e-8
@@ -155,15 +155,28 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
         # if 
 
         U_lengths_in_low_rec_chunks = lperchunk[low_rec_chunk_ids]
+        prior_B_for_low_rec_chunks = b_values[calc_start + np.where(low_rec_chunk_ids)[0] * chunk_size]
+
+        b_from_outside_interference_regime = 0.9 # Fix later!! ! ! ! ! ! !  ! !  ! ! Make an actual algorithm
+
         print("Hi in chromBcalc", low_rec_chunk_ids, U_lengths_in_low_rec_chunks)
 
         from Bvalcalc.core.calculateB import calculateB_hri
+        from Bvalcalc.core.helpers.calc_distant_B_values import calc_distant_B_values
 
-        calculateB_hri(prior_B=low_rec_chunk_ids, interfering_L=U_lengths_in_low_rec_chunks)
-        print("Hai")
+        
+        distant_Bvals_per_chunk = calc_distant_B_values() ## NEXT ACTUALLY CALCULATE THIS VALUE
+
+        interference_Bvals_per_chunk = calculateB_hri(
+                                            distant_B=np.array([distant_Bvals_per_chunk]),        # Prior B values per chunk (e.g., from unlinked or outside-interference estimates)
+                                            interfering_L=np.array([U_lengths_in_low_rec_chunks])     # Interfering L per chunk (length under selection)
+                                        )
+
+        ## WHERE prior_B is greater than Bprime, use prior_B
+
+        print("Hai", prior_B_for_low_rec_chunks, U_lengths_in_low_rec_chunks, interference_Bvals_per_chunk)
         sys.exit()
 
-        interference_Bvals_per_chunk = calc_Bprime_per_chunk(prior_B=low_rec_chunk_ids, interfering_L=U_lengths_in_low_rec_chunks)
 
 
     if args.out is not None: # Write to CSV
