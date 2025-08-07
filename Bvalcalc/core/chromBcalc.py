@@ -11,7 +11,7 @@ import sys
 
 def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = None, prior_b = None, calc_start=None, calc_end=None, chr_size=None, caller="regionBcalc"):    
     #Shared arguments between genomeBcalc and regionBcalc
-    file_path, chunk_size, precise_chunks, quiet, verbose = args.bedgff_path, args.chunk_size, args.precise_chunks, args.quiet, args.verbose
+    file_path, chunk_size, precise_chunks, no_hri, quiet, verbose = args.bedgff_path, args.chunk_size, args.precise_chunks, args.no_hri, args.quiet, args.verbose
     #Arguments specific to regionBcalc
     if caller == "regionBcalc":
         calc_start, calc_end = calc_start, calc_end
@@ -88,7 +88,7 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
                 executor.submit(process_single_chunk, chunk_idx,
                                 chunk_size, blockstart, blockend, chr_start, chr_size, calc_start,
                                 calc_end, num_chunks, precise_chunks, lperchunk, b_values,
-                                rec_rate_per_chunk, gc_rate_per_chunk, quiet, verbose): chunk_idx
+                                rec_rate_per_chunk, gc_rate_per_chunk, no_hri, quiet, verbose): chunk_idx
                 for chunk_idx in batch
             }
             if not quiet and not verbose:
@@ -143,37 +143,6 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
     output_data = np.core.records.fromarrays(
         [chrom_col,binned_positions.astype(int),binned_b_values.astype(float)],
         names='Chromosome,Position,B',formats='U20,i8,f8')
-
-
-    if args.no_hri is False: # Skip this if user has --no_hri active
-        if not quiet: print(f"Correcting low recombination chunks below 0.1 * r threshold with Bprime (Becher and Charlesworth, 2025). To skip add --no_hri")
-        from Bvalcalc.core.helpers.calc_distant_B_values import calc_distant_B_values
-
-        rec_rate_per_chunk_in_region = rec_rate_per_chunk[calc_start // chunk_size:] # Slice rec_rate_per_chunk from region start onward
-        hri_r_threshold = 0.1 # fraction of "r" in a chunk that triggers Bprime hri calculation
-        low_rec_chunk_ids = rec_rate_per_chunk_in_region < hri_r_threshold # Find chunks that need Bprime calculation
-
-        U_lengths_in_low_rec_chunks = lperchunk[low_rec_chunk_ids]
-        prior_B_for_low_rec_chunks = b_values[calc_start + np.where(low_rec_chunk_ids)[0] * chunk_size]
-
-        print("Hi in chromBcalc", low_rec_chunk_ids, U_lengths_in_low_rec_chunks, rec_rate_per_chunk_in_region)
-
-        from Bvalcalc.core.calculateB import calculateB_hri
-        from Bvalcalc.core.helpers.calc_distant_B_values import calc_distant_B_values
-
-        B_from_outside_local_interference_regime = calc_distant_B_values(U_lengths_in_low_rec_chunks.shape) ## Get distant_B for each of the chunks and return in same shape as interfering_L array
-
-        interference_Bvals_per_chunk = calculateB_hri(
-            distant_B=B_from_outside_local_interference_regime,
-            interfering_L=U_lengths_in_low_rec_chunks
-        )
-
-        ## WHERE prior_B is greater than Bprime, use prior_B
-
-        print("Hai", U_lengths_in_low_rec_chunks.shape, prior_B_for_low_rec_chunks, U_lengths_in_low_rec_chunks, interference_Bvals_per_chunk)
-        sys.exit()
-
-
 
     if args.out is not None: # Write to CSV
         print(f"Writing B output to file...")

@@ -3,11 +3,12 @@ from Bvalcalc.core.helpers.calc_B_from_chunks import calc_B_from_chunks
 from Bvalcalc.core.helpers.calc_R_len_dist import calc_R_lengths
 from Bvalcalc.core.helpers.calc_R_len_dist import calc_R_distances
 from Bvalcalc.core.helpers.calc_B_in_genes import calc_B_in_genes
+from Bvalcalc.core.helpers.calc_distant_B_values import calc_distant_B_values
 import numpy as np
 
 def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start, chr_size,
                          calc_start, calc_end, num_chunks, precise_chunks,lperchunk, 
-                         b_values, rec_rate_per_chunk=None, gc_rate_per_chunk=None, quiet=False, verbose=False):
+                         b_values, rec_rate_per_chunk=None, gc_rate_per_chunk=None, no_hri=False, quiet=False, verbose=False):
     
     chunk_start =  chr_start + chunk_idx * chunk_size
     chunk_end   = min(chunk_start + chunk_size - 1, calc_end)
@@ -104,6 +105,48 @@ def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start,
         chunk_slice *= (aggregated_B * B_from_distant_chunks * within_gene_B) # Update chunk slice and combine flank_B with B from distant chunks
 
     mean_chunk_b = np.nanmean(chunk_slice) # Mean B for chunk
+
+    ### NEW
+
+    # rec_rate_per_chunk_in_region = rec_rate_per_chunk[calc_start // chunk_size:] # Slice rec_rate_per_chunk from region start onward
+    # low_rec_chunk_ids = rec_rate_per_chunk_in_region < hri_r_threshold # Find chunks that need Bprime calculation
+
+    hri_r_threshold = 0.1 # fraction of "r" in a chunk that triggers Bprime hri calculation
+    if (no_hri is False 
+        and rec_rate_per_chunk is not None
+        and rec_rate_per_chunk[chunk_idx] < hri_r_threshold): # Skip this if user has --no_hri active
+
+        if not quiet: print(f"Correcting low recombination chunk {chunk_idx}, local r modifier = {rec_rate_per_chunk[chunk_idx]}, which is below 0.1 threshold. Calculating Bprime (Becher and Charlesworth, 2025). To skip add --no_hri")
+
+        print("Hai", chunk_idx, rec_rate_per_chunk[chunk_idx])#, prior_B_for_low_rec_chunks, U_lengths_in_low_rec_chunks, interference_Bvals_per_chunk)
+        import sys
+        sys.exit()
+
+        U_lengths_in_low_rec_chunks = lperchunk[low_rec_chunk_ids]
+        prior_B_for_low_rec_chunks = b_values[calc_start + np.where(low_rec_chunk_ids)[0] * chunk_size]
+
+        # U_lengths_in_low_rec_chunks = combine_adjacent_chunks(low_rec_chunk_ids) NEXT ON THE CHOPPING BLOCK
+        ## 
+
+        ## 1. for  
+
+        print("Hi in chromBcalc", low_rec_chunk_ids, U_lengths_in_low_rec_chunks, rec_rate_per_chunk_in_region)
+
+        from Bvalcalc.core.calculateB import calculateB_hri
+        from Bvalcalc.core.helpers.calc_distant_B_values import calc_distant_B_values
+
+        B_from_outside_local_interference_regime = calc_distant_B_values(U_lengths_in_low_rec_chunks.shape) ## Get distant_B for each of the chunks and return in same shape as interfering_L array
+
+        interference_Bvals_per_chunk = calculateB_hri(
+            distant_B=B_from_outside_local_interference_regime,
+            interfering_L=U_lengths_in_low_rec_chunks
+        )
+
+        ## WHERE prior_B is greater than Bprime, use prior_B
+
+
+    ### NEW
+
 
     if verbose: # Per-chunk summaries
         print(f"Processing chunk {chunk_idx}: {pos_chunk.min()} - {pos_chunk.max()}")
