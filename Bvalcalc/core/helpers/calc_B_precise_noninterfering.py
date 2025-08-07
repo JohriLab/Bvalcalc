@@ -2,7 +2,7 @@ from Bvalcalc.core.calculateB import calculateB_linear
 import numpy as np
 
 def calc_B_precise_noninterfering(precise_blockstart, precise_blockend, pos_chunk, chr_start, 
-                                  chunk_size, chr_size, local_interference_indices):
+                                  chunk_size, chr_size, local_interference_indices, chunk_idx):
     """
     Return B for the precise region *excluding* local interference blocks.
     """
@@ -25,6 +25,7 @@ def calc_B_precise_noninterfering(precise_blockstart, precise_blockend, pos_chun
                 ts.append(end_bp + 1); te.append(be)      # right fragment
 
     if not ts:
+        print(f"[DEBUG] no non‐interfering blocks in chunk {chunk_idx} → B=1")
         return 1.0  # nothing remains → B = 1
 
     bs_arr = np.array(ts, dtype=int)
@@ -50,12 +51,20 @@ def calc_B_precise_noninterfering(precise_blockstart, precise_blockend, pos_chun
     flat_distances = flat_distances[valid]
     flat_lengths   = flat_lengths[valid]
 
-    B_noninterfering_in_precise_region = calculateB_linear(flat_distances, flat_lengths)
+    # 6) calculate B
+    B_noninterfering = calculateB_linear(flat_distances, flat_lengths)
 
-    print(f"HAIRII", B_noninterfering_in_precise_region)
+    # === DEBUG PRINTS ===
+    print(f"[DEBUG] interference bp range: {start_bp}-{end_bp}")
+    print(f"[DEBUG] original blocks: {list(zip(precise_blockstart, precise_blockend))}")
+    print(f"[DEBUG] trimmed blocks:  {list(zip(bs_arr, be_arr))}")
+    print(f"[DEBUG] flat_distances ({len(flat_distances)}): {flat_distances[:5]}{'...' if len(flat_distances)>5 else ''}")
+    print(f"[DEBUG] flat_lengths   ({len(flat_lengths)}):  {flat_lengths[:5]}{'...' if len(flat_lengths)>5 else ''}")
+    print(f"[DEBUG] B_noninterfering_in_precise_region = {B_noninterfering:.6f}")
+    # =====================
 
-    # 6) linear B on non-interfering pieces
-    return B_noninterfering_in_precise_region
+    return B_noninterfering
+
 
 
 
