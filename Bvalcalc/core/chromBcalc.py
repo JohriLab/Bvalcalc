@@ -145,34 +145,28 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
         names='Chromosome,Position,B',formats='U20,i8,f8')
 
 
-    if args.no_hri is False: # As in, skip this if user has --no_hri active
+    if args.no_hri is False: # Skip this if user has --no_hri active
         if not quiet: print(f"Correcting low recombination chunks below 0.1 * r threshold with Bprime (Becher and Charlesworth, 2025). To skip add --no_hri")
         from Bvalcalc.core.helpers.calc_distant_B_values import calc_distant_B_values
 
         rec_rate_per_chunk_in_region = rec_rate_per_chunk[calc_start // chunk_size:] # Slice rec_rate_per_chunk from region start onward
-        r = 1e-8 ## Need to get this properly
-        low_rec_chunk_ids = rec_rate_per_chunk_in_region < 0.1 * r
-
-        # if 
+        hri_r_threshold = 0.1 # fraction of "r" in a chunk that triggers Bprime hri calculation
+        low_rec_chunk_ids = rec_rate_per_chunk_in_region < hri_r_threshold # Find chunks that need Bprime calculation
 
         U_lengths_in_low_rec_chunks = lperchunk[low_rec_chunk_ids]
         prior_B_for_low_rec_chunks = b_values[calc_start + np.where(low_rec_chunk_ids)[0] * chunk_size]
-
-        b_from_outside_interference_regime = 0.9 # Fix later!! ! ! ! ! ! !  ! !  ! ! Make an actual algorithm
 
         print("Hi in chromBcalc", low_rec_chunk_ids, U_lengths_in_low_rec_chunks, rec_rate_per_chunk_in_region)
 
         from Bvalcalc.core.calculateB import calculateB_hri
         from Bvalcalc.core.helpers.calc_distant_B_values import calc_distant_B_values
 
-        
-        distant_Bvals_per_chunk = calc_distant_B_values(U_lengths_in_low_rec_chunks.shape) ## Get distant_B for each of the chunks and return in same shape as interfering_L array
+        B_from_outside_local_interference_regime = calc_distant_B_values(U_lengths_in_low_rec_chunks.shape) ## Get distant_B for each of the chunks and return in same shape as interfering_L array
 
         interference_Bvals_per_chunk = calculateB_hri(
-            distant_B=distant_Bvals_per_chunk,
+            distant_B=B_from_outside_local_interference_regime,
             interfering_L=U_lengths_in_low_rec_chunks
         )
-
 
         ## WHERE prior_B is greater than Bprime, use prior_B
 
