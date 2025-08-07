@@ -130,6 +130,16 @@ def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start,
         total_interfering_L = lperchunk[interference_region_start_idx : interference_region_end_idx + 1].sum()## get combined 
         if quiet: print(f"Contiguous low‐rec run: chunks {interference_region_start_idx}–{interference_region_end_idx}, interfering sites L = {total_interfering_L:.1f}")
 
+        local_interference_indices = np.arange(interference_region_start_idx, interference_region_end_idx + 1) # Indexes for chunks in local interfering region
+
+        B_from_distant_chunks = calc_B_from_chunks( # Re-compute B from distant chunks in non-precise region, exluding local interfering region
+            chunk_idx, chunk_size, chr_start, chr_size, num_chunks, 
+            precise_chunks, lperchunk, rec_rate_per_chunk, gc_rate_per_chunk, local_interference_indices)
+        print("B_from_distant_chunks", B_from_distant_chunks, local_interference_indices)
+        sys.exit()
+
+        total_interfering_L
+
         ## If adjacent chunks are also in low_rec_chunk_ids, combine their lperchunk into the total interfering_L
 
 
