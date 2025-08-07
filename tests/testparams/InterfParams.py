@@ -7,7 +7,7 @@
 ## Core parameters
 x = 100 # Scaling factor (N,u,r), keep as 1 unless calculating for rescaled simulations
 Nanc = 1e6/x # Ancestral population size
-r = 0 # Recombination (crossover) rate per bp, per generation
+r = 1e-8 * x # Recombination (crossover) rate per bp, per generation
 u = 3*1e-9*x # Mutation rate (all types) per bp, per generation
 g = 0*1e-8*x # Gene conversion initiation rate per bp, per generation
 k = 440 # Gene conversion tract length (bp)

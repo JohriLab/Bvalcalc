@@ -3,7 +3,7 @@ from Bvalcalc.core.helpers.calc_B_from_chunks import calc_B_from_chunks
 from Bvalcalc.core.helpers.calc_R_len_dist import calc_R_lengths
 from Bvalcalc.core.helpers.calc_R_len_dist import calc_R_distances
 from Bvalcalc.core.helpers.calc_B_in_genes import calc_B_in_genes
-from Bvalcalc.core.helpers.calc_distant_B_values import calc_distant_B_values
+from Bvalcalc.core.helpers.calc_B_precise_noninterfering import calc_B_precise_noninterfering
 import numpy as np
 
 def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start, chr_size,
@@ -135,8 +135,18 @@ def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start,
         B_from_distant_chunks = calc_B_from_chunks( # Re-compute B from distant chunks in non-precise region, exluding local interfering region
             chunk_idx, chunk_size, chr_start, chr_size, num_chunks, 
             precise_chunks, lperchunk, rec_rate_per_chunk, gc_rate_per_chunk, local_interference_indices)
-        print("B_from_distant_chunks", B_from_distant_chunks, local_interference_indices)
-        sys.exit()
+        print("B_from_distant_chunks, excluding local interference region", B_from_distant_chunks)
+        
+            # Calculate B from elements within the precise region but not in the interfering region. No need to calculate intragenic B. 
+            # 
+            # # FILTER ALL THE FOLLOWING INPUTS (e.g. flat_distances, flat_lengths etc.) to remove genes within the chunks that comprise the local interfering region.
+            #
+
+         # # Drop-in here, don't change anywhere else
+                 # === DROP-IN: trim any part inside the interference region ===
+        B_noninterfering_in_precise_region = calc_B_precise_noninterfering(precise_blockstart, precise_blockend, pos_chunk, chr_start, 
+                                  chunk_size, chr_size, local_interference_indices)
+
 
         total_interfering_L
 
@@ -164,7 +174,7 @@ def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start,
         print("Hi in chromBcalc", low_rec_chunk_ids, U_lengths_in_low_rec_chunks, rec_rate_per_chunk_in_region)
 
         from Bvalcalc.core.calculateB import calculateB_hri
-        from Bvalcalc.core.helpers.calc_distant_B_values import calc_distant_B_values
+        from Bvalcalc.core.helpers.calc_B_precise_noninterfering import calc_distant_B_values
 
         B_from_outside_local_interference_regime = calc_distant_B_values(U_lengths_in_low_rec_chunks.shape) ## Get distant_B for each of the chunks and return in same shape as interfering_L array
 
