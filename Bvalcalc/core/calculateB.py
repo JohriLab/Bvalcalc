@@ -264,34 +264,15 @@ def get_a_b_with_GC_andMaps(C, y, l, rec_l, local_g):
 
         return a, b
 
-
 def calculateB_hri(distant_B, interfering_L, params: dict | None = None):
     """
     Fully vectorized calculation of B' under Hill-Robertson interference.
-
-    Supports both scalar and numpy array inputs for distant_B and interfering_L.
-
-    Parameters
-    ----------
-    distant_B : float or np.ndarray
-        Prior B value (unlinked) for each chunk.
-    interfering_L : int or np.ndarray
-        Selected length in the chunk under interference.
-    params : dict, optional
-        Demographic and DFE parameters (see get_params()).
-
-    Returns
-    -------
-    Bprime : float or np.ndarray
-        B' values per chunk.
     """
     if params is None:
         params = get_DFE_params()
 
-    # Unpack parameters
     Nanc, u, f1, f2 = params["Nanc"], params["u"], params["f1"], params["f2"]
 
-    # Broadcast prior_B and interfering_L
     distant_B = np.atleast_1d(distant_B).astype(float)
     interfering_L = np.atleast_1d(interfering_L).astype(float)
 
@@ -304,7 +285,6 @@ def calculateB_hri(distant_B, interfering_L, params: dict | None = None):
     u2 = f2 * u
     u_total = u1 + u2
 
-    # E[X^2] for uniform DFEs
     E_X2_f1 = (1**2 + 1*10 + 10**2) / 3
     E_X2_f2 = (10**2 + 10*100 + 100**2) / 3
 
@@ -317,7 +297,6 @@ def calculateB_hri(distant_B, interfering_L, params: dict | None = None):
     alpha2 = 2 * N0 * U
     kappa = 1.0
 
-    # Bisection-style batched solver for eq4
     def eq4(B, U, gamma, t):
         exp_term = np.exp(-gamma * B)
         num = 0.5 * U * (1 - exp_term)**3
@@ -325,9 +304,11 @@ def calculateB_hri(distant_B, interfering_L, params: dict | None = None):
         return -np.log(B) - num / denom
 
     def solve_eq4_batched(U, gamma, t, n=500):
-        Bgrid = np.linspace(1e-10, 1.0, n)
-        Bgrid = Bgrid[None, :]
-        U, gamma, t = [x[:, None] for x in (U, gamma, t)]
+        Bgrid = np.linspace(1e-10, 1.0, n)[None, :]
+        U = np.asarray(U).reshape(-1, 1)
+        gamma = np.asarray(gamma).reshape(-1, 1)
+        t = np.asarray(t).reshape(-1, 1)
+
         fvals = eq4(Bgrid, U, gamma, t)
         signs = np.sign(fvals)
         crossing = np.diff(signs, axis=1) < 0
@@ -344,25 +325,27 @@ def calculateB_hri(distant_B, interfering_L, params: dict | None = None):
     Bval = solve_eq4_batched(U, gamma, t)
 
     def eq5_vectorized(B, alpha2, gamma, Tmax=100.0, n_steps=2000):
-        x = np.linspace(0, Tmax, n_steps)
-        dx = x[1] - x[0]
+        x = np.linspace(0, Tmax, n_steps)[None, :]  # shape (1, n_steps)
+        dx = x[0, 1] - x[0, 0]
 
-        B, alpha2, gamma = [z[:, None] for z in (B, alpha2, gamma)]
+        B = B[:, None]
+        alpha2 = alpha2[:, None]
+        gamma = gamma[:, None]
+
         f1 = 1 - np.exp(-gamma * B)
         f2 = 1 + kappa * np.exp(-gamma * B)
         A = f1 / f2
         c = 0.5 * alpha2 / gamma * A**3
         d = 2 * gamma * B * (f2 / f1)
 
-        gx = np.exp(c * (1 - np.exp(-d * x))**2)
+        x_broadcasted = np.broadcast_to(x, (B.shape[0], x.shape[1]))
+        gx = np.exp(c * (1 - np.exp(-d * x_broadcasted))**2)
         cumI = np.cumsum((gx[:, :-1] + gx[:, 1:]) * 0.5 * dx, axis=1)
         cumI = np.hstack([np.zeros((gx.shape[0], 1)), cumI])
 
         hx = np.exp(-B * cumI)
-        Bprime = B[:, 0] * trapezoid(hx, x, axis=1)
+        Bprime = B[:, 0] * trapezoid(hx, x[0], axis=1)
         return Bprime
 
     Bprime = eq5_vectorized(Bval, alpha2, gamma)
     return Bprime[0] if scalar_input else Bprime
-
-##

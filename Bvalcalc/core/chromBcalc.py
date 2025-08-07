@@ -168,9 +168,10 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
         distant_Bvals_per_chunk = calc_distant_B_values() ## NEXT ACTUALLY CALCULATE THIS VALUE
 
         interference_Bvals_per_chunk = calculateB_hri(
-                                            distant_B=np.array([distant_Bvals_per_chunk]),        # Prior B values per chunk (e.g., from unlinked or outside-interference estimates)
-                                            interfering_L=np.array([U_lengths_in_low_rec_chunks])     # Interfering L per chunk (length under selection)
-                                        )
+            distant_B=distant_Bvals_per_chunk,
+            interfering_L=U_lengths_in_low_rec_chunks
+        )
+
 
         ## WHERE prior_B is greater than Bprime, use prior_B
 
