@@ -29,7 +29,7 @@ Copy population genetic parameters from one of the templates, e.g. `Drosophila m
    # Wrote parameters to: ./DrosophilaParams.py
 
 Open ``./DrosophilaParams.py`` in your text editor of choice. This file contains example popgen parameters that allow us to accurately calculate B.
-When calculating B for a new species you'll need to check the literature and use informed values for your population, see :doc:`Tailoring Parameters <./params>`
+When calculating B for a new species you'll need to check the literature and use informed values for your population, see :doc:`Tailoring Parameters <./params>`.
 
 Calculating a B value
 ----------------------
