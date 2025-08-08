@@ -111,6 +111,8 @@ def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start,
     # rec_rate_per_chunk_in_region = rec_rate_per_chunk[calc_start // chunk_size:] # Slice rec_rate_per_chunk from region start onward
     # low_rec_chunk_ids = rec_rate_per_chunk_in_region < hri_r_threshold # Find chunks that need Bprime calculation
 
+
+    print("Yikers", rec_rate_per_chunk, no_hri)
     hri_r_threshold = 0.1 # fraction of "r" in a chunk that triggers Bprime hri calculation
     if (no_hri is False 
         and rec_rate_per_chunk is not None

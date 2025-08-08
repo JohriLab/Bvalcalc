@@ -157,3 +157,5 @@ def calc_B_precise_noninterfering(
 
     print(f"[DEBUG] final B_noninterfering = {B}")
     return B
+
+## WON'T WORK FOR UNLINKED B, OR FOR SITES considering B from an interfering region, that aren't themselves in the interfering region

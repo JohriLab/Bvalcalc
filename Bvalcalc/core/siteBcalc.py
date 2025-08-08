@@ -41,6 +41,18 @@ def siteBcalc(args):
     ##      5. Update B_values array
 
 
+    ##  For sites outside the interference region, calculating B from sites within the interference region
+    ##
+    ##  Option 1. Use the B from within the interference region and modify it by r accordingly
+    ##
+    ##  Option 2. Ignore it
+    ## 
+    ##  Option 3a. Calculate interference B for all interfering regions separately.
+    ##  Option 3b. Calculate B as normal for all non-interfering regions
+    ##  Option 3c. For within interference region, use interference B
+    ##  Option 3d. For outside interference region, use interference B modified by rec length and rec distance
+
+
     ## linkage_block_max_rec_length = r * 100 # r * l
     ## linkage_block_min_selected_length = u * 10000
 
