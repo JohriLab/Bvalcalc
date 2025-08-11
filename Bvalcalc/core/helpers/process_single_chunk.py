@@ -146,7 +146,7 @@ def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start,
         B_noninterfering_in_precise_region = calc_B_precise_noninterfering(precise_blockstart, precise_blockend, pos_chunk,
                                                                            chr_start, chunk_size, chr_size, precise_region_start, precise_region_end,local_interference_indices, chunk_idx, 
                                                                            rec_rate_per_chunk, gc_rate_per_chunk)
-        print("Haiio")
+        
         
 
 
@@ -158,12 +158,9 @@ def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start,
         # Get distant B
         # distant_B_arr = calc_distant_B_values(np.array([interfering_L]))
 
-        print("Hai", chunk_idx, rec_rate_per_chunk[chunk_idx], total_interfering_L)#, prior_B_for_low_rec_chunks, U_lengths_in_low_rec_chunks, interference_Bvals_per_chunk)
 
               # 1) get this chunk’s U‐length
 
-        import sys
-        sys.exit()
 
         U_lengths_in_low_rec_chunks = lperchunk[low_rec_chunk_ids]
         prior_B_for_low_rec_chunks = b_values[calc_start + np.where(low_rec_chunk_ids)[0] * chunk_size]
@@ -173,17 +170,20 @@ def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start,
 
         ## 1. for  
 
-        print("Hi in chromBcalc", low_rec_chunk_ids, U_lengths_in_low_rec_chunks, rec_rate_per_chunk_in_region)
-
         from Bvalcalc.core.calculateB import calculateB_hri
-        from Bvalcalc.core.helpers.calc_B_precise_noninterfering import calc_distant_B_values
+        # from Bvalcalc.core.helpers.calc_B_precise_noninterfering import calc_distant_B_values
 
-        B_from_outside_local_interference_regime = calc_distant_B_values(U_lengths_in_low_rec_chunks.shape) ## Get distant_B for each of the chunks and return in same shape as interfering_L array
+        # B_from_outside_local_interference_regime = calc_distant_B_values(U_lengths_in_low_rec_chunks.shape) ## Get distant_B for each of the chunks and return in same shape as interfering_L array
+        print("Hai", chunk_idx, B_from_distant_chunks, U_lengths_in_low_rec_chunks)#, prior_B_for_low_rec_chunks, U_lengths_in_low_rec_chunks, interference_Bvals_per_chunk)
 
         interference_Bvals_per_chunk = calculateB_hri(
-            distant_B=B_from_outside_local_interference_regime,
+            distant_B=B_from_distant_chunks, # NEED TO ALSO INCLUDE B FROM IN THE PRECISE REGION
             interfering_L=U_lengths_in_low_rec_chunks
         )
+        print("Hyi", chunk_idx, interference_Bvals_per_chunk)
+        import sys
+        sys.exit()
+
 
         ## WHERE prior_B is greater than Bprime, use prior_B
 
