@@ -70,6 +70,7 @@ def siteBcalc(args):
     #                                   Continue replacing B with B' until you reach a site distance j away for which B is higher than B', which should happen rapidly once the local effect from f1 and f2 mutations is diminished by recombination
     #                                   To avoid edge cases where B decreases due to proximity to a new selected region placed a few bp distance from the HRI region, break also if B at site j is higher than at site j+1 (as in, B is decreasing with increasing distance from the HRI region)
     ##
+    ##
     ##  4a. Calculate 
     ##
     ##

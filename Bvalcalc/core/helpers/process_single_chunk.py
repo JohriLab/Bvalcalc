@@ -111,13 +111,10 @@ def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start,
     # rec_rate_per_chunk_in_region = rec_rate_per_chunk[calc_start // chunk_size:] # Slice rec_rate_per_chunk from region start onward
     # low_rec_chunk_ids = rec_rate_per_chunk_in_region < hri_r_threshold # Find chunks that need Bprime calculation
 
-
-    print("Yikers", rec_rate_per_chunk, no_hri)
     hri_r_threshold = 0.1 # fraction of "r" in a chunk that triggers Bprime hri calculation
     if (no_hri is False 
         and rec_rate_per_chunk is not None
         and rec_rate_per_chunk[chunk_idx] < hri_r_threshold): # Skip this if user has --no_hri active
-
         if quiet: print(f"Chunk {chunk_idx}: r modifier = {rec_rate_per_chunk[chunk_idx]}, which is at or below 0.1 threshold. Calculating B'. To skip add --no_hri")
         low_rec_chunk_ids = rec_rate_per_chunk < hri_r_threshold
 
@@ -137,7 +134,7 @@ def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start,
         B_from_distant_chunks = calc_B_from_chunks( # Re-compute B from distant chunks in non-precise region, exluding local interfering region
             chunk_idx, chunk_size, chr_start, chr_size, num_chunks, 
             precise_chunks, lperchunk, rec_rate_per_chunk, gc_rate_per_chunk, local_interference_indices)
-        print("B_from_distant_chunks, excluding local interference region", B_from_distant_chunks)
+        print(f"Chunk {chunk_idx}: B_from_distant_chunks, excluding local interference region", B_from_distant_chunks)
         
             # Calculate B from elements within the precise region but not in the interfering region. No need to calculate intragenic B. 
             # 
@@ -147,8 +144,10 @@ def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start,
          # # Drop-in here, don't change anywhere else
                  # === DROP-IN: trim any part inside the interference region ===
         B_noninterfering_in_precise_region = calc_B_precise_noninterfering(precise_blockstart, precise_blockend, pos_chunk,
-                                                                           chr_start, chunk_size, chr_size, local_interference_indices, chunk_idx, 
+                                                                           chr_start, chunk_size, chr_size, precise_region_start, precise_region_end,local_interference_indices, chunk_idx, 
                                                                            rec_rate_per_chunk, gc_rate_per_chunk)
+        print("Haiio")
+        
 
 
         total_interfering_L

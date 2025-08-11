@@ -26,7 +26,10 @@ def calc_R_distances(
     precise_region_start, precise_region_end, chunk_size,
     pos_chunk_clean, chunk_start
 ):
+    
+
     num_precise_chunks = (precise_region_end - precise_region_start) // chunk_size
+    print("[ENTER calc_R_distances]", precise_region_start, precise_region_end, chunk_size, chunk_start, num_precise_chunks)
     chunk_starts = precise_region_start + np.arange(0, num_precise_chunks + 1) * chunk_size
     chunk_ends = np.minimum(chunk_starts + chunk_size, precise_region_end)
     this_chunk_idx = np.where(chunk_starts == chunk_start)[0][0]
@@ -36,7 +39,6 @@ def calc_R_distances(
     blockend_chunks = (precise_blockend - precise_region_start) // chunk_size
 
     pos_broadcast = pos_chunk_clean[None, :]  # shape (1, P)
-
     # BLOCKEND (upstream) distances
     inchunk_distances_end = np.minimum(
         pos_broadcast - precise_blockend[:, None],
