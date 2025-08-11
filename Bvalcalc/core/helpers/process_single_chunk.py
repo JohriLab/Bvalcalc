@@ -8,7 +8,7 @@ import numpy as np
 
 def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start, chr_size,
                          calc_start, calc_end, num_chunks, precise_chunks,lperchunk, 
-                         b_values, rec_rate_per_chunk=None, gc_rate_per_chunk=None, no_hri=False, quiet=False, verbose=False):
+                         b_values, rec_rate_per_chunk=None, gc_rate_per_chunk=None, no_hri=False, quiet=False, verbose=False, unlinked_B=1.0):
     
     chunk_start =  chr_start + chunk_idx * chunk_size
     chunk_end   = min(chunk_start + chunk_size - 1, calc_end)
@@ -162,7 +162,7 @@ def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start,
               # 1) get this chunk’s U‐length
 
 
-        print("Hai", chunk_idx)#, prior_B_for_low_rec_chunks, U_lengths_in_low_rec_chunks, interference_Bvals_per_chunk)
+        # print("Hai", chunk_idx)#, prior_B_for_low_rec_chunks, U_lengths_in_low_rec_chunks, interference_Bvals_per_chunk)
         U_lengths_in_low_rec_chunks = lperchunk[low_rec_chunk_ids]
         prior_B_for_low_rec_chunks = b_values[calc_start + np.where(low_rec_chunk_ids)[0] * chunk_size]
 
@@ -177,12 +177,13 @@ def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start,
         # B_from_outside_local_interference_regime = calc_distant_B_values(U_lengths_in_low_rec_chunks.shape) ## Get distant_B for each of the chunks and return in same shape as interfering_L array
 
         interference_Bvals_per_chunk = calculateB_hri(
-            distant_B=B_from_distant_chunks, # NEED TO ALSO INCLUDE B FROM IN THE PRECISE REGION
+            distant_B=B_from_distant_chunks, # NEED TO ALSO INCLUDE B FROM IN THE PRECISE REGION and unlinked_B!!!
             interfering_L=U_lengths_in_low_rec_chunks
         )
-        print("Hyi", chunk_idx, interference_Bvals_per_chunk)
-        import sys
-        sys.exit()
+        # np.maximum(flank_B, interference_Bvals_per_chunk, out=flank_B)
+
+
+        # print("Hyi", chunk_idx, interference_Bvals_per_chunk, flank_B)
 
 
         ## WHERE prior_B is greater than Bprime, use prior_B

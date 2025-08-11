@@ -88,7 +88,7 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
                 executor.submit(process_single_chunk, chunk_idx,
                                 chunk_size, blockstart, blockend, chr_start, chr_size, calc_start,
                                 calc_end, num_chunks, precise_chunks, lperchunk, b_values,
-                                rec_rate_per_chunk, gc_rate_per_chunk, no_hri, quiet, verbose): chunk_idx
+                                rec_rate_per_chunk, gc_rate_per_chunk, no_hri, quiet, verbose, unlinked_B): chunk_idx
                 for chunk_idx in batch
             }
             if not quiet and not verbose:
@@ -104,6 +104,11 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
 
     b_values = b_values[calc_start:(calc_end+1)] # Trim b_values array to only calculated region
     b_values = b_values * unlinked_B
+    # print('Hriii', np.shape(b_values))
+
+    if not no_hri: # If --no_hri is not active
+        from Bvalcalc.core.helpers.extend_hri_regions_correction import extend_hri_regions_correction
+        extend_hri_regions_correction(b_values, rec_rate_per_chunk) # Extend HRI regions until B > B' to avoid sharp decrease in B at the border between normal and HRI regions. See manuscript.
     
     if not quiet: 
         print(f"====== F I N I S H E D ===== C A L C ===============")
