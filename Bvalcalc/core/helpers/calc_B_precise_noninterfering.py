@@ -51,6 +51,7 @@ def calc_B_precise_noninterfering(
 
     phys = np.where(mask, np.where(up_mask, up_dist, down_dist), np.nan)
     flat_distances = phys[mask]
+
     # print(f"[DEBUG] flat_distances ({len(flat_distances)}): "
     #       f"{flat_distances[:5]}{'...' if len(flat_distances)>5 else ''}")
 
@@ -75,7 +76,7 @@ def calc_B_precise_noninterfering(
         rec_lens = calc_R_lengths(
             bs_arr, be_arr,
             r_rates,
-            bs_arr.min(), be_arr.max(),
+            precise_region_start, precise_region_end,
             chunk_size
         )
         chunk_start = chr_start + chunk_idx * chunk_size
@@ -90,23 +91,23 @@ def calc_B_precise_noninterfering(
         rec_phys = np.where(mask, np.where(up_mask, rec_up, rec_down), np.nan)
         flat_rec_distances = rec_phys[mask][valid]
         flat_rec_lengths   = np.repeat(rec_lens, counts)[valid]
-        print(f"[DEBUG] flat_rec_distances ({len(flat_rec_distances)}): "
-              f"{flat_rec_distances[:5]}{'...' if len(flat_rec_distances)>5 else ''}")
-        print(f"[DEBUG] flat_rec_lengths    ({len(flat_rec_lengths)}):  "
-              f"{flat_rec_lengths[:5]}{'...' if len(flat_rec_lengths)>5 else ''}")
+        # print(f"[DEBUG] flat_rec_distances ({len(flat_rec_distances)}): "
+        #       f"{flat_rec_distances[:5]}{'...' if len(flat_rec_distances)>5 else ''}")
+        # print(f"[DEBUG] flat_rec_lengths    ({len(flat_rec_lengths)}):  "
+        #       f"{flat_rec_lengths[:5]}{'...' if len(flat_rec_lengths)>5 else ''}")
     else:
         flat_rec_distances = flat_rec_lengths = None
 
     # 7) optionally flatten gene-conversion
     if gc_rate_per_chunk is not None:
-        region_start_idx = (bs_arr.min() - chr_start) // chunk_size
-        region_end_idx   = (be_arr.max() - chr_start) // chunk_size
+        region_start_idx = (precise_region_start - chr_start) // chunk_size
+        region_end_idx   = (precise_region_end - chr_start) // chunk_size
         g_rates = gc_rate_per_chunk[region_start_idx:region_end_idx+1]
 
         gc_lens = calc_R_lengths(
             bs_arr, be_arr,
             g_rates,
-            bs_arr.min(), be_arr.max(),
+            precise_region_start, precise_region_end,
             chunk_size
         )
         chunk_start = chr_start + chunk_idx * chunk_size

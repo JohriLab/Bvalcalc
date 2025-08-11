@@ -29,7 +29,6 @@ def calc_R_distances(
     
 
     num_precise_chunks = (precise_region_end - precise_region_start) // chunk_size
-    print("[ENTER calc_R_distances]", precise_region_start, precise_region_end, chunk_size, chunk_start, num_precise_chunks)
     chunk_starts = precise_region_start + np.arange(0, num_precise_chunks + 1) * chunk_size
     chunk_ends = np.minimum(chunk_starts + chunk_size, precise_region_end)
     this_chunk_idx = np.where(chunk_starts == chunk_start)[0][0]

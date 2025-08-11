@@ -162,6 +162,7 @@ def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start,
               # 1) get this chunk’s U‐length
 
 
+        print("Hai", chunk_idx)#, prior_B_for_low_rec_chunks, U_lengths_in_low_rec_chunks, interference_Bvals_per_chunk)
         U_lengths_in_low_rec_chunks = lperchunk[low_rec_chunk_ids]
         prior_B_for_low_rec_chunks = b_values[calc_start + np.where(low_rec_chunk_ids)[0] * chunk_size]
 
@@ -174,7 +175,6 @@ def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start,
         # from Bvalcalc.core.helpers.calc_B_precise_noninterfering import calc_distant_B_values
 
         # B_from_outside_local_interference_regime = calc_distant_B_values(U_lengths_in_low_rec_chunks.shape) ## Get distant_B for each of the chunks and return in same shape as interfering_L array
-        print("Hai", chunk_idx, B_from_distant_chunks, U_lengths_in_low_rec_chunks)#, prior_B_for_low_rec_chunks, U_lengths_in_low_rec_chunks, interference_Bvals_per_chunk)
 
         interference_Bvals_per_chunk = calculateB_hri(
             distant_B=B_from_distant_chunks, # NEED TO ALSO INCLUDE B FROM IN THE PRECISE REGION
