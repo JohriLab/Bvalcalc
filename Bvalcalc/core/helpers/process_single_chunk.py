@@ -110,7 +110,7 @@ def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start,
         # The following code could be used to compare the non-HRI and HRI B values, keeping the highest for each site. Not included ATM.
         # np.copyto(aggregated_B, hri_aggregated_B, where=aggregated_B * B_from_distant_chunks * within_gene_B < hri_aggregated_B)
         chunk_slice *= hri_aggregated_B
-        return
+        return b_values
     else:
     ### NEW
         if unique_indices.size == 0: # If there are no nearby sites under selection
