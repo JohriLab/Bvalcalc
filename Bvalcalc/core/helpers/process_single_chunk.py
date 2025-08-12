@@ -180,7 +180,8 @@ def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start,
             distant_B=B_from_distant_chunks, # NEED TO ALSO INCLUDE B FROM IN THE PRECISE REGION and unlinked_B!!!
             interfering_L=U_lengths_in_low_rec_chunks
         )
-        # np.maximum(flank_B, interference_Bvals_per_chunk, out=flank_B)
+        np.maximum(flank_B, interference_Bvals_per_chunk, out=flank_B)
+        print("yaa", flank_B, interference_Bvals_per_chunk)
 
 
         # print("Hyi", chunk_idx, interference_Bvals_per_chunk, flank_B)
