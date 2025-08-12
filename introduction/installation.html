@@ -115,6 +115,13 @@
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>--index-url<span class="w"> </span>https://test.pypi.org/simple<span class="w"> </span>--extra-index-url<span class="w"> </span>https://pypi.org/simple<span class="w"> </span>--upgrade<span class="w"> </span>Bvalcalc
 </pre></div>
 </div>
+<p>If it’s not working try this:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>bvalcalc-env<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.10<span class="w"> </span>-y
+conda<span class="w"> </span>activate<span class="w"> </span>bvalcalc-env
+conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span><span class="s2">&quot;numpy&gt;=1.26&quot;</span><span class="w"> </span><span class="s2">&quot;scipy&gt;=1.13&quot;</span><span class="w"> </span>matplotlib<span class="w"> </span>-y
+pip<span class="w"> </span>install<span class="w"> </span>--index-url<span class="w"> </span>https://test.pypi.org/simple<span class="w"> </span>--extra-index-url<span class="w"> </span>https://pypi.org/simple<span class="w"> </span>--upgrade<span class="w"> </span>Bvalcalc
+</pre></div>
+</div>
 <p>Verify the install worked by running the CLI “help”:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--help
 </pre></div>
