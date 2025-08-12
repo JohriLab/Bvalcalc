@@ -4,7 +4,7 @@ import numpy as np
 
 def calc_B_precise_noninterfering(
     precise_blockstart, precise_blockend, pos_chunk,
-    chr_start, chunk_size, chr_size, precise_region_start, precise_region_end,
+    chr_start, chunk_end, chunk_size, chr_size, precise_region_start, precise_region_end,
     local_interference_indices, chunk_idx,
     rec_rate_per_chunk, gc_rate_per_chunk
 ):
@@ -156,7 +156,15 @@ def calc_B_precise_noninterfering(
     else:
         B = calculateB_linear(flat_distances, flat_lengths)
 
-    print(f"Chunk {chunk_idx}: Final B_noninterfering = {B}")
-    return B
+
+        # Combine B's calculated from distant genes, and genes within the region!
+    safe_flank_B = np.concatenate((np.ones(chunk_end+1 - chunk_start, dtype=float), B)) # Add an array of flank_B where all sites are B = 1, to account for sites with no flanking genes
+    new_flanking_mask = np.concatenate((np.ones((1, chunk_end+1 - chunk_start), dtype=bool), mask), axis=0)
+    unique_indices, inverse_indices = np.unique(np.where(new_flanking_mask)[1], return_inverse=True)
+    aggregated_B = np.ones_like(np.ones_like(np.arange(chunk_start,chunk_end+1), dtype=np.float64), dtype=np.float64)
+    np.multiply.at(aggregated_B, inverse_indices, safe_flank_B) # Multiplicative sum of B calculated at a given site from multiple elements
+
+    print(f"Chunk {chunk_idx}: Final B_noninterfering = {aggregated_B}")
+    return aggregated_B
 
 ## WON'T WORK FOR UNLINKED B, OR FOR SITES considering B from an interfering region, that aren't themselves in the interfering region

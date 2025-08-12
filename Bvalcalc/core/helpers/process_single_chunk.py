@@ -118,8 +118,6 @@ def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start,
         if quiet: print(f"Chunk {chunk_idx}: r modifier = {rec_rate_per_chunk[chunk_idx]}, which is at or below 0.1 threshold. Calculating B'. To skip add --no_hri")
         low_rec_chunk_ids = rec_rate_per_chunk < hri_r_threshold
 
-        this_chunk_interfering_L = lperchunk[chunk_idx]
-
         # extend left, then right til there's a chunk with recombination
         interference_region_start_idx, interference_region_end_idx = chunk_idx, chunk_idx
         while interference_region_start_idx > 0 and low_rec_chunk_ids[interference_region_start_idx - 1]:
@@ -136,52 +134,23 @@ def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start,
             precise_chunks, lperchunk, rec_rate_per_chunk, gc_rate_per_chunk, local_interference_indices)
         print(f"Chunk {chunk_idx}: B_from_distant_chunks, excluding local interference region", B_from_distant_chunks)
         
-            # Calculate B from elements within the precise region but not in the interfering region. No need to calculate intragenic B. 
-            # 
-            # # FILTER ALL THE FOLLOWING INPUTS (e.g. flat_distances, flat_lengths etc.) to remove genes within the chunks that comprise the local interfering region.
-            #
-
-         # # Drop-in here, don't change anywhere else
-                 # === DROP-IN: trim any part inside the interference region ===
         B_noninterfering_in_precise_region = calc_B_precise_noninterfering(precise_blockstart, precise_blockend, pos_chunk,
-                                                                           chr_start, chunk_size, chr_size, precise_region_start, precise_region_end,local_interference_indices, chunk_idx, 
+                                                                           chr_start, chunk_end, chunk_size, chr_size, precise_region_start, precise_region_end,local_interference_indices, chunk_idx, 
                                                                            rec_rate_per_chunk, gc_rate_per_chunk)
-        
-        
 
-
-        total_interfering_L
-
-        ## If adjacent chunks are also in low_rec_chunk_ids, combine their lperchunk into the total interfering_L
-
-
-        # Get distant B
-        # distant_B_arr = calc_distant_B_values(np.array([interfering_L]))
-
-
-              # 1) get this chunk’s U‐length
-
-
-        # print("Hai", chunk_idx)#, prior_B_for_low_rec_chunks, U_lengths_in_low_rec_chunks, interference_Bvals_per_chunk)
         U_lengths_in_low_rec_chunks = lperchunk[low_rec_chunk_ids]
         prior_B_for_low_rec_chunks = b_values[calc_start + np.where(low_rec_chunk_ids)[0] * chunk_size]
 
-        # U_lengths_in_low_rec_chunks = combine_adjacent_chunks(low_rec_chunk_ids) NEXT ON THE CHOPPING BLOCK
-        ## 
-
-        ## 1. for  
+        # combined_non_interfering_B = np.ones_like(B_from_distant_chunks, dtype=np.float64)
+        # combined_non_interfering_B *= (B_from_distant_chunks, B_noninterfering_in_precise_region, unlinked_B)
 
         from Bvalcalc.core.calculateB import calculateB_hri
-        # from Bvalcalc.core.helpers.calc_B_precise_noninterfering import calc_distant_B_values
-
-        # B_from_outside_local_interference_regime = calc_distant_B_values(U_lengths_in_low_rec_chunks.shape) ## Get distant_B for each of the chunks and return in same shape as interfering_L array
-
         interference_Bvals_per_chunk = calculateB_hri(
-            distant_B=B_from_distant_chunks, # NEED TO ALSO INCLUDE B FROM IN THE PRECISE REGION and unlinked_B!!!
+            distant_B=B_from_distant_chunks, # NEED TO ALSO INCLUDE B NONINTERFERING IN THE PRECISE REGION and unlinked_B!!!
             interfering_L=U_lengths_in_low_rec_chunks
         )
         np.maximum(flank_B, interference_Bvals_per_chunk, out=flank_B)
-        print("yaa", flank_B, interference_Bvals_per_chunk)
+        print("yaa", B_from_distant_chunks, np.shape(B_noninterfering_in_precise_region), unlinked_B)
 
 
         # print("Hyi", chunk_idx, interference_Bvals_per_chunk, flank_B)
