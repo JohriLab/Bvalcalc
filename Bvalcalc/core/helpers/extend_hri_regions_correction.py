@@ -36,6 +36,11 @@ def extend_hri_regions_correction(b_values, rec_rate_per_chunk, chunk_size, chr_
     print("interference_region_end_pos  :", interference_region_end_pos)
     print("b_values  :", B_in_interference_regions)
 
+    left_extended  = np.zeros(len(interference_region_start_pos), dtype=int)
+    right_extended = np.zeros(len(interference_region_end_pos), dtype=int)
+
+    n = b_values.shape[0]
+
 
     # ---- Backward extension from each region start ----
     # For region i, extend left from start_pos[i] - 1 while region B is higher
@@ -43,53 +48,59 @@ def extend_hri_regions_correction(b_values, rec_rate_per_chunk, chunk_size, chr_
     for i in range(len(interference_region_start_pos)):
         b_inside = B_in_interference_regions[i]
 
-        # index in b_values for the neighbor left of the region start
-        idx = (interference_region_start_pos[i] - calc_start) - 1
-        if idx < 0:
-            continue  # already at the leftmost calc position
-
-        # Do not overwrite into the previous interference region
+        # ---- backward extension ----
+        idx_left = (interference_region_start_pos[i] - calc_start) - 1
         if i == 0:
-            left_stop_rel = 0  # calc_start in b_values coordinates
+            stop_left_rel = 0
         else:
-            # previous region's end is inclusive; stop just to its right
-            left_stop_abs = interference_region_end_pos[i - 1] + 1
-            left_stop_rel = max(0, left_stop_abs - calc_start)
+            stop_left_abs = interference_region_end_pos[i - 1] + 1
+            stop_left_rel = max(0, stop_left_abs - calc_start)
 
-        # Walk left while region B is higher than current b_values
-        while idx >= left_stop_rel:
-            if b_inside > b_values[idx]:
-                b_values[idx] = b_inside
-                idx -= 1
+        while idx_left >= stop_left_rel:
+            if b_inside > b_values[idx_left]:
+                b_values[idx_left] = b_inside
+                left_extended[i] += 1
+                # NEW: stop if extended beyond chunk_size
+                if left_extended[i] > chunk_size:
+                    break
+                idx_left -= 1
             else:
                 break
 
-    # ---- Forward extension from each region end ----
-    # Mirror of above: extend right from end_pos[i] + 1 while region B is higher.
-    # Stop at calc_end or just before the next region's start.
-    n = b_values.shape[0]
-    for i in range(len(interference_region_end_pos)):
-        b_inside = B_in_interference_regions[i]
-
-        # index in b_values for the neighbor right of the region end
-        idx = (interference_region_end_pos[i] - calc_start) + 1
-        if idx >= n:
-            continue  # already at or beyond the rightmost calc position
-
-        # Do not overwrite into the next interference region
+        # ---- forward extension ----
+        idx_right = (interference_region_end_pos[i] - calc_start) + 1
         if i == len(interference_region_start_pos) - 1:
-            right_stop_rel = n - 1  # last valid index
+            stop_right_rel = n - 1
         else:
-            # next region's start is absolute; stop just to its left
-            right_stop_abs = interference_region_start_pos[i + 1] - 1
-            right_stop_rel = min(n - 1, right_stop_abs - calc_start)
+            stop_right_abs = interference_region_start_pos[i + 1] - 1
+            stop_right_rel = min(n - 1, stop_right_abs - calc_start)
 
-        # Walk right while region B is higher than current b_values
-        while idx <= right_stop_rel:
-            if b_inside > b_values[idx]:
-                b_values[idx] = b_inside
-                idx += 1
+        while idx_right <= stop_right_rel:
+            if b_inside > b_values[idx_right]:
+                b_values[idx_right] = b_inside
+                right_extended[i] += 1
+                # NEW: stop if extended beyond chunk_size
+                if right_extended[i] > chunk_size:
+                    break
+                idx_right += 1
             else:
                 break
+
+    # ---- warnings ----
+    for i in range(len(interference_region_start_pos)):
+        warn_left  = left_extended[i]  > chunk_size
+        warn_right = right_extended[i] > chunk_size
+        if warn_left or warn_right:
+            sides = []
+            if warn_left:
+                sides.append(f"left={left_extended[i]}")
+            if warn_right:
+                sides.append(f"right={right_extended[i]}")
+            print(
+                f"WARNING: HRI extension exceeded chunk_size at region {i} "
+                f"[{interference_region_start_pos[i]}-{interference_region_end_pos[i]}]; "
+                f"{', '.join(sides)} bases > chunk_size ({chunk_size}). "
+                f"This suggests B is very low and HRI is too pervasive for B to be calculated effectively in this region."
+            )
 
     return b_values
