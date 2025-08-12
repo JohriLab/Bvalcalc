@@ -14,8 +14,8 @@ authors = [
   { name = "Parul Johri", email = "pjohri@unc.edu" }
 ]
 dependencies = [
-  "numpy",
-  "scipy",
+  "numpy>=1.22",
+  "scipy>=1.13",
   "matplotlib",
   "seaborn (>=0.13.2,<0.14.0)"
 ]
