@@ -150,12 +150,12 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
 
     output_data = np.core.records.fromarrays(
         [chrom_col,binned_positions.astype(int),binned_b_values.astype(float)],
-        names='Chromosome,Position,B',formats='U20,i8,f8')
+        names='Chromosome,Start,B',formats='U20,i8,f8')
 
-    if args.out is not None: # Write to CSV
+    if args.out is not None: # Write to CSVs
         print(f"Writing B output to file...")
-        with open(args.out, 'a') as f:
-            np.savetxt(f, output_data, delimiter=",", fmt="%s,%d,%.6f", comments="")
+        from Bvalcalc.utils.write_chrom_B_to_file import write_chrom_B_to_file
+        write_chrom_B_to_file(args.out, output_data, hri_extended_starts, hri_extended_ends, args.out_binsize, calc_end)
         print(f"Appended B values to: {os.path.abspath(args.out)}")
     else:
         if not args.quiet:

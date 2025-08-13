@@ -108,4 +108,6 @@ def extend_hri_regions_correction(b_values, rec_rate_per_chunk, chunk_size, chr_
     extended_ends   = np.minimum(interference_region_end_pos + right_extended, calc_end)
     # extended_regions_pos = np.stack([extended_starts, extended_ends], axis=1).astype(int)
 
+    print(f"Extended HRI regions to {extended_starts, extended_ends}")
+
     return extended_starts, extended_ends
