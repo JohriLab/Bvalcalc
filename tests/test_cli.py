@@ -130,7 +130,11 @@ def test_cli_genome_with_recmap_plot(tmp_path):
 
     assert result.returncode == 0, f"CLI failed:\n{result.stderr}"
     assert "Cumulative length of chromosome under selection: 99990bp (50.0%)" in out
-    assert "Mean B of neutral sites across chromosome chr_200kb: 0.701584724570370" in out
+    match = re.search(r"Mean B of neutral sites across chromosome chr_200kb: ([0-9.]+)", out)
+    assert match, "Could not find mean B output in CLI output"
+    mean_b = float(match.group(1))
+    expected = 0.701584724570370
+    assert abs(mean_b - expected) < 1e-10, f"Expected {expected}, got {mean_b}"
     assert f"Appended B values to: {output_path.as_posix()}" in out
     assert output_path.exists(), "Expected output file not created"
     assert output_path.stat().st_size > 0, "Output file is empty"
