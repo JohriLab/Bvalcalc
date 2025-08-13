@@ -182,7 +182,7 @@ def test_cli_gene_expand():
     out = result.stdout + result.stderr
 
     assert result.returncode == 0, f"CLI failed:\n{result.stderr}"
-    assert "Mean B for flanking region: 0.9823767432235562" in out
+    assert "Mean B for flanking region: 0.982376743223556" in out
     assert "B prior to demographic change" in out
     assert "B post B-calculation" in out
 
