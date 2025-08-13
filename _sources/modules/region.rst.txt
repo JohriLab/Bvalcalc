@@ -54,7 +54,7 @@ Optional Arguments
   Note that ``s`` and ``proportion_synonymous`` should be set in the parameters file when active.
 
 **-\-no_hri**
-  If included, will skip post-hoc calculation of B under HRI (Bprime; Becher and Charlesworth 2025), for low recombination regions. Classic B values will be used in these regions instead.
+  If included, will skip post-hoc calculation of B under HRI (B'; Becher and Charlesworth 2025), for low recombination regions. Classic B values will be used in these regions instead.
 
 **-\-prior_Bmap [path/to/prior_Bmap.csv]**  
     Optional prior B-value map (`.csv` format). Used to multiply the newly calculated B-values by a per-site prior (e.g. for regions under different selection parameters). Format: ``Chromosome,Start,B``.
