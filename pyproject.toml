@@ -42,6 +42,9 @@ docs = [
   "sphinx>=6.0",
   "sphinx-rtd-theme"
 ]
+test = [
+  "pytest>=7.0"
+]
 
 [project.scripts]
 Bvalcalc = "Bvalcalc.cli:main"
