@@ -108,7 +108,6 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
 
     if not no_hri: # If --no_hri is not active
         from Bvalcalc.core.helpers.extend_hri_regions_correction import extend_hri_regions_correction
-        # Below also returns the start and end of each region for which B' is used
         hri_extended_starts, hri_extended_ends = extend_hri_regions_correction(b_values, rec_rate_per_chunk, chunk_size, chr_start, calc_start, calc_end, hri_r_threshold = 0.1) # Extend HRI regions until B > B' to avoid sharp decrease in B at the border between normal and HRI regions. See manuscript.
     else:
         hri_extended_starts, hri_extended_ends = np.array([], dtype=int), np.array([], dtype=int)

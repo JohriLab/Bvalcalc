@@ -99,20 +99,13 @@ def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start,
     unique_indices, inverse_indices = np.unique(np.where(new_flanking_mask)[1], return_inverse=True)
     aggregated_B = np.ones_like(np.ones_like(np.arange(chunk_start,chunk_end+1), dtype=np.float64), dtype=np.float64)
     np.multiply.at(aggregated_B, inverse_indices, safe_flank_B) # Multiplicative sum of B calculated at a given site from multiple elements
-    ### NEW
-
     hri_r_threshold = 0.1 # fraction of "r" in a chunk that triggers Bprime hri calculation
-    if (no_hri is False 
-        and rec_rate_per_chunk is not None
-        and rec_rate_per_chunk[chunk_idx] < hri_r_threshold): # Skip this if user has --no_hri active
+    if (no_hri is False and rec_rate_per_chunk is not None and rec_rate_per_chunk[chunk_idx] < hri_r_threshold): # Skip this if user has --no_hri active
         from Bvalcalc.core.helpers.calc_B_in_hri_region import calc_B_in_hri_region
         hri_aggregated_B = calc_B_in_hri_region(quiet, chunk_idx, rec_rate_per_chunk, hri_r_threshold, lperchunk, chunk_size, chr_start, chr_size, num_chunks, gc_rate_per_chunk, precise_chunks, precise_blockstart, precise_blockend, pos_chunk, chunk_end, precise_region_start, precise_region_end, unlinked_B)
-        # The following code could be used to compare the non-HRI and HRI B values, keeping the highest for each site. Not included ATM.
-        # np.copyto(aggregated_B, hri_aggregated_B, where=aggregated_B * B_from_distant_chunks * within_gene_B < hri_aggregated_B)
         chunk_slice *= hri_aggregated_B
         return b_values
     else:
-    ### NEW
         if unique_indices.size == 0: # If there are no nearby sites under selection
             chunk_slice *= (B_from_distant_chunks * within_gene_B)
         else:

@@ -36,8 +36,4 @@ def calc_B_in_hri_region(quiet, chunk_idx, rec_rate_per_chunk, hri_r_threshold, 
         interfering_L=U_lengths_in_low_rec_chunks
     )
 
-    
-    # np.maximum(flank_B, interference_Bvals_per_chunk, out=flank_B)
-    # print("yaa", B_from_distant_chunks, np.shape(B_noninterfering_in_precise_region), unlinked_B)
-
     return interference_Bvals_per_chunk
