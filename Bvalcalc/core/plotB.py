@@ -34,7 +34,7 @@ def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_
 
     # Main plotting logic
     if caller == "chromosome":
-        positions = b_values_input['Position']
+        positions = b_values_input['Start']
         b_vals = b_values_input['B']
         chrom = b_values_input['Chromosome'][0] if 'Chromosome' in b_values_input.dtype.names else 'unknown'
 

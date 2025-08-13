@@ -19,7 +19,7 @@ The required format for **SF2** is a tab-delimited file for a single chromosome 
     780210  0.95
 
     # Bvalcalc B-map format
-    Chromosome,Position,B
+    Chromosome,Start,B
     chr1,1,0.7
     chr1,1001,0.6
     chr1,2001,0.5

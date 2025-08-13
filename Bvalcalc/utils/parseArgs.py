@@ -46,7 +46,7 @@ def parseRegionArgs(argv=None):
     parser.add_argument('--prior_Bmap', type=str, default=None,
                         help="Optional input with per-site expected diversity, e.g. a B map calculated using Bvalcalc on different annotations! Usage: --prior_Bmap your_map.csv "
                              "These values will be multiplied by the caluculated B, i.e. a value of 0.9 at a given position will be returned as 0.9 * [newly calculated B]"
-                             "Format should be the same as the B-map output: 'Chromosome,Position,Conserved,B'. "
+                             "Format should be the same as the B-map output: 'Chromosome,Start,Conserved,B'. "
                              "Note that the Conserved column is needed for accurate parsing but will not affect the analysis.")
     parser.add_argument('--rec_map', nargs='?', default=None,
                         help="Optional recombination (crossover) map input. Usage: --rec_map your.map, "
@@ -94,7 +94,7 @@ def parseGenomeArgs(argv=None):
     parser.add_argument('--prior_Bmap', type=str, default=None,
                         help="Optional input with per-site expected diversity, e.g. a B map calculated using Bvalcalc on different annotations! Usage: --prior_Bmap your_map.csv "
                              "These values will be multiplied by the caluculated B, i.e. a value of 0.9 at a given position will be returned as 0.9 * [newly calculated B]"
-                             "Format should be the same as the B-map output: 'Chromosome,Position,Conserved,B'. "
+                             "Format should be the same as the B-map output: 'Chromosome,Start,Conserved,B'. "
                              "Note that the Conserved column is needed for accurate parsing but will not affect the analysis.")
     parser.add_argument('--rec_map', type=str, default=None,
                         help="Optional recombination (crossover) map input. Usage: --rec_map your.map, "

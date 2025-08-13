@@ -25,7 +25,7 @@ def genomeBcalc(args):
 
     if args.out is not None: # Overwrite existing file with header
         with open(args.out, 'w') as out_f:
-            out_f.write("Chromosome,Position,B\n")
+            out_f.write("Chromosome,Start,B\n")
 
     for i in np.arange(0,len(unique_chromosomes)):
 
