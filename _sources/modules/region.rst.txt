@@ -54,7 +54,7 @@ Optional Arguments
   Note that ``s`` and ``proportion_synonymous`` should be set in the parameters file when active.
   
 **-\-prior_Bmap [path/to/prior_Bmap.csv]**  
-    Optional prior B-value map (`.csv` format). Used to multiply the newly calculated B-values by a per-site prior (e.g. for regions under different selection parameters). Format: ``Chromosome,Position,Conserved,B``. Note that ``Conserved`` is required for parsing but does not affect output
+    Optional prior B-value map (`.csv` format). Used to multiply the newly calculated B-values by a per-site prior (e.g. for regions under different selection parameters). Format: ``Chromosome,Start,B``.
 
 **-\-chunk_size [int]**  
     Size of chunks to process in each B calculation (default: ``20000``). It may be useful to increase this in large chromosomes with sparse selection for tractability, though consider how this may affect analysis in conjunction with the number of `precise_chunks`.

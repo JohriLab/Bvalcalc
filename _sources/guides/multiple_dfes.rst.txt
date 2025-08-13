@@ -11,7 +11,7 @@ Arguments
 **-\-prior_Bmap [path/to/prior_Bmap.csv]**  
     Optional prior B-value map (`.csv` format). Used to multiply the newly calculated B-values by a per-site prior (e.g. for regions under different selection parameters). 
     
-    Format: `Chromosome,Position,Conserved,B`. Note that `Conserved` is required for parsing but does not affect output
+    Format: `Chromosome,Start,B`.
 
 Example Walkthrough
 --------------------
