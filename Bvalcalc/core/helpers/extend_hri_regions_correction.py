@@ -103,4 +103,9 @@ def extend_hri_regions_correction(b_values, rec_rate_per_chunk, chunk_size, chr_
                 f"This suggests B is very low and HRI is too pervasive for B to be calculated effectively in this region."
             )
 
-    return b_values
+        # NEW: compute final (start,end) positions after extension, inclusive
+    extended_starts = np.maximum(interference_region_start_pos - left_extended, calc_start)
+    extended_ends   = np.minimum(interference_region_end_pos + right_extended, calc_end)
+    # extended_regions_pos = np.stack([extended_starts, extended_ends], axis=1).astype(int)
+
+    return extended_starts, extended_ends
