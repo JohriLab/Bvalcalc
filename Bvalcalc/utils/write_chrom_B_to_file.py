@@ -3,6 +3,7 @@ import sys
 
 def write_chrom_B_to_file(out,
                           output_data,
+                          quiet,
                           hri_starts=None,
                           hri_ends=None,
                           binsize=None,
@@ -58,5 +59,9 @@ def write_chrom_B_to_file(out,
     rows[:, 1] = output_data['Start'].astype(int)
     rows[:, 2] = B_as_str
 
+    if not quiet and hri_starts is not None: 
+        print(f"B values calculated for HRI regions (B') is indicated with ' at end of line")
+
     with open(out, 'a') as f:
         np.savetxt(f, rows, delimiter=",", fmt="%s,%d,%s", comments="")
+
