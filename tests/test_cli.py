@@ -74,6 +74,7 @@ def test_cli_genome_basic(tmp_path):
         "--chr_sizes", str(chr_sizes_path),
         "--out", str(output_path),
         "--out_binsize", "1",
+        "--no_hri",
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     out = result.stdout + result.stderr
@@ -96,6 +97,7 @@ def test_cli_genome_gcparams(tmp_path):
         "--chr_sizes", str(chr_sizes_path),
         "--out", str(output_path),
         "--out_binsize", "1",
+        "--no_hri",
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     out = result.stdout + result.stderr
@@ -121,6 +123,7 @@ def test_cli_genome_with_recmap_plot(tmp_path):
         "--rec_map", str(map_path),
         "--out", str(output_path),
         "--out_binsize", "1",
+        "--no_hri",
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     out = result.stdout + result.stderr
@@ -140,6 +143,7 @@ def test_cli_mean_b_value(tmp_path):
         "--pop_params", params,
         "--bedgff_path", "tests/testfiles/200kb_slimtest.csv",
         "--plot_output", "tests/testout/genome_test.png",
+        "--no_hri",
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     out = result.stdout + result.stderr
@@ -215,3 +219,45 @@ def test_cli_positions_minimum_filter():
     assert "Mean B across filtered sites: 0.562500" in out
     assert "Max B across filtered sites: 0.750000 at chr_2R:20000" in out
     assert "Min B across filtered sites: 0.500000 at chr_2R:1" in out
+
+def test_cli_genome_hri_marking(tmp_path):
+    # python -m Bvalcalc.cli --genome  --pop_params ./tests/testparams/InterfParams.py \
+    # --bedgff_path ./tests/testfiles/200kb_hri.csv --rec_map ./tests/testfiles/200kb_hri.map \
+    # --precise_chunks 2 --out haut.B --out_binsize 100
+    params      = Path(__file__).parents[1] / "tests" / "testparams" / "InterfParams.py"
+    bed_path    = Path(__file__).parents[1] / "tests" / "testfiles" / "200kb_hri.csv"
+    map_path    = Path(__file__).parents[1] / "tests" / "testfiles" / "200kb_hri.map"
+    output_path = Path(__file__).parents[1] / "tests" / "testout" / "hri_200kb_test.B"
+
+    cmd = BASE_CMD + [
+        "--genome",
+        "--pop_params", str(params),
+        "--bedgff_path", str(bed_path),
+        "--rec_map", str(map_path),
+        "--precise_chunks", "2",
+        "--out", str(output_path),
+        "--out_binsize", "100",
+    ]
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    out = result.stdout + result.stderr
+
+    # CLI ran
+    assert result.returncode == 0, f"CLI failed:\n{result.stderr}"
+    assert "Mean B of neutral sites across chromosome chr_200kb: 0.588623210410594" in out
+
+    # File wrote
+    assert output_path.exists(), "Expected output file not created"
+
+    # Contents
+    with open(output_path, "r") as f:
+        lines = [ln.strip() for ln in f if ln.strip()]
+
+    assert len(lines) == 2001, f"Expected 2001 lines, found {len(lines)}"
+
+    # Specific rows must be present
+    assert "chr_200kb,4201,0.340332'" in lines
+    assert "chr_200kb,40101,0.359374'" in lines
+    assert "chr_200kb,81101,0.782838" in lines
+
+    # Final line check
+    assert lines[-1] == "chr_200kb,199901,0.327636'", f"Unexpected final line: {lines[-1]}"

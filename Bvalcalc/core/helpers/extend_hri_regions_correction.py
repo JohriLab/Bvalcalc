@@ -4,7 +4,7 @@ def extend_hri_regions_correction(b_values, rec_rate_per_chunk, chunk_size, chr_
 
     ## First need to export properly from process_single_chunk.py
 
-    print(f"Extending HRI regions", b_values, rec_rate_per_chunk)
+    # print(f"Extending HRI regions", b_values, rec_rate_per_chunk)
 
     low_rec_chunk_ids = rec_rate_per_chunk < hri_r_threshold
 
@@ -16,7 +16,7 @@ def extend_hri_regions_correction(b_values, rec_rate_per_chunk, chunk_size, chr_
     interference_region_starts_idx = np.where(mask & np.r_[True, ~mask[:-1]])[0]
     interference_region_ends_idx   = np.where(mask & np.r_[~mask[1:], True])[0]
 
-    print(interference_region_starts_idx, interference_region_ends_idx)
+    # print(interference_region_starts_idx, interference_region_ends_idx)
 
     base_chunk_idx = (calc_start - chr_start) // chunk_size
 
@@ -32,9 +32,9 @@ def extend_hri_regions_correction(b_values, rec_rate_per_chunk, chunk_size, chr_
     B_in_interference_regions = b_values[np.maximum(interference_region_start_pos-calc_start, 0)] # Find in b_values array which starts at calc_start
 
     # Debug peek
-    print("interference_region_start_pos:", interference_region_start_pos)
-    print("interference_region_end_pos  :", interference_region_end_pos)
-    print("b_values  :", B_in_interference_regions)
+    # print("interference_region_start_pos:", interference_region_start_pos)
+    # print("interference_region_end_pos  :", interference_region_end_pos)
+    # print("b_values  :", B_in_interference_regions)
 
     left_extended  = np.zeros(len(interference_region_start_pos), dtype=int)
     right_extended = np.zeros(len(interference_region_end_pos), dtype=int)
