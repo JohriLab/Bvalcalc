@@ -61,7 +61,7 @@ def test_cli_gene_gcparams(tmp_path):
     assert plot_path.exists(), f"Expected plot at {plot_path}, but not found"
 
 def test_cli_genome_basic(tmp_path):
-    # poetry run Bvalcalc --genome --pop_params tests/testparams/nogcBasicParams.py --bedgff_path tests/testfiles/200kb_slimtest.csv --chr_sizes examples/test_sizes.txt
+    # poetry run Bvalcalc --genome --pop_params tests/testparams/nogcBasicParams.py --bedgff_path tests/testfiles/200kb_slimtest.csv --chr_sizes tests/testfiles/test_sizes.txt
     # poetry run Bvalcalc --region chr_200kb:1-200000 --pop_params tests/testparams/nogcBasicParams.py --bedgff_path tests/testfiles/200kb_slimtest.csv --plot_output
     params         = Path(__file__).parents[1] / "tests" / "testparams" / "nogcBasicParams.py"
     bed_path       = Path(__file__).parents[1] / "tests" / "testfiles" / "200kb_slimtest.csv"
@@ -85,7 +85,7 @@ def test_cli_genome_basic(tmp_path):
     assert output_path.stat().st_size > 0, "Output file is empty"
 
 def test_cli_genome_gcparams(tmp_path):
-    # python -m Bvalcalc.cli --genome --pop_params tests/testparams/gcBasicParams.py --bedgff_path tests/testfiles/200kb_slimtest.csv --chr_sizes examples/test_sizes.txt --out <tmp>/gc_bvals.bvals --out_binsize 1
+    # python -m Bvalcalc.cli --genome --pop_params tests/testparams/gcBasicParams.py --bedgff_path tests/testfiles/200kb_slimtest.csv --chr_sizes tests/testfiles/test_sizes.txt --out <tmp>/gc_bvals.bvals --out_binsize 1
     params         = Path(__file__).parents[1] / "tests" / "testparams" / "gcBasicParams.py"
     bed_path       = Path(__file__).parents[1] / "tests" / "testfiles" / "200kb_slimtest.csv"
     chr_sizes_path = Path(__file__).parents[1] / "examples" / "test_sizes.txt"
@@ -109,7 +109,7 @@ def test_cli_genome_gcparams(tmp_path):
     assert output_path.stat().st_size > 0, "Output file is empty"
 
 def test_cli_genome_with_recmap_plot(tmp_path):
-    # python -m Bvalcalc.cli --genome --pop_params tests/testparams/nogcBasicParams.py --bedgff_path tests/testfiles/200kb_slimtest.csv --chr_sizes examples/test_sizes.txt --rec_map tests/testfiles/200kb.map --out <tmp>/200kb_dfe5.bvals --out_binsize 1
+    # python -m Bvalcalc.cli --genome --pop_params tests/testparams/nogcBasicParams.py --bedgff_path tests/testfiles/200kb_slimtest.csv --chr_sizes tests/testfiles/test_sizes.txt --rec_map tests/testfiles/200kb.map --out <tmp>/200kb_dfe5.bvals --out_binsize 1
     params         = Path(__file__).parents[1] / "tests" / "testparams" / "nogcBasicParams.py"
     bed_path       = Path(__file__).parents[1] / "tests" / "testfiles" / "200kb_slimtest.csv"
     map_path       = Path(__file__).parents[1] / "tests" / "testfiles" / "200kb.map"
@@ -203,7 +203,7 @@ def test_cli_selfing():
     assert "B at start and end of the neutral region: [0.60347707 0.6035028  0.60352854 ... 0.89001725 0.89001929 0.89002133]" in out
 
 def test_cli_positions_minimum_filter():
-    # python -m Bvalcalc.cli --Bmap ./examples/false_Bvalues_chr3R.csv --positions ./examples/posfile.csv --out_minimum 0.5
+    # python -m Bvalcalc.cli --Bmap ./tests/testfiles/false_Bvalues_chr3R.csv --positions ./tests/testfiles/posfile.csv --out_minimum 0.5
     bmap_path = Path(__file__).parents[1] / "examples" / "false_Bvalues_chr3R.csv"
     pos_path  = Path(__file__).parents[1] / "examples" / "posfile.csv"
 
