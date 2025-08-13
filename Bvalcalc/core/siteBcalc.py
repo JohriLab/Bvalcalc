@@ -8,7 +8,8 @@ def siteBcalc(args):
     dfe_helper.CONSTANT_DFE = args.constant_dfe # Update DFE if --constant_dfe
     from Bvalcalc.core.calculateB import calculateB_linear
 
-    b_values = calculateB_linear(distance, gene_size)
+    ## TESTING A BREAKING CHANGE 
+    ## b_values = calculateB_linear(distance, gene_size)
     print(f"B for site {distance}bp away from {gene_size}bp region: {b_values}")
 
     if args.pop_change:
