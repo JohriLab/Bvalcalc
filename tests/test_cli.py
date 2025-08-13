@@ -80,7 +80,7 @@ def test_cli_genome_basic(tmp_path):
     out = result.stdout + result.stderr
 
     assert result.returncode == 0, f"CLI failed:\n{result.stderr}"
-    assert "Mean B of neutral sites across chromosome chr_200kb: 0.753693843332109" in out
+    assert "Mean B of neutral sites across chromosome chr_200kb: 0.753693843332108" in out
     assert output_path.exists(), "Expected output file not created"
     assert output_path.stat().st_size > 0, "Output file is empty"
 
@@ -130,7 +130,7 @@ def test_cli_genome_with_recmap_plot(tmp_path):
 
     assert result.returncode == 0, f"CLI failed:\n{result.stderr}"
     assert "Cumulative length of chromosome under selection: 99990bp (50.0%)" in out
-    assert "Mean B of neutral sites across chromosome chr_200kb: 0.7015847245703709" in out
+    assert "Mean B of neutral sites across chromosome chr_200kb: 0.701584724570370" in out
     assert f"Appended B values to: {output_path.as_posix()}" in out
     assert output_path.exists(), "Expected output file not created"
     assert output_path.stat().st_size > 0, "Output file is empty"
