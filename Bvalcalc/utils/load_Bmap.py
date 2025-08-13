@@ -21,13 +21,19 @@ def load_Bmap(file_path):
 
             chrom = row[0]
             pos   = int(row[1])
-            b     = float(row[2])
+
+            # Strip trailing single quote if present
+            b_str = row[2].strip()
+            if b_str.endswith("'"):
+                b_str = b_str[:-1]
+            b = float(b_str)
 
             chromosomes.append(chrom)
             positions.append(pos)
             b_values.append(b)
-        chromosomes = np.array(chromosomes, dtype='<U20')
-        positions = np.array(positions,   dtype=np.int64)
-        b_values = np.array(b_values,    dtype=np.float64)
+
+    chromosomes = np.array(chromosomes, dtype='<U20')
+    positions   = np.array(positions,   dtype=np.int64)
+    b_values    = np.array(b_values,    dtype=np.float64)
 
     return chromosomes, positions, b_values
