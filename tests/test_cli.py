@@ -80,7 +80,11 @@ def test_cli_genome_basic(tmp_path):
     out = result.stdout + result.stderr
 
     assert result.returncode == 0, f"CLI failed:\n{result.stderr}"
-    assert "Mean B of neutral sites across chromosome chr_200kb: 0.753693843332108" in out
+    match = re.search(r"Mean B of neutral sites across chromosome chr_200kb: ([0-9.]+)", out)
+    assert match, "Could not find mean B output in CLI output"
+    mean_b = float(match.group(1))
+    expected = 0.753693843332108
+    assert abs(mean_b - expected) < 1e-10, f"Expected {expected}, got {mean_b}"
     assert output_path.exists(), "Expected output file not created"
     assert output_path.stat().st_size > 0, "Output file is empty"
 

@@ -12,6 +12,31 @@ import sys
 def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = None, prior_b = None, calc_start=None, calc_end=None, chr_size=None, caller="regionBcalc"):    
     #Shared arguments between genomeBcalc and regionBcalc
     file_path, chunk_size, precise_chunks, no_hri, quiet, verbose = args.bedgff_path, args.chunk_size, args.precise_chunks, args.no_hri, args.quiet, args.verbose
+    
+    # Auto-adjust chunk size for large datasets (only if user hasn't manually set chunk_size)
+    if args.chunk_size is None:  # If they did not explicitly provide --chunk_size
+        num_blocks = len(blockstart)
+        # Set default chunk size
+        chunk_size = 20000
+        original_chunk_size = chunk_size
+        if num_blocks > 250000:
+            chunk_size = 1000  # Use 1kb chunks for extremely massive datasets
+            if not quiet:
+                print(f"Extremely massive dataset detected ({num_blocks} blocks). Auto-adjusting chunk size from {original_chunk_size} to {chunk_size} bp for memory efficiency. Use --chunk_size to override.")
+        elif num_blocks > 125000:
+            chunk_size = 2000  # Use 2kb chunks for massive datasets
+            if not quiet:
+                print(f"Massive dataset detected ({num_blocks} blocks). Auto-adjusting chunk size from {original_chunk_size} to {chunk_size} bp for memory efficiency. Use --chunk_size to override.")
+        elif num_blocks > 50000:
+            chunk_size = 5000  # Use 5kb chunks for very large datasets
+            if not quiet:
+                print(f"Very large dataset detected ({num_blocks} blocks). Auto-adjusting chunk size from {original_chunk_size} to {chunk_size} bp for memory efficiency. Use --chunk_size to override.")
+        elif num_blocks > 25000:
+            chunk_size = 10000  # Use 10kb chunks for large datasets
+            if not quiet:
+                print(f"Large dataset detected ({num_blocks} blocks). Auto-adjusting chunk size from {original_chunk_size} to {chunk_size} bp for memory efficiency. Use --chunk_size to override.")
+    elif not quiet and num_blocks > 25000:
+        print(f"Large dataset detected ({num_blocks} blocks) but using user-specified chunk size of {chunk_size} bp.")
     #Arguments specific to regionBcalc
     if caller == "regionBcalc":
         calc_start, calc_end = calc_start, calc_end
