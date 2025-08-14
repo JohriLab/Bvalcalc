@@ -131,7 +131,7 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
     b_values = b_values * unlinked_B
     # print('Hriii', np.shape(b_values))
 
-    if not no_hri: # If --no_hri is not active
+    if not no_hri and rec_rate_per_chunk is not None: # If --no_hri is not active
         from Bvalcalc.core.helpers.extend_hri_regions_correction import extend_hri_regions_correction
         hri_extended_starts, hri_extended_ends = extend_hri_regions_correction(b_values, rec_rate_per_chunk, chunk_size, chr_start, calc_start, calc_end, hri_r_threshold = 0.1) # Extend HRI regions until B > B' to avoid sharp decrease in B at the border between normal and HRI regions. See manuscript.
     else:
