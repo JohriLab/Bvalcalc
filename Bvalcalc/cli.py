@@ -11,7 +11,7 @@ from Bvalcalc.utils.generateParams import SPECIES, generateParams, check_generat
 from Bvalcalc.core.positionsBstats import positionsBstats
 from Bvalcalc.core.plotChromB import plotChromB
 
-__version__ = "0.6.1"
+__version__ = "0.6.2"
 
 def main():
     start_time = time.time()
