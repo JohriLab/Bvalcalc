@@ -1,5 +1,5 @@
 """
-Utility modules for Bvalcalc.
+Utility modules for bvalcalc.
 """
 # Argument parsers
 from .parseArgs import parse_args, parseGenomeArgs, parseRegionArgs, parseGeneArgs, parseSiteArgs

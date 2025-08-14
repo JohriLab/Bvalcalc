@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "Bvalcalc"
+name = "bvalcalc"
 version = "0.6.1"
 description = "Calculate relative diversity (B) under background selection"
 readme = "README.md"
@@ -17,7 +17,7 @@ dependencies = [
   "numpy>=1.22",
   "scipy>=1.13",
   "matplotlib",
-  "seaborn (>=0.13.2,<0.14.0)"
+  "seaborn>=0.13.2,<0.14.0"
 ]
 classifiers = [
   "Development Status :: 4 - Beta",
@@ -32,10 +32,10 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage      = "https://github.com/JohriLab/Bvalcalc"
-Documentation = "https://github.com/JohriLab/Bvalcalc"
-Source        = "https://github.com/JohriLab/Bvalcalc"
-Tracker       = "https://github.com/JohriLab/Bvalcalc/issues"
+Homepage = "https://github.com/JohriLab/Bvalcalc"
+Documentation = "https://JohriLab.github.io/Bvalcalc"
+Source = "https://github.com/JohriLab/Bvalcalc"
+Tracker = "https://github.com/JohriLab/Bvalcalc/issues"
 
 [project.optional-dependencies]
 docs = [
@@ -47,11 +47,10 @@ test = [
 ]
 
 [project.scripts]
-Bvalcalc = "Bvalcalc.cli:main"
+bvalcalc = "Bvalcalc.cli:main"
 
 [tool.setuptools.packages.find]
-
-where   = ["."]
+where = ["."]
 include = ["Bvalcalc", "Bvalcalc.*"]
 exclude = ["trash*"]
 [tool.poetry.group.docs.dependencies]
@@ -59,5 +58,4 @@ sphinx = "^7.2"
 sphinx-argparse = "^0.5.2"
 
 [tool.poetry.scripts]
-Bvalcalc = "Bvalcalc.cli:main"
 bvalcalc = "Bvalcalc.cli:main"

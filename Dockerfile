@@ -8,15 +8,15 @@
     
     ENV PYTHONUNBUFFERED=1 PIP_NO_CACHE_DIR=1
     
-    # Install Bvalcalc from PyPI (use the TestPyPI variant below if needed)
+    # Install bvalcalc from PyPI (use the TestPyPI variant below if needed)
     RUN pip install --no-cache-dir \
     --index-url https://test.pypi.org/simple \
     --extra-index-url https://pypi.org/simple \
-    Bvalcalc  
+    bvalcalc  
     
     # Workdir for your mounted files
     WORKDIR /work
     
     # Default entrypoint runs the CLI
-    ENTRYPOINT ["Bvalcalc"]
+    ENTRYPOINT ["bvalcalc"]
     
