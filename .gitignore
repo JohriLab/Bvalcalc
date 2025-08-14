@@ -53,3 +53,6 @@ trash/
 examples/
 
 *sh
+
+# Conda-forge submission checklist (local only)
+CONDA_FORGE_CHECKLIST.md
