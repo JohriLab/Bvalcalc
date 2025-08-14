@@ -32,7 +32,7 @@ def main():
             plotChromB(flat_b, flat_chrom, args.plot_distribution, args.quiet)
         return
 
-    print(f"= Calculating relative diversity (B) for all neutral sites across the genomes. = = =")
+    print(f"= Calculating relative diversity (B) for all neutral sites across the genome. = = =")
 
     if known_args.genome: # Run genome Bcalc
         args = parseGenomeArgs(remaining_args)

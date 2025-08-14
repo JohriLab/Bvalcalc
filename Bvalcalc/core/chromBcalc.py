@@ -35,14 +35,14 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
         chr_size = blockend[-1]
         if calc_end is None and not args.quiet:
             print(f"No --chr_size provided for chromosome: {chromosome}. Using last position in BED/GFF: {chr_size}")
-    if calc_start is None:
-        calc_start = 1
-    if calc_end is None:
-        calc_end = chr_size
 
     if not quiet: print(f"====== S T A R T I N G ===== C A L C ===============")
     if calc_start is None and calc_end is None:
         if not quiet: print(f"Calculating B for entire chromosome, to only calculate for a subregion, use --calc_start and --calc_end")
+    if calc_start is None:
+        calc_start = 1
+    if calc_end is None:
+        calc_end = chr_size
 
     chr_start = 1 # Currently hardcoded, can change if needed
     num_chunks = (chr_size - chr_start + chunk_size - 1) // chunk_size
