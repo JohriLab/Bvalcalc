@@ -48,6 +48,7 @@ test = [
 
 [project.scripts]
 bvalcalc = "Bvalcalc.cli:main"
+Bvalcalc = "Bvalcalc.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
@@ -59,3 +60,4 @@ sphinx-argparse = "^0.5.2"
 
 [tool.poetry.scripts]
 bvalcalc = "Bvalcalc.cli:main"
+Bvalcalc = "Bvalcalc.cli:main"
