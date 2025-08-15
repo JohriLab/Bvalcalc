@@ -25,11 +25,22 @@ def extend_hri_regions_correction(b_values, rec_rate_per_chunk, chunk_size, chr_
     abs_end_chunks   = base_chunk_idx + interference_region_ends_idx + 1  # +1 for end-exclusive
 
     interference_region_start_pos = chr_start + abs_start_chunks * chunk_size
-
     interference_region_end_pos = np.minimum(calc_end,
         chr_start + abs_end_chunks * chunk_size - 1)
-    
-    B_in_interference_regions = b_values[np.maximum(interference_region_start_pos-calc_start, 0)] # Find in b_values array which starts at calc_start
+
+    # Filter to only include interference regions that overlap with the calculation region
+    valid_mask = (interference_region_end_pos >= calc_start) & (interference_region_start_pos <= calc_end)
+    if not valid_mask.any():
+        return b_values
+
+    interference_region_start_pos = interference_region_start_pos[valid_mask]
+    interference_region_end_pos = interference_region_end_pos[valid_mask]
+
+    # Clip positions to be within the calculation region
+    interference_region_start_pos = np.maximum(interference_region_start_pos, calc_start)
+    interference_region_end_pos = np.minimum(interference_region_end_pos, calc_end)
+
+    B_in_interference_regions = b_values[interference_region_start_pos - calc_start]
 
     # Debug peek
     # print("interference_region_start_pos:", interference_region_start_pos)
