@@ -122,11 +122,11 @@
 <span class="sd">    Caches on (params_path, gamma_dfe, constant_dfe) and rebuilds whenever</span>
 <span class="sd">    any of those three inputs change.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">global</span> <span class="n">_params_cache</span><span class="c1">#, _cache_args # COMMENTED OUT CACHING FOR API USAGE, CAN RE-IMPLEMENT FOR CLI IF IT SLOWS IT DOWN</span>
-    <span class="c1"># key = (params_path, gamma_dfe, constant_dfe)</span>
-    <span class="c1"># if _cache_args != key:</span>
-    <span class="n">_params_cache</span> <span class="o">=</span> <span class="n">get_DFE_params</span><span class="p">(</span><span class="n">params_path</span><span class="p">,</span> <span class="n">gamma_dfe</span><span class="p">,</span> <span class="n">constant_dfe</span><span class="p">)</span>
-    <span class="c1"># _cache_args = key</span>
+    <span class="k">global</span> <span class="n">_params_cache</span><span class="p">,</span> <span class="n">_cache_args</span> <span class="c1"># Re-added caching for CLI, was re-running too much, can re-implement for API as needed</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">params_path</span><span class="p">,</span> <span class="n">gamma_dfe</span><span class="p">,</span> <span class="n">constant_dfe</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">_cache_args</span> <span class="o">!=</span> <span class="n">key</span><span class="p">:</span>
+        <span class="n">_params_cache</span> <span class="o">=</span> <span class="n">get_DFE_params</span><span class="p">(</span><span class="n">params_path</span><span class="p">,</span> <span class="n">gamma_dfe</span><span class="p">,</span> <span class="n">constant_dfe</span><span class="p">)</span>
+        <span class="n">_cache_args</span> <span class="o">=</span> <span class="n">key</span>
     <span class="k">return</span> <span class="n">_params_cache</span></div>
 
 
