@@ -118,10 +118,7 @@ def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start,
     if should_do_hri: # Skip this if user has --no_hri active
         from Bvalcalc.core.helpers.calc_B_in_hri_region import calc_B_in_hri_region
         hri_aggregated_B = calc_B_in_hri_region(quiet, chunk_idx, rec_rate_per_chunk, hri_r_threshold, lperchunk, chunk_size, chr_start, chr_size, num_chunks, gc_rate_per_chunk, precise_chunks, precise_blockstart, precise_blockend, pos_chunk, chunk_end, precise_region_start, precise_region_end, unlinked_B)
-        print(hri_aggregated_B, "hri_aggregated_B")
-        print(B_from_distant_chunks, "B_from_distant_chunks")
-        print(hri_aggregated_B * B_from_distant_chunks, "hri_aggregated_B * B_from_distant_chunks")
-        chunk_slice *= (hri_aggregated_B * B_from_distant_chunks)
+        chunk_slice *= hri_aggregated_B
         return b_values
     else:
         if unique_indices.size == 0: # If there are no nearby sites under selection
