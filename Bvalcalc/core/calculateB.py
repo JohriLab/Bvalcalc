@@ -16,11 +16,11 @@ def get_params(
     Caches on (params_path, gamma_dfe, constant_dfe) and rebuilds whenever
     any of those three inputs change.
     """
-    global _params_cache#, _cache_args # COMMENTED OUT CACHING FOR API USAGE, CAN RE-IMPLEMENT FOR CLI IF IT SLOWS IT DOWN
-    # key = (params_path, gamma_dfe, constant_dfe)
-    # if _cache_args != key:
-    _params_cache = get_DFE_params(params_path, gamma_dfe, constant_dfe)
-    # _cache_args = key
+    global _params_cache, _cache_args # Re-added caching for CLI, was re-running too much, can re-implement for API as needed
+    key = (params_path, gamma_dfe, constant_dfe)
+    if _cache_args != key:
+        _params_cache = get_DFE_params(params_path, gamma_dfe, constant_dfe)
+        _cache_args = key
     return _params_cache
 
 def calculateB_linear(distance_to_element: int, length_of_element: int, params: dict | None = None):
