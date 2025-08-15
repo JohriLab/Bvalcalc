@@ -100,10 +100,28 @@ def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start,
     aggregated_B = np.ones_like(np.ones_like(np.arange(chunk_start,chunk_end+1), dtype=np.float64), dtype=np.float64)
     np.multiply.at(aggregated_B, inverse_indices, safe_flank_B) # Multiplicative sum of B calculated at a given site from multiple elements
     hri_r_threshold = 0.1 # fraction of "r" in a chunk that triggers Bprime hri calculation
-    if (no_hri is False and rec_rate_per_chunk is not None and rec_rate_per_chunk[chunk_idx] < hri_r_threshold): # Skip this if user has --no_hri active
+    hri_L_threshold = 5000 # minimum number of selected sites in a chunk that triggers Bprime hri calculation
+    
+    # Check if this chunk should trigger HRI calculation
+    should_do_hri = False
+    if (no_hri is False and rec_rate_per_chunk is not None and rec_rate_per_chunk[chunk_idx] < hri_r_threshold):
+        # Calculate the total L across the entire interference region
+        low_rec_chunk_ids = rec_rate_per_chunk < hri_r_threshold
+        interference_region_start_idx, interference_region_end_idx = chunk_idx, chunk_idx
+        while interference_region_start_idx > 0 and low_rec_chunk_ids[interference_region_start_idx - 1]:
+            interference_region_start_idx -= 1
+        while interference_region_end_idx < low_rec_chunk_ids.size - 1 and low_rec_chunk_ids[interference_region_end_idx + 1]:
+            interference_region_end_idx += 1
+        total_interfering_L = lperchunk[interference_region_start_idx : interference_region_end_idx + 1].sum()
+        should_do_hri = total_interfering_L > hri_L_threshold
+    
+    if should_do_hri: # Skip this if user has --no_hri active
         from Bvalcalc.core.helpers.calc_B_in_hri_region import calc_B_in_hri_region
         hri_aggregated_B = calc_B_in_hri_region(quiet, chunk_idx, rec_rate_per_chunk, hri_r_threshold, lperchunk, chunk_size, chr_start, chr_size, num_chunks, gc_rate_per_chunk, precise_chunks, precise_blockstart, precise_blockend, pos_chunk, chunk_end, precise_region_start, precise_region_end, unlinked_B)
-        chunk_slice *= hri_aggregated_B
+        print(hri_aggregated_B, "hri_aggregated_B")
+        print(B_from_distant_chunks, "B_from_distant_chunks")
+        print(hri_aggregated_B * B_from_distant_chunks, "hri_aggregated_B * B_from_distant_chunks")
+        chunk_slice *= (hri_aggregated_B * B_from_distant_chunks)
         return b_values
     else:
         if unique_indices.size == 0: # If there are no nearby sites under selection

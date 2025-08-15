@@ -35,9 +35,9 @@ def calc_B_precise_noninterfering(
             if be > end_bp:
                 ts.append(end_bp + 1); te.append(be)
     # print(f"[DEBUG] original blocks: {list(zip(precise_blockstart, precise_blockend))}")
-    if not ts:
-        print(f"Chunk {chunk_idx}: No non-interfering blocks; B=1")
-        return 1.0
+    # if not ts:
+    #     print(f"Chunk {chunk_idx}: No non-interfering blocks; B=1")
+    #     return 1.0
     bs_arr = np.array(ts, dtype=int)
     be_arr = np.array(te, dtype=int)
     # print(f"[DEBUG] trimmed blocks:  {list(zip(bs_arr, be_arr))}")
