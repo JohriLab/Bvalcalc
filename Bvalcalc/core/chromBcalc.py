@@ -11,7 +11,7 @@ import sys
 
 def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = None, prior_b = None, calc_start=None, calc_end=None, chr_size=None, caller="regionBcalc"):    
     #Shared arguments between genomeBcalc and regionBcalc
-    file_path, chunk_size, precise_chunks, no_hri, quiet, verbose = args.bedgff_path, args.chunk_size, args.precise_chunks, args.no_hri, args.quiet, args.verbose
+    file_path, chunk_size, precise_chunks, hri, quiet, verbose = args.bedgff_path, args.chunk_size, args.precise_chunks, args.hri, args.quiet, args.verbose
     
     num_blocks = len(blockstart)
     # Auto-adjust chunk size for large datasets (only if user hasn't manually set chunk_size)
@@ -113,7 +113,7 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
                 executor.submit(process_single_chunk, chunk_idx,
                                 chunk_size, blockstart, blockend, chr_start, chr_size, calc_start,
                                 calc_end, num_chunks, precise_chunks, lperchunk, b_values,
-                                rec_rate_per_chunk, gc_rate_per_chunk, no_hri, quiet, verbose, unlinked_B): chunk_idx
+                                rec_rate_per_chunk, gc_rate_per_chunk, hri, quiet, verbose, unlinked_B): chunk_idx
                 for chunk_idx in batch
             }
             if not quiet and not verbose:
@@ -131,7 +131,7 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
     b_values = b_values * unlinked_B
     # print('Hriii', np.shape(b_values))
 
-    if not no_hri and rec_rate_per_chunk is not None: # If --no_hri is not active
+    if hri and rec_rate_per_chunk is not None: # If --hri is active
         from Bvalcalc.core.helpers.extend_hri_regions_correction import extend_hri_regions_correction
         hri_extended_starts, hri_extended_ends = extend_hri_regions_correction(b_values, rec_rate_per_chunk, chunk_size, chr_start, calc_start, calc_end, hri_r_threshold = 0.1) # Extend HRI regions until B > B' to avoid sharp decrease in B at the border between normal and HRI regions. See manuscript.
     else:

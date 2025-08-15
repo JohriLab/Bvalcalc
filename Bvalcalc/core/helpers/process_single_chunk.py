@@ -8,7 +8,7 @@ import numpy as np
 
 def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start, chr_size,
                          calc_start, calc_end, num_chunks, precise_chunks,lperchunk, 
-                         b_values, rec_rate_per_chunk=None, gc_rate_per_chunk=None, no_hri=False, quiet=False, verbose=False, unlinked_B=1.0):
+                         b_values, rec_rate_per_chunk=None, gc_rate_per_chunk=None, hri=False, quiet=False, verbose=False, unlinked_B=1.0):
     
     chunk_start =  chr_start + chunk_idx * chunk_size
     chunk_end   = min(chunk_start + chunk_size - 1, calc_end)
@@ -100,11 +100,11 @@ def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start,
     aggregated_B = np.ones_like(np.ones_like(np.arange(chunk_start,chunk_end+1), dtype=np.float64), dtype=np.float64)
     np.multiply.at(aggregated_B, inverse_indices, safe_flank_B) # Multiplicative sum of B calculated at a given site from multiple elements
     hri_r_threshold = 0.1 # fraction of "r" in a chunk that triggers Bprime hri calculation
-    hri_L_threshold = 5000 # minimum number of selected sites in a chunk that triggers Bprime hri calculation
+    hri_L_threshold = 1000 # minimum number of selected sites in a chunk that triggers Bprime hri calculation
     
     # Check if this chunk should trigger HRI calculation
     should_do_hri = False
-    if (no_hri is False and rec_rate_per_chunk is not None and rec_rate_per_chunk[chunk_idx] < hri_r_threshold):
+    if (hri and rec_rate_per_chunk is not None and rec_rate_per_chunk[chunk_idx] < hri_r_threshold):
         # Calculate the total L across the entire interference region
         low_rec_chunk_ids = rec_rate_per_chunk < hri_r_threshold
         interference_region_start_idx, interference_region_end_idx = chunk_idx, chunk_idx
@@ -115,7 +115,7 @@ def process_single_chunk(chunk_idx, chunk_size, blockstart, blockend, chr_start,
         total_interfering_L = lperchunk[interference_region_start_idx : interference_region_end_idx + 1].sum()
         should_do_hri = total_interfering_L > hri_L_threshold
     
-    if should_do_hri: # Skip this if user has --no_hri active
+    if should_do_hri: # Only do this if user has --hri active
         from Bvalcalc.core.helpers.calc_B_in_hri_region import calc_B_in_hri_region
         hri_aggregated_B = calc_B_in_hri_region(quiet, chunk_idx, rec_rate_per_chunk, hri_r_threshold, lperchunk, chunk_size, chr_start, chr_size, num_chunks, gc_rate_per_chunk, precise_chunks, precise_blockstart, precise_blockend, pos_chunk, chunk_end, precise_region_start, precise_region_end, unlinked_B)
         chunk_slice *= hri_aggregated_B

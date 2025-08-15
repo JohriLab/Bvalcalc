@@ -74,7 +74,6 @@ def test_cli_genome_basic(tmp_path):
         "--chr_sizes", str(chr_sizes_path),
         "--out", str(output_path),
         "--out_binsize", "1",
-        "--no_hri",
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     out = result.stdout + result.stderr
@@ -101,7 +100,6 @@ def test_cli_genome_gcparams(tmp_path):
         "--chr_sizes", str(chr_sizes_path),
         "--out", str(output_path),
         "--out_binsize", "1",
-        "--no_hri",
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     out = result.stdout + result.stderr
@@ -127,7 +125,6 @@ def test_cli_genome_with_recmap_plot(tmp_path):
         "--rec_map", str(map_path),
         "--out", str(output_path),
         "--out_binsize", "1",
-        "--no_hri",
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     out = result.stdout + result.stderr
@@ -151,7 +148,6 @@ def test_cli_mean_b_value(tmp_path):
         "--pop_params", params,
         "--bedgff_path", "tests/testfiles/200kb_slimtest.csv",
         "--plot_output", "tests/testout/genome_test.png",
-        "--no_hri",
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     out = result.stdout + result.stderr
@@ -245,6 +241,7 @@ def test_cli_genome_hri_marking(tmp_path):
         "--precise_chunks", "2",
         "--out", str(output_path),
         "--out_binsize", "100",
+        "--hri",
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     out = result.stdout + result.stderr
@@ -263,9 +260,9 @@ def test_cli_genome_hri_marking(tmp_path):
     assert len(lines) == 2001, f"Expected 2001 lines, found {len(lines)}"
 
     # Specific rows must be present
-    assert "chr_200kb,4201,0.340332'" in lines
+    assert "chr_200kb,1,0.340332'" in lines
+    assert "chr_200kb,101,0.340332'" in lines
     assert "chr_200kb,40101,0.359374'" in lines
-    assert "chr_200kb,81101,0.782838" in lines
 
     # Final line check
     assert lines[-1] == "chr_200kb,199901,0.327636'", f"Unexpected final line: {lines[-1]}"
