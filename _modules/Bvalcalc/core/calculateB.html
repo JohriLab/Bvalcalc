@@ -122,8 +122,17 @@
 <span class="sd">    Caches on (params_path, gamma_dfe, constant_dfe) and rebuilds whenever</span>
 <span class="sd">    any of those three inputs change.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">global</span> <span class="n">_params_cache</span><span class="p">,</span> <span class="n">_cache_args</span> <span class="c1"># Re-added caching for CLI, was re-running too much, can re-implement for API as needed</span>
-    <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">params_path</span><span class="p">,</span> <span class="n">gamma_dfe</span><span class="p">,</span> <span class="n">constant_dfe</span><span class="p">)</span>
+    <span class="k">global</span> <span class="n">_params_cache</span><span class="p">,</span> <span class="n">_cache_args</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">Bvalcalc.utils.dfe_helper</span><span class="w"> </span><span class="kn">import</span> <span class="n">GAMMA_DFE</span><span class="p">,</span> <span class="n">CONSTANT_DFE</span>
+    
+    <span class="c1"># Get the actual params path that will be used</span>
+    <span class="n">actual_params_path</span> <span class="o">=</span> <span class="n">params_path</span>
+    <span class="k">if</span> <span class="n">actual_params_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+        <span class="n">actual_params_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;BCALC_POP_PARAMS&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Include global DFE state in cache key</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">actual_params_path</span><span class="p">,</span> <span class="n">gamma_dfe</span> <span class="ow">or</span> <span class="n">GAMMA_DFE</span><span class="p">,</span> <span class="n">constant_dfe</span> <span class="ow">or</span> <span class="n">CONSTANT_DFE</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">_cache_args</span> <span class="o">!=</span> <span class="n">key</span><span class="p">:</span>
         <span class="n">_params_cache</span> <span class="o">=</span> <span class="n">get_DFE_params</span><span class="p">(</span><span class="n">params_path</span><span class="p">,</span> <span class="n">gamma_dfe</span><span class="p">,</span> <span class="n">constant_dfe</span><span class="p">)</span>
         <span class="n">_cache_args</span> <span class="o">=</span> <span class="n">key</span>
@@ -382,7 +391,7 @@
 <span class="sd">    Fully vectorized calculation of B&#39; under Hill-Robertson interference.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">params</span> <span class="o">=</span> <span class="n">get_DFE_params</span><span class="p">()</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">get_params</span><span class="p">()</span>
 
     <span class="n">Nanc</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">f1</span><span class="p">,</span> <span class="n">f2</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;Nanc&quot;</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;u&quot;</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;f1&quot;</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;f2&quot;</span><span class="p">]</span>
 
