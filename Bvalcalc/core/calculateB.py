@@ -16,8 +16,17 @@ def get_params(
     Caches on (params_path, gamma_dfe, constant_dfe) and rebuilds whenever
     any of those three inputs change.
     """
-    global _params_cache, _cache_args # Re-added caching for CLI, was re-running too much, can re-implement for API as needed
-    key = (params_path, gamma_dfe, constant_dfe)
+    global _params_cache, _cache_args
+    from Bvalcalc.utils.dfe_helper import GAMMA_DFE, CONSTANT_DFE
+    
+    # Get the actual params path that will be used
+    actual_params_path = params_path
+    if actual_params_path is None:
+        import os
+        actual_params_path = os.environ.get("BCALC_POP_PARAMS")
+    
+    # Include global DFE state in cache key
+    key = (actual_params_path, gamma_dfe or GAMMA_DFE, constant_dfe or CONSTANT_DFE)
     if _cache_args != key:
         _params_cache = get_DFE_params(params_path, gamma_dfe, constant_dfe)
         _cache_args = key
@@ -269,7 +278,7 @@ def calculateB_hri(distant_B, interfering_L, params: dict | None = None):
     Fully vectorized calculation of B' under Hill-Robertson interference.
     """
     if params is None:
-        params = get_DFE_params()
+        params = get_params()
 
     Nanc, u, f1, f2 = params["Nanc"], params["u"], params["f1"], params["f2"]
 
