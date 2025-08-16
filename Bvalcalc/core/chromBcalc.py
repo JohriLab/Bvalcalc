@@ -77,12 +77,6 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
     calc_chunks = np.arange(calc_chunk_start,calc_chunk_end + 1) # Relevant chunks to calculate B for based on calc_start and calc_end
 
     b_values = np.ones(chr_size + 2 - chr_start, dtype=np.float64) # Initialize array of B values
-    if prior_pos is not None and prior_b is not None: # If we have prior B map, overwrite those positions' B values
-        idx = np.asarray(prior_pos, dtype=int)
-        calc_mask = (idx >= calc_start) & (idx <= calc_end)
-        idx = idx[calc_mask] # filter to only those within [calc_start, calc_end]
-        bprior = np.asarray(prior_b, dtype=b_values.dtype)[calc_mask]
-        b_values[idx] = bprior
 
     lperchunk = calculate_L_per_chunk(chunk_size, blockstart, blockend, chr_start, chr_size) # Cumulative conserved length in each chunk
 
@@ -129,6 +123,17 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
 
     b_values = b_values[calc_start:(calc_end+1)] # Trim b_values array to only calculated region
     b_values = b_values * unlinked_B
+    # Apply prior B values as multipliers after chunk processing
+    if prior_pos is not None and prior_b is not None: # Apply prior B values to ranges
+        sorted_indices = np.argsort(prior_pos) # Sort positions and B values
+        sorted_pos, sorted_b = prior_pos[sorted_indices], prior_b[sorted_indices]
+        for i in range(len(sorted_pos)): # Apply B values from each start position to next
+            start_pos, b_val = sorted_pos[i], sorted_b[i]
+            end_pos = sorted_pos[i + 1] if i < len(sorted_pos) - 1 else calc_end + 1 # Next position or end
+            range_start, range_end = max(start_pos, calc_start), min(end_pos, calc_end + 1) # Clip to calc region
+            if range_start < range_end:
+                idx_start, idx_end = range_start - calc_start, range_end - calc_start # Convert to array indices
+                b_values[idx_start:idx_end] *= b_val # Multiply by prior B values
     # print('Hriii', np.shape(b_values))
 
     if hri and rec_rate_per_chunk is not None: # If --hri is active
@@ -149,8 +154,11 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
             if overlap_start <= overlap_end:
                 calc_selected_length += (overlap_end - overlap_start + 1)
         print(f"Cumulative length of calculated region under selection: {calc_selected_length}bp "f"({round((calc_selected_length / (calc_end - calc_start + 1)) * 100, 2)}%)")
+        if prior_pos is not None and prior_b is not None: # Report mean prior B if provided
+            mean_prior_b = np.mean(sorted_b)
+            print(f"Mean prior B value: {mean_prior_b:.6f}")
         print(f"Cumulative length of chromosome under selection: {int(sum(lperchunk))}bp ({round((sum(lperchunk)/(chr_size - chr_start + 1))*100,2)}%)")
-        print(f"B from unlinked sites for chromosome {chromosome}: {unlinked_B}")
+        print(f"B from unlinked sites calculated for chromosome {chromosome}: {unlinked_B}")
         if caller == "genomeBcalc": print(f"Mean B of neutral sites across chromosome {chromosome}: {b_values[~np.isnan(b_values)].mean()}")
         elif caller == "regionBcalc": print(f"Mean B of neutral sites across specified region: {b_values[~np.isnan(b_values)].mean()}")
         if args.rec_map: # Process recombination map if provided
