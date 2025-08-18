@@ -105,7 +105,7 @@
              
   <section id="calculate-gene-b-recovery">
 <h1>Calculate Gene B Recovery<a class="headerlink" href="#calculate-gene-b-recovery" title="Link to this heading"></a></h1>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--gene<span class="w"> </span>--pop_params<span class="w"> </span>Params.py
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--gene<span class="w"> </span>--params<span class="w"> </span>Params.py
 </pre></div>
 </div>
 <dl class="simple">
@@ -115,9 +115,9 @@
 <section id="core-arguments">
 <h2>Core Arguments<a class="headerlink" href="#core-arguments" title="Link to this heading"></a></h2>
 <dl class="simple">
-<dt><strong>--pop_params [path/to/YourParams.py]</strong></dt><dd><p>Path to a Python file defining population genetic parameters, see here for accessing pre-built templates, <a class="reference internal" href="../introduction/generate_params.html"><span class="doc">Generate Parameters</span></a>, and here for adjusting parameters to new species/populations, <a class="reference internal" href="../guides/params.html"><span class="doc">Tailoring Parameters</span></a>.</p>
+<dt><strong>--params [path/to/YourParams.py]</strong></dt><dd><p>Path to a Python file defining population genetic parameters, see here for accessing pre-built templates, <a class="reference internal" href="../introduction/generate_params.html"><span class="doc">Generate Parameters</span></a>, and here for adjusting parameters to new species/populations, <a class="reference internal" href="../guides/params.html"><span class="doc">Tailoring Parameters</span></a>.</p>
 </dd>
-<dt><strong>--gene_size [int]</strong></dt><dd><p>Total length of the selected region, e.g. gene or exon, (default: <cite>10000</cite>).</p>
+<dt><strong>--element_size [int]</strong></dt><dd><p>Total length of the selected region, e.g. gene or exon, (default: <cite>10000</cite>).</p>
 </dd>
 <dt><strong>--flank_len [int]</strong></dt><dd><p>Length of the flanking neutral region to calculate B (default: <cite>40000</cite>)</p>
 </dd>
@@ -126,7 +126,7 @@
 <section id="optional-arguments">
 <h2>Optional Arguments<a class="headerlink" href="#optional-arguments" title="Link to this heading"></a></h2>
 <dl class="simple">
-<dt><strong>--plot_output [path]</strong></dt><dd><p>Generate a B recovery slope output with a specified path (default: <cite>./Bplot.png</cite> if no path is given)</p>
+<dt><strong>--plot [path]</strong></dt><dd><p>Generate a B recovery slope output with a specified path (default: <cite>./Bplot.png</cite> if no path is given)</p>
 </dd>
 <dt><strong>--out [path]</strong></dt><dd><p>Write B-values to a CSV file with the specified path (must also provide <code class="docutils literal notranslate"><span class="pre">--out_binsize</span></code>)</p>
 </dd>
@@ -148,10 +148,10 @@ Note that <code class="docutils literal notranslate"><span class="pre">s</span><
 <section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--gene<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--pop_params<span class="w"> </span>HumanParams.py<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--gene_size<span class="w"> </span><span class="m">10000</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--params<span class="w"> </span>HumanParams.py<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--element_size<span class="w"> </span><span class="m">10000</span><span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--flank_len<span class="w"> </span><span class="m">40000</span><span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--plot_output<span class="w"> </span>./Bplot.png
+<span class="w">    </span>--plot<span class="w"> </span>./Bplot.png
 
 <span class="c1"># B for adjacent site: 0.9634908092757006</span>
 <span class="c1"># Mean B for flanking region: 0.9808824926142455</span>

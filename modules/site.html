@@ -105,7 +105,7 @@
              
   <section id="calculate-single-site-b">
 <h1>Calculate Single Site B<a class="headerlink" href="#calculate-single-site-b" title="Link to this heading"></a></h1>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--site<span class="w"> </span>--pop_params<span class="w"> </span>Params.py
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--site<span class="w"> </span>--params<span class="w"> </span>Params.py
 </pre></div>
 </div>
 <dl class="simple">
@@ -115,9 +115,9 @@
 <section id="core-arguments">
 <h2>Core Arguments<a class="headerlink" href="#core-arguments" title="Link to this heading"></a></h2>
 <dl class="simple">
-<dt><strong>--pop_params [path/to/YourParams.py]</strong></dt><dd><p>Path to a Python file defining population genetic parameters, see here for accessing pre-built templates, <a class="reference internal" href="../introduction/generate_params.html"><span class="doc">Generate Parameters</span></a>, and here for adjusting parameters to new species/populations, <a class="reference internal" href="../guides/params.html"><span class="doc">Tailoring Parameters</span></a>.</p>
+<dt><strong>--params [path/to/YourParams.py]</strong></dt><dd><p>Path to a Python file defining population genetic parameters, see here for accessing pre-built templates, <a class="reference internal" href="../introduction/generate_params.html"><span class="doc">Generate Parameters</span></a>, and here for adjusting parameters to new species/populations, <a class="reference internal" href="../guides/params.html"><span class="doc">Tailoring Parameters</span></a>.</p>
 </dd>
-<dt><strong>--gene_size [int]</strong></dt><dd><p>Total length of the selected region, e.g. gene or CDS, (default: <cite>10000</cite>)</p>
+<dt><strong>--element_size [int]</strong></dt><dd><p>Total length of the selected region, e.g. gene or CDS, (default: <cite>10000</cite>)</p>
 </dd>
 <dt><strong>--distance [int]</strong></dt><dd><p>Distance from the focal neutral site to the edge of the selected element in bp (default: <cite>1</cite>). Note that this assumes recombinant distance increases linearly with physical distance.</p>
 </dd>
@@ -141,7 +141,7 @@ Note that <code class="docutils literal notranslate"><span class="pre">s</span><
 </section>
 <section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--site<span class="w"> </span>--pop_params<span class="w"> </span>HumanParams.py<span class="w"> </span>--distance<span class="w"> </span><span class="m">1500</span><span class="w"> </span>--gene_size<span class="w"> </span><span class="m">10000</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--site<span class="w"> </span>--params<span class="w"> </span>HumanParams.py<span class="w"> </span>--distance<span class="w"> </span><span class="m">1500</span><span class="w"> </span>--element_size<span class="w"> </span><span class="m">10000</span>
 
 <span class="c1"># B for site 1500bp away from 10000bp region: 0.9670029436948963</span>
 </pre></div>

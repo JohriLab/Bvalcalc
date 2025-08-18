@@ -3,7 +3,7 @@ Calculate Single Site B
 
 .. code-block:: bash
 
-    Bvalcalc --site --pop_params Params.py
+    Bvalcalc --site --params Params.py
 
 **-\-site**
   Calculate B for a single site at a specified distance from a single selected element
@@ -11,10 +11,10 @@ Calculate Single Site B
 Core Arguments
 ------------------
 
-**-\-pop_params [path/to/YourParams.py]** 
+**-\-params [path/to/YourParams.py]** 
   Path to a Python file defining population genetic parameters, see here for accessing pre-built templates, :doc:`Generate Parameters <../introduction/generate_params>`, and here for adjusting parameters to new species/populations, :doc:`Tailoring Parameters <../guides/params>`.
 
-**-\-gene_size [int]**
+**-\-element_size [int]**
   Total length of the selected region, e.g. gene or CDS, (default: `10000`)
 
 **-\-distance [int]**
@@ -42,7 +42,7 @@ Example
 -------
 .. code-block:: bash
 
-    Bvalcalc --site --pop_params HumanParams.py --distance 1500 --gene_size 10000
+    Bvalcalc --site --params HumanParams.py --distance 1500 --element_size 10000
 
     # B for site 1500bp away from 10000bp region: 0.9670029436948963
 

@@ -3,7 +3,7 @@ Calculate Region B-map
 
 .. code-block:: bash
 
-    Bvalcalc --region chr1:1-1000000 --pop_params Params.py --bedgff_path CDS.bed
+    Bvalcalc --region chr1:1-1000000 --params Params.py --bedgff CDS.bed
 
 **-\-region [CHR:START-END]**
     Calculate a B-map for a specified chromosomal region, considering linked and unlinked effects of selection from all conserved elements across the genome.
@@ -11,10 +11,10 @@ Calculate Region B-map
 Core Arguments
 --------------
 
-**-\-pop_params [path/to/YourParams.py]** 
+**-\-params [path/to/YourParams.py]** 
   Path to a Python file defining population genetic parameters, see here for accessing pre-built templates, :doc:`Generate Parameters <../introduction/generate_params>`, and here for adjusting parameters to new species/populations, :doc:`Tailoring Parameters <../guides/params>`.
 
-**-\-bedgff_path [path/to/example.bed]**  
+**-\-bedgff [path/to/example.bed]**  
     Path to an annotation file of selected elements, in BED, GFF3 or CSV format (CHR,START,END)
 
 Recommended Arguments
@@ -39,11 +39,11 @@ Optional Arguments
 **-\-out_binsize [int]**  
   Bin size to average B-values in the CSV output, required if ``--out`` is used.
 
-**-\-plot_output [path]**  
+**-\-plot [path]**  
     Output path for a genome-wide or region B-value plot (default: `genome_plot.png`)
 
 **-\-neutral_only**  
-    If used with ``--plot_output``, only neutral sites will be shown in the plot
+    If used with ``--plot``, only neutral sites will be shown in the plot
 
 **-\-gamma_dfe**
   If included, use a gamma distribution to define the DFE (instead of fixed ``f0``, ``f1``, ``f2``, ``f3``). 
@@ -78,11 +78,11 @@ Example
 
 
     Bvalcalc --region 21:30326675-36709983 \
-      --bedgff_path exons.accessible.21.bed \
-      --pop_params HumanParams.py \
+      --bedgff exons.accessible.21.bed \
+      --params HumanParams.py \
       --out Bvalues_chr21_region.csv \
       --out_binsize 1000 \
-      --plot_output B_chr21_region.png
+      --plot B_chr21_region.png
 
     # Cumulative length of calculated region under selection: 724516bp (11.35%)
     # Cumulative length of chromosome under selection: 3279253bp (7.02%)

@@ -131,8 +131,8 @@ When calculating B for a new species you’ll need to check the literature and u
 <p>Let’s start by calculating B at a site 1kb from the edge of a single conserved element 5kb in length.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span><span class="se">\</span>
 --site<span class="w"> </span><span class="se">\</span>
---pop_params<span class="w"> </span>./DrosophilaParams.py<span class="w"> </span><span class="se">\</span>
---gene_size<span class="w"> </span><span class="m">5000</span><span class="w"> </span><span class="se">\</span>
+--params<span class="w"> </span>./DrosophilaParams.py<span class="w"> </span><span class="se">\</span>
+--element_size<span class="w"> </span><span class="m">5000</span><span class="w"> </span><span class="se">\</span>
 --distance<span class="w"> </span><span class="m">1000</span>
 
 <span class="c1"># B for site 1000bp away from 5000bp region: 0.9919234623753387</span>
@@ -145,9 +145,9 @@ When calculating B for a new species you’ll need to check the literature and u
 <p>Now, let’s calculate the recovery of B as a function of distance from the 5kb element so we can plot it (<code class="docutils literal notranslate"><span class="pre">gene_B.png</span></code>).</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span><span class="se">\</span>
 --gene<span class="w"> </span><span class="se">\</span>
---gene_size<span class="w"> </span><span class="m">5000</span><span class="w"> </span><span class="se">\</span>
---pop_params<span class="w"> </span>./DrosophilaParams.py<span class="w"> </span><span class="se">\</span>
---plot_output<span class="w"> </span>gene_B.png
+--element_size<span class="w"> </span><span class="m">5000</span><span class="w"> </span><span class="se">\</span>
+--params<span class="w"> </span>./DrosophilaParams.py<span class="w"> </span><span class="se">\</span>
+--plot<span class="w"> </span>gene_B.png
 
 <span class="c1"># B for adjacent site: 0.973696017863886</span>
 <span class="c1"># Mean B for flanking region: 0.9988920361466203</span>
@@ -163,9 +163,9 @@ We can use a BED file (or GFF/CSV) that specifies which genomic ranges are conse
 Let’s calculate B for a 1 Mb region in the middle of chromosome 2R [9500000-10500000] and save it to <code class="docutils literal notranslate"><span class="pre">1Mb_B.png</span></code>.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span><span class="se">\</span>
 --region<span class="w"> </span>2R:9500000-10500000<span class="w"> </span><span class="se">\</span>
---pop_params<span class="w"> </span>./DrosophilaParams.py<span class="w"> </span><span class="se">\</span>
---bedgff_path<span class="w"> </span>examples/dmel6_2R_genes.csv<span class="w"> </span><span class="se">\</span>
---plot_output<span class="w"> </span>1Mb_B.png
+--params<span class="w"> </span>./DrosophilaParams.py<span class="w"> </span><span class="se">\</span>
+--bedgff<span class="w"> </span>examples/dmel6_2R_genes.csv<span class="w"> </span><span class="se">\</span>
+--plot<span class="w"> </span>1Mb_B.png
 
 <span class="c1"># Mean B of neutral sites across specified region: 0.910805643014426</span>
 </pre></div>
@@ -179,8 +179,8 @@ Let’s calculate B for a 1 Mb region in the middle of chromosome 2R [9500000-10
 <p>If you wanted to generate a complete B-map for all sites across all chromosomes you would use the following command, though note it’s a lot more data to crunch and maps are already available for Drosophila so no need to run it!</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span><span class="se">\</span>
 --genome<span class="w"> </span><span class="se">\</span>
---pop_params<span class="w"> </span>./DrosophilaParams.py<span class="w"> </span><span class="se">\</span>
---bedgff_path<span class="w"> </span>examples/dmel6_2R_genes.csv<span class="w"> </span><span class="se">\</span>
+--params<span class="w"> </span>./DrosophilaParams.py<span class="w"> </span><span class="se">\</span>
+--bedgff<span class="w"> </span>examples/dmel6_2R_genes.csv<span class="w"> </span><span class="se">\</span>
 --out<span class="w"> </span>Dmel_Bmap.csv<span class="w"> </span><span class="se">\</span>
 --out_binsize<span class="w"> </span><span class="m">1000</span>
 </pre></div>

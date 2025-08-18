@@ -3,7 +3,7 @@ Calculate Genome B-map
 
 .. code-block:: bash
 
-    Bvalcalc --genome --pop_params Params.py --bedgff_path CDS.bed
+    Bvalcalc --genome --params Params.py --bedgff CDS.bed
 
 **-\-genome**
     Calculate a B-map for all neutral and conserved sites across the genome, considering linked and unlinked effects of selection from all conserved elements.
@@ -11,10 +11,10 @@ Calculate Genome B-map
 Core Arguments
 --------------
 
-**-\-pop_params [path/to/YourParams.py]** 
+**-\-params [path/to/YourParams.py]** 
   Path to a Python file defining population genetic parameters, see here for accessing pre-built templates, :doc:`Generate Parameters <../introduction/generate_params>`, and here for adjusting parameters to new species/populations, :doc:`Tailoring Parameters <../guides/params>`.
 
-**-\-bedgff_path [path/to/example.bed]**  
+**-\-bedgff [path/to/example.bed]**  
     Path to an annotation file of selected elements, in BED, GFF3 or CSV format (CHR,START,END)
 
 Recommended Arguments
@@ -73,8 +73,8 @@ Example
 .. code-block:: bash
 
     Bvalcalc --genome \
-      --pop_params DrosophilaParams.py \
-      --bedgff_path drosophila_CDS.bed \
+      --params DrosophilaParams.py \
+      --bedgff drosophila_CDS.bed \
       --chr_sizes chrom_sizes.txt \
       --out Bvalues_drosophila_CDS.csv \
       --out_binsize 1000

@@ -105,7 +105,7 @@
              
   <section id="calculate-region-b-map">
 <h1>Calculate Region B-map<a class="headerlink" href="#calculate-region-b-map" title="Link to this heading"></a></h1>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--region<span class="w"> </span>chr1:1-1000000<span class="w"> </span>--pop_params<span class="w"> </span>Params.py<span class="w"> </span>--bedgff_path<span class="w"> </span>CDS.bed
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--region<span class="w"> </span>chr1:1-1000000<span class="w"> </span>--params<span class="w"> </span>Params.py<span class="w"> </span>--bedgff<span class="w"> </span>CDS.bed
 </pre></div>
 </div>
 <dl class="simple">
@@ -115,9 +115,9 @@
 <section id="core-arguments">
 <h2>Core Arguments<a class="headerlink" href="#core-arguments" title="Link to this heading"></a></h2>
 <dl class="simple">
-<dt><strong>--pop_params [path/to/YourParams.py]</strong></dt><dd><p>Path to a Python file defining population genetic parameters, see here for accessing pre-built templates, <a class="reference internal" href="../introduction/generate_params.html"><span class="doc">Generate Parameters</span></a>, and here for adjusting parameters to new species/populations, <a class="reference internal" href="../guides/params.html"><span class="doc">Tailoring Parameters</span></a>.</p>
+<dt><strong>--params [path/to/YourParams.py]</strong></dt><dd><p>Path to a Python file defining population genetic parameters, see here for accessing pre-built templates, <a class="reference internal" href="../introduction/generate_params.html"><span class="doc">Generate Parameters</span></a>, and here for adjusting parameters to new species/populations, <a class="reference internal" href="../guides/params.html"><span class="doc">Tailoring Parameters</span></a>.</p>
 </dd>
-<dt><strong>--bedgff_path [path/to/example.bed]</strong></dt><dd><p>Path to an annotation file of selected elements, in BED, GFF3 or CSV format (CHR,START,END)</p>
+<dt><strong>--bedgff [path/to/example.bed]</strong></dt><dd><p>Path to an annotation file of selected elements, in BED, GFF3 or CSV format (CHR,START,END)</p>
 </dd>
 </dl>
 </section>
@@ -140,9 +140,9 @@ Note that <code class="docutils literal notranslate"><span class="pre">Bcur</spa
 </dd>
 <dt><strong>--out_binsize [int]</strong></dt><dd><p>Bin size to average B-values in the CSV output, required if <code class="docutils literal notranslate"><span class="pre">--out</span></code> is used.</p>
 </dd>
-<dt><strong>--plot_output [path]</strong></dt><dd><p>Output path for a genome-wide or region B-value plot (default: <cite>genome_plot.png</cite>)</p>
+<dt><strong>--plot [path]</strong></dt><dd><p>Output path for a genome-wide or region B-value plot (default: <cite>genome_plot.png</cite>)</p>
 </dd>
-<dt><strong>--neutral_only</strong></dt><dd><p>If used with <code class="docutils literal notranslate"><span class="pre">--plot_output</span></code>, only neutral sites will be shown in the plot</p>
+<dt><strong>--neutral_only</strong></dt><dd><p>If used with <code class="docutils literal notranslate"><span class="pre">--plot</span></code>, only neutral sites will be shown in the plot</p>
 </dd>
 <dt><strong>--gamma_dfe</strong></dt><dd><p>If included, use a gamma distribution to define the DFE (instead of fixed <code class="docutils literal notranslate"><span class="pre">f0</span></code>, <code class="docutils literal notranslate"><span class="pre">f1</span></code>, <code class="docutils literal notranslate"><span class="pre">f2</span></code>, <code class="docutils literal notranslate"><span class="pre">f3</span></code>).
 Note that <code class="docutils literal notranslate"><span class="pre">mean</span></code>, <code class="docutils literal notranslate"><span class="pre">shape</span></code> and <code class="docutils literal notranslate"><span class="pre">proportion_synonymous</span></code> should be set in the parameters file when active.</p>
@@ -167,11 +167,11 @@ Note that <code class="docutils literal notranslate"><span class="pre">s</span><
 <section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--region<span class="w"> </span><span class="m">21</span>:30326675-36709983<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--bedgff_path<span class="w"> </span>exons.accessible.21.bed<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--pop_params<span class="w"> </span>HumanParams.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--bedgff<span class="w"> </span>exons.accessible.21.bed<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--params<span class="w"> </span>HumanParams.py<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--out<span class="w"> </span>Bvalues_chr21_region.csv<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--out_binsize<span class="w"> </span><span class="m">1000</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--plot_output<span class="w"> </span>B_chr21_region.png
+<span class="w">  </span>--plot<span class="w"> </span>B_chr21_region.png
 
 <span class="c1"># Cumulative length of calculated region under selection: 724516bp (11.35%)</span>
 <span class="c1"># Cumulative length of chromosome under selection: 3279253bp (7.02%)</span>

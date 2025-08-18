@@ -3,7 +3,7 @@ Calculate Gene B Recovery
 
 .. code-block:: bash
 
-    Bvalcalc --gene --pop_params Params.py
+    Bvalcalc --gene --params Params.py
 
 **-\-gene**
   Calculate B values for a range of neutral sites flanking a single selected element.
@@ -11,10 +11,10 @@ Calculate Gene B Recovery
 Core Arguments
 --------------
 
-**-\-pop_params [path/to/YourParams.py]** 
+**-\-params [path/to/YourParams.py]** 
   Path to a Python file defining population genetic parameters, see here for accessing pre-built templates, :doc:`Generate Parameters <../introduction/generate_params>`, and here for adjusting parameters to new species/populations, :doc:`Tailoring Parameters <../guides/params>`.
 
-**-\-gene_size [int]**
+**-\-element_size [int]**
   Total length of the selected region, e.g. gene or exon, (default: `10000`).
 
 **-\-flank_len [int]**
@@ -23,7 +23,7 @@ Core Arguments
 Optional Arguments
 ------------------
 
-**-\-plot_output [path]**  
+**-\-plot [path]**  
   Generate a B recovery slope output with a specified path (default: `./Bplot.png` if no path is given)
 
 **-\-out [path]**  
@@ -53,10 +53,10 @@ Example
 .. code-block:: bash
 
     Bvalcalc --gene \
-        --pop_params HumanParams.py \
-        --gene_size 10000 \
+        --params HumanParams.py \
+        --element_size 10000 \
         --flank_len 40000 \
-        --plot_output ./Bplot.png
+        --plot ./Bplot.png
 
     # B for adjacent site: 0.9634908092757006
     # Mean B for flanking region: 0.9808824926142455

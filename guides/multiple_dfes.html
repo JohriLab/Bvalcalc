@@ -134,8 +134,8 @@ scp<span class="w"> </span>CdsParams.py<span class="w"> </span>UtrParams.py
 <li><p>Run <code class="docutils literal notranslate"><span class="pre">--genome</span></code> to create a B-map considering only the first annotation type (e.g. CDS). See <a class="reference internal" href="../modules/genome.html"><span class="doc">Calculate Genome B-map</span></a></p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--genome<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--pop_params<span class="w"> </span>CdsParams.py<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--bedgff_path<span class="w"> </span>drosophila_CDS.bed<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--params<span class="w"> </span>CdsParams.py<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--bedgff<span class="w"> </span>drosophila_CDS.bed<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--out<span class="w"> </span>CDS_B.csv<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--out_binsize<span class="w"> </span><span class="m">1000</span>
 </pre></div>
@@ -144,8 +144,8 @@ scp<span class="w"> </span>CdsParams.py<span class="w"> </span>UtrParams.py
 <li><p>Run <code class="docutils literal notranslate"><span class="pre">--genome</span></code> and pass in the first annotations (CDS) Bmap <code class="docutils literal notranslate"><span class="pre">--prior_Bmap</span></code> as an additional argument.</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--genome<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--pop_params<span class="w"> </span>UtrParams.py<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--bedgff_path<span class="w"> </span>drosophila_UTR.bed<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--params<span class="w"> </span>UtrParams.py<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--bedgff<span class="w"> </span>drosophila_UTR.bed<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--prior_Bmap<span class="w"> </span>CDS_B.csv<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--out<span class="w"> </span>UTR_CDS_B.csv<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--out_binsize<span class="w"> </span><span class="m">1000</span>

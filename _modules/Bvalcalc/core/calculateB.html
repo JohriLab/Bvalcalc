@@ -129,7 +129,7 @@
     <span class="n">actual_params_path</span> <span class="o">=</span> <span class="n">params_path</span>
     <span class="k">if</span> <span class="n">actual_params_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-        <span class="n">actual_params_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;BCALC_POP_PARAMS&quot;</span><span class="p">)</span>
+        <span class="n">actual_params_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;BCALC_params&quot;</span><span class="p">)</span>
     
     <span class="c1"># Include global DFE state in cache key</span>
     <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">actual_params_path</span><span class="p">,</span> <span class="n">gamma_dfe</span> <span class="ow">or</span> <span class="n">GAMMA_DFE</span><span class="p">,</span> <span class="n">constant_dfe</span> <span class="ow">or</span> <span class="n">CONSTANT_DFE</span><span class="p">)</span>

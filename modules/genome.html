@@ -105,7 +105,7 @@
              
   <section id="calculate-genome-b-map">
 <h1>Calculate Genome B-map<a class="headerlink" href="#calculate-genome-b-map" title="Link to this heading"></a></h1>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--genome<span class="w"> </span>--pop_params<span class="w"> </span>Params.py<span class="w"> </span>--bedgff_path<span class="w"> </span>CDS.bed
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--genome<span class="w"> </span>--params<span class="w"> </span>Params.py<span class="w"> </span>--bedgff<span class="w"> </span>CDS.bed
 </pre></div>
 </div>
 <dl class="simple">
@@ -115,9 +115,9 @@
 <section id="core-arguments">
 <h2>Core Arguments<a class="headerlink" href="#core-arguments" title="Link to this heading"></a></h2>
 <dl class="simple">
-<dt><strong>--pop_params [path/to/YourParams.py]</strong></dt><dd><p>Path to a Python file defining population genetic parameters, see here for accessing pre-built templates, <a class="reference internal" href="../introduction/generate_params.html"><span class="doc">Generate Parameters</span></a>, and here for adjusting parameters to new species/populations, <a class="reference internal" href="../guides/params.html"><span class="doc">Tailoring Parameters</span></a>.</p>
+<dt><strong>--params [path/to/YourParams.py]</strong></dt><dd><p>Path to a Python file defining population genetic parameters, see here for accessing pre-built templates, <a class="reference internal" href="../introduction/generate_params.html"><span class="doc">Generate Parameters</span></a>, and here for adjusting parameters to new species/populations, <a class="reference internal" href="../guides/params.html"><span class="doc">Tailoring Parameters</span></a>.</p>
 </dd>
-<dt><strong>--bedgff_path [path/to/example.bed]</strong></dt><dd><p>Path to an annotation file of selected elements, in BED, GFF3 or CSV format (CHR,START,END)</p>
+<dt><strong>--bedgff [path/to/example.bed]</strong></dt><dd><p>Path to an annotation file of selected elements, in BED, GFF3 or CSV format (CHR,START,END)</p>
 </dd>
 </dl>
 </section>
@@ -164,8 +164,8 @@ Note that <code class="docutils literal notranslate"><span class="pre">s</span><
 <section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--genome<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--pop_params<span class="w"> </span>DrosophilaParams.py<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--bedgff_path<span class="w"> </span>drosophila_CDS.bed<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--params<span class="w"> </span>DrosophilaParams.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--bedgff<span class="w"> </span>drosophila_CDS.bed<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--chr_sizes<span class="w"> </span>chrom_sizes.txt<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--out<span class="w"> </span>Bvalues_drosophila_CDS.csv<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--out_binsize<span class="w"> </span><span class="m">1000</span>
