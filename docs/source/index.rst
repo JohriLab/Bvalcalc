@@ -3,13 +3,13 @@ Bvalcalc Documentation
 
 Welcome to the documentation for **Bvalcalc**, a CLI tool for easily calculating B-values and B-maps. 
 
-Background selection (BGS) is the process by which diversity is reduced at neutral sites linked to conserved regions such as exons that experience direct purifying selection, and across the genome. **bvalcalc** allows users to easily calculate the relative reduction of diversity due to BGS (B) using several different modes. Calculating B-values is important for understanding the linked effects of selection, can be used to establish an evolutionary null model for inference, and can aid in selecting the most neutrally evolving sites, see :doc:`Demographic Inference with B-map <guides/demography>`. 
+Background selection (BGS) is the process by which diversity is reduced at neutral sites linked to conserved regions such as exons that experience direct purifying selection, and across the genome. **Bvalcalc** allows users to easily calculate the relative reduction of diversity due to BGS (B) using several different modes. Calculating B-values is important for understanding the linked effects of selection, can be used to establish an evolutionary null model for inference, and can aid in selecting the most neutrally evolving sites, see :doc:`Demographic Inference with B-map <guides/demography>`. 
 
 To learn more about background selection, see :doc:`About BGS and B-values <prebuilt_maps/learn>`. To access pre-built B-maps for select species, see :doc:`Query Species B-maps <prebuilt_maps/query>`. To calculate B-values for yourself, install **bvalcalc** and explore the docs, we recommend getting started with the :doc:`Quickstart Tutorial <guides/quickstart>`.
 
 .. code-block:: console
 
-    bvalcalc [--generate_params [SPECIES]|--site|--gene|--region|--genome]
+    Bvalcalc [--generate_params [SPECIES]|--site|--gene|--region|--genome]
 
    --generate_params [SPECIES]
                          Save population parameters from a species template (human, drosophila, arabidopsis, celegans, mouse, pfalciparum, selfing)

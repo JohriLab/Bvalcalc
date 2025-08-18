@@ -225,9 +225,7 @@ def test_cli_positions_minimum_filter():
     assert "Min B across filtered sites: 0.500000 at chr_2R:1" in out
 
 def test_cli_genome_hri_marking(tmp_path):
-    # poetry run Bvalcalc --genome  --pop_params ./tests/testparams/InterfParams.py \
-    # --bedgff_path ./tests/testfiles/200kb_hri.csv --rec_map ./tests/testfiles/200kb_hri.map \
-    # --precise_chunks 2 --out haut.B --out_binsize 100 --hri
+    # poetry run Bvalcalc --region chr_200kb:1-199999  --pop_params ./tests/testparams/InterfParams.py  --bedgff_path ./tests/testfiles/200kb_hri.csv --rec_map ./tests/testfiles/200kb_hri.map --precise_chunks 2 --out haut.B --out_binsize 100 --hri --plot_output
     params      = Path(__file__).parents[1] / "tests" / "testparams" / "InterfParams.py"
     bed_path    = Path(__file__).parents[1] / "tests" / "testfiles" / "200kb_hri.csv"
     map_path    = Path(__file__).parents[1] / "tests" / "testfiles" / "200kb_hri.map"
@@ -267,5 +265,3 @@ def test_cli_genome_hri_marking(tmp_path):
     # Final line check
     assert lines[-1] == "chr_200kb,199901,0.327636'", f"Unexpected final line: {lines[-1]}"
 
-
-# poetry run Bvalcalc --region chr_200kb:1-200001 --pop_params tests/testparams/nogcBasicParams.py --bedgff_path tests/testfiles/200kb_slimtest.csv --rec_map tests/testfiles/200kb.map --out examples/200kb_dfe5.bvals --out_binsize 100 --plot_output
