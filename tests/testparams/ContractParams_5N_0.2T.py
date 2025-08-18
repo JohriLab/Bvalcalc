@@ -1,4 +1,4 @@
-## poetry run Bvalcalc --gene --pop_params tests/testparams/ContractParams_5N_0.2T.py --plot_output --out ../sim_testing/calculatedBfiles/40kb_contract_5N_0.2T.bvals --pop_change
+## poetry run Bvalcalc --gene --params tests/testparams/ContractParams_5N_0.2T.py --plot --out ../sim_testing/calculatedBfiles/40kb_contract_5N_0.2T.bvals --pop_change
 
 ## Core parameters
 x = 100 # Scaling factor (N,u,r), keep as 1 unless calculating for rescaled simulations

@@ -8,8 +8,8 @@ def pytest_sessionstart(session):
         sys.path.insert(0, root_dir)
 
     # Set default env var for pop params if not already set
-    if "BCALC_POP_PARAMS" not in os.environ:
+    if "BCALC_params" not in os.environ:
         default_params = os.path.join(root_dir, "tests", "testparams", "nogcBasicParams.py")
         if not os.path.exists(default_params):
             raise FileNotFoundError(f"Could not find test params at expected path: {default_params}")
-        os.environ["BCALC_POP_PARAMS"] = default_params
+        os.environ["BCALC_params"] = default_params

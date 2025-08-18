@@ -3,8 +3,8 @@ import argparse
 
 def parseSiteArgs(argv=None):
     parser = argparse.ArgumentParser(description="Calculates B for a single neutral site given a distance from a single selected region and prints to console.")
-    parser.add_argument('--pop_params', type=str, required=True, help="Path to Python file with population genetic parameters, e.g., ExampleParams.py")
-    parser.add_argument('--gene_size', type=int, default=10000, help="Length of single region (e.g. gene) under selection. [5000]")
+    parser.add_argument('--params', type=str, required=True, help="Path to Python file with population genetic parameters, e.g., ExampleParams.py")
+    parser.add_argument('--element_size', type=int, default=10000, help="Length of single region (e.g. gene) under selection. [5000]")
     parser.add_argument('--distance', type=int, default=1, help="Length of single region (e.g. gene) under selection. [5000]")
     parser.add_argument('--pop_change', action='store_true', help="If set, B will reflect the current B after a step change in population size, rather than ancestral B.")
     parser.add_argument('--gamma_dfe', action='store_true', help="If set, gamma distribution parameters will be used to define DFE's discretized f0-f3 proportions")
@@ -14,13 +14,13 @@ def parseSiteArgs(argv=None):
 
 def parseGeneArgs(argv=None):
     parser = argparse.ArgumentParser(description="Calculates B for neutral sites flanking a single element under selection.")
-    parser.add_argument('--pop_params', type=str, required=True, help="Path to Python file with population genetic parameters, e.g., ExampleParams.py")
-    parser.add_argument('--gene_size', type=int, default=10000, help="Length of single region (e.g. gene) under selection. [5000]")
+    parser.add_argument('--params', type=str, required=True, help="Path to Python file with population genetic parameters, e.g., ExampleParams.py")
+    parser.add_argument('--element_size', type=int, default=10000, help="Length of single region (e.g. gene) under selection. [5000]")
     parser.add_argument('--flank_len', type=int, default=40000, help="Length of flanking neutral region for which to calcuate recovery of B. [25000]")
     parser.add_argument('--pop_change', action='store_true', help="If set, B will reflect the current B after a step change in population size, rather than ancestral B.")
     parser.add_argument('--gamma_dfe', action='store_true', help="If set, gamma distribution parameters will be used to define DFE's discretized f0-f3 proportions")
     parser.add_argument('--constant_dfe', action='store_true', help="If set, the constant `s` and `neu_prop` parameters in the params file will be used for all conserved regions instead of discretized f0-f3 proportions")   
-    parser.add_argument('--plot_output', nargs='?', const='Bplot.png', default=None, 
+    parser.add_argument('--plot', nargs='?', const='Bplot.png', default=None, 
                         help="Generate a B recovery slope output"
                             "Provide path to plot output.")
     parser.add_argument('--out', type=str, default=None,
@@ -36,9 +36,9 @@ def parseGeneArgs(argv=None):
 
 def parseRegionArgs(argv=None):
     parser = argparse.ArgumentParser(description="Calculates B for all neutral sites across given chromosome.")
-    # parser.add_argument('--pop_params', type=int, required=True, help="Path to file providing popgen parameters specific to modelled population (empirical or simulated).")
-    parser.add_argument('--pop_params', type=str, required=True, help="Path to Python file with population genetic parameters, e.g., ExampleParams.py")
-    parser.add_argument('--bedgff_path', type=str, required=True, help="Path to input BED or GFF3 file.")
+    # parser.add_argument('--params', type=int, required=True, help="Path to file providing popgen parameters specific to modelled population (empirical or simulated).")
+    parser.add_argument('--params', type=str, required=True, help="Path to Python file with population genetic parameters, e.g., ExampleParams.py")
+    parser.add_argument('--bedgff', type=str, required=True, help="Path to input BED or GFF3 file.")
     parser.add_argument('--chunk_size', type=int, default=None, help="Size of chunks calculated simultaneously (bp). Default: 20000, auto-adjusted for large datasets.")
     parser.add_argument('--chunk_batch_size', type=int, default=250, help="Number of chunks to process before flushing memory. [250]")
     parser.add_argument('--precise_chunks', type=int, default=3, help="Number of adjacent chunks to calculate B precisely.")
@@ -58,11 +58,11 @@ def parseRegionArgs(argv=None):
                              "Note that gene conversion rates will be averaged within each chunk.")    
     parser.add_argument('--gamma_dfe', action='store_true', help="If set, gamma distribution parameters will be used to define DFE's discretized f0-f3 proportions")
     parser.add_argument('--constant_dfe', action='store_true', help="If set, the constant `s` and `neu_prop` parameters in the params file will be used for all conserved regions instead of discretized f0-f3 proportions")   
-    parser.add_argument('--plot_output', nargs='?', const='genome_plot.png', default=None, 
+    parser.add_argument('--plot', nargs='?', const='genome_plot.png', default=None, 
                         help="Generate a basic plot using `Bvalcalc --genome` output"
                             "Provide path to plot output.")
     parser.add_argument('--hri', action='store_true', help="If set, will enable post-hoc calculation of B under HRI (B'; Becher and Charlesworth 2025), for low recombination regions")   
-    parser.add_argument('--neutral_only', action='store_true', help="If set, plot_output will only show neutral sites.")
+    parser.add_argument('--neutral_only', action='store_true', help="If set, plot will only show neutral sites.")
     parser.add_argument('--out', type=str, default=None,
                         help="Required path to output CSV file. If --out is specified but no file name is given, "
                              "'b_values.csv' will be used in the current directory. If --out is not specified, "
@@ -83,9 +83,9 @@ def parseRegionArgs(argv=None):
 
 def parseGenomeArgs(argv=None):
     parser = argparse.ArgumentParser(description="Calculates B for all neutral sites across given chromosome.")
-    # parser.add_argument('--pop_params', type=int, required=True, help="Path to file providing popgen parameters specific to modelled population (empirical or simulated).")
-    parser.add_argument('--pop_params', type=str, required=True, help="Path to Python file with population genetic parameters, e.g., ExampleParams.py")
-    parser.add_argument('--bedgff_path', type=str, required=True, help="Path to input BED or GFF3 file.")
+    # parser.add_argument('--params', type=int, required=True, help="Path to file providing popgen parameters specific to modelled population (empirical or simulated).")
+    parser.add_argument('--params', type=str, required=True, help="Path to Python file with population genetic parameters, e.g., ExampleParams.py")
+    parser.add_argument('--bedgff', type=str, required=True, help="Path to input BED or GFF3 file.")
     parser.add_argument('--chr_sizes', type=str, default=None, help="Chromosome sizes file. Defaults to end of last gene in each chromosome if not provided.")
     parser.add_argument('--chunk_size', type=int, default=None, help="Size of chunks calculated simultaneously (bp). Default: 20000, auto-adjusted for large datasets.")
     parser.add_argument('--chunk_batch_size', type=int, default=250, help="Number of chunks to process before flushing memory. [250]")
@@ -107,7 +107,7 @@ def parseGenomeArgs(argv=None):
     parser.add_argument('--gamma_dfe', action='store_true', help="If set, gamma distribution parameters will be used to define DFE's discretized f0-f3 proportions")   
     parser.add_argument('--constant_dfe', action='store_true', help="If set, the constant `s` and `neu_prop` parameters in the params file will be used for all conserved regions instead of discretized f0-f3 proportions")   
     parser.add_argument('--hri', action='store_true', help="If set, will enable post-hoc calculation of B under HRI (B'; Becher and Charlesworth 2025), for low recombination regions")   
-    parser.add_argument('--neutral_only', action='store_true', help="If set, plot_output will only show neutral sites.")
+    parser.add_argument('--neutral_only', action='store_true', help="If set, plot will only show neutral sites.")
     parser.add_argument('--out', type=str, default=None,
                         help="Required path to output CSV file. If --out is specified but no file name is given, "
                              "'b_values.csv' will be used in the current directory. If --out is not specified, "

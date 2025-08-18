@@ -7,7 +7,7 @@ import numpy as np
 
 def genomeBcalc(args):    
 
-    allblockstart, allblockend, allblockchrom = load_bed_gff(args.bedgff_path) # Read BED/GFF, return start and end of conserved elements
+    allblockstart, allblockend, allblockchrom = load_bed_gff(args.bedgff) # Read BED/GFF, return start and end of conserved elements
 
     unique_chromosomes = np.unique(allblockchrom) # Move BED/GFF handler here
     if args.chr_sizes is not None: 

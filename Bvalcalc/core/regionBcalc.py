@@ -6,7 +6,7 @@ import numpy as np
 
 def regionBcalc(args, region):    
 
-    allblockstart, allblockend, allblockchrom  = load_bed_gff(args.bedgff_path) # Read BED/GFF, return start and end of conserved elements
+    allblockstart, allblockend, allblockchrom  = load_bed_gff(args.bedgff) # Read BED/GFF, return start and end of conserved elements
 
     import Bvalcalc.utils.dfe_helper as dfe_helper
     dfe_helper.GAMMA_DFE = args.gamma_dfe # Update DFE if --gamma_dfe

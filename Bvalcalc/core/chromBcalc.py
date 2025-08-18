@@ -11,7 +11,7 @@ import sys
 
 def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = None, prior_b = None, calc_start=None, calc_end=None, chr_size=None, caller="regionBcalc"):    
     #Shared arguments between genomeBcalc and regionBcalc
-    file_path, chunk_size, precise_chunks, hri, quiet, verbose = args.bedgff_path, args.chunk_size, args.precise_chunks, args.hri, args.quiet, args.verbose
+    file_path, chunk_size, precise_chunks, hri, quiet, verbose = args.bedgff, args.chunk_size, args.precise_chunks, args.hri, args.quiet, args.verbose
     
     num_blocks = len(blockstart)
     # Auto-adjust chunk size for large datasets (only if user hasn't manually set chunk_size)

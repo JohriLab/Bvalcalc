@@ -40,8 +40,8 @@ Let's start by calculating B at a site 1kb from the edge of a single conserved e
 
    Bvalcalc \
    --site \
-   --pop_params ./DrosophilaParams.py \
-   --gene_size 5000 \
+   --params ./DrosophilaParams.py \
+   --element_size 5000 \
    --distance 1000
 
    # B for site 1000bp away from 5000bp region: 0.9919234623753387
@@ -57,9 +57,9 @@ Now, let's calculate the recovery of B as a function of distance from the 5kb el
 
    Bvalcalc \
    --gene \
-   --gene_size 5000 \
-   --pop_params ./DrosophilaParams.py \
-   --plot_output gene_B.png
+   --element_size 5000 \
+   --params ./DrosophilaParams.py \
+   --plot gene_B.png
 
    # B for adjacent site: 0.973696017863886
    # Mean B for flanking region: 0.9988920361466203
@@ -82,9 +82,9 @@ Let's calculate B for a 1 Mb region in the middle of chromosome 2R [9500000-1050
 
    Bvalcalc \
    --region 2R:9500000-10500000 \
-   --pop_params ./DrosophilaParams.py \
-   --bedgff_path examples/dmel6_2R_genes.csv \
-   --plot_output 1Mb_B.png
+   --params ./DrosophilaParams.py \
+   --bedgff examples/dmel6_2R_genes.csv \
+   --plot 1Mb_B.png
 
    # Mean B of neutral sites across specified region: 0.910805643014426
 
@@ -106,8 +106,8 @@ If you wanted to generate a complete B-map for all sites across all chromosomes 
 
    Bvalcalc \
    --genome \
-   --pop_params ./DrosophilaParams.py \
-   --bedgff_path examples/dmel6_2R_genes.csv \
+   --params ./DrosophilaParams.py \
+   --bedgff examples/dmel6_2R_genes.csv \
    --out Dmel_Bmap.csv \
    --out_binsize 1000
 

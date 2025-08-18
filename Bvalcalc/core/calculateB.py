@@ -23,7 +23,7 @@ def get_params(
     actual_params_path = params_path
     if actual_params_path is None:
         import os
-        actual_params_path = os.environ.get("BCALC_POP_PARAMS")
+        actual_params_path = os.environ.get("BCALC_params")
     
     # Include global DFE state in cache key
     key = (actual_params_path, gamma_dfe or GAMMA_DFE, constant_dfe or CONSTANT_DFE)

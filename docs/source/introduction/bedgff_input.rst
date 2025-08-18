@@ -5,7 +5,7 @@ BED/GFF Input
 
 When using the ``--region`` and ``genome`` modules, these conserved regions are indicated by a BED/GFF/CSV annotation file:
 
-**-\-bedgff_path [path/to/example.bed]**  
+**-\-bedgff [path/to/example.bed]**  
     Path to an annotation file of selected elements, in BED, GFF3 or CSV format (CHR,START,END). Header information, indicated by ``#``, is ignored.
 
 Annotations
@@ -37,4 +37,4 @@ Example
     2R,854814,855571
     2R,924636,951252
 
-Three headerless example inputs to ``--bedgff_path`` that will be processed identically:
+Three headerless example inputs to ``--bedgff`` that will be processed identically:

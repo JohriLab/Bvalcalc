@@ -4,7 +4,7 @@ import numpy as np
 import os
 
 def geneBcalc(args):    
-    gene_size, flank_len, quiet = args.gene_size, args.flank_len, args.quiet
+    element_size, flank_len, quiet = args.element_size, args.flank_len, args.quiet
     
     import Bvalcalc.utils.dfe_helper as dfe_helper
     dfe_helper.CONSTANT_DFE = args.constant_dfe # Update DFE if --constant_dfe
@@ -14,11 +14,11 @@ def geneBcalc(args):
     if not quiet: 
         print(f"====== P A R A M E T E R S =========================")
         print(f"Distribution of fitness effects (DFE): {flank_len}bp")
-        print(f"Length of element under selection: {gene_size}bp")
+        print(f"Length of element under selection: {element_size}bp")
         print(f"Length of flanking neutral region: {flank_len}bp")
 
     print(f"====== S T A R T I N G ===== C A L C ===============")
-    b_values = calculateB_linear(np.arange(1, flank_len, 1, dtype = int), gene_size) # B for flank region
+    b_values = calculateB_linear(np.arange(1, flank_len, 1, dtype = int), element_size) # B for flank region
 
     print(f"====== F I N I S H E D ===== C A L C ===============")
 
@@ -53,7 +53,7 @@ def geneBcalc(args):
     ## !!The following (prior to return) calculates output_data WITH the sites in the gene from the edge to the middle of the gene
     ## !!Not currently supported because it'll require major updates to plotting --gene, worth adding when plotB is refactored
 
-        # distance_to_middle_of_gene = int((gene_size)/2)
+        # distance_to_middle_of_gene = int((element_size)/2)
         # left_gene_lengths = np.arange(distance_to_middle_of_gene, distance_to_middle_of_gene*2, 1, dtype = int)
         # right_gene_lengths = np.arange(1, distance_to_middle_of_gene + 1, 1, dtype = int)[::-1] #Flip array at the end so it starts with center point
 
@@ -62,7 +62,7 @@ def geneBcalc(args):
         # left_gene_b_values = calculateB_linear(distance_to_element = 1, length_of_element = left_gene_lengths)
         
         # in_gene_b_values = right_gene_b_values*left_gene_b_values
-        # print(gene_size, distance_to_middle_of_gene, np.shape(left_gene_b_values), np.shape(right_gene_b_values), left_gene_lengths, right_gene_lengths, in_gene_b_values)
+        # print(element_size, distance_to_middle_of_gene, np.shape(left_gene_b_values), np.shape(right_gene_b_values), left_gene_lengths, right_gene_lengths, in_gene_b_values)
 
         # combined_b_values = np.append(in_gene_b_values, b_values)
         # print(combined_b_values, np.shape(combined_b_values))

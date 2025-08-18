@@ -1,10 +1,10 @@
 ## Population genetic parameters for the simulated or empirical population
 ## Accurate estimation requires accurate and appropriate parameters
 ##
-## Usage: ./Bvalcalc --region --pop_params ExampleParams.py
-##        ./Bvalcalc --genome --pop_params ExampleParams.py
+## Usage: ./Bvalcalc --region --params ExampleParams.py
+##        ./Bvalcalc --genome --params ExampleParams.py
 ##
-##  poetry run Bvalcalc --site --pop_params tests/testparams/norecBasicParams.py
+##  poetry run Bvalcalc --site --params tests/testparams/norecBasicParams.py
 
 ## Core parameters
 x = 100 # Scaling factor (N,u,r), keep as 1 unless calculating for rescaled simulations

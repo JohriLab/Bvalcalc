@@ -7,13 +7,13 @@ from pathlib import Path
 BASE_CMD = [sys.executable, "-m", "Bvalcalc.cli"]
 
 def test_cli_site_basic():
-    # poetry run Bvalcalc --site --pop_params tests/testparams/gcBasicParams.py --distance 100 --gene_size 5000
+    # poetry run Bvalcalc --site --params tests/testparams/gcBasicParams.py --distance 100 --element_size 5000
     params = Path(__file__).parent / "testparams" / "gcBasicParams.py"
     cmd = BASE_CMD + [
         "--site",
-        "--pop_params", str(params),
+        "--params", str(params),
         "--distance", "100",
-        "--gene_size", "5000",
+        "--element_size", "5000",
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
 
@@ -22,12 +22,12 @@ def test_cli_site_basic():
     assert "0.9246145075198539" in result.stdout
 
 def test_cli_gene_basic():
-    # poetry run Bvalcalc --gene --pop_params tests/testparams/nogcBasicParams.py --gene_size 10000
+    # poetry run Bvalcalc --gene --params tests/testparams/nogcBasicParams.py --element_size 10000
     params = Path(__file__).parents[1] / "tests" / "testparams" / "nogcBasicParams.py"
     cmd = BASE_CMD + [
         "--gene",
-        "--pop_params", str(params),
-        "--gene_size", "10000",
+        "--params", str(params),
+        "--element_size", "10000",
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     out = result.stdout + result.stderr
@@ -40,14 +40,14 @@ def test_cli_gene_basic():
     assert "= B value calculated" in out
 
 def test_cli_gene_gcparams(tmp_path):
-    # poetry run Bvalcalc --gene --pop_params tests/testparams/gcBasicParams.py --gene_size 10000 --plot_output tests/testout/test_plot.png
+    # poetry run Bvalcalc --gene --params tests/testparams/gcBasicParams.py --element_size 10000 --plot tests/testout/test_plot.png
     params   = Path(__file__).parents[1] / "tests" / "testparams" / "gcBasicParams.py"
     plot_path = Path(__file__).parents[1] / "tests" / "testout" / "test_plot.png"
     cmd = BASE_CMD + [
         "--gene",
-        "--pop_params", str(params),
-        "--gene_size", "10000",
-        "--plot_output", str(plot_path),
+        "--params", str(params),
+        "--element_size", "10000",
+        "--plot", str(plot_path),
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     out = result.stdout + result.stderr
@@ -61,16 +61,16 @@ def test_cli_gene_gcparams(tmp_path):
     assert plot_path.exists(), f"Expected plot at {plot_path}, but not found"
 
 def test_cli_genome_basic(tmp_path):
-    # poetry run Bvalcalc --genome --pop_params tests/testparams/nogcBasicParams.py --bedgff_path tests/testfiles/200kb_slimtest.csv --chr_sizes tests/testfiles/test_sizes.txt
-    # poetry run Bvalcalc --region chr_200kb:1-200000 --pop_params tests/testparams/nogcBasicParams.py --bedgff_path tests/testfiles/200kb_slimtest.csv --plot_output
+    # poetry run Bvalcalc --genome --params tests/testparams/nogcBasicParams.py --bedgff tests/testfiles/200kb_slimtest.csv --chr_sizes tests/testfiles/test_sizes.txt
+    # poetry run Bvalcalc --region chr_200kb:1-200000 --params tests/testparams/nogcBasicParams.py --bedgff tests/testfiles/200kb_slimtest.csv --plot
     params         = Path(__file__).parents[1] / "tests" / "testparams" / "nogcBasicParams.py"
     bed_path       = Path(__file__).parents[1] / "tests" / "testfiles" / "200kb_slimtest.csv"
     chr_sizes_path = Path(__file__).parents[1] / "tests" / "testfiles" / "test_sizes.txt"
     output_path    = tmp_path / "200kb_dfe5.bvals"
     cmd = BASE_CMD + [
         "--genome",
-        "--pop_params", str(params),
-        "--bedgff_path", str(bed_path),
+        "--params", str(params),
+        "--bedgff", str(bed_path),
         "--chr_sizes", str(chr_sizes_path),
         "--out", str(output_path),
         "--out_binsize", "1",
@@ -88,15 +88,15 @@ def test_cli_genome_basic(tmp_path):
     assert output_path.stat().st_size > 0, "Output file is empty"
 
 def test_cli_genome_gcparams(tmp_path):
-    # poetry run Bvalcalc --genome --pop_params tests/testparams/gcBasicParams.py --bedgff_path tests/testfiles/200kb_slimtest.csv --chr_sizes tests/testfiles/test_sizes.txt --out <tmp>/gc_bvals.bvals --out_binsize 1
+    # poetry run Bvalcalc --genome --params tests/testparams/gcBasicParams.py --bedgff tests/testfiles/200kb_slimtest.csv --chr_sizes tests/testfiles/test_sizes.txt --out <tmp>/gc_bvals.bvals --out_binsize 1
     params         = Path(__file__).parents[1] / "tests" / "testparams" / "gcBasicParams.py"
     bed_path       = Path(__file__).parents[1] / "tests" / "testfiles" / "200kb_slimtest.csv"
     chr_sizes_path = Path(__file__).parents[1] / "tests" / "testfiles" / "test_sizes.txt"
     output_path    = tmp_path / "gc_bvals.bvals"
     cmd = BASE_CMD + [
         "--genome",
-        "--pop_params", str(params),
-        "--bedgff_path", str(bed_path),
+        "--params", str(params),
+        "--bedgff", str(bed_path),
         "--chr_sizes", str(chr_sizes_path),
         "--out", str(output_path),
         "--out_binsize", "1",
@@ -111,7 +111,7 @@ def test_cli_genome_gcparams(tmp_path):
     assert output_path.stat().st_size > 0, "Output file is empty"
 
 def test_cli_genome_with_recmap_plot(tmp_path):
-    # poetry run Bvalcalc --genome --pop_params tests/testparams/nogcBasicParams.py --bedgff_path tests/testfiles/200kb_slimtest.csv --chr_sizes tests/testfiles/test_sizes.txt --rec_map tests/testfiles/200kb.map --out examples/200kb_dfe5.bvals --out_binsize 1
+    # poetry run Bvalcalc --genome --params tests/testparams/nogcBasicParams.py --bedgff tests/testfiles/200kb_slimtest.csv --chr_sizes tests/testfiles/test_sizes.txt --rec_map tests/testfiles/200kb.map --out examples/200kb_dfe5.bvals --out_binsize 1
     params         = Path(__file__).parents[1] / "tests" / "testparams" / "nogcBasicParams.py"
     bed_path       = Path(__file__).parents[1] / "tests" / "testfiles" / "200kb_slimtest.csv"
     map_path       = Path(__file__).parents[1] / "tests" / "testfiles" / "200kb.map"
@@ -119,8 +119,8 @@ def test_cli_genome_with_recmap_plot(tmp_path):
     output_path    = tmp_path / "200kb_dfe5.bvals"
     cmd = BASE_CMD + [
         "--genome",
-        "--pop_params", str(params),
-        "--bedgff_path", str(bed_path),
+        "--params", str(params),
+        "--bedgff", str(bed_path),
         "--chr_sizes", str(chr_sizes_path),
         "--rec_map", str(map_path),
         "--out", str(output_path),
@@ -141,13 +141,13 @@ def test_cli_genome_with_recmap_plot(tmp_path):
     assert output_path.stat().st_size > 0, "Output file is empty"
 
 def test_cli_mean_b_value(tmp_path):
-    # poetry run Bvalcalc --region chr_200kb:1514-62456 --pop_params tests/testparams/nogcBasicParams.py --bedgff_path tests/testfiles/200kb_slimtest.csv --plot_output tests/testout/genome_test.png 
+    # poetry run Bvalcalc --region chr_200kb:1514-62456 --params tests/testparams/nogcBasicParams.py --bedgff tests/testfiles/200kb_slimtest.csv --plot tests/testout/genome_test.png 
     params = "tests/testparams/nogcBasicParams.py"
     cmd = BASE_CMD + [
         "--region", "chr_200kb:1514-62456",
-        "--pop_params", params,
-        "--bedgff_path", "tests/testfiles/200kb_slimtest.csv",
-        "--plot_output", "tests/testout/genome_test.png",
+        "--params", params,
+        "--bedgff", "tests/testfiles/200kb_slimtest.csv",
+        "--plot", "tests/testout/genome_test.png",
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     out = result.stdout + result.stderr
@@ -161,11 +161,11 @@ def test_cli_mean_b_value(tmp_path):
     assert abs(mean_b - expected) < 1e-10, f"Expected {expected}, got {mean_b}"
 
 def test_cli_gene_contract():
-    # poetry run Bvalcalc --gene --pop_params tests/testparams/ContractParams_5N_1T.py --pop_change --plot_output
+    # poetry run Bvalcalc --gene --params tests/testparams/ContractParams_5N_1T.py --pop_change --plot
     params = Path(__file__).parents[1] / "tests" / "testparams" / "ContractParams_5N_1T.py"
     cmd = BASE_CMD + [
         "--gene",
-        "--pop_params", str(params),
+        "--params", str(params),
         "--pop_change",
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
@@ -175,11 +175,11 @@ def test_cli_gene_contract():
     assert "Mean B for flanking region: 0.9623874578845304" in out
 
 def test_cli_gene_expand():
-    # poetry run Bvalcalc --gene --pop_params tests/testparams/ExpandParams_5N_1T.py --pop_change
+    # poetry run Bvalcalc --gene --params tests/testparams/ExpandParams_5N_1T.py --pop_change
     params = Path(__file__).parents[1] / "tests" / "testparams" / "ExpandParams_5N_1T.py"
     cmd = BASE_CMD + [
         "--gene",
-        "--pop_params", str(params),
+        "--params", str(params),
         "--pop_change",
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
@@ -191,11 +191,11 @@ def test_cli_gene_expand():
     assert "B post B-calculation" in out
 
 def test_cli_selfing():
-    # poetry run Bvalcalc --gene --pop_params tests/testparams/SelfParams_0.9S_0.5h.py
+    # poetry run Bvalcalc --gene --params tests/testparams/SelfParams_0.9S_0.5h.py
     params = Path(__file__).parents[1] / "tests" / "testparams" / "SelfParams_0.9S_0.5h.py"
     cmd = BASE_CMD + [
         "--gene",
-        "--pop_params", str(params),
+        "--params", str(params),
         "--pop_change",
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
@@ -225,7 +225,7 @@ def test_cli_positions_minimum_filter():
     assert "Min B across filtered sites: 0.500000 at chr_2R:1" in out
 
 def test_cli_genome_hri_marking(tmp_path):
-    # poetry run Bvalcalc --region chr_200kb:1-199999  --pop_params ./tests/testparams/InterfParams.py  --bedgff_path ./tests/testfiles/200kb_hri.csv --rec_map ./tests/testfiles/200kb_hri.map --precise_chunks 2 --out haut.B --out_binsize 100 --hri --plot_output
+    # poetry run Bvalcalc --region chr_200kb:1-199999  --params ./tests/testparams/InterfParams.py  --bedgff ./tests/testfiles/200kb_hri.csv --rec_map ./tests/testfiles/200kb_hri.map --precise_chunks 2 --out haut.B --out_binsize 100 --hri --plot
     params      = Path(__file__).parents[1] / "tests" / "testparams" / "InterfParams.py"
     bed_path    = Path(__file__).parents[1] / "tests" / "testfiles" / "200kb_hri.csv"
     map_path    = Path(__file__).parents[1] / "tests" / "testfiles" / "200kb_hri.map"
@@ -233,8 +233,8 @@ def test_cli_genome_hri_marking(tmp_path):
 
     cmd = BASE_CMD + [
         "--genome",
-        "--pop_params", str(params),
-        "--bedgff_path", str(bed_path),
+        "--params", str(params),
+        "--bedgff", str(bed_path),
         "--rec_map", str(map_path),
         "--precise_chunks", "2",
         "--out", str(output_path),

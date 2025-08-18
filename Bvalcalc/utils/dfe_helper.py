@@ -10,22 +10,22 @@ CONSTANT_DFE = False # Default, instead of prop injected
 def get_DFE_params(params_path: str | None = None, gamma_dfe: bool = False, constant_dfe: bool = False) -> Dict[str, Any]:
     """
     Load and validate population parameters from the file pointed to by
-    `params_path` or, if None, by the BCALC_POP_PARAMS env var.
+    `params_path` or, if None, by the BCALC_params env var.
     Returns a dictionary of parameters for use in B-value calculations.
     """
     # 1. Determine the path: either passed in or from the env var
     if params_path is None:
-        params_path = os.environ.get("BCALC_POP_PARAMS")
+        params_path = os.environ.get("BCALC_params")
         if not params_path:
             raise KeyError(
-                "Environment variable BCALC_POP_PARAMS not set. "
+                "Environment variable BCALC_params not set. "
                 "Cannot load pop-gen parameters."
             )
 
     # 2. Load the module
-    spec = importlib.util.spec_from_file_location("pop_params", params_path)
+    spec = importlib.util.spec_from_file_location("params", params_path)
     if spec is None or spec.loader is None:
-        raise FileNotFoundError(f"Could not load spec for pop_params from {params_path}")
+        raise FileNotFoundError(f"Could not load spec for params from {params_path}")
     pop = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(pop)
 
@@ -34,10 +34,10 @@ def get_DFE_params(params_path: str | None = None, gamma_dfe: bool = False, cons
     params: Dict[str, Any] = {}
     for name in required_names:
         if not hasattr(pop, name):
-            raise AttributeError(f"pop_params must define '{name}'")
+            raise AttributeError(f"params must define '{name}'")
         val = getattr(pop, name)
         if val is None:
-            raise AttributeError(f"pop_params parameter '{name}' is None; must be a numeric value")
+            raise AttributeError(f"params parameter '{name}' is None; must be a numeric value")
         params[name] = float(val)
 
     # 4. Optional gamma-DFE override
@@ -47,7 +47,7 @@ def get_DFE_params(params_path: str | None = None, gamma_dfe: bool = False, cons
         prop_syn = getattr(pop, 'proportion_synonymous', None)
         if mean is None or shape is None or prop_syn is None:
             raise AttributeError(
-                "pop_params must define 'mean', 'shape' and 'proportion_synonymous' when --gamma_dfe is active"
+                "params must define 'mean', 'shape' and 'proportion_synonymous' when --gamma_dfe is active"
             )
         from .dfe_helper import gammaDFE_to_discretized
         f0, f1, f2, f3 = gammaDFE_to_discretized(mean, shape, prop_syn)
@@ -71,7 +71,7 @@ def get_DFE_params(params_path: str | None = None, gamma_dfe: bool = False, cons
         prop_syn = getattr(pop, 'proportion_synonymous', None)
         if s is None or prop_syn is None:
             raise AttributeError(
-                "pop_params must define 's' and 'proportion_synonymous' when --constant_dfe is active"
+                "params must define 's' and 'proportion_synonymous' when --constant_dfe is active"
             )
         params["t_constant"] = h * s # Set parameter to be exported to calculateB
     else:         
