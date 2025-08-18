@@ -36,29 +36,29 @@ def main():
 
     if known_args.genome: # Run genome Bcalc
         args = parseGenomeArgs(remaining_args)
-        os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Save params to global
+        os.environ["BCALC_params"] = args.params  # Save params to global
         from Bvalcalc.core.genomeBcalc import genomeBcalc
         genomeBcalc(args)
 
     elif known_args.region: # Run region Bcalc
         args = parseRegionArgs(remaining_args)
-        os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Save params to global
+        os.environ["BCALC_params"] = args.params  # Save params to global
         from Bvalcalc.core.regionBcalc import regionBcalc
         output_data, block_ranges, rec_rate_per_chunk_in_region, chunk_size = regionBcalc(args, known_args.region)
-        if getattr(args, 'plot_output', True):
-            plotB(b_values_input=output_data, caller="chromosome", output_path=args.plot_output, quiet=args.quiet, gene_ranges=block_ranges, neutral_only=args.neutral_only, rec_rates=rec_rate_per_chunk_in_region, chunk_size=chunk_size)
+        if getattr(args, 'plot', True):
+            plotB(b_values_input=output_data, caller="chromosome", output_path=args.plot, quiet=args.quiet, gene_ranges=block_ranges, neutral_only=args.neutral_only, rec_rates=rec_rate_per_chunk_in_region, chunk_size=chunk_size)
 
     elif known_args.gene: # Run gene Bcalc
         args = parseGeneArgs(remaining_args)
-        os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Save params to global
+        os.environ["BCALC_params"] = args.params  # Save params to global
         from Bvalcalc.core.geneBcalc import geneBcalc
         output_data = geneBcalc(args) # Capture the output from geneBcalc
-        if getattr(args, 'plot_output', False): # If the --plot_output flag was provided, call plotB with geneBcalc's output.
-            plotB(b_values_input=output_data, caller="gene", output_path=args.plot_output, quiet=args.quiet)
+        if getattr(args, 'plot', False): # If the --plot flag was provided, call plotB with geneBcalc's output.
+            plotB(b_values_input=output_data, caller="gene", output_path=args.plot, quiet=args.quiet)
 
     elif known_args.site: # Run single site Bcalc
         args = parseSiteArgs(remaining_args)
-        os.environ["BCALC_POP_PARAMS"] = args.pop_params  # Save params to global
+        os.environ["BCALC_params"] = args.params  # Save params to global
         from Bvalcalc.core.siteBcalc import siteBcalc
         siteBcalc(args)
 

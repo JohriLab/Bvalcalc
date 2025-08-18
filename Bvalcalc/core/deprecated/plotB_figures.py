@@ -16,14 +16,14 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
     legend_name_dot = "Observed B"
 
     # nogcBasicParams AKA Normal
-    # poetry run Bvalcalc --gene --pop_params ./tests/testparams/nogcBasicParams.py --plot_output /Users/jmarsh96/Desktop/Bcalc/Figures/nogcBasicParams.png
+    # poetry run Bvalcalc --gene --params ./tests/testparams/nogcBasicParams.py --plot /Users/jmarsh96/Desktop/Bcalc/Figures/nogcBasicParams.png
     B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/all.pi"
     legend_name_blue = "Calculated"
     legend_name_dot = "Observed (simulations)"
     title_name = 'B recovery from single element with DFE'
 
     # gcBasicParams AKA with GC
-    # poetry run Bvalcalc --gene --pop_params ./tests/testparams/gcBasicParams.py --plot_output /Users/jmarsh96/Desktop/Bcalc/Figures/gcBasicParams.png
+    # poetry run Bvalcalc --gene --params ./tests/testparams/gcBasicParams.py --plot /Users/jmarsh96/Desktop/Bcalc/Figures/gcBasicParams.png
     # B_uncorrected = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/nogcBasicParams.B"
     # B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/40kb_gc_all.pi"
     # legend_name_blue = "Calculated (with GC)"
@@ -32,7 +32,7 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
     # title_name = 'B recovery from single element with gene conversion'
 
     # expand_5N_1T AKA Demography
-    # poetry run Bvalcalc --gene --pop_params tests/testparams/ExpandParams_5N_1T.py --pop_change --plot_output /Users/jmarsh96/Desktop/Bcalc/Figures/expand_5N_1T.png
+    # poetry run Bvalcalc --gene --params tests/testparams/ExpandParams_5N_1T.py --pop_change --plot /Users/jmarsh96/Desktop/Bcalc/Figures/expand_5N_1T.png
     # B_uncorrected = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/c40kb_expand_5N_1T.bvals"
     # B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/OBS_Expand_5N_1T.csv"
     # legend_name_blue = "Calculated (with demography)"
@@ -41,7 +41,7 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
     # title_name = 'B recovery from single element (5X Expansion 1N_anc generations ago)'
 
     # SelfParams_0.9S_0.5h AKA Selfing
-    # poetry run Bvalcalc --gene --pop_params tests/testparams/SelfParams_0.9S_0.5h.py --plot_output /Users/jmarsh96/Desktop/Bcalc/Figures/SelfParams_0.9S_0.5h.png
+    # poetry run Bvalcalc --gene --params tests/testparams/SelfParams_0.9S_0.5h.py --plot /Users/jmarsh96/Desktop/Bcalc/Figures/SelfParams_0.9S_0.5h.png
     # B_uncorrected = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/nogcBasicParams.B"
     # B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/40kb_f0.9_h0.5_all.pi"
     # legend_name_blue = "Calculated (with selfing)"

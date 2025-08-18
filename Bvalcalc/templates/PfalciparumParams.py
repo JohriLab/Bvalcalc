@@ -1,7 +1,7 @@
 ## Population genetic parameters for the simulated or empirical population
 ## Accurate estimation requires accurate and appropriate parameters
 ##
-## e.g. Bvalcalc --pop_params path/to/ExampleParams.py
+## e.g. Bvalcalc --params path/to/ExampleParams.py
 ##
 ## Core parameters
 f = 0.9 # Inbreeding coefficient, selfing (F = S/(2-S); Wright's inbreeding coefficient)

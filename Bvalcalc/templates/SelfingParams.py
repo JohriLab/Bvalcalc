@@ -1,7 +1,7 @@
 ## Population genetic parameters for the simulated or empirical population
 ## Accurate estimation requires accurate and appropriate parameters
 ##
-## e.g. Bvalcalc --pop_params path/to/TemplateParams.py
+## e.g. Bvalcalc --params path/to/TemplateParams.py
 ##
 ## Core parameters
 f = 0 # Selfing rate (f = S/(2-S); Wright's inbreeding coefficient) [Naive value]

@@ -2,19 +2,19 @@ import os
 import numpy as np
 import importlib.util
 
-def _load_pop_params_module():
+def _load_params_module():
     """
-    Dynamically load the population parameters from BCALC_POP_PARAMS.
+    Dynamically load the population parameters from BCALC_params.
     """
-    params_path = os.environ.get("BCALC_POP_PARAMS")
+    params_path = os.environ.get("BCALC_params")
     if not params_path:
         raise KeyError(
-            "Environment variable BCALC_POP_PARAMS not set. Cannot load population parameters."
+            "Environment variable BCALC_params not set. Cannot load population parameters."
         )
-    spec = importlib.util.spec_from_file_location("pop_params", params_path)
-    pop_params = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(pop_params)
-    return pop_params
+    spec = importlib.util.spec_from_file_location("params", params_path)
+    params = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(params)
+    return params
 
 def get_Bcur(Banc: np.ndarray) -> np.ndarray:
     """
@@ -26,7 +26,7 @@ def get_Bcur(Banc: np.ndarray) -> np.ndarray:
     Returns:
         np.ndarray of B under current population size
     """
-    pop = _load_pop_params_module()
+    pop = _load_params_module()
     Nanc = pop.Nanc
     Ncur = pop.Ncur
     time_of_change = pop.time_of_change

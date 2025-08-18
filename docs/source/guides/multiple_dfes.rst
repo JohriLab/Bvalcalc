@@ -35,8 +35,8 @@ Let's briefly walk through how you would generate a B-map that considers the com
 .. code-block:: bash
 
     Bvalcalc --genome \
-        --pop_params CdsParams.py \
-        --bedgff_path drosophila_CDS.bed \
+        --params CdsParams.py \
+        --bedgff drosophila_CDS.bed \
         --out CDS_B.csv \
         --out_binsize 1000
 
@@ -45,8 +45,8 @@ Let's briefly walk through how you would generate a B-map that considers the com
 .. code-block:: bash
 
     Bvalcalc --genome \
-        --pop_params UtrParams.py \
-        --bedgff_path drosophila_UTR.bed \
+        --params UtrParams.py \
+        --bedgff drosophila_UTR.bed \
         --prior_Bmap CDS_B.csv \
         --out UTR_CDS_B.csv \
         --out_binsize 1000
