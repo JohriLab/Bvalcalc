@@ -5,7 +5,7 @@ def calc_R_lengths(blockstart, blockend, rec_rate_per_chunk, calc_start, calc_en
     Calculates the weighted lengths of each conserved block (gene), so that for example if the mean 
     recombination rate across the block is 0.5, this will return the length of the block multiplied by 0.5
     """
-    num_precise_chunks = (calc_end - calc_start) // chunk_size
+    num_precise_chunks = (calc_end - calc_start - 1) // chunk_size # -1 to fix extra chunk bug. May need to revert.
 
     # Build chunk boundaries (note: length = num_chunks + 1)
     chunk_starts = calc_start + np.arange(0, num_precise_chunks + 1) * chunk_size
