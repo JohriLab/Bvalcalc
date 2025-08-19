@@ -152,6 +152,7 @@ def parse_args(version):
     group.add_argument('--region', '-r', type=str, help="Calculate B values for a specific chromosomal region, considering genome-wide effects. Provide region as [CHR,START,END].")
     group.add_argument('--genome', '-w', action='store_true', help="Calculate B values genome-wide for all sites considering all selected elements")
     group.add_argument('--Bmap', '-b', type=str, help="B-map lookup for sites in a VCF/txt file")
+    group.add_argument('--download_sample_data', action='store_true', help="Download sample data files to user-accessible location")
 
     # If no args provided, print help and exit
     if len(sys.argv) == 1:

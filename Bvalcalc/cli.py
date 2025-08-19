@@ -10,6 +10,7 @@ from Bvalcalc.core.deprecated.plotB_figures_200kb import plotB_figures_200kb
 from Bvalcalc.utils.generateParams import SPECIES, generateParams, check_generate_params_args
 from Bvalcalc.core.positionsBstats import positionsBstats
 from Bvalcalc.core.plotChromB import plotChromB
+from Bvalcalc.utils.sample_data import download_sample_data
 
 __version__ = "0.6.4"
 
@@ -24,6 +25,10 @@ def main():
         print(f"Retrieving params from template...")
         generateParams(known_args.generate_params, known_args.dir)
         return
+    
+    if known_args.download_sample_data: # if --download_sample_data
+        success = download_sample_data(force=False, quiet=False)
+        sys.exit(0 if success else 1)
     
     if known_args.Bmap is not None: # if --Bmap
         args = parseBmapArgs(remaining_args)
