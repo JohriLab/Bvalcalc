@@ -14,14 +14,8 @@ def get_sample_data_dir():
     Returns:
         str: Path to the sample data directory
     """
-    # Try to use conda environment path first
-    conda_prefix = os.environ.get('CONDA_PREFIX')
-    if conda_prefix:
-        return os.path.join(conda_prefix, 'share', 'bvalcalc', 'data')
-    
-    # Fallback to user's home directory
-    home = os.path.expanduser('~')
-    return os.path.join(home, '.bvalcalc', 'data')
+    # Use current working directory as default
+    return os.getcwd()
 
 
 def get_package_data_dir():
@@ -38,19 +32,21 @@ def get_package_data_dir():
     return os.path.join(package_root, 'data')
 
 
-def download_sample_data(force=False, quiet=False):
+def download_sample_data(force=False, quiet=False, target_dir=None):
     """
     Download sample data to user-accessible location.
     
     Args:
         force (bool): If True, overwrite existing data
         quiet (bool): If True, suppress output messages
+        target_dir (str): Target directory (defaults to current working directory)
     
     Returns:
         bool: True if successful, False otherwise
     """
     source_dir = get_package_data_dir()
-    target_dir = get_sample_data_dir()
+    if target_dir is None:
+        target_dir = get_sample_data_dir()
     
     if not os.path.exists(source_dir):
         if not quiet:

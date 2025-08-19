@@ -27,7 +27,7 @@ def main():
         return
     
     if known_args.download_sample_data: # if --download_sample_data
-        success = download_sample_data(force=False, quiet=False)
+        success = download_sample_data(force=False, quiet=False, target_dir=known_args.dir)
         sys.exit(0 if success else 1)
     
     if known_args.Bmap is not None: # if --Bmap

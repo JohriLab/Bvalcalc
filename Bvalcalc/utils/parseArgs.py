@@ -146,13 +146,14 @@ def parse_args(version):
     group.add_argument('--generate_params', metavar='SPECIES', nargs='?', const='template', default=None,
                        choices=['selfing', 'human', 'drosophila', 'arabidopsis', 'mouse', 'pfalciparum', 'celegans', 'dromel_cds', 'dromel_utr', 'dromel_phastcons', 'template'],
                        help="Save population parameters from a species template")
-    parser.add_argument('--dir', '-d', default='.', help="Directory to write the generated params file (default: current directory)")
     group.add_argument('--site', '-s', action='store_true', help="Calculate B values for a single site from a selected element")
     group.add_argument('--gene', '-g', action='store_true', help="Calculate B values for a neutral region adjacent to a single selected element")
     group.add_argument('--region', '-r', type=str, help="Calculate B values for a specific chromosomal region, considering genome-wide effects. Provide region as [CHR,START,END].")
     group.add_argument('--genome', '-w', action='store_true', help="Calculate B values genome-wide for all sites considering all selected elements")
     group.add_argument('--Bmap', '-b', type=str, help="B-map lookup for sites in a VCF/txt file")
-    group.add_argument('--download_sample_data', action='store_true', help="Download sample data files to user-accessible location")
+    group.add_argument('--download_sample_data', action='store_true', help="Download sample data files to current directory (or use --dir to specify)")
+    
+    parser.add_argument('--dir', '-d', default='.', help="Directory to write the generated params file or download sample data (default: current directory)")
 
     # If no args provided, print help and exit
     if len(sys.argv) == 1:

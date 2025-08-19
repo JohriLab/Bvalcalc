@@ -25,8 +25,11 @@ This directory contains sample data files from the literature that are compatibl
 These files can be used with Bvalcalc commands. For example:
 
 ```bash
-# Download sample data
+# Download sample data to current directory
 bvalcalc --download_sample_data
+
+# Download sample data to specific directory
+bvalcalc --download_sample_data --dir /path/to/directory
 
 # Use with Bvalcalc commands
 bvalcalc --genome --params DroMel_Cds_Params.py --bedgff cds_noX.bed --rec_map dmel_comeron_recmap.csv
