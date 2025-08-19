@@ -2,7 +2,7 @@ import os
 import sys
 
 # keep your list of valid species here
-SPECIES = ['selfing', 'human', 'drosophila', 'arabidopsis', 'mouse', 'pfalciparum', 'celegans']
+SPECIES = ['selfing', 'human', 'drosophila', 'arabidopsis', 'mouse', 'pfalciparum', 'celegans', 'dromel_cds', 'dromel_utr', 'dromel_phastcons']
 
 def check_generate_params_args(argv=None):
     """
@@ -18,14 +18,27 @@ def check_generate_params_args(argv=None):
             sys.exit(1)
 
 def generateParams(species, folder='.'):
-    species_cap = species.capitalize()
-    tpl_path = os.path.abspath(
-        os.path.join(
-            os.path.dirname(__file__),
-            '..', 'templates',
-            f'{species_cap}Params.py'
+    # Handle special naming for dromel variants
+    if species.startswith('dromel_'):
+        tpl_path = os.path.abspath(
+            os.path.join(
+                os.path.dirname(__file__),
+                '..', 'templates',
+                f'DroMel_{species[7:].capitalize()}_Params.py'
+            )
         )
-    )
+        dest_name = f'DroMel_{species[7:].capitalize()}_Params.py'
+    else:
+        species_cap = species.capitalize()
+        tpl_path = os.path.abspath(
+            os.path.join(
+                os.path.dirname(__file__),
+                '..', 'templates',
+                f'{species_cap}Params.py'
+            )
+        )
+        dest_name = f'{species_cap}Params.py'
+    
     if not os.path.isfile(tpl_path):
         raise FileNotFoundError(f"Template for '{species}' not found at {tpl_path}")
 
@@ -37,8 +50,8 @@ def generateParams(species, folder='.'):
     # Ensure target folder exists
     os.makedirs(folder, exist_ok=True)
 
-    # Write into <folder>/<Species>Params.py
-    dest_path = os.path.join(folder, f'{species_cap}Params.py')
+    # Write into <folder>/<dest_name>
+    dest_path = os.path.join(folder, dest_name)
     with open(dest_path, 'w') as out_file:
         out_file.write(content)
 
