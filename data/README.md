@@ -1,6 +1,6 @@
 # Sample Data for Bvalcalc
 
-This directory contains sample data files for testing and learning with Bvalcalc.
+This directory contains sample data files from the literature that are compatible with Bvalcalc.
 
 ## Available Files
 
@@ -14,11 +14,11 @@ This directory contains sample data files for testing and learning with Bvalcalc
 
 - `cds_noX.bed` - Coding sequence annotations (BED format)
 - `utr_noX.bed` - UTR region annotations (BED format)
-- `phastcons_noX.bed` - PhastCons conserved region annotations (BED format)
+- `phastcons_noX.bed` - PhastCons conserved region annotations (BED format) (Siepel et al 2005)
 
 ### Recombination Maps
 
-- `dmel_comeron_recmap.csv` - Drosophila melanogaster recombination map
+- `dmel_comeron_recmap.csv` - Drosophila melanogaster recombination map (Comeron et al 2012)
 
 ## Usage
 
