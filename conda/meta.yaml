@@ -13,6 +13,7 @@ source:
 build:
   number: 0
   noarch: python
+  script: {{ PYTHON }} -m pip install . -vv --no-build-isolation --no-deps
   entry_points:
     - bvalcalc = Bvalcalc.cli:main
     - Bvalcalc = Bvalcalc.cli:main
