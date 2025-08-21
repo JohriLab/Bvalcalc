@@ -9,9 +9,9 @@ Arguments
 ----------
 
 **-\-generate_params [SPECIES]**
-    Save a local copy of a population parameter file from a chosen species template.
+    Save a local copy of a population parameter file from a chosen species template in format ``GenSpe_Elementtype_Params.py``.
     
-    Available species: ``human``, ``drosophila``, ``arabidopsis``, ``mouse``, ``pfalciparum``, ``celegans``, ``selfing``, ``dromel_cds``, ``dromel_utr``, ``dromel_phastcons``
+    Available species: ``selfing``, ``aratha_cds``, ``aratha_phastcons``, ``dromel_cds``, ``dromel_utr``, ``dromel_phastcons``, ``homsap_cds``
 
 **-\-dir [path/to/NewParams.py]**
     Optional path to save parameters (defaults to `./SpeciesParams.py`).
@@ -21,6 +21,6 @@ Example
 
 .. code-block:: bash
 
-    Bvalcalc --generate_params human
+    Bvalcalc --generate_params homsap_cds
 
-This will save a copy of `HumanParams.py` with population parameters specific to humans in the current folder, ready for calculating B
+This will save a copy of `HomSap_Cds_Params.py` with population parameters specific to human CDS (coding sequence) in the current folder, ready for calculating B
