@@ -144,7 +144,6 @@ def parse_args(version):
 
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('--generate_params', metavar='SPECIES', nargs='?', const='template', default=None,
-                       choices=['selfing', 'human', 'drosophila', 'arabidopsis', 'mouse', 'pfalciparum', 'celegans', 'dromel_cds', 'dromel_utr', 'dromel_phastcons', 'template'],
                        help="Save population parameters from a species template")
     group.add_argument('--site', '-s', action='store_true', help="Calculate B values for a single site from a selected element")
     group.add_argument('--gene', '-g', action='store_true', help="Calculate B values for a neutral region adjacent to a single selected element")

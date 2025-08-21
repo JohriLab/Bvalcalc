@@ -27,4 +27,4 @@ mean, shape, proportion_synonymous = 500, 0.5, 0.3 # Gamma distribution of DFE t
 # [3] Rowan et al. 2019 doi: 10.1534/genetics.119.302406
 # [4] Weng et al. 2018 doi: 10.1534/genetics.118.301721
 # [5] Yang et al. 2012 doi: 10.1073/pnas.1211827110
-# [6] Williamson et al doi: 10.1371/journal.pgen.1004622 *Note that this is an estimate for phastCons results for Capsella rubella as A. thaliana results are not available
+# [6] Williamson et al 2014 doi: 10.1371/journal.pgen.1004622 *Note that this is an estimate for phastCons results for Capsella rubella as A. thaliana results are not available
