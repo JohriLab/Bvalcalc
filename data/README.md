@@ -1,20 +1,12 @@
-# Sample Data for Bvalcalc
+# Drosophila CDS Sample Data for Bvalcalc
 
-This directory contains sample data files from the literature that are compatible with Bvalcalc.
+This directory contains Drosophila melanogaster CDS sample data files from the literature that are compatible with Bvalcalc.
 
 ## Available Files
-
-### Parameter Files
-
-- `DroMel_Cds_Params.py` - Drosophila melanogaster parameters for coding sequences
-- `DroMel_Utr_Params.py` - Drosophila melanogaster parameters for UTR regions
-- `DroMel_Phastcons_Params.py` - Drosophila melanogaster parameters for PhastCons conserved regions
 
 ### Annotation Files
 
 - `cds_noX.bed` - Coding sequence annotations (BED format)
-- `utr_noX.bed` - UTR region annotations (BED format)
-- `phastcons_noX.bed` - PhastCons conserved region annotations (BED format) (Siepel et al 2005)
 
 ### Recombination Maps
 
@@ -32,5 +24,5 @@ bvalcalc --download_sample_data
 bvalcalc --download_sample_data --dir /path/to/directory
 
 # Use with Bvalcalc commands
-bvalcalc --genome --params DroMel_Cds_Params.py --bedgff cds_noX.bed --rec_map dmel_comeron_recmap.csv
+bvalcalc --genome --params your_params.py --bedgff cds_noX.bed --rec_map dmel_comeron_recmap.csv
 ```

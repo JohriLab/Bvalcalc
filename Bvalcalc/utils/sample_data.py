@@ -34,7 +34,7 @@ def get_package_data_dir():
 
 def download_sample_data(force=False, quiet=False, target_dir=None):
     """
-    Download sample data to user-accessible location.
+    Download Drosophila CDS sample data to user-accessible location.
     
     Args:
         force (bool): If True, overwrite existing data
@@ -57,32 +57,35 @@ def download_sample_data(force=False, quiet=False, target_dir=None):
     os.makedirs(target_dir, exist_ok=True)
     
     if not quiet:
-        print(f"Downloading sample data to: {target_dir}")
+        print(f"Downloading Drosophila CDS sample data to: {target_dir}")
+    
+    # Define which files to copy (Drosophila CDS only)
+    files_to_copy = [
+        'cds_noX.bed',           # CDS annotations
+        'dmel_comeron_recmap.csv', # Drosophila recombination map
+        'README.md'              # Documentation
+    ]
     
     try:
         existing_files = []
         copied_files = []
         
-        # Copy all files from source to target
-        for item in os.listdir(source_dir):
-            source_path = os.path.join(source_dir, item)
-            target_path = os.path.join(target_dir, item)
+        # Copy only the specified files
+        for filename in files_to_copy:
+            source_path = os.path.join(source_dir, filename)
+            target_path = os.path.join(target_dir, filename)
             
-            if os.path.isfile(source_path):
-                if os.path.exists(target_path):
-                    existing_files.append(item)
-                    continue
-                
-                shutil.copy2(source_path, target_path)
-                copied_files.append(item)
-                    
-            elif os.path.isdir(source_path):
-                if os.path.exists(target_path):
-                    existing_files.append(f"{item}/")
-                    continue
-                
-                shutil.copytree(source_path, target_path, dirs_exist_ok=True)
-                copied_files.append(f"{item}/")
+            if not os.path.exists(source_path):
+                if not quiet:
+                    print(f"Warning: Source file not found: {filename}")
+                continue
+            
+            if os.path.exists(target_path) and not force:
+                existing_files.append(filename)
+                continue
+            
+            shutil.copy2(source_path, target_path)
+            copied_files.append(filename)
         
         # Show warnings for existing files
         if existing_files and not quiet:
@@ -97,7 +100,7 @@ def download_sample_data(force=False, quiet=False, target_dir=None):
                 print(f"  Copied {item}")
         
         if not quiet:
-            print(f"\nSample data successfully downloaded!")
+            print(f"\nDrosophila CDS sample data successfully downloaded!")
             print(f"Available files:")
             for item in sorted(os.listdir(target_dir)):
                 item_path = os.path.join(target_dir, item)
@@ -107,7 +110,7 @@ def download_sample_data(force=False, quiet=False, target_dir=None):
                 else:
                     print(f"  {item}/")
             print(f"\nYou can now use these files with Bvalcalc commands.")
-            print(f"Example: bvalcalc calculate -v {target_dir}/sample.vcf -p {target_dir}/sample_params.py")
+            print(f"Example: bvalcalc --genome --params your_params.py --bedgff cds_noX.bed --rec_map dmel_comeron_recmap.csv")
         
         return True
         
@@ -119,7 +122,7 @@ def download_sample_data(force=False, quiet=False, target_dir=None):
 
 def list_sample_data(quiet=False):
     """
-    List available sample data files.
+    List available Drosophila CDS sample data files.
     
     Args:
         quiet (bool): If True, suppress output messages
@@ -131,11 +134,11 @@ def list_sample_data(quiet=False):
     
     if not os.path.exists(data_dir):
         if not quiet:
-            print("Sample data not found. Run 'bvalcalc download-sample-data' to download sample files.")
+            print("Drosophila CDS sample data not found. Run 'bvalcalc --download_sample_data' to download sample files.")
         return False
     
     if not quiet:
-        print(f"Sample data available in: {data_dir}")
+        print(f"Drosophila CDS sample data available in: {data_dir}")
         print("Available files:")
         
         for item in sorted(os.listdir(data_dir)):
