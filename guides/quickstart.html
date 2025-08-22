@@ -161,6 +161,10 @@ When calculating B for a new species or annotation type you’ll need to check t
 <h2>B in a genomic region<a class="headerlink" href="#b-in-a-genomic-region" title="Link to this heading"></a></h2>
 <p>Alright, now let’s look at part of a chromosome.
 We can use a BED file (or GFF/CSV) that specifies which genomic ranges are conserved to calculate B for a region in the genome. Here we’ll also provide an optional recombination (crossover) map to account for local variation in crossover rates.</p>
+<p>First we’ll need to download the sample data, which includes a BED file with CDS annotations and a recombination map for <cite>D. melanogaster</cite>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--download_sample_data
+</pre></div>
+</div>
 <p>Let’s calculate B for a 1 Mb region in a relatively low recombination region in chromosome 2R and save it to <code class="docutils literal notranslate"><span class="pre">1Mb_B.png</span></code> (to save the B-map output to a file, use <code class="docutils literal notranslate"><span class="pre">--out</span></code>).</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span><span class="se">\</span>
 --region<span class="w"> </span>chr2R:8000000-9000000<span class="w"> </span><span class="se">\</span>
@@ -188,6 +192,7 @@ We could also have added a gene conversion map with <code class="docutils litera
 --genome<span class="w"> </span><span class="se">\</span>
 --params<span class="w"> </span>./DroMel_Cds_Params.py<span class="w"> </span><span class="se">\</span>
 --bedgff<span class="w"> </span>./cds_noX.bed<span class="w"> </span><span class="se">\</span>
+--rec_map<span class="w"> </span>./dmel_comeron_recmap.csv<span class="w"> </span><span class="se">\</span>
 --out<span class="w"> </span>Dmel_Bmap.csv<span class="w"> </span><span class="se">\</span>
 --out_binsize<span class="w"> </span><span class="m">1000</span>
 </pre></div>
