@@ -78,6 +78,12 @@ B in a genomic region
 Alright, now let's look at part of a chromosome.  
 We can use a BED file (or GFF/CSV) that specifies which genomic ranges are conserved to calculate B for a region in the genome. Here we'll also provide an optional recombination (crossover) map to account for local variation in crossover rates.
 
+First we'll need to download the sample data, which includes a BED file with CDS annotations and a recombination map for `D. melanogaster`.
+
+.. code-block:: bash
+
+   Bvalcalc --download_sample_data
+
 Let's calculate B for a 1 Mb region in a relatively low recombination region in chromosome 2R and save it to ``1Mb_B.png`` (to save the B-map output to a file, use ``--out``).
 
 .. code-block:: bash
@@ -115,6 +121,7 @@ If you wanted to generate a complete B-map for all sites across all chromosomes 
    --genome \
    --params ./DroMel_Cds_Params.py \
    --bedgff ./cds_noX.bed \
+   --rec_map ./dmel_comeron_recmap.csv \
    --out Dmel_Bmap.csv \
    --out_binsize 1000
 
