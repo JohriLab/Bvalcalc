@@ -160,20 +160,32 @@ When calculating B for a new species you’ll need to check the literature and u
 <section id="b-in-a-genomic-region">
 <h2>B in a genomic region<a class="headerlink" href="#b-in-a-genomic-region" title="Link to this heading"></a></h2>
 <p>Alright, now let’s look at part of a chromosome.
-We can use a BED file (or GFF/CSV) that specifies which genomic ranges are conserved to calculate B for a region in the genome.
-Let’s calculate B for a 1 Mb region in the middle of chromosome 2R [9500000-10500000] and save it to <code class="docutils literal notranslate"><span class="pre">1Mb_B.png</span></code>.</p>
+We can use a BED file (or GFF/CSV) that specifies which genomic ranges are conserved to calculate B for a region in the genome. Here we’ll also provide an optional recombination (crossover) map to account for local variation in crossover rates.
+Let’s calculate B for a 1 Mb region in a relatively low recombination region in chromosome 2R [8000000-9000000] and save it to <code class="docutils literal notranslate"><span class="pre">1Mb_B.png</span></code>.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span><span class="se">\</span>
 --region<span class="w"> </span>2R:9500000-10500000<span class="w"> </span><span class="se">\</span>
 --params<span class="w"> </span>./DrosophilaParams.py<span class="w"> </span><span class="se">\</span>
 --bedgff<span class="w"> </span>examples/dmel6_2R_genes.csv<span class="w"> </span><span class="se">\</span>
 --plot<span class="w"> </span>1Mb_B.png
 
-<span class="c1"># Mean B of neutral sites across specified region: 0.910805643014426</span>
+Bvalcalc<span class="w"> </span><span class="se">\</span>
+--region<span class="w"> </span>chr2R:8000000-9000000<span class="w"> </span><span class="se">\</span>
+--params<span class="w"> </span>./DroMel_Cds_Params.py<span class="w"> </span><span class="se">\</span>
+--rec_map<span class="w"> </span>./dmel_comeron_recmap.csv<span class="w"> </span><span class="se">\</span>
+--bedgff<span class="w"> </span>cds_noX.bed<span class="w"> </span><span class="se">\</span>
+--plot<span class="w"> </span>1Mb_B.png
+
+<span class="c1"># Mean B of neutral sites across specified region: 0.8925140916007113</span>
 </pre></div>
 </div>
 <p>Have a look at the plot: the blue sections of the graph indicate neutral regions and black indicates conserved elements (in this case genes).</p>
 <img alt="B region tutorial example" class="with-shadow align-center" src="../_images/1Mb_B.png" />
 <p>That’s all that’s necessary for many analyses, especially if you’re only interested in B values for a specific region of the genome, or are testing against simulated results.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The recombination map directly scales the crossover rate <code class="docutils literal notranslate"><span class="pre">r</span></code>.
+We could also have added a gene conversion map with <code class="docutils literal notranslate"><span class="pre">--gc_map</span></code> but given it’s relatively constant in Drosophila, it’s not necessary.</p>
+</div>
 </section>
 <section id="calculating-a-b-map">
 <h2>Calculating a B-map<a class="headerlink" href="#calculating-a-b-map" title="Link to this heading"></a></h2>
@@ -186,8 +198,11 @@ Let’s calculate B for a 1 Mb region in the middle of chromosome 2R [9500000-10
 --out_binsize<span class="w"> </span><span class="m">1000</span>
 </pre></div>
 </div>
-<p>If you had run that command, you’d get a B-map!</p>
+<p>If you had run that command, you’d get a B-map for sites due to BGS from CDS regions. It’s also possible to include the contribution of BGS from non-coding regions using <strong>Bvalcalc</strong> (see <a class="reference internal" href="multiple_dfes.html"><span class="doc">Multiple DFEs</span></a>).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <p>B-maps are useful to identify highly conserved regions of the genome, as a null-model for inference, e.g. <a class="reference internal" href="sweepfinder2.html"><span class="doc">SweepFinder2 with B-map</span></a>, or to select the most neutrally-evolving sites for e.g. demographic inference, see <a class="reference internal" href="demography.html"><span class="doc">Demographic Inference with B-map</span></a>.</p>
+</div>
 </section>
 </section>
 

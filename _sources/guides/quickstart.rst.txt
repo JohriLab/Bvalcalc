@@ -76,8 +76,8 @@ B in a genomic region
 -----------------------------------------
 
 Alright, now let's look at part of a chromosome.  
-We can use a BED file (or GFF/CSV) that specifies which genomic ranges are conserved to calculate B for a region in the genome.  
-Let's calculate B for a 1 Mb region in the middle of chromosome 2R [9500000-10500000] and save it to ``1Mb_B.png``.
+We can use a BED file (or GFF/CSV) that specifies which genomic ranges are conserved to calculate B for a region in the genome. Here we'll also provide an optional recombination (crossover) map to account for local variation in crossover rates.
+Let's calculate B for a 1 Mb region in a relatively low recombination region in chromosome 2R [8000000-9000000] and save it to ``1Mb_B.png``.
 
 .. code-block:: bash
 
@@ -87,9 +87,17 @@ Let's calculate B for a 1 Mb region in the middle of chromosome 2R [9500000-1050
    --bedgff examples/dmel6_2R_genes.csv \
    --plot 1Mb_B.png
 
-   # Mean B of neutral sites across specified region: 0.910805643014426
+   Bvalcalc \
+   --region chr2R:8000000-9000000 \
+   --params ./DroMel_Cds_Params.py \
+   --rec_map ./dmel_comeron_recmap.csv \
+   --bedgff cds_noX.bed \
+   --plot 1Mb_B.png
+
+   # Mean B of neutral sites across specified region: 0.8925140916007113
 
 Have a look at the plot: the blue sections of the graph indicate neutral regions and black indicates conserved elements (in this case genes).  
+
 
 .. image:: /_static/images/1Mb_B.png
    :alt: B region tutorial example
@@ -97,6 +105,10 @@ Have a look at the plot: the blue sections of the graph indicate neutral regions
    :align: center
 
 That's all that's necessary for many analyses, especially if you're only interested in B values for a specific region of the genome, or are testing against simulated results.
+
+.. note::
+   The recombination map directly scales the crossover rate ``r``.
+   We could also have added a gene conversion map with ``--gc_map`` but given it's relatively constant in Drosophila, it's not necessary.  
 
 Calculating a B-map
 -----------------------------
@@ -112,6 +124,7 @@ If you wanted to generate a complete B-map for all sites across all chromosomes 
    --out Dmel_Bmap.csv \
    --out_binsize 1000
 
-If you had run that command, you'd get a B-map! 
+If you had run that command, you'd get a B-map for sites due to BGS from CDS regions. It's also possible to include the contribution of BGS from non-coding regions using **Bvalcalc** (see :doc:`Multiple DFEs <../guides/multiple_dfes>`).
 
-B-maps are useful to identify highly conserved regions of the genome, as a null-model for inference, e.g. :doc:`SweepFinder2 with B-map <./sweepfinder2>`, or to select the most neutrally-evolving sites for e.g. demographic inference, see :doc:`Demographic Inference with B-map <./demography>`.
+.. note::
+   B-maps are useful to identify highly conserved regions of the genome, as a null-model for inference, e.g. :doc:`SweepFinder2 with B-map <./sweepfinder2>`, or to select the most neutrally-evolving sites for e.g. demographic inference, see :doc:`Demographic Inference with B-map <./demography>`.
