@@ -105,28 +105,34 @@
              
   <section id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h1>
-<section id="pypi">
-<h2>PyPI<a class="headerlink" href="#pypi" title="Link to this heading"></a></h2>
-<p>Install <strong>bvalcalc</strong> via pip from PyPI:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>bvalcalc
-</pre></div>
-</div>
-<p>… or for the dev version!</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>--index-url<span class="w"> </span>https://test.pypi.org/simple<span class="w"> </span>--extra-index-url<span class="w"> </span>https://pypi.org/simple<span class="w"> </span>--upgrade<span class="w"> </span>bvalcalc
-</pre></div>
-</div>
-<p>If it’s not working try this:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>bvalcalc-env<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.10<span class="w"> </span>-y
-conda<span class="w"> </span>activate<span class="w"> </span>bvalcalc-env
-conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span><span class="s2">&quot;numpy&gt;=1.26&quot;</span><span class="w"> </span><span class="s2">&quot;scipy&gt;=1.13&quot;</span><span class="w"> </span>matplotlib<span class="w"> </span>-y
-pip<span class="w"> </span>install<span class="w"> </span>--index-url<span class="w"> </span>https://test.pypi.org/simple<span class="w"> </span>--extra-index-url<span class="w"> </span>https://pypi.org/simple<span class="w"> </span>--upgrade<span class="w"> </span>bvalcalc
+<p>Install <strong>Bvalcalc</strong> in a new conda environment via conda-forge (recommended):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>bvalcalc<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>bvalcalc
+conda<span class="w"> </span>activate<span class="w"> </span>bvalcalc
 </pre></div>
 </div>
 <p>Verify the install worked by running the CLI “help”:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bvalcalc<span class="w"> </span>--help
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--help
 </pre></div>
 </div>
-<p>You should see usage modes listed (<code class="docutils literal notranslate"><span class="pre">--site</span></code>, <code class="docutils literal notranslate"><span class="pre">--gene</span></code>, etc.).</p>
+<p>You should see usage modes listed with e.g. <code class="docutils literal notranslate"><span class="pre">Welcome</span> <span class="pre">to</span> <span class="pre">Bvalcalc</span> <span class="pre">v0.6.5!</span></code></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Bvalcalc supports both <code class="docutils literal notranslate"><span class="pre">bvalcalc</span></code> (lowercase) and <code class="docutils literal notranslate"><span class="pre">Bvalcalc</span></code> (capitalized) for the CLI.
+For the Python API, use uppercase: <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">Bvalcalc</span></code>.</p>
+</div>
+<section id="pypi">
+<h2>PyPI<a class="headerlink" href="#pypi" title="Link to this heading"></a></h2>
+<p>Install <strong>Bvalcalc</strong> via pip from PyPI:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>bvalcalc
+</pre></div>
+</div>
+<p>If you encounter dependency conflicts or prefer to install from PyPI with specific dependency versions, use this manual approach:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>bvalcalc-env<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.10<span class="w"> </span>-y
+conda<span class="w"> </span>activate<span class="w"> </span>bvalcalc-env
+conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span><span class="s2">&quot;numpy&gt;=1.26&quot;</span><span class="w"> </span><span class="s2">&quot;scipy&gt;=1.13&quot;</span><span class="w"> </span>matplotlib<span class="w"> </span>-y
+pip<span class="w"> </span>install<span class="w"> </span>bvalcalc
+</pre></div>
+</div>
 </section>
 <section id="dependencies">
 <h2>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading"></a></h2>

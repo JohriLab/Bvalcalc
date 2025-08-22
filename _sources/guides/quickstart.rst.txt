@@ -8,11 +8,12 @@ Installation
 
 **Bvalcalc** is a python program called from the command line (terminal, shell, zsh, bash etc.)
 
-You can install **Bvalcalc** on the command line via pip:
+Install **Bvalcalc** in a new conda environment via conda-forge:
 
 .. code-block:: bash
 
-   pip install Bvalcalc
+   conda create -n bvalcalc -c conda-forge bvalcalc
+   conda activate bvalcalc
    
 
 Specifying popgen parameters
