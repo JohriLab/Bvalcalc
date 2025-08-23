@@ -460,12 +460,12 @@ html::-webkit-scrollbar-thumb:active {
 }
 
 .admonition.note .admonition-title {
-  background-color: #8a8d91 !important;
-  color: white !important;
+  background-color: #e9ecef !important;
+  color: black !important;
 }
 
 .admonition.note .admonition-title::before {
-  color: white !important;
+  color: black !important;
 }
 
 /* Also handle other admonition types for consistency */

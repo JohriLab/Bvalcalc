@@ -108,7 +108,7 @@ That's all that's necessary for many analyses, especially if you're only interes
 
 .. note::
    The recombination map directly scales the crossover rate ``r``.
-   We could also have added a gene conversion map with ``--gc_map`` but given it's relatively constant in `D. melanogaster` (Comeron et al. 2012), you can calculate a pretty accurate map without it.  
+   You could also add a gene conversion map with ``--gc_map`` but as the gc rate is relatively constant in `D. melanogaster` (Comeron et al. 2012), you can calculate an reasonably accurate map without it.  
 
 Calculating a B-map
 -----------------------------
