@@ -430,3 +430,24 @@ html::-webkit-scrollbar-thumb:active {
   max-height: 100vh;
   overflow-y: auto;
 }
+
+/* Restore Sphinx highlighting for reset functionality */
+.restore-highlighting {
+  color: inherit !important;
+}
+
+.restore-highlighting .c1 {
+  color: #008000 !important;
+  font-style: italic !important;
+}
+
+.restore-highlighting .w {
+  color: #000000 !important;
+}
+
+.restore-highlighting .m {
+  color: #0000ff !important;
+}
+
+
+

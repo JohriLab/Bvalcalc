@@ -78,7 +78,7 @@ function initializeCodeBlock(codeBlock) {
     left: 0;
     background: transparent;
     color: #5f6368;
-    padding: 4px 8px;
+    padding: 5px 9px;
     font-size: 11px;
     font-weight: 500;
     z-index: 5;
