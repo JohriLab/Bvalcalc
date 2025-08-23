@@ -84,12 +84,15 @@ function initializeCodeBlock(codeBlock) {
     languageTag.textContent = 'code';
   }
 
+  // Set color based on language
+  const labelColor = isPython ? '#2E8B57' : '#FF8C00'; // Python green for python, warm orange for others
+
   languageTag.style.cssText = `
     position: absolute;
     top: -1px;
     left: 2px;
     background: transparent;
-    color: #FF8C00;
+    color: ${labelColor};
     padding: 5px 9px;
     font-size: 11px;
     font-weight: 500;
