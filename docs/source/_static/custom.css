@@ -450,17 +450,17 @@ html::-webkit-scrollbar-thumb:active {
 }
 
 /* ───────────────────────────────────────────────────────────────── */
-/* Note styling - grey theme instead of blue                         */
+/* Note styling - light yellow theme instead of grey                 */
 /* ───────────────────────────────────────────────────────────────── */
 
-/* Override RTD theme's blue note styling with grey */
+/* Override RTD theme's blue note styling with light yellow */
 .admonition.note {
-  background-color: #e9ecef !important;
-  border-left-color: #6c757d !important;
+  background-color: #fff8e1 !important;
+  border-left-color: #FFC30B !important;
 }
 
 .admonition.note .admonition-title {
-  background-color: #e9ecef !important;
+  background-color: #FFC30B !important;
   color: black !important;
 }
 
