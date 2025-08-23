@@ -96,6 +96,8 @@ Let's calculate B for a 1 Mb region in a relatively low recombination region in 
    --plot 1Mb_B.png
 
    # Mean B of neutral sites across specified region: 0.8925140916007113
+   # Plot saved to 1Mb_B.png
+   # = B value calculated in 6.67 seconds. = = =
 
 Have a look at the plot: the blue sections of the graph indicate neutral regions and black indicates conserved elements (CDS). The white-red gradient reflects the local crossover rate (red = high).
 
