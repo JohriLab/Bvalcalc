@@ -18,12 +18,12 @@ To learn more about background selection, see :doc:`About BGS and B-values <preb
    --region, -r          Calculate B values for a chromosomal region, considering genome-wide effects
    --genome, -w          Calculate B values genome-wide for all sites considering all elements
 
-.. image:: /_static/images/B_chr21.png
+.. image:: /_static/images/1Mb_B.png
    :alt: B region example
    :class: with-shadow
    :align: center
 
-*B-values from linked CDS across ~6 Mb of human chromosome 21, calculated with the -\-region module in 13.16 seconds*
+B-values at 1 Mb of sites under BGS from coding sequences in D. melanogaster, calculated with the :doc:`Region module <modules/region>` in 6.67 seconds
 
 .. toctree::
    :maxdepth: 1
