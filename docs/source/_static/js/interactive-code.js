@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Add focus styles and select all text on click
     firstCodeBlock.addEventListener('click', () => {
-      firstCodeBlock.style.borderColor = '#007bff';
+      firstCodeBlock.style.borderColor = '#000000';
       firstCodeBlock.style.backgroundColor = '#f8f9fa';
 
       // Select all text when clicked
