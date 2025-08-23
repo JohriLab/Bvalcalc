@@ -449,5 +449,64 @@ html::-webkit-scrollbar-thumb:active {
   color: #0000ff !important;
 }
 
+/* ───────────────────────────────────────────────────────────────── */
+/* Note styling - grey theme instead of blue                         */
+/* ───────────────────────────────────────────────────────────────── */
 
+/* Override RTD theme's blue note styling with grey */
+.admonition.note {
+  background-color: #e9ecef !important;
+  border-left-color: #6c757d !important;
+}
 
+.admonition.note .admonition-title {
+  background-color: #8a8d91 !important;
+  color: white !important;
+}
+
+.admonition.note .admonition-title::before {
+  color: white !important;
+}
+
+/* Also handle other admonition types for consistency */
+.admonition.warning {
+  background-color: #fff3cd !important;
+  border-left-color: #ffc107 !important;
+}
+
+.admonition.warning .admonition-title {
+  background-color: #ffc107 !important;
+  color: #212529 !important;
+}
+
+.admonition.warning .admonition-title::before {
+  color: #212529 !important;
+}
+
+.admonition.important {
+  background-color: #d1ecf1 !important;
+  border-left-color: #17a2b8 !important;
+}
+
+.admonition.important .admonition-title {
+  background-color: #17a2b8 !important;
+  color: white !important;
+}
+
+.admonition.important .admonition-title::before {
+  color: white !important;
+}
+
+.admonition.tip {
+  background-color: #d4edda !important;
+  border-left-color: #28a745 !important;
+}
+
+.admonition.tip .admonition-title {
+  background-color: #28a745 !important;
+  color: white !important;
+}
+
+.admonition.tip .admonition-title::before {
+  color: white !important;
+}
