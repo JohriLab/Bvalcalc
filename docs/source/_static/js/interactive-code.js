@@ -7,7 +7,7 @@ function initializeCodeBlock(codeBlock) {
   codeBlock.style.caretColor = 'black';
   codeBlock.style.userSelect = 'text';
   codeBlock.style.whiteSpace = 'pre';
-  codeBlock.style.paddingTop = '24px';
+  codeBlock.style.paddingTop = '25px';
 
   // Sanitize input to plain text only
   codeBlock.addEventListener('paste', (e) => {
@@ -69,13 +69,25 @@ function initializeCodeBlock(codeBlock) {
   `;
   parent.appendChild(resetButton);
 
-  // Add bash tag
-  const bashTag = document.createElement('div');
-  bashTag.textContent = 'bash';
-  bashTag.style.cssText = `
+  // Determine language and add appropriate tag
+  const languageTag = document.createElement('div');
+
+  // Check if this is a Python block by looking at the parent's class
+  const isPython = parent.parentElement.classList.contains('highlight-python');
+  const isBash = parent.parentElement.classList.contains('highlight-bash');
+
+  if (isPython) {
+    languageTag.textContent = 'python';
+  } else if (isBash) {
+    languageTag.textContent = 'bash';
+  } else {
+    languageTag.textContent = 'code';
+  }
+
+  languageTag.style.cssText = `
     position: absolute;
-    top: 0;
-    left: 0;
+    top: -1px;
+    left: 2px;
     background: transparent;
     color: #5f6368;
     padding: 5px 9px;
@@ -83,7 +95,7 @@ function initializeCodeBlock(codeBlock) {
     font-weight: 500;
     z-index: 5;
   `;
-  parent.appendChild(bashTag);
+  parent.appendChild(languageTag);
 
   codeBlock.addEventListener('focus', () => {
     codeBlock.style.border = '1px solid black';
@@ -142,7 +154,7 @@ function initializeCodeBlock(codeBlock) {
 
 document.addEventListener('DOMContentLoaded', () => {
   const codeBlocks = document.querySelectorAll(
-    '.highlight-bash .highlight pre'
+    '.highlight-bash .highlight pre, .highlight-python .highlight pre'
   );
   codeBlocks.forEach((codeBlock) => {
     initializeCodeBlock(codeBlock);
