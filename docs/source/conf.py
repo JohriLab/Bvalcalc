@@ -29,6 +29,7 @@ html_theme_options = {
 }
 html_js_files = [
     "js/onthispage-scrollspy.js",
+    "js/interactive-code.js",
 ]
 html_static_path = ['_static']
 
