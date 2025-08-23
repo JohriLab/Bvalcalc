@@ -510,3 +510,24 @@ html::-webkit-scrollbar-thumb:active {
 .admonition.tip .admonition-title::before {
   color: white !important;
 }
+
+/* ───────────────────────────────────────────────────────────────── */
+/* Hide link icons on headings (RTD theme)                          */
+/* ───────────────────────────────────────────────────────────────── */
+
+/* Hide the link icon that appears on hover over headings */
+.wy-menu-vertical .toctree-l1 a:hover::after,
+.wy-menu-vertical .toctree-l2 a:hover::after,
+h1:hover .headerlink,
+h2:hover .headerlink,
+h3:hover .headerlink,
+h4:hover .headerlink,
+h5:hover .headerlink,
+h6:hover .headerlink {
+  display: none !important;
+}
+
+/* Also hide the headerlink elements entirely */
+.headerlink {
+  display: none !important;
+}
