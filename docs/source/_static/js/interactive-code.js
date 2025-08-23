@@ -129,12 +129,18 @@ function initializeCodeBlock(codeBlock) {
   copyButton.addEventListener('click', (e) => {
     e.stopPropagation();
 
-    // Filter out comment lines starting with #
-    const lines = codeBlock.textContent.split('\n');
-    const filteredLines = lines.filter((line) => !line.trim().startsWith('#'));
-    const cleanText = filteredLines.join('\n').trim();
+    // Get the content with proper line breaks by using selection
+    const selection = window.getSelection();
+    const range = document.createRange();
+    range.selectNodeContents(codeBlock);
+    selection.removeAllRanges();
+    selection.addRange(range);
 
-    navigator.clipboard.writeText(cleanText);
+    // Copy the selected content
+    document.execCommand('copy');
+
+    // Clear the selection
+    selection.removeAllRanges();
 
     // Show message and keep it visible
     message.style.opacity = '1';
