@@ -37,7 +37,7 @@ function initializeCodeBlock(codeBlock) {
     cursor: pointer;
     display: block;
     z-index: 20;
-    color: #666;
+    color: #FF8C00;
   `;
 
   // Insert button into the parent container
@@ -65,7 +65,7 @@ function initializeCodeBlock(codeBlock) {
     cursor: pointer;
     display: block;
     z-index: 20;
-    color: #666;
+    color: #FF8C00;
   `;
   parent.appendChild(resetButton);
 
@@ -89,7 +89,7 @@ function initializeCodeBlock(codeBlock) {
     top: -1px;
     left: 2px;
     background: transparent;
-    color: #5f6368;
+    color: #FF8C00;
     padding: 5px 9px;
     font-size: 11px;
     font-weight: 500;
