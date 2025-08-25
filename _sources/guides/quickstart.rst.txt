@@ -21,7 +21,7 @@ Specifying popgen parameters
 
 To calculate B, we need evolutionary information about the species of the population in a parameters file.
 
-Copy population genetic parameters from one of the templates, e.g. for coding (CDS) regions in `Drosophila melanogaster` (DroMel)
+Copy population genetic parameters from one of the templates, e.g. for coding (CDS) regions in `Drosophila melanogaster` (DroMel).
 
 .. code-block:: bash
 
@@ -29,13 +29,18 @@ Copy population genetic parameters from one of the templates, e.g. for coding (C
 
    # Wrote parameters to: ./DroMel_Cds_Params.py
 
-Open ``./DroMel_Cds_Params.py`` in your text editor of choice. This file contains popgen parameters that allow us to accurately calculate B.
-When calculating B for a new species or annotation type you'll need to check the literature and use informed values for your population, see :doc:`Tailoring Parameters <./params>`.
+Open ``./DroMel_Cds_Params.py`` in your text editor of choice. This file contains popgen parameters that allow us to accurately calculate B. 
+
+.. note::
+   Templates are available for several species and annotation types, see the list at :doc:`Generate Parameters <../introduction/generate_params>`.
+   When calculating B for a new species or annotation type you'll need to check the literature and use inferred/informed values for your population, see :doc:`Tailoring Parameters <./params>`.
 
 Calculating a B value
 ----------------------
 
-Let's start by calculating B at a site 1kb from the edge of a single conserved element 5kb in length.
+Let's start by calculating B at a site 1kb from the edge of a single conserved element (CDS) 5kb in length.
+
+A conserved element is an annotated part of the genome that experiences direct purifying selection. It will introduce BGS (reduction in B) at sites within and outside the element.
 
 .. code-block:: bash
 
@@ -110,7 +115,7 @@ That's all that's necessary for many analyses, especially if you're only interes
 
 .. note::
    The recombination map directly scales the crossover rate ``r``.
-   You could also add a gene conversion map with ``--gc_map`` but as the gc rate is relatively constant in `D. melanogaster` (Comeron et al. 2012), you can calculate an reasonably accurate map without it.  
+   You could also add a gene conversion map with ``--gc_map`` but as the gc rate is relatively constant in `D. melanogaster` (Comeron et al. 2012), you can calculate a reasonably accurate map without it.  
 
 Calculating a B-map
 -----------------------------

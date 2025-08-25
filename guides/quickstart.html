@@ -119,18 +119,23 @@ conda<span class="w"> </span>activate<span class="w"> </span>bvalcalc
 <section id="specifying-popgen-parameters">
 <h2>Specifying popgen parameters<a class="headerlink" href="#specifying-popgen-parameters" title="Link to this heading"></a></h2>
 <p>To calculate B, we need evolutionary information about the species of the population in a parameters file.</p>
-<p>Copy population genetic parameters from one of the templates, e.g. for coding (CDS) regions in <cite>Drosophila melanogaster</cite> (DroMel)</p>
+<p>Copy population genetic parameters from one of the templates, e.g. for coding (CDS) regions in <cite>Drosophila melanogaster</cite> (DroMel).</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--generate_params<span class="w"> </span>dromel_cds
 
 <span class="c1"># Wrote parameters to: ./DroMel_Cds_Params.py</span>
 </pre></div>
 </div>
-<p>Open <code class="docutils literal notranslate"><span class="pre">./DroMel_Cds_Params.py</span></code> in your text editor of choice. This file contains popgen parameters that allow us to accurately calculate B.
-When calculating B for a new species or annotation type you’ll need to check the literature and use informed values for your population, see <a class="reference internal" href="params.html"><span class="doc">Tailoring Parameters</span></a>.</p>
+<p>Open <code class="docutils literal notranslate"><span class="pre">./DroMel_Cds_Params.py</span></code> in your text editor of choice. This file contains popgen parameters that allow us to accurately calculate B.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Templates are available for several species and annotation types, see the list at <a class="reference internal" href="../introduction/generate_params.html"><span class="doc">Generate Parameters</span></a>.
+When calculating B for a new species or annotation type you’ll need to check the literature and use inferred/informed values for your population, see <a class="reference internal" href="params.html"><span class="doc">Tailoring Parameters</span></a>.</p>
+</div>
 </section>
 <section id="calculating-a-b-value">
 <h2>Calculating a B value<a class="headerlink" href="#calculating-a-b-value" title="Link to this heading"></a></h2>
-<p>Let’s start by calculating B at a site 1kb from the edge of a single conserved element 5kb in length.</p>
+<p>Let’s start by calculating B at a site 1kb from the edge of a single conserved element (CDS) 5kb in length.</p>
+<p>A conserved element is an annotated part of the genome that experiences direct purifying selection. It will introduce BGS (reduction in B) at sites within and outside the element.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span><span class="se">\</span>
 --site<span class="w"> </span><span class="se">\</span>
 --params<span class="w"> </span>./DroMel_Cds_Params.py<span class="w"> </span><span class="se">\</span>
@@ -185,7 +190,7 @@ We can use a BED file (or GFF/CSV) that specifies which genomic ranges are conse
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The recombination map directly scales the crossover rate <code class="docutils literal notranslate"><span class="pre">r</span></code>.
-You could also add a gene conversion map with <code class="docutils literal notranslate"><span class="pre">--gc_map</span></code> but as the gc rate is relatively constant in <cite>D. melanogaster</cite> (Comeron et al. 2012), you can calculate an reasonably accurate map without it.</p>
+You could also add a gene conversion map with <code class="docutils literal notranslate"><span class="pre">--gc_map</span></code> but as the gc rate is relatively constant in <cite>D. melanogaster</cite> (Comeron et al. 2012), you can calculate a reasonably accurate map without it.</p>
 </div>
 </section>
 <section id="calculating-a-b-map">
