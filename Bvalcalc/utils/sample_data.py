@@ -25,11 +25,18 @@ def get_package_data_dir():
     Returns:
         str: Path to the package data directory
     """
-    # Get the directory where this module is located
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    # Go up to Bvalcalc root, then to data directory
-    package_root = os.path.dirname(os.path.dirname(current_dir))
-    return os.path.join(package_root, 'data')
+    try:
+        # Try to use importlib.resources for modern Python packaging
+        import importlib.resources as resources
+        with resources.path('Bvalcalc', 'data') as data_path:
+            return str(data_path)
+    except (ImportError, FileNotFoundError):
+        # Fallback for older Python versions or development environment
+        # Get the directory where this module is located
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        # Go up to Bvalcalc root, then to data directory
+        package_root = os.path.dirname(os.path.dirname(current_dir))
+        return os.path.join(package_root, 'data')
 
 
 def download_sample_data(force=False, quiet=False, target_dir=None):
