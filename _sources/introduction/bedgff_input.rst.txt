@@ -3,7 +3,7 @@ BED/GFF Input
 
 **Bvalcalc** estimates the effects of BGS on linked (and unlinked) sites due to direct purifying selection in conserved regions of the genome.
 
-When using the ``--region`` and ``genome`` modules, these conserved regions are indicated by a BED/GFF/CSV annotation file:
+When using the ``--region`` and ``genome`` modules, all annotated regions in the BED/GFF/CSV annotation file will be used to estimate calculate BGS effects
 
 **-\-bedgff [path/to/example.bed]**  
     Path to an annotation file of selected elements, in BED, GFF3 or CSV format (CHR,START,END). Header information, indicated by ``#``, is ignored.
@@ -19,6 +19,8 @@ If you have DFE information for the different annotation types (e.g., CDS and UT
 
 Example
 ------------
+
+Three example inputs to ``--bedgff`` that will be processed identically:
 
 .. code-block:: console
 
@@ -36,5 +38,3 @@ Example
     2R,326768,705848
     2R,854814,855571
     2R,924636,951252
-
-Three headerless example inputs to ``--bedgff`` that will be processed identically:

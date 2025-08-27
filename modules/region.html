@@ -151,7 +151,7 @@ Note that <code class="docutils literal notranslate"><span class="pre">mean</spa
 <dt><strong>--constant_dfe</strong></dt><dd><p>If included, use a constant fixed <code class="docutils literal notranslate"><span class="pre">s</span></code> value as the DFE of selected sites (instead of fixed <code class="docutils literal notranslate"><span class="pre">f0</span></code>, <code class="docutils literal notranslate"><span class="pre">f1</span></code>, <code class="docutils literal notranslate"><span class="pre">f2</span></code>, <code class="docutils literal notranslate"><span class="pre">f3</span></code>).
 Note that <code class="docutils literal notranslate"><span class="pre">s</span></code> and <code class="docutils literal notranslate"><span class="pre">proportion_synonymous</span></code> should be set in the parameters file when active.</p>
 </dd>
-<dt><strong>--hri</strong></dt><dd><p>If included, will enable post-hoc calculation of B under HRI (B’; Becher and Charlesworth 2025), for low recombination regions. By default, classic B values are used in these regions.</p>
+<dt><strong>--hri</strong></dt><dd><p>If included, will enable post-hoc calculation of B under HRI (B’; Becher and Charlesworth 2025), for low recombination regions. Note that this is experimental and largely untested, see supplement in the manuscript.</p>
 </dd>
 <dt><strong>--prior_Bmap [path/to/prior_Bmap.csv]</strong></dt><dd><p>Optional prior B-value map (<cite>.csv</cite> format). Used to multiply the newly calculated B-values by a per-site prior (e.g. for regions under different selection parameters). Format: <code class="docutils literal notranslate"><span class="pre">Chromosome,Start,B</span></code>.</p>
 </dd>
@@ -169,7 +169,7 @@ Note that <code class="docutils literal notranslate"><span class="pre">s</span><
 <h2>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--region<span class="w"> </span><span class="m">21</span>:30326675-36709983<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--bedgff<span class="w"> </span>exons.accessible.21.bed<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--params<span class="w"> </span>HumanParams.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--params<span class="w"> </span>HomSap_Cds_Params.py<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--out<span class="w"> </span>Bvalues_chr21_region.csv<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--out_binsize<span class="w"> </span><span class="m">1000</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--plot<span class="w"> </span>B_chr21_region.png
@@ -184,11 +184,17 @@ Note that <code class="docutils literal notranslate"><span class="pre">s</span><
 </section>
 <section id="notes">
 <h2>Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <p>A caveat to the <code class="docutils literal notranslate"><span class="pre">--region</span></code> and <code class="docutils literal notranslate"><span class="pre">--genome</span></code> modes is that by default they combine and simplify distant elements in discrete chunks which can slightly change the distance of distant conserved elements when
 calculating B. The default chunk size is 20kb and the window within which calculations are perfectly precise is three chunks in each direction (140kb total). This allows for vastly improved performance
 and typically will not result in directional biases of B estimates for most analyses.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <p>To achieve more exact results you can specify the size of the chunks with <code class="docutils literal notranslate"><span class="pre">--chunk_size</span></code>, and the size of the window to
 perform perfectly precise calculations with <code class="docutils literal notranslate"><span class="pre">--precise_chunks</span></code>, though this will come at the cost of perfomance so consider using HPC resources or limiting to a specific region with <code class="docutils literal notranslate"><span class="pre">--region</span></code>.</p>
+</div>
 </section>
 </section>
 

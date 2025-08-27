@@ -42,8 +42,8 @@ Example
 -------
 .. code-block:: bash
 
-    Bvalcalc --site --params HumanParams.py --distance 1500 --element_size 10000
+    Bvalcalc --site --params HomSap_Cds_Params.py --distance 1500 --element_size 10000
 
     # B for site 1500bp away from 10000bp region: 0.9670029436948963
 
-Calculates B for a single site 1500bp away from a gene under selection of length 10kb using example human parameters.
+Calculates B for a single site 1500bp away from a gene under selection of length 10kb using the template human CDS parameters.

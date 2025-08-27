@@ -109,8 +109,12 @@
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bvalcalc<span class="w"> </span>--Bmap<span class="w"> </span>Bmap.csv<span class="w"> </span>--positions<span class="w"> </span>variants.vcf
 </pre></div>
 </div>
-<dl class="simple">
+<dl>
 <dt><strong>--Bmap [path/to/Bmap.csv]</strong></dt><dd><p>B-map utilities for getting B statistics for specific sites in a VCF/txt file. Provide path to B map as following argument.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is a basic utility that is not optimized for compressed VCFs or large VCFs. For compressed VCFs, it’s recommended to pull out the positions into a .txt file to use. If it’s taking too long for a large VCF, consider writing a custom script, LLMs are good at this.</p>
+</div>
 </dd>
 </dl>
 <section id="core-arguments">

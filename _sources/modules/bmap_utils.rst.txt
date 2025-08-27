@@ -8,6 +8,9 @@ B-map Utilities for VCF
 **-\-Bmap [path/to/Bmap.csv]**
   B-map utilities for getting B statistics for specific sites in a VCF/txt file. Provide path to B map as following argument.
 
+  .. note::
+    This is a basic utility that is not optimized for compressed VCFs or large VCFs. For compressed VCFs, it's recommended to pull out the positions into a .txt file to use. If it's taking too long for a large VCF, consider writing a custom script, LLMs are good at this.
+
 Core Arguments
 ---------------
 
