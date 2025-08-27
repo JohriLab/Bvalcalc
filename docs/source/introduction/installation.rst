@@ -15,7 +15,7 @@ Verify the install worked by running the CLI "help":
 
    Bvalcalc --help
 
-You should see usage modes listed with e.g. ``Welcome to Bvalcalc v0.6.5!``
+You should see usage modes listed with e.g. ``Welcome to Bvalcalc v1.0.0!``
 
 .. note::
    Bvalcalc supports both ``bvalcalc`` (lowercase) and ``Bvalcalc`` (capitalized) for the CLI.

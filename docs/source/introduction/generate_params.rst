@@ -14,7 +14,7 @@ Arguments
     Available species: ``selfing``, ``aratha_cds``, ``aratha_phastcons``, ``dromel_cds``, ``dromel_utr``, ``dromel_phastcons``, ``homsap_cds``
 
 **-\-dir [path/to/NewParams.py]**
-    Optional path to save parameters (defaults to `./SpeciesParams.py`).
+    Optional path to directory to save parameters in (defaults to current directory).
 
 Example
 --------

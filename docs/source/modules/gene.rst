@@ -53,7 +53,7 @@ Example
 .. code-block:: bash
 
     Bvalcalc --gene \
-        --params HumanParams.py \
+        --params HomSap_Cds_Params.py \
         --element_size 10000 \
         --flank_len 40000 \
         --plot ./Bplot.png
@@ -61,7 +61,7 @@ Example
     # B for adjacent site: 0.9634908092757006
     # Mean B for flanking region: 0.9808824926142455
 
-Calculates B for a 40 kb neutral region flanking a single gene under selection of length 10 kb using example human parameters, and plot the output.
+Calculates B for a 40 kb neutral region flanking a single gene under selection of length 10 kb using template human CDS parameters, and plot the output.
 
 .. image:: /_static/images/gene_Bplot.png
    :alt: B region example

@@ -50,7 +50,7 @@ Optional Arguments
   Note that ``s`` and ``proportion_synonymous`` should be set in the parameters file when active.
   
 **-\-hri**
-    If included, will enable post-hoc calculation of B under HRI (B'; Becher and Charlesworth 2025), for low recombination regions. By default, classic B values are used in these regions.
+    If included, will enable post-hoc calculation of B under HRI (B'; Becher and Charlesworth 2025), for low recombination regions. Note that this is experimental and largely untested, see supplement in the manuscript.
 
 **-\-prior_Bmap [path/to/prior_Bmap.csv]**  
     Optional prior B-value map (``.csv`` format). Used to multiply the newly calculated B-values by a per-site prior (e.g. for regions under different selection parameters). Format: ``Chromosome,Start,Conserved,B``. Note that ``Conserved`` is required for parsing but does not affect output
@@ -73,7 +73,7 @@ Example
 .. code-block:: bash
 
     Bvalcalc --genome \
-      --params DrosophilaParams.py \
+      --params DroMel_Cds_Params.py \
       --bedgff drosophila_CDS.bed \
       --chr_sizes chrom_sizes.txt \
       --out Bvalues_drosophila_CDS.csv \
@@ -84,9 +84,11 @@ Calculates a B-map for across the genome considering all CDS regions. Output of 
 Notes
 ------
 
-A caveat to the ``--region`` and ``--genome`` modes is that by default they combine and simplify distant elements in discrete chunks which can slightly change the distance of distant conserved elements when
-calculating B. The default chunk size is 20kb and the window within which calculations are perfectly precise is three chunks in each direction (140kb total). This allows for vastly improved performance
-and typically will not result in directional biases of B estimates for most analyses. 
+.. note::
+    A caveat to the ``--region`` and ``--genome`` modes is that by default they combine and simplify distant elements in discrete chunks which can slightly change the distance of distant conserved elements when
+    calculating B. The default chunk size is 20kb and the window within which calculations are perfectly precise is three chunks in each direction (140kb total). This allows for vastly improved performance
+    and typically will not result in directional biases of B estimates for most analyses. 
 
-To achieve more exact results you can specify the size of the chunks with ``--chunk_size``, and the size of the window to
-perform perfectly precise calculations with ``--precise_chunks``, though this will come at the cost of perfomance so consider using HPC resources or limiting to a specific region with ``--region``.
+.. note::
+    To achieve more exact results you can specify the size of the chunks with ``--chunk_size``, and the size of the window to
+    perform perfectly precise calculations with ``--precise_chunks``, though this will come at the cost of perfomance so consider using HPC resources or limiting to a specific region with ``--region``.
