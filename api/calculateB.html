@@ -136,7 +136,7 @@ in which case parameters are sourced from the params file directly.</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="Bvalcalc.calculateB_unlinked">
 <span class="sig-prename descclassname"><span class="pre">Bvalcalc.</span></span><span class="sig-name descname"><span class="pre">calculateB_unlinked</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unlinked_L</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Bvalcalc/core/calculateB.html#calculateB_unlinked"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Bvalcalc.calculateB_unlinked" title="Link to this definition"></a></dt>
-<dd><p>Calculate B due to purifying selection at unlinked sites (numerical integration over DFE).</p>
+<dd><p>Calculate B due to purifying selection at unlinked sites.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -169,7 +169,7 @@ Then B will be calculated from 200kb of unlinked sites using <code class="docuti
 <section id="notes">
 <h2>Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
 <p>Note that <code class="docutils literal notranslate"><span class="pre">calculateB_linear</span></code> assumes a consistent crossover and gene conversion rate across both the length of and distance to the selected element, in the CLI, variable recombination rates are accounted for with
-the more complex function <code class="docutils literal notranslate"><span class="pre">calculateB_recmap</span></code>; if accessing this function is important for your work feel free to raise it as an issue on GitHub as I could add it as a public API.</p>
+the more complex function <code class="docutils literal notranslate"><span class="pre">calculateB_recmap</span></code>; if accessing this function is important for your work feel free to raise it as an issue on GitHub as I could describe its usage public API.</p>
 </section>
 </section>
 
