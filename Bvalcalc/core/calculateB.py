@@ -301,6 +301,10 @@ def calculateB_hri(distant_B, interfering_L, params: dict | None = None):
 
     scalar_input = distant_B.shape == () or distant_B.shape == (1,)
 
+    # Early return: if no interfering L in inputs, B' = distant_B
+    if np.all(interfering_L == 0):
+        return distant_B[0] if scalar_input else distant_B
+
     N0 = distant_B * Nanc
     h = 0.5
     u = 2 * u
