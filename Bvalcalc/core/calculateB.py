@@ -57,7 +57,7 @@ def calculateB_linear(distance_to_element: int, length_of_element: int, params: 
             a = C # RECOMBINATION IN Y
             b = C + (r * length_of_element) # RECOMBINATION IN X
         elif g > 0:
-            a, b = get_a_b_with_GC(C, distance_to_element, length_of_element)
+            a, b = get_a_b_with_GC(C, distance_to_element, length_of_element, params)
 
         if t_constant: #If --constant_dfe is active
             E_constant = calculate_exponent(t_constant, t_constant, U, a, b)
@@ -111,7 +111,7 @@ def calculateB_recmap(distance_to_element, length_of_element,
             b = C + r * rec_adjusted_length_of_element # cM
         elif g > 0:
              a, b = get_a_b_with_GC_andMaps(C, y=distance_to_element, l=length_of_element, 
-                                            rec_l=rec_adjusted_length_of_element, local_g = local_g)
+                                            rec_l=rec_adjusted_length_of_element, local_g = local_g, params=params)
 
         if t_constant: #If --constant_dfe is active
             E_constant = calculate_exponent(t_constant, t_constant, U, a, b)
@@ -226,9 +226,10 @@ def calculate_exponent(t_start, t_end, U, a, b):
 
     return E
 
-def get_a_b_with_GC(C, y, l):
+def get_a_b_with_GC(C, y, l, params=None):
         with np.errstate(divide='ignore', invalid='ignore'):
-            params = get_params()
+            if params is None:
+                params = get_params()
             r, u, g, k, t1, t1half, t2, t3, t4, f1, f2, f3, f0 = params["r"], params["u"], params["g"], params["k"], params["t1"], params["t1half"], params["t2"], params["t3"], params["t4"], params["f1"], params["f2"], params["f3"], params["f0"]
             proportion_nogc_a = np.where(k < y + l, # When GC includes neutral site, this is proportion of the gene it includes
                                         np.maximum((0.5*(k-y)/l), 0),
@@ -250,8 +251,9 @@ def get_a_b_with_GC(C, y, l):
 
         return a, b
 
-def get_a_b_with_GC_andMaps(C, y, l, rec_l, local_g):
-        params = get_params()
+def get_a_b_with_GC_andMaps(C, y, l, rec_l, local_g, params=None):
+        if params is None:
+            params = get_params()
         r, u, g, k, t1, t1half, t2, t3, t4, f1, f2, f3, f0 = params["r"], params["u"], params["g"], params["k"], params["t1"], params["t1half"], params["t2"], params["t3"], params["t4"], params["f1"], params["f2"], params["f3"], params["f0"]
         with np.errstate(divide='ignore', invalid='ignore'):
             proportion_nogc_a = np.where(k < y + l, # When GC includes neutral site, this is proportion of the gene it includes
