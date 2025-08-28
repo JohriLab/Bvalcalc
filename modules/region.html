@@ -184,17 +184,11 @@ Note that <code class="docutils literal notranslate"><span class="pre">s</span><
 </section>
 <section id="notes">
 <h2>Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
 <p>A caveat to the <code class="docutils literal notranslate"><span class="pre">--region</span></code> and <code class="docutils literal notranslate"><span class="pre">--genome</span></code> modes is that by default they combine and simplify distant elements in discrete chunks which can slightly change the distance of distant conserved elements when
 calculating B. The default chunk size is 20kb and the window within which calculations are perfectly precise is three chunks in each direction (140kb total). This allows for vastly improved performance
 and typically will not result in directional biases of B estimates for most analyses.</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
 <p>To achieve more exact results you can specify the size of the chunks with <code class="docutils literal notranslate"><span class="pre">--chunk_size</span></code>, and the size of the window to
 perform perfectly precise calculations with <code class="docutils literal notranslate"><span class="pre">--precise_chunks</span></code>, though this will come at the cost of perfomance so consider using HPC resources or limiting to a specific region with <code class="docutils literal notranslate"><span class="pre">--region</span></code>.</p>
-</div>
 </section>
 </section>
 

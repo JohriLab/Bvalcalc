@@ -98,11 +98,9 @@ Calculates a B-map for the specified ~6 Mb region on human chromosome 21 conside
 Notes
 ------
 
-.. note::
-    A caveat to the ``--region`` and ``--genome`` modes is that by default they combine and simplify distant elements in discrete chunks which can slightly change the distance of distant conserved elements when
-    calculating B. The default chunk size is 20kb and the window within which calculations are perfectly precise is three chunks in each direction (140kb total). This allows for vastly improved performance
-    and typically will not result in directional biases of B estimates for most analyses. 
+A caveat to the ``--region`` and ``--genome`` modes is that by default they combine and simplify distant elements in discrete chunks which can slightly change the distance of distant conserved elements when
+calculating B. The default chunk size is 20kb and the window within which calculations are perfectly precise is three chunks in each direction (140kb total). This allows for vastly improved performance
+and typically will not result in directional biases of B estimates for most analyses. 
 
-.. note::
-  To achieve more exact results you can specify the size of the chunks with ``--chunk_size``, and the size of the window to
-  perform perfectly precise calculations with ``--precise_chunks``, though this will come at the cost of perfomance so consider using HPC resources or limiting to a specific region with ``--region``.
+To achieve more exact results you can specify the size of the chunks with ``--chunk_size``, and the size of the window to
+perform perfectly precise calculations with ``--precise_chunks``, though this will come at the cost of perfomance so consider using HPC resources or limiting to a specific region with ``--region``.
