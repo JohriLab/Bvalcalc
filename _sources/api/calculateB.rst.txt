@@ -34,7 +34,9 @@ Example
    # np.float64(0.22627504209854507)
 
 This will import the relevant functions, get the popgen parameters from a relevant params file, see :doc:`Generate Parameters <../introduction/generate_params>`. 
+
 Then B will be calculated from 200kb of unlinked sites using ``calculateB_unlinked``, and B from a linked selected element of length 10kb, 500bp away is calculated using ``calculateB_linear``.
+
 Finally, B' is calculated for a non-recombining region containing 10000bp of selected sites, with a prior B of 0.7 from distant selected sites outside the region.
 
 Notes
