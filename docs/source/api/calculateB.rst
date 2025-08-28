@@ -35,4 +35,4 @@ Notes
 ---------
 
 Note that ``calculateB_linear`` assumes a consistent crossover and gene conversion rate across both the length of and distance to the selected element, in the CLI, variable recombination rates are accounted for with 
-the more complex function ``calculateB_recmap``; if accessing this function is important for your work feel free to raise it as an issue on GitHub as I could add it as a public API.
+the more complex function ``calculateB_recmap``; if accessing this function is important for your work feel free to raise it as an issue on GitHub as I could describe its usage public API.

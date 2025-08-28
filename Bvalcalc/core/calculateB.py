@@ -135,7 +135,7 @@ def calculateB_recmap(distance_to_element, length_of_element,
 
 def calculateB_unlinked(unlinked_L: int, params: dict | None = None):
     """
-    Calculate B due to purifying selection at unlinked sites (numerical integration over DFE).
+    Calculate B due to purifying selection at unlinked sites.
 
     Parameters
     ----------
