@@ -275,7 +275,19 @@ def get_a_b_with_GC_andMaps(C, y, l, rec_l, local_g):
 
 def calculateB_hri(distant_B, interfering_L, params: dict | None = None):
     """
-    Fully vectorized calculation of B' under Hill-Robertson interference.
+    Calculate B' (B accounting for Hill-Robertson interference effects) for a non-recombining region containing selected sites. 
+
+    This is a diploid implementation of Eq. 12 from Becher and Charlesworth (2025), see the relevant supplement in the B-value calculator manuscript.
+
+    Parameters
+    ----------
+    distant_B : float or array-like
+        The background B value in the HRI region, from less-linked selected sites outside the interference region (i.e. elsewhere on the chromosome, other chromosomes).
+    interfering_L : float or array-like
+        The cumulative length (bp) of interfering selected sites in the HRI region.
+    params : dict
+        Required parameters from ``get_params()``, only kept as default (None) when being called by CLI,
+        in which case parameters are sourced from the params file directly.
     """
     if params is None:
         params = get_params()
