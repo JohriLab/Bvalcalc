@@ -417,6 +417,10 @@
 
     <span class="n">scalar_input</span> <span class="o">=</span> <span class="n">distant_B</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">()</span> <span class="ow">or</span> <span class="n">distant_B</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,)</span>
 
+    <span class="c1"># Early return: if no interfering L in inputs, B&#39; = distant_B</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">interfering_L</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">distant_B</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">scalar_input</span> <span class="k">else</span> <span class="n">distant_B</span>
+
     <span class="n">N0</span> <span class="o">=</span> <span class="n">distant_B</span> <span class="o">*</span> <span class="n">Nanc</span>
     <span class="n">h</span> <span class="o">=</span> <span class="mf">0.5</span>
     <span class="n">u</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">u</span>
