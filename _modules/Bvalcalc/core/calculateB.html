@@ -387,9 +387,23 @@
 
         <span class="k">return</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span>
 
+<div class="viewcode-block" id="calculateB_hri">
+<a class="viewcode-back" href="../../../api/calculateB.html#Bvalcalc.calculateB_hri">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">calculateB_hri</span><span class="p">(</span><span class="n">distant_B</span><span class="p">,</span> <span class="n">interfering_L</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Fully vectorized calculation of B&#39; under Hill-Robertson interference.</span>
+<span class="sd">    Calculate B&#39; (B accounting for Hill-Robertson interference effects) for a non-recombining region containing selected sites. </span>
+
+<span class="sd">    This is a diploid implementation of Eq. 12 from Becher and Charlesworth (2025), see the relevant supplement in the B-value calculator manuscript.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    distant_B : float or array-like</span>
+<span class="sd">        The background B value in the HRI region, from less-linked selected sites outside the interference region (i.e. elsewhere on the chromosome, other chromosomes).</span>
+<span class="sd">    interfering_L : float or array-like</span>
+<span class="sd">        The cumulative length (bp) of interfering selected sites in the HRI region.</span>
+<span class="sd">    params : dict</span>
+<span class="sd">        Required parameters from ``get_params()``, only kept as default (None) when being called by CLI,</span>
+<span class="sd">        in which case parameters are sourced from the params file directly.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">params</span> <span class="o">=</span> <span class="n">get_params</span><span class="p">()</span>
@@ -471,7 +485,8 @@
         <span class="k">return</span> <span class="n">Bprime</span>
 
     <span class="n">Bprime</span> <span class="o">=</span> <span class="n">eq5_vectorized</span><span class="p">(</span><span class="n">Bval</span><span class="p">,</span> <span class="n">alpha2</span><span class="p">,</span> <span class="n">gamma</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">Bprime</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">scalar_input</span> <span class="k">else</span> <span class="n">Bprime</span>
+    <span class="k">return</span> <span class="n">Bprime</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">scalar_input</span> <span class="k">else</span> <span class="n">Bprime</span></div>
+
 </pre></div>
 
            </div>

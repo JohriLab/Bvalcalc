@@ -148,6 +148,23 @@ in which case parameters are sourced from the params file directly.</p></li>
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="Bvalcalc.calculateB_hri">
+<span class="sig-prename descclassname"><span class="pre">Bvalcalc.</span></span><span class="sig-name descname"><span class="pre">calculateB_hri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distant_B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interfering_L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Bvalcalc/core/calculateB.html#calculateB_hri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Bvalcalc.calculateB_hri" title="Link to this definition"></a></dt>
+<dd><p>Calculate B’ (B accounting for Hill-Robertson interference effects) for a non-recombining region containing selected sites.</p>
+<p>This is a diploid implementation of Eq. 12 from Becher and Charlesworth (2025), see the relevant supplement in the B-value calculator manuscript.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>distant_B</strong> (<em>float</em><em> or </em><em>array-like</em>) – The background B value in the HRI region, from less-linked selected sites outside the interference region (i.e. elsewhere on the chromosome, other chromosomes).</p></li>
+<li><p><strong>interfering_L</strong> (<em>float</em><em> or </em><em>array-like</em>) – The cumulative length (bp) of interfering selected sites in the HRI region.</p></li>
+<li><p><strong>params</strong> (<em>dict</em>) – Required parameters from <code class="docutils literal notranslate"><span class="pre">get_params()</span></code>, only kept as default (None) when being called by CLI,
+in which case parameters are sourced from the params file directly.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
@@ -157,10 +174,13 @@ in which case parameters are sourced from the params file directly.</p></li>
 <span class="n">params</span> <span class="o">=</span> <span class="n">get_params</span><span class="p">(</span><span class="s2">&quot;./DrosophilaParams.py&quot;</span><span class="p">)</span>
 
 <span class="n">calculateB_unlinked</span><span class="p">(</span><span class="n">unlinked_L</span> <span class="o">=</span> <span class="mi">200000</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="p">)</span>
-<span class="c1"># 0.9998476570803477</span>
+<span class="c1"># np.float64(0.9996953434292404)</span>
 
 <span class="n">calculateB_linear</span><span class="p">(</span><span class="n">distance_to_element</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span> <span class="n">length_of_element</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="p">)</span>
 <span class="c1"># array(0.98721754)</span>
+
+<span class="n">calculateB_hri</span><span class="p">(</span><span class="n">distant_B</span> <span class="o">=</span> <span class="mf">0.7</span><span class="p">,</span> <span class="n">interfering_L</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="p">)</span>
+<span class="c1"># np.float64(0.22627504209854507)</span>
 </pre></div>
 </div>
 <p>This will import the relevant functions, get the popgen parameters from a relevant params file, see <a class="reference internal" href="../introduction/generate_params.html"><span class="doc">Generate Parameters</span></a>.
@@ -215,6 +235,7 @@ the more complex function <code class="docutils literal notranslate"><span class
 <li><a class="reference internal" href="#Bvalcalc.get_params"><code class="docutils literal notranslate"><span class="pre">get_params()</span></code></a></li>
 <li><a class="reference internal" href="#Bvalcalc.calculateB_linear"><code class="docutils literal notranslate"><span class="pre">calculateB_linear()</span></code></a></li>
 <li><a class="reference internal" href="#Bvalcalc.calculateB_unlinked"><code class="docutils literal notranslate"><span class="pre">calculateB_unlinked()</span></code></a></li>
+<li><a class="reference internal" href="#Bvalcalc.calculateB_hri"><code class="docutils literal notranslate"><span class="pre">calculateB_hri()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#example">Example</a></li>

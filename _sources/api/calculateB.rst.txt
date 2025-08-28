@@ -25,10 +25,13 @@ Example
    params = get_params("./DrosophilaParams.py")
 
    calculateB_unlinked(unlinked_L = 200000, params = params)
-   # 0.9998476570803477
+   # np.float64(0.9996953434292404)
 
    calculateB_linear(distance_to_element = 500, length_of_element = 10000, params = params)
    # array(0.98721754)
+
+   calculateB_hri(distant_B = 0.7, interfering_L = 10000, params = params)
+   # np.float64(0.22627504209854507)
 
 This will import the relevant functions, get the popgen parameters from a relevant params file, see :doc:`Generate Parameters <../introduction/generate_params>`. 
 Then B will be calculated from 200kb of unlinked sites using ``calculateB_unlinked``, and B from a linked selected element of length 10kb, 500bp away is calculated using ``calculateB_linear``.
