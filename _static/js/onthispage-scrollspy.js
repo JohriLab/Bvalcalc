@@ -126,8 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
     extra.className = 'extra-footer-text';
     extra.innerHTML = `
       <p>
-        Citation: Marsh JI, Johri, PJ. The B-value calculator: tractable calculation of expected
-        genetic diversity with background selection. bioRxiv. doi:
+        Citation: Marsh JI, Johri, PJ. The B-value calculator: map expected diversity under background selection. bioRxiv. doi:
           <a href="https://biorxiv" target="_blank" rel="noopener noreferrer">10.1101/2063.10.10.561727</a>
       </p>
       <div>      
