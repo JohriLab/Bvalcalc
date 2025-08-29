@@ -6,16 +6,32 @@ __pycache__/
 # Backup & temporary files
 *.out
 *.log
-*.txt
-!tests/testfiles/*.txt
-*.B
-*.bvals
-*.Params.py
 *.tmp
 *~
-# Ignore all PNGs except in docs/_static/images
+
+# Data files (but allow test files)
+*.B
+*.bvals
+*.bed
+*.csv
+!tests/testfiles/*.csv
+!tests/testfiles/*.txt
+!tests/testfiles/*.map
+
+# Parameter files (user-specific)
+*Params.py
+!Bvalcalc/templates/*.py
+
+# Image files (but allow docs)
 *.png
 !docs/source/_static/images/*.png
+
+# Text files (but allow important ones)
+*.txt
+!README.md
+!LICENSE
+!MANIFEST.in
+!tests/testfiles/*.txt
 
 # Editor/project files
 .vscode/
@@ -49,10 +65,11 @@ docs/_build/
 # Example or local-only data
 exampleData/
 trash/
-
 examples/
 
-*sh
+# Shell scripts (but allow important ones)
+*.sh
+!create_conda_files.sh
 
 # Conda-forge submission checklist (local only)
 CONDA_FORGE_CHECKLIST.md
