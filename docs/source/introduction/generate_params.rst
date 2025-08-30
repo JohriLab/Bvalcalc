@@ -11,7 +11,7 @@ Arguments
 **-\-generate_params [SPECIES]**
     Save a local copy of a population parameter file from a chosen species template in format ``GenSpe_Elementtype_Params.py``.
     
-    Available species: ``selfing``, ``aratha_cds``, ``aratha_phastcons``, ``dromel_cds``, ``dromel_utr``, ``dromel_phastcons``, ``homsap_cds``
+    Available species: ``selfing``, ``aratha_cds``, ``aratha_phastcons``, ``dromel_cds``, ``dromel_utr``, ``dromel_phastcons``, ``homsap_cds``, ``homsap_phastcons``
 
 **-\-dir [path/to/NewParams.py]**
     Optional path to directory to save parameters in (defaults to current directory).

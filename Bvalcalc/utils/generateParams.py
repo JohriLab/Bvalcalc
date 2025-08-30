@@ -6,7 +6,7 @@ SPECIES = [
     'selfing',  # Special case - no element type
     'aratha_cds', 'aratha_phastcons',  # Arabidopsis thaliana
     'dromel_cds', 'dromel_utr', 'dromel_phastcons',  # Drosophila melanogaster
-    'homsap_cds',  # Homo sapiens
+    'homsap_cds', 'homsap_phastcons',  # Homo sapiens
 ]
 
 def check_generate_params_args(argv=None):
@@ -46,6 +46,7 @@ def generateParams(species, folder='.'):
             'dromel_utr': 'DroMel_Utr_Params.py',
             'dromel_phastcons': 'DroMel_Phastcons_Params.py',
             'homsap_cds': 'HomSap_Cds_Params.py',
+            'homsap_phastcons': 'HomSap_Phastcons_Params.py',
         }
         
         if species_lower not in species_mapping:
