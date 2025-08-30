@@ -12,7 +12,7 @@ To learn more about background selection, see :doc:`About BGS and B-values <preb
     Bvalcalc [--generate_params [SPECIES]|--site|--gene|--region|--genome]
 
    --generate_params [SPECIES]
-                         Save population parameters from a species template (human, drosophila, arabidopsis, celegans, mouse, pfalciparum, selfing, dromel_cds, dromel_utr, dromel_phastcons)
+                         Save population parameters from a species template (selfing, dromel_cds, dromel_utr, dromel_phastcons, homsap_cds, homsap_phastcons)
    --site, -s            Calculate B values for a single site from a selected element
    --gene, -g            Calculate B values for a region adjacent to a single selected element
    --region, -r          Calculate B values for a chromosomal region, considering genome-wide effects
