@@ -16,19 +16,13 @@ def sort_chromosomes_naturally(chromosomes):
         if chrom_str.startswith('chr'):
             chrom_str = chrom_str[3:]
         
-        # Handle special chromosomes
-        if chrom_str.upper() in ['X', 'Y', 'M', 'MT']:
-            # Map special chromosomes to high numbers for sorting
-            special_map = {'X': 1000, 'Y': 1001, 'M': 1002, 'MT': 1002}
-            return special_map[chrom_str.upper()]
-        
-        # Extract numeric part
+        # Extract numeric part for natural sorting
         match = re.match(r'^(\d+)', chrom_str)
         if match:
             return int(match.group(1))
         
-        # For any other format, sort alphabetically
-        return 9999
+        # For non-numeric chromosomes, sort alphabetically
+        return chrom_str
     
     return sorted(chromosomes, key=natural_sort_key)
 
