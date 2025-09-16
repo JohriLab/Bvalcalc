@@ -4,12 +4,40 @@ from Bvalcalc.utils.load_chr_sizes import load_chr_sizes
 from Bvalcalc.utils.load_Bmap import load_Bmap
 from Bvalcalc.core.calculateB import calculateB_unlinked
 import numpy as np
+import re
+
+def sort_chromosomes_naturally(chromosomes):
+    """
+    Sort chromosomes in natural order: chr1, chr2, chr3, ..., chr9, chr10, chr11, chrX, chrY, chrM
+    """
+    def natural_sort_key(chrom):
+        # Extract the chromosome name part (remove 'chr' prefix if present)
+        chrom_str = str(chrom)
+        if chrom_str.startswith('chr'):
+            chrom_str = chrom_str[3:]
+        
+        # Handle special chromosomes
+        if chrom_str.upper() in ['X', 'Y', 'M', 'MT']:
+            # Map special chromosomes to high numbers for sorting
+            special_map = {'X': 1000, 'Y': 1001, 'M': 1002, 'MT': 1002}
+            return special_map[chrom_str.upper()]
+        
+        # Extract numeric part
+        match = re.match(r'^(\d+)', chrom_str)
+        if match:
+            return int(match.group(1))
+        
+        # For any other format, sort alphabetically
+        return 9999
+    
+    return sorted(chromosomes, key=natural_sort_key)
 
 def genomeBcalc(args):    
 
     allblockstart, allblockend, allblockchrom = load_bed_gff(args.bedgff) # Read BED/GFF, return start and end of conserved elements
 
     unique_chromosomes = np.unique(allblockchrom) # Move BED/GFF handler here
+    unique_chromosomes = sort_chromosomes_naturally(unique_chromosomes)
     if args.chr_sizes is not None: 
         chr_sizes = load_chr_sizes(args.chr_sizes)  # <-- Path to the sizes CSV file
 
