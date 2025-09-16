@@ -4,7 +4,7 @@ from Bvalcalc.core.helpers.calc_B_precise_noninterfering import calc_B_precise_n
 from Bvalcalc.core.calculateB import calculateB_hri
 
 def calc_B_in_hri_region(quiet, chunk_idx, rec_rate_per_chunk, hri_r_threshold, lperchunk, chunk_size, chr_start, chr_size, num_chunks, gc_rate_per_chunk, precise_chunks, precise_blockstart, precise_blockend, pos_chunk, chunk_end, precise_region_start, precise_region_end, unlinked_B):
-    if quiet: print(f"Chunk {chunk_idx}: r modifier = {rec_rate_per_chunk[chunk_idx]}, which is at or below 0.1 threshold. Calculating B'. HRI calculation is enabled with --hri")
+    if not quiet: print(f"Chunk {chunk_idx}: r modifier = {rec_rate_per_chunk[chunk_idx]}, which is at or below 0.1 threshold. Calculating B'. HRI calculation is enabled with --hri")
     low_rec_chunk_ids = rec_rate_per_chunk < hri_r_threshold
 
     # extend left, then right til there's a chunk with recombination
