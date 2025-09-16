@@ -12,6 +12,11 @@ def load_rec_map(rec_map, calc_start, calc_end, chunk_size, chromosome):
     chromosome (str), start (int), and rate (float). Only rows whose first
     column equals the provided `chromosome` are used; all others are skipped.
     
+    When the recombination map doesn't cover the full chromosome range:
+    - Missing start coverage: Uses the first available rate from the map
+    - Missing end coverage: Uses the last available rate from the map
+    - Warnings are printed when coverage is incomplete
+    
     Parameters:
         rec_map (str): Path to the recombination map file.
         calc_start (int): Starting position of the chromosome.
@@ -43,7 +48,10 @@ def load_rec_map(rec_map, calc_start, calc_end, chunk_size, chromosome):
 
     intervals = []
     if rec_map_data and rec_map_data[0]['start'] > calc_start:
-        intervals.append({'start': calc_start, 'end': rec_map_data[0]['start'], 'rate': 1.0})
+        # Use the first available rate for missing start coverage
+        first_rate = rec_map_data[0]['rate']
+        intervals.append({'start': calc_start, 'end': rec_map_data[0]['start'], 'rate': first_rate})
+        print(f"WARNING: Recombination map for {chromosome} doesn't cover start of chromosome (positions {calc_start}-{rec_map_data[0]['start']-1}). Using first available rate ({first_rate}). Consider extending your map if this affects your analysis.")
     
     for i, entry in enumerate(rec_map_data):
         interval_start = entry['start']
@@ -58,8 +66,13 @@ def load_rec_map(rec_map, calc_start, calc_end, chunk_size, chromosome):
     if intervals:
         last_end = intervals[-1]['end']
         if last_end < calc_end:
-            intervals.append({'start': last_end, 'end': calc_end, 'rate': 1.0})
+            # Use the last available rate for missing end coverage
+            last_rate = intervals[-1]['rate']
+            intervals.append({'start': last_end, 'end': calc_end, 'rate': last_rate})
+            print(f"WARNING: Recombination map for {chromosome} doesn't cover end of chromosome (positions {last_end}-{calc_end}). Using last available rate ({last_rate}). Consider extending your map if this affects your analysis.")
     else:
+        # No recombination data found for this chromosome
+        print(f"WARNING: No recombination map data found for chromosome {chromosome}. Using default rate (1.0) for entire chromosome.")
         intervals.append({'start': calc_start, 'end': calc_end, 'rate': 1.0})
     
     rec_rates = []
