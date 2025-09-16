@@ -25,7 +25,7 @@ def calc_B_in_hri_region(quiet, chunk_idx, rec_rate_per_chunk, hri_r_threshold, 
     
     B_noninterfering_in_precise_region = calc_B_precise_noninterfering(precise_blockstart, precise_blockend, pos_chunk,
                                                                     chr_start, chunk_end, chunk_size, chr_size, precise_region_start, precise_region_end,local_interference_indices, chunk_idx, 
-                                                                    rec_rate_per_chunk, gc_rate_per_chunk)
+                                                                    rec_rate_per_chunk, gc_rate_per_chunk, quiet)
 
     U_lengths_in_low_rec_chunks = lperchunk[low_rec_chunk_ids]
 

@@ -6,7 +6,7 @@ def calc_B_precise_noninterfering(
     precise_blockstart, precise_blockend, pos_chunk,
     chr_start, chunk_end, chunk_size, chr_size, precise_region_start, precise_region_end,
     local_interference_indices, chunk_idx,
-    rec_rate_per_chunk, gc_rate_per_chunk
+    rec_rate_per_chunk, gc_rate_per_chunk, quiet=False
 ):
     """
     Calculate B in the precise region excluding local interference blocks,
@@ -164,7 +164,7 @@ def calc_B_precise_noninterfering(
     aggregated_B = np.ones_like(np.ones_like(np.arange(chunk_start,chunk_end+1), dtype=np.float64), dtype=np.float64)
     np.multiply.at(aggregated_B, inverse_indices, safe_flank_B) # Multiplicative sum of B calculated at a given site from multiple elements
 
-    print(f"Chunk {chunk_idx}: Final B_noninterfering = {aggregated_B}")
+    if not quiet: print(f"Chunk {chunk_idx}: Final B_noninterfering = {aggregated_B}")
     return aggregated_B
 
 ## WON'T WORK FOR UNLINKED B, OR FOR SITES considering B from an interfering region, that aren't themselves in the interfering region
