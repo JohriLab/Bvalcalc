@@ -21,7 +21,7 @@ Recommended Arguments
 ---------------------
 
 **-\-rec_map [path/to/rec_map.csv]**  
-    Optional recombination (crossover) map in CSV format (CHR,START,RATE), where "RATE" is a multiplication factor for ``r`` in the parameters file. Note that recombination rates are averaged over chunks.
+    Optional recombination (crossover) map in CSV format (CHR,START,RATE), where "RATE" is a multiplication factor for ``r`` in the parameters file. Note that recombination rates are averaged over chunks. If a map is missing a rate for the start region the first provided rate will be used.
 
 **-\-gc_map [path/to/gc_map.csv]**  
     Optional gene conversion initiation rate map in CSV format (CHR,START,RATE), where "RATE" is a multiplication factor for ``g`` in the parameters file. Note that the same map can be used for crossover and gene conversion rates, rates are averaged over chunks.
