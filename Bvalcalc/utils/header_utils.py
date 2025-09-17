@@ -39,7 +39,7 @@ def generate_header(info: HeaderInfo) -> List[str]:
         from Bvalcalc import __version__
         lines.append(f"# Bvalcalc v{__version__}")
     except ImportError:
-        lines.append("# Bvalcalc v1.0.0")  # Fallback
+        lines.append("# Bvalcalc v(version not found)")
     
     # Command information
     if info.command:

@@ -32,7 +32,7 @@ def write_chrom_B_to_file(out,
             from Bvalcalc import __version__
             version_str = __version__
         except ImportError:
-            version_str = "1.0.0"  # Fallback
+            version_str = "(version not found)"
         with open(out, 'w') as f:
             f.write(f"# Bvalcalc v{version_str}\n")
             f.write("# Format: Chromosome,Start,B\n")
