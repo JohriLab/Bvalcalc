@@ -77,22 +77,17 @@ def extract_header_info(header_lines: List[str]) -> HeaderInfo:
     for line in header_lines:
         line = line[1:].strip()  # Remove # and strip whitespace
         
-        if line.startswith("Bvalcalc Header Format"):
+        if line.startswith("Bvalcalc "):
             info.file_type = "bvalcalc"
-        elif line.startswith("Generated:"):
-            info.generated = line.split(":", 1)[1].strip()
-        elif line.startswith("Command:"):
-            info.command = line.split(":", 1)[1].strip()
-        elif line.startswith("Mode:"):
-            info.mode = line.split(":", 1)[1].strip()
+        elif line.startswith("--") or (line.startswith("bvalcalc ") and not line.startswith("Bvalcalc ")):
+            # This is a command line (starts with -- or bvalcalc)
+            info.command = f"bvalcalc {line}"
         elif line.startswith("WARNING:"):
             warning = line.split(":", 1)[1].strip()
             info.warnings.append(warning)
-        elif line.startswith("File Type:"):
-            info.file_type = line.split(":", 1)[1].strip()
         elif line.startswith("Description:"):
             info.description = line.split(":", 1)[1].strip()
-        elif line.startswith("Data:"):
+        elif line.startswith("Format:"):
             info.data_format = line.split(":", 1)[1].strip()
         elif line.startswith("Input Files:"):
             in_input_files_section = True
@@ -134,52 +129,28 @@ def generate_header(info: HeaderInfo) -> List[str]:
     lines = []
     
     # File identification
-    lines.append("# Bvalcalc Header Format v1.0")
-    if info.generated:
-        lines.append(f"# Generated: {info.generated}")
-    else:
-        lines.append(f"# Generated: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    
-    if info.file_type:
-        lines.append(f"# File Type: {info.file_type}")
-    
-    if info.description:
-        lines.append(f"# Description: {info.description}")
+    try:
+        from Bvalcalc import __version__
+        lines.append(f"# Bvalcalc v{__version__}")
+    except ImportError:
+        lines.append("# Bvalcalc v1.0.0")  # Fallback
     
     # Command information
     if info.command:
-        lines.append(f"# Command: {info.command}")
-    
-    if info.mode:
-        lines.append(f"# Mode: {info.mode}")
+        # Remove "bvalcalc" from the beginning since it's already in the first line
+        command = info.command
+        if command.startswith("bvalcalc "):
+            command = command[9:]  # Remove "bvalcalc "
+        lines.append(f"# {command}")
     
     # Warnings
     if info.warnings:
-        lines.append("")
         for warning in info.warnings:
             lines.append(f"# WARNING: {warning}")
     
-    # Input files
-    if info.input_files:
-        lines.append("")
-        lines.append("# Input Files:")
-        for file_path, description in info.input_files:
-            lines.append(f"#   - {file_path}: {description}")
-    
-    # Parameters
-    if info.parameters:
-        lines.append("")
-        lines.append("# Parameters:")
-        for param_name, param_value in info.parameters.items():
-            lines.append(f"#   - {param_name}: {param_value}")
-    
     # Data format
     if info.data_format:
-        lines.append("")
-        lines.append(f"# Data: {info.data_format}")
-    
-    # Add empty line before data
-    lines.append("")
+        lines.append(f"# Format: {info.data_format}")
     
     return lines
 

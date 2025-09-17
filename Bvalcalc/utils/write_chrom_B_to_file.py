@@ -28,10 +28,14 @@ def write_chrom_B_to_file(out,
         write_headers_to_file(out, header_lines, 'w')
     elif write_header and not header_info:
         # Write basic header if no header_info provided
+        try:
+            from Bvalcalc import __version__
+            version_str = __version__
+        except ImportError:
+            version_str = "1.0.0"  # Fallback
         with open(out, 'w') as f:
-            f.write("# Bvalcalc Header Format v1.0\n")
-            f.write("# Data: Chromosome,Start,B\n")
-            f.write("\n")
+            f.write(f"# Bvalcalc v{version_str}\n")
+            f.write("# Format: Chromosome,Start,B\n")
 
     # Fast path: no HRI spans or no binsize provided -> write floats directly
     need_mark = (

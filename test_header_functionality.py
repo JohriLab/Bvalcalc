@@ -47,11 +47,9 @@ def test_header_generation():
         print(f"  {line}")
     
     # Verify header format
-    assert header_lines[0] == "# Bvalcalc Header Format v1.0"
-    assert any("File Type: B-map" in line for line in header_lines)
+    assert header_lines[0] == "# Bvalcalc v1.0.0"
     assert any("WARNING: Test warning message" in line for line in header_lines)
-    assert any("test.bed: Test BED file" in line for line in header_lines)
-    assert any("r: 1.2e-8" in line for line in header_lines)
+    assert any("Format: Chromosome,Start,B" in line for line in header_lines)
     
     print("✓ Header generation test passed!")
 
@@ -61,23 +59,10 @@ def test_header_parsing():
     print("\nTesting header parsing...")
     
     # Create a test file with headers
-    test_content = """# Bvalcalc Header Format v1.0
-# Generated: 2024-01-15 14:30:25
-# File Type: BED
-# Description: Test BED file with headers
-# Command: bvalcalc --genome --params test_params.py --bedgff test.bed
-#
+    test_content = """# Bvalcalc v1.0.0
+# --genome --params test_params.py --bedgff test.bed
 # WARNING: This is a test warning
-#
-# Input Files:
-#   - test.bed: Test BED file
-#   - test_params.py: Test parameters
-#
-# Parameters:
-#   - r: 1.2e-8
-#   - g: 1.0e-6
-#
-# Data: Chromosome,Start,End
+# Format: Chromosome,Start,End
 chr2L,1000,2000
 chr2L,3000,4000
 """
@@ -103,11 +88,9 @@ chr2L,3000,4000
         print(f"Parameters: {header_info.parameters}")
         
         # Verify parsed information
-        assert header_info.file_type == "BED"
-        assert header_info.description == "Test BED file with headers"
+        assert header_info.file_type == "bvalcalc"
         assert "This is a test warning" in header_info.warnings
-        assert ("test.bed", "Test BED file") in header_info.input_files
-        assert header_info.parameters["r"] == "1.2e-8"
+        assert header_info.data_format == "Chromosome,Start,End"
         
         print("✓ Header parsing test passed!")
         
@@ -120,11 +103,8 @@ def test_file_parsing_with_headers():
     print("\nTesting file parsing with headers...")
     
     # Test BED file with headers
-    bed_content = """# Bvalcalc Header Format v1.0
-# File Type: BED
-# Description: Test BED file
-#
-# Data: Chromosome,Start,End
+    bed_content = """# Bvalcalc v1.0.0
+# Format: Chromosome,Start,End
 chr2L,1000,2000
 chr2L,3000,4000
 """
@@ -142,7 +122,7 @@ chr2L,3000,4000
         print(f"BED file type: {header_info.file_type}")
         
         assert len(headers) > 0
-        assert header_info.file_type == "BED"
+        assert header_info.file_type == "bvalcalc"
         
         print("✓ BED file parsing with headers test passed!")
         
@@ -150,11 +130,8 @@ chr2L,3000,4000
         os.unlink(bed_file)
     
     # Test CSV file with headers
-    csv_content = """# Bvalcalc Header Format v1.0
-# File Type: CSV
-# Description: Test recombination map
-#
-# Data: Chromosome,Start,Rate
+    csv_content = """# Bvalcalc v1.0.0
+# Format: Chromosome,Start,Rate
 chr2L,1000,1.2e-8
 chr2L,2000,1.5e-8
 """
@@ -172,7 +149,7 @@ chr2L,2000,1.5e-8
         print(f"CSV file type: {header_info.file_type}")
         
         assert len(headers) > 0
-        assert header_info.file_type == "CSV"
+        assert header_info.file_type == "bvalcalc"
         
         print("✓ CSV file parsing with headers test passed!")
         
@@ -186,8 +163,7 @@ def test_warning_handling():
     
     # Create header with warnings
     header_lines = [
-        "# Bvalcalc Header Format v1.0",
-        "# File Type: B-map",
+        "# Bvalcalc v1.0.0",
         "# WARNING: First warning",
         "# WARNING: Second warning"
     ]
