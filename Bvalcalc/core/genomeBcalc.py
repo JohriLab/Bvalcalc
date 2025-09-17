@@ -2,7 +2,6 @@ from Bvalcalc.core.chromBcalc import chromBcalc
 from Bvalcalc.utils.load_bed_gff import load_bed_gff
 from Bvalcalc.utils.load_chr_sizes import load_chr_sizes, get_chr_sizes_header_info
 from Bvalcalc.utils.load_Bmap import load_Bmap
-from Bvalcalc.utils.load_rec_map import get_rec_map_header_info
 from Bvalcalc.utils.write_chrom_B_to_file import write_chrom_B_to_file
 from Bvalcalc.utils.header_utils import create_header_info_from_args, add_warning_to_headers
 from Bvalcalc.core.calculateB import calculateB_unlinked
@@ -54,15 +53,6 @@ def genomeBcalc(args):
         header_info = create_header_info_from_args(args, "B-map", "B-value calculations across genome")
         
         # Add input file headers to the header info
-        
-        if hasattr(args, 'rec_map') and args.rec_map:
-            try:
-                rec_header_info = get_rec_map_header_info(args.rec_map)
-                if rec_header_info.warnings:
-                    header_info.warnings.extend(rec_header_info.warnings)
-            except:
-                pass  # If header parsing fails, continue without it
-        
         if hasattr(args, 'chr_sizes') and args.chr_sizes:
             try:
                 chr_header_info = get_chr_sizes_header_info(args.chr_sizes)

@@ -1,7 +1,6 @@
 import csv
 import numpy as np
 import sys
-from .header_utils import parse_headers, extract_header_info
 
 def load_rec_map(rec_map, calc_start, calc_end, chunk_size, chromosome):
     """
@@ -13,7 +12,7 @@ def load_rec_map(rec_map, calc_start, calc_end, chunk_size, chromosome):
     chromosome (str), start (int), and rate (float). Only rows whose first
     column equals the provided `chromosome` are used; all others are skipped.
     
-    Headers (lines starting with #) are automatically skipped.
+    Lines starting with '#' are treated as comments and automatically skipped.
     
     When the recombination map doesn't cover the full chromosome range:
     - Missing start coverage: Uses the first available rate from the map
@@ -101,31 +100,3 @@ def load_rec_map(rec_map, calc_start, calc_end, chunk_size, chromosome):
         rec_rates.append(weighted_sum / chunk_len if chunk_len > 0 else 1.0)
     
     return np.array(rec_rates)
-
-
-def get_rec_map_headers(rec_map):
-    """
-    Get header lines from a recombination map file.
-    
-    Args:
-        rec_map: Path to the recombination map file
-        
-    Returns:
-        List of header lines (with # prefix)
-    """
-    header_lines, _ = parse_headers(rec_map)
-    return header_lines
-
-
-def get_rec_map_header_info(rec_map):
-    """
-    Get structured header information from a recombination map file.
-    
-    Args:
-        rec_map: Path to the recombination map file
-        
-    Returns:
-        HeaderInfo object with extracted information
-    """
-    header_lines = get_rec_map_headers(rec_map)
-    return extract_header_info(header_lines)
