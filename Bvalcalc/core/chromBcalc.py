@@ -9,7 +9,7 @@ import numpy as np
 import os
 import sys
 
-def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = None, prior_b = None, calc_start=None, calc_end=None, chr_size=None, caller="regionBcalc", header_info=None):    
+def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = None, prior_b = None, calc_start=None, calc_end=None, chr_size=None, caller="regionBcalc", write_header=True):    
     #Shared arguments between genomeBcalc and regionBcalc
     file_path, chunk_size, precise_chunks, hri, quiet, verbose = args.bedgff, args.chunk_size, args.precise_chunks, args.hri, args.quiet, args.verbose
     
@@ -134,7 +134,6 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
             if range_start < range_end:
                 idx_start, idx_end = range_start - calc_start, range_end - calc_start # Convert to array indices
                 b_values[idx_start:idx_end] *= b_val # Multiply by prior B values
-    # print('Hriii', np.shape(b_values))
 
     if hri and rec_rate_per_chunk is not None: # If --hri is active
         from Bvalcalc.core.helpers.extend_hri_regions_correction import extend_hri_regions_correction
@@ -187,12 +186,7 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
     if args.out is not None: # Write to CSVs
         print(f"Writing B output to file...")
         from Bvalcalc.utils.write_chrom_B_to_file import write_chrom_B_to_file
-        # Determine if this is the first chromosome (write header) or subsequent (append)
-        # For genome mode, we need to track which chromosome is first
-        write_header = getattr(args, '_first_chromosome', True)
-        if write_header:
-            args._first_chromosome = False  # Mark that we've written the header
-        write_chrom_B_to_file(args.out, output_data, quiet, hri_extended_starts, hri_extended_ends, args.out_binsize, calc_end, header_info, write_header)
+        write_chrom_B_to_file(args.out, output_data, quiet, hri_extended_starts, hri_extended_ends, args.out_binsize, calc_end, write_header=write_header)
         print(f"Appended B values to: {os.path.abspath(args.out)}")
     else:
         if not args.quiet:

@@ -3,7 +3,7 @@ from Bvalcalc.utils.load_bed_gff import load_bed_gff
 from Bvalcalc.utils.load_chr_sizes import load_chr_sizes
 from Bvalcalc.utils.load_Bmap import load_Bmap
 from Bvalcalc.utils.write_chrom_B_to_file import write_chrom_B_to_file
-from Bvalcalc.utils.header_utils import create_header_info_from_args
+from Bvalcalc.utils.header_utils import create_header_info_from_args, generate_header, write_headers_to_file
 from Bvalcalc.core.calculateB import calculateB_unlinked
 import numpy as np
 import re
@@ -47,13 +47,11 @@ def genomeBcalc(args):
         prior_chromosomes, prior_positions, prior_b_values = load_Bmap(file_path = args.prior_Bmap)
         if not args.quiet: print(f"Using prior B values from {args.prior_Bmap}")
 
-    # Create header information for output file
-    header_info = None
+    # Create and write header once at the start
     if args.out is not None:
-        header_info = create_header_info_from_args(args, "B-map", "B-value calculations across genome")
-
-    # Initialize flag for tracking first chromosome (for header writing)
-    args._first_chromosome = True
+        header_info = create_header_info_from_args(args, "B-map")
+        header_lines = generate_header(header_info)
+        write_headers_to_file(args.out, header_lines, mode='w')
     
     for i in np.arange(0,len(unique_chromosomes)):
 
@@ -73,6 +71,6 @@ def genomeBcalc(args):
 
         if args.chr_sizes is not None: chr_size = chr_sizes.get(chromosome)
         else: chr_size = None
-        chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos, prior_b, calc_start=None, calc_end=None, chr_size=chr_size, caller="genomeBcalc", header_info=header_info)
+        chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos, prior_b, calc_start=None, calc_end=None, chr_size=chr_size, caller="genomeBcalc", write_header=False)
 
     return

@@ -45,8 +45,8 @@ def write_chrom_B_to_file(out,
     )
 
     if not need_mark:
-        # Use append mode if headers were written, otherwise write mode
-        mode = 'a' if write_header else 'w'
+        # Always use append mode (header either written here or by genomeBcalc)
+        mode = 'a'
         with open(out, mode) as f:
             np.savetxt(f, output_data, delimiter=",", fmt="%s,%d,%.6f", comments="")
         return
@@ -84,8 +84,8 @@ def write_chrom_B_to_file(out,
     if not quiet and hri_starts is not None: 
         print(f"B values calculated for HRI regions (B') is indicated with ' at end of line")
 
-    # Use append mode if headers were written, otherwise write mode
-    mode = 'a' if write_header else 'w'
+    # Always use append mode (header either written here or by genomeBcalc)
+    mode = 'a'
     with open(out, mode) as f:
         np.savetxt(f, rows, delimiter=",", fmt="%s,%d,%s", comments="")
 

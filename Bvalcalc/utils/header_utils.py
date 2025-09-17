@@ -43,9 +43,17 @@ def generate_header(info: HeaderInfo) -> List[str]:
     
     # Command information
     if info.command:
-        # Remove "bvalcalc" from the beginning since it's already in the first line
+        # Remove the script path from the beginning since it's already in the first line
         command = info.command
-        if command.startswith("bvalcalc "):
+        # Check for various ways the script might be called
+        if "Bvalcalc/__main__.py" in command:
+            # Extract just the arguments after the script path
+            parts = command.split()
+            if len(parts) > 1:
+                command = " ".join(parts[1:])
+        elif command.startswith("python -m Bvalcalc "):
+            command = command[19:]  # Remove "python -m Bvalcalc "
+        elif command.startswith("bvalcalc "):
             command = command[9:]  # Remove "bvalcalc "
         lines.append(f"# {command}")
     
