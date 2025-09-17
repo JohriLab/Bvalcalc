@@ -57,10 +57,7 @@ def load_rec_map(rec_map, calc_start, calc_end, chunk_size, chromosome):
         # Use the first available rate for missing start coverage
         first_rate = rec_map_data[0]['rate']
         intervals.append({'start': calc_start, 'end': rec_map_data[0]['start'], 'rate': first_rate})
-        # Only warn if gap is >1Mb
-        gap_size = rec_map_data[0]['start'] - calc_start
-        if gap_size > 1000000:
-            print(f"WARNING: Recombination map for {chromosome} doesn't cover start of chromosome (positions {calc_start}-{rec_map_data[0]['start']-1}, gap: {gap_size:,}bp). Using first available rate ({first_rate}). Consider extending your map if this affects your analysis.")
+        print(f"WARNING: Recombination map for {chromosome} doesn't cover start of chromosome (positions {calc_start}-{rec_map_data[0]['start']-1}). Using first available rate ({first_rate}). Consider extending your map if this affects your analysis.")
     
     for i, entry in enumerate(rec_map_data):
         interval_start = entry['start']
