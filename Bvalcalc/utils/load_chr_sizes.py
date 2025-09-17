@@ -8,6 +8,10 @@ def load_chr_sizes(file_path):
         reader = csv.reader(csvfile)
 
         for row in reader:
+            # Skip header lines (starting with #)
+            if row and row[0].startswith('#'):
+                continue
+                
             if len(row) < 2:
                 continue
 

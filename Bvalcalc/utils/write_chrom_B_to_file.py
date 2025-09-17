@@ -1,5 +1,6 @@
 import numpy as np
 import sys
+from .header_utils import generate_header, HeaderInfo, write_headers_to_file
 
 def write_chrom_B_to_file(out,
                           output_data,
@@ -7,7 +8,9 @@ def write_chrom_B_to_file(out,
                           hri_starts=None,
                           hri_ends=None,
                           binsize=None,
-                          calc_end=None):
+                          calc_end=None,
+                          header_info=None,
+                          write_header=True):
     """
     Write Chromosome,Start,B to CSV.
     If hri_starts/hri_ends provided, append ' to B for rows whose bin overlaps any HRI region.
@@ -15,7 +18,24 @@ def write_chrom_B_to_file(out,
     - hri_starts, hri_ends: 1D int arrays of equal length (inclusive coordinates)
     - binsize: int, bin length (last bin truncated)
     - calc_end: int, max coordinate to cap last-bin end (optional but recommended)
+    - header_info: HeaderInfo object with header information (optional)
+    - write_header: Whether to write headers (default True)
     """
+
+    # Write headers if requested
+    if write_header and header_info:
+        header_lines = generate_header(header_info)
+        write_headers_to_file(out, header_lines, 'w')
+    elif write_header and not header_info:
+        # Write basic header if no header_info provided
+        try:
+            from Bvalcalc import __version__
+            version_str = __version__
+        except ImportError:
+            version_str = "(version not found)"
+        with open(out, 'w') as f:
+            f.write(f"# Bvalcalc v{version_str}\n")
+            f.write("# Format: Chromosome,Start,B\n")
 
     # Fast path: no HRI spans or no binsize provided -> write floats directly
     need_mark = (
@@ -25,7 +45,9 @@ def write_chrom_B_to_file(out,
     )
 
     if not need_mark:
-        with open(out, 'a') as f:
+        # Always use append mode (header either written here or by genomeBcalc)
+        mode = 'a'
+        with open(out, mode) as f:
             np.savetxt(f, output_data, delimiter=",", fmt="%s,%d,%.6f", comments="")
         return
 
@@ -62,6 +84,8 @@ def write_chrom_B_to_file(out,
     if not quiet and hri_starts is not None: 
         print(f"B values calculated for HRI regions (B') is indicated with ' at end of line")
 
-    with open(out, 'a') as f:
+    # Always use append mode (header either written here or by genomeBcalc)
+    mode = 'a'
+    with open(out, mode) as f:
         np.savetxt(f, rows, delimiter=",", fmt="%s,%d,%s", comments="")
 
