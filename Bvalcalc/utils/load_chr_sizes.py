@@ -1,5 +1,4 @@
 import csv
-from .header_utils import parse_headers, extract_header_info
 
 def load_chr_sizes(file_path):
     chr_size_dict = {}
@@ -31,31 +30,3 @@ def load_chr_sizes(file_path):
         raise ValueError(f"No valid chromosome size entries found in '{file_path}'. Expecting format: string,int per line.")
 
     return chr_size_dict
-
-
-def get_chr_sizes_headers(file_path):
-    """
-    Get header lines from a chromosome sizes file.
-    
-    Args:
-        file_path: Path to the chromosome sizes file
-        
-    Returns:
-        List of header lines (with # prefix)
-    """
-    header_lines, _ = parse_headers(file_path)
-    return header_lines
-
-
-def get_chr_sizes_header_info(file_path):
-    """
-    Get structured header information from a chromosome sizes file.
-    
-    Args:
-        file_path: Path to the chromosome sizes file
-        
-    Returns:
-        HeaderInfo object with extracted information
-    """
-    header_lines = get_chr_sizes_headers(file_path)
-    return extract_header_info(header_lines)
