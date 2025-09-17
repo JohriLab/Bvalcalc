@@ -2,6 +2,7 @@ import csv
 import os
 import numpy as np
 import re
+from .header_utils import parse_headers, extract_header_info
 
 def load_bed_gff(file_path):
     """
@@ -13,6 +14,8 @@ def load_bed_gff(file_path):
 
     Any lines beginning with '#' or with fewer than the required columns are skipped.
     For duplicate start coordinates, only the longest block is kept.
+    
+    Headers (lines starting with #) are preserved and can be accessed via get_bed_gff_headers().
     """
     # Determine extension and parsing rules
     _, ext = os.path.splitext(file_path)
@@ -92,3 +95,31 @@ def load_bed_gff(file_path):
         return np.array(blockstart), np.array(blockend), np.array(chromosomes)
     else:
         return np.array([]), np.array([]), np.array([])
+
+
+def get_bed_gff_headers(file_path):
+    """
+    Get header lines from a BED, CSV, GFF, GFF3, or GTF file.
+    
+    Args:
+        file_path: Path to the file
+        
+    Returns:
+        List of header lines (with # prefix)
+    """
+    header_lines, _ = parse_headers(file_path)
+    return header_lines
+
+
+def get_bed_gff_header_info(file_path):
+    """
+    Get structured header information from a BED, CSV, GFF, GFF3, or GTF file.
+    
+    Args:
+        file_path: Path to the file
+        
+    Returns:
+        HeaderInfo object with extracted information
+    """
+    header_lines = get_bed_gff_headers(file_path)
+    return extract_header_info(header_lines)

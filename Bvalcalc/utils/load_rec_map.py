@@ -1,16 +1,19 @@
 import csv
 import numpy as np
 import sys
+from .header_utils import parse_headers, extract_header_info
 
 def load_rec_map(rec_map, calc_start, calc_end, chunk_size, chromosome):
     """
-    Processes the recombination map file (no header) and returns
+    Processes the recombination map file and returns
     the average recombination rate per chunk, weighted by the proportion of each 
     chunk that falls within a given recombination interval.
     
-    The file must be headerless, with each row having exactly three columns:
+    The file format is CSV with each row having exactly three columns:
     chromosome (str), start (int), and rate (float). Only rows whose first
     column equals the provided `chromosome` are used; all others are skipped.
+    
+    Headers (lines starting with #) are automatically skipped.
     
     When the recombination map doesn't cover the full chromosome range:
     - Missing start coverage: Uses the first available rate from the map
@@ -31,6 +34,9 @@ def load_rec_map(rec_map, calc_start, calc_end, chunk_size, chromosome):
     with open(rec_map, newline='') as csvfile:
         reader = csv.reader(csvfile)
         for row in reader:
+            # Skip header lines (starting with #)
+            if row and row[0].startswith('#'):
+                continue
             # must have exactly [str, int, float]
             if len(row) != 3:
                 continue
@@ -92,3 +98,31 @@ def load_rec_map(rec_map, calc_start, calc_end, chunk_size, chromosome):
         rec_rates.append(weighted_sum / chunk_len if chunk_len > 0 else 1.0)
     
     return np.array(rec_rates)
+
+
+def get_rec_map_headers(rec_map):
+    """
+    Get header lines from a recombination map file.
+    
+    Args:
+        rec_map: Path to the recombination map file
+        
+    Returns:
+        List of header lines (with # prefix)
+    """
+    header_lines, _ = parse_headers(rec_map)
+    return header_lines
+
+
+def get_rec_map_header_info(rec_map):
+    """
+    Get structured header information from a recombination map file.
+    
+    Args:
+        rec_map: Path to the recombination map file
+        
+    Returns:
+        HeaderInfo object with extracted information
+    """
+    header_lines = get_rec_map_headers(rec_map)
+    return extract_header_info(header_lines)

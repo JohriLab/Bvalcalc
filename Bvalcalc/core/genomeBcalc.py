@@ -1,7 +1,10 @@
 from Bvalcalc.core.chromBcalc import chromBcalc
-from Bvalcalc.utils.load_bed_gff import load_bed_gff
-from Bvalcalc.utils.load_chr_sizes import load_chr_sizes
+from Bvalcalc.utils.load_bed_gff import load_bed_gff, get_bed_gff_header_info
+from Bvalcalc.utils.load_chr_sizes import load_chr_sizes, get_chr_sizes_header_info
 from Bvalcalc.utils.load_Bmap import load_Bmap
+from Bvalcalc.utils.load_rec_map import get_rec_map_header_info
+from Bvalcalc.utils.write_chrom_B_to_file import write_chrom_B_to_file
+from Bvalcalc.utils.header_utils import create_header_info_from_args, add_warning_to_headers
 from Bvalcalc.core.calculateB import calculateB_unlinked
 import numpy as np
 import re
@@ -45,10 +48,39 @@ def genomeBcalc(args):
         prior_chromosomes, prior_positions, prior_b_values = load_Bmap(file_path = args.prior_Bmap)
         if not args.quiet: print(f"Using prior B values from {args.prior_Bmap}")
 
-    if args.out is not None: # Overwrite existing file with header
-        with open(args.out, 'w') as out_f:
-            out_f.write("Chromosome,Start,B\n")
+    # Create header information for output file
+    header_info = None
+    if args.out is not None:
+        header_info = create_header_info_from_args(args, "B-map", "B-value calculations across genome")
+        
+        # Add input file headers to the header info
+        if hasattr(args, 'bedgff') and args.bedgff:
+            try:
+                bed_header_info = get_bed_gff_header_info(args.bedgff)
+                if bed_header_info.warnings:
+                    header_info.warnings.extend(bed_header_info.warnings)
+            except:
+                pass  # If header parsing fails, continue without it
+        
+        if hasattr(args, 'rec_map') and args.rec_map:
+            try:
+                rec_header_info = get_rec_map_header_info(args.rec_map)
+                if rec_header_info.warnings:
+                    header_info.warnings.extend(rec_header_info.warnings)
+            except:
+                pass  # If header parsing fails, continue without it
+        
+        if hasattr(args, 'chr_sizes') and args.chr_sizes:
+            try:
+                chr_header_info = get_chr_sizes_header_info(args.chr_sizes)
+                if chr_header_info.warnings:
+                    header_info.warnings.extend(chr_header_info.warnings)
+            except:
+                pass  # If header parsing fails, continue without it
 
+    # Initialize flag for tracking first chromosome (for header writing)
+    args._first_chromosome = True
+    
     for i in np.arange(0,len(unique_chromosomes)):
 
         mask = allblockchrom == unique_chromosomes[i]
@@ -67,6 +99,6 @@ def genomeBcalc(args):
 
         if args.chr_sizes is not None: chr_size = chr_sizes.get(chromosome)
         else: chr_size = None
-        chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos, prior_b, calc_start=None, calc_end=None, chr_size=chr_size, caller="genomeBcalc")
+        chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos, prior_b, calc_start=None, calc_end=None, chr_size=chr_size, caller="genomeBcalc", header_info=header_info)
 
     return

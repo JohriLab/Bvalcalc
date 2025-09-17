@@ -9,7 +9,7 @@ import numpy as np
 import os
 import sys
 
-def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = None, prior_b = None, calc_start=None, calc_end=None, chr_size=None, caller="regionBcalc"):    
+def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = None, prior_b = None, calc_start=None, calc_end=None, chr_size=None, caller="regionBcalc", header_info=None):    
     #Shared arguments between genomeBcalc and regionBcalc
     file_path, chunk_size, precise_chunks, hri, quiet, verbose = args.bedgff, args.chunk_size, args.precise_chunks, args.hri, args.quiet, args.verbose
     
@@ -187,7 +187,12 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
     if args.out is not None: # Write to CSVs
         print(f"Writing B output to file...")
         from Bvalcalc.utils.write_chrom_B_to_file import write_chrom_B_to_file
-        write_chrom_B_to_file(args.out, output_data, quiet, hri_extended_starts, hri_extended_ends, args.out_binsize, calc_end)
+        # Determine if this is the first chromosome (write header) or subsequent (append)
+        # For genome mode, we need to track which chromosome is first
+        write_header = getattr(args, '_first_chromosome', True)
+        if write_header:
+            args._first_chromosome = False  # Mark that we've written the header
+        write_chrom_B_to_file(args.out, output_data, quiet, hri_extended_starts, hri_extended_ends, args.out_binsize, calc_end, header_info, write_header)
         print(f"Appended B values to: {os.path.abspath(args.out)}")
     else:
         if not args.quiet:
