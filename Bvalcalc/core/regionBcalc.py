@@ -1,6 +1,7 @@
 from Bvalcalc.core.chromBcalc import chromBcalc
 from Bvalcalc.utils.load_bed_gff import load_bed_gff
 from Bvalcalc.utils.load_Bmap import load_Bmap
+from Bvalcalc.utils.header_utils import create_header_info_from_args, generate_header, write_headers_to_file
 from Bvalcalc.core.calculateB import calculateB_unlinked
 import numpy as np
 
@@ -30,10 +31,13 @@ def regionBcalc(args, region):
     else:
         prior_pos, prior_b = None, None
 
-    if args.out is not None: # Overwrite existing file with header
-        with open(args.out, 'w') as out_f:
-            out_f.write("Chromosome,Start,B\n")
-    output_data, block_ranges, rec_rate_per_chunk_in_region, chunk_size = chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos, prior_b, calc_start, calc_end, caller="regionBcalc")
+    # Create and write header once at the start
+    if args.out is not None:
+        header_info = create_header_info_from_args(args, "B-map")
+        header_lines = generate_header(header_info)
+        write_headers_to_file(args.out, header_lines, mode='w')
+    
+    output_data, block_ranges, rec_rate_per_chunk_in_region, chunk_size = chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos, prior_b, calc_start, calc_end, caller="regionBcalc", write_header=False)
 
     return  output_data, block_ranges, rec_rate_per_chunk_in_region, chunk_size
 
