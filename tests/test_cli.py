@@ -255,7 +255,7 @@ def test_cli_genome_hri_marking(tmp_path):
     with open(output_path, "r") as f:
         lines = [ln.strip() for ln in f if ln.strip()]
 
-    assert len(lines) == 2001, f"Expected 2001 lines, found {len(lines)}"
+    assert len(lines) == 2003, f"Expected 2003 lines (3 header + 2000 data), found {len(lines)}"
 
     # Specific rows must be present
     assert "chr_200kb,1,0.340332'" in lines
