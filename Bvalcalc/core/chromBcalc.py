@@ -186,7 +186,7 @@ def chromBcalc(args, blockstart, blockend, chromosome, unlinked_B, prior_pos = N
     if args.out is not None: # Write to CSVs
         print(f"Writing B output to file...")
         from Bvalcalc.utils.write_chrom_B_to_file import write_chrom_B_to_file
-        write_chrom_B_to_file(args.out, output_data, quiet, hri_extended_starts, hri_extended_ends, args.out_binsize, calc_end, write_header=write_header)
+        write_chrom_B_to_file(args.out, output_data, quiet, hri_extended_starts, hri_extended_ends, args.out_binsize, calc_end, write_header=write_header, no_header=getattr(args, 'no_header', False))
         print(f"Appended B values to: {os.path.abspath(args.out)}")
     else:
         if not args.quiet:

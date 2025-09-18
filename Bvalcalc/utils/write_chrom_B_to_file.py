@@ -10,7 +10,8 @@ def write_chrom_B_to_file(out,
                           binsize=None,
                           calc_end=None,
                           header_info=None,
-                          write_header=True):
+                          write_header=True,
+                          no_header=False):
     """
     Write Chromosome,Start,B to CSV.
     If hri_starts/hri_ends provided, append ' to B for rows whose bin overlaps any HRI region.
@@ -20,13 +21,14 @@ def write_chrom_B_to_file(out,
     - calc_end: int, max coordinate to cap last-bin end (optional but recommended)
     - header_info: HeaderInfo object with header information (optional)
     - write_header: Whether to write headers (default True)
+    - no_header: If True, skip writing comment headers (version, command, etc.)
     """
 
-    # Write headers if requested
-    if write_header and header_info:
+    # Write headers if requested and not disabled
+    if write_header and not no_header and header_info:
         header_lines = generate_header(header_info)
         write_headers_to_file(out, header_lines, 'w')
-    elif write_header and not header_info:
+    elif write_header and not no_header and not header_info:
         # Write basic header if no header_info provided
         try:
             from Bvalcalc import __version__
