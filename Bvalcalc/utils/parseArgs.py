@@ -71,6 +71,7 @@ def parseRegionArgs(argv=None):
     parser.add_argument('--out_binsize', type=int, default=None, help="Size of bins to write average B in. By default B is saved per-base")
     parser.add_argument('--verbose', action='store_true', help="If set, will give per-chunk summaries")
     parser.add_argument('--quiet', action='store_true', help="If set, silence print statements.")
+    parser.add_argument('--no_header', action='store_true', help="If set, skip writing comment headers to output file (version, command, etc.)")
     
     raw = argv if argv is not None else sys.argv[1:]
     args = parser.parse_args(argv)
@@ -115,6 +116,7 @@ def parseGenomeArgs(argv=None):
     parser.add_argument('--out_binsize', type=int, default=None, help="Size of bins to write average B in. By default B is saved per-base")
     parser.add_argument('--verbose', action='store_true', help="If set, will give per-chunk summaries")
     parser.add_argument('--quiet', action='store_true', help="If set, silence print statements.")
+    parser.add_argument('--no_header', action='store_true', help="If set, skip writing comment headers to output file (version, command, etc.)")
 
     raw = argv if argv is not None else sys.argv[1:]
     args = parser.parse_args(argv)

@@ -48,7 +48,7 @@ def genomeBcalc(args):
         if not args.quiet: print(f"Using prior B values from {args.prior_Bmap}")
 
     # Create and write header once at the start
-    if args.out is not None:
+    if args.out is not None and not getattr(args, 'no_header', False):
         header_info = create_header_info_from_args(args, "B-map")
         header_lines = generate_header(header_info)
         write_headers_to_file(args.out, header_lines, mode='w')
