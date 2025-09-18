@@ -7,7 +7,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Calculate Region B-map &mdash; Bvalcalc 1.0.0 documentation</title>
+  <title>Calculate Region B-map &mdash; Bvalcalc 1.2.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=7b5bf6d2" />
@@ -15,7 +15,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../_static/documentation_options.js?v=6efca38a"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../_static/js/onthispage-scrollspy.js?v=f39ba9e5"></script>
@@ -158,6 +158,8 @@ Note that <code class="docutils literal notranslate"><span class="pre">s</span><
 <dt><strong>--chunk_size [int]</strong></dt><dd><p>Size of chunks to process in each B calculation (default: <code class="docutils literal notranslate"><span class="pre">20000</span></code>). It may be useful to increase this in large chromosomes with sparse selection for tractability, though consider how this may affect analysis in conjunction with the number of <cite>precise_chunks</cite>.</p>
 </dd>
 <dt><strong>--precise_chunks [int]</strong></dt><dd><p>Number of chunks on either side of a focal chunk to calculate precisely (default: <code class="docutils literal notranslate"><span class="pre">3</span></code>). Increasing this beyond the default will lead to more precise results though reduces tractability, consider how this may affect analysis in conjunction with the <cite>chunk_size</cite>.</p>
+</dd>
+<dt><strong>--no_header</strong></dt><dd><p>Suppress comment headers in the B-map output file. Data rows start immediately (CHR,START,B).</p>
 </dd>
 <dt><strong>--verbose</strong></dt><dd><p>Print per-chunk processing summaries (default: <cite>False</cite>)</p>
 </dd>

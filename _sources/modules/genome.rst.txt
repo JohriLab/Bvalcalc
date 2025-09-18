@@ -61,6 +61,9 @@ Optional Arguments
 **-\-precise_chunks [int]**  
     Number of chunks on either side of a focal chunk to calculate precisely (default: ``3``). Increasing this beyond the default will lead to more precise results though reduces tractability, consider how this may affect analysis in conjunction with the ``chunk_size``.
 
+**-\-no_header**  
+    Suppress comment headers in the B-map output file. Data rows start immediately (CHR,START,B).
+
 **-\-verbose**  
     Print per-chunk processing summaries (default: `False`)
 
