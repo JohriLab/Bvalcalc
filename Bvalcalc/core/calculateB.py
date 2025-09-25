@@ -153,6 +153,7 @@ def calculateB_unlinked(unlinked_L: int, params: dict | None = None):
     if t_constant: #If --constant_dfe is active    
 
         unlinked_B  = np.exp(-8 * u * 1.0 * unlinked_L * (t_constant/(1 + t_constant)**2))
+        # unlinked_B  = np.exp(-8 * u * 1.0 * unlinked_L * t_constant) ## THIS IS EQ. XX APPROXIMATION IN THE MANUSCRIPT
         return unlinked_B    
 
     f1_above_cutoff = f1 * ((t1half - t1) / (t2 - t1))

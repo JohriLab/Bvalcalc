@@ -28,3 +28,4 @@ f3 = 1 #(*Proportion of strongly deleterious mutations with |2Nes| >= 100 *) 0.2
 gamma_cutoff = 5 # 2Ns threshold for effectively neutral alleles, mutations below this threshold will be ignored in B calculation. Keep as 5 unless theory suggests otherwise.
 h=0.5 # Dominance coefficient of selected alleles
 mean, shape, proportion_synonymous = 500, 0.5, 0.3 # Gamma distribution of DFE to discretize and replace f0-f3 [mean (2Ns), shape] (!Requires --gamma_dfe)
+s, proportion_synonymous = 0.1 , 0
