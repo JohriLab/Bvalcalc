@@ -266,6 +266,7 @@
     <span class="k">if</span> <span class="n">t_constant</span><span class="p">:</span> <span class="c1">#If --constant_dfe is active    </span>
 
         <span class="n">unlinked_B</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">8</span> <span class="o">*</span> <span class="n">u</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="n">unlinked_L</span> <span class="o">*</span> <span class="p">(</span><span class="n">t_constant</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">t_constant</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+        <span class="c1"># unlinked_B  = np.exp(-8 * u * 1.0 * unlinked_L * t_constant) ## THIS IS EQ. XX APPROXIMATION IN THE MANUSCRIPT</span>
         <span class="k">return</span> <span class="n">unlinked_B</span>    
 
     <span class="n">f1_above_cutoff</span> <span class="o">=</span> <span class="n">f1</span> <span class="o">*</span> <span class="p">((</span><span class="n">t1half</span> <span class="o">-</span> <span class="n">t1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">t2</span> <span class="o">-</span> <span class="n">t1</span><span class="p">))</span>
