@@ -1,0 +1,161 @@
+---
+title: "FigureB"
+output: html_document
+date: "2025-09-23"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(patchwork)
+```
+
+## Get Data
+
+```{r data, echo=FALSE}
+a_obs_dat <- read_csv("/Users/jmarsh96/Desktop/Bcalc/Figures/data/all_mean.pi") %>% mutate(B_mean = pi_mean / 0.012) %>% mutate(Distance = start - 9950) %>% select(Distance, B_mean)
+b_obs_dat <- read_csv("/Users/jmarsh96/Desktop/Bcalc/Figures/data/40kb_gc_all_mean.pi")  %>% mutate(B_mean = pi_mean / 0.012) %>% mutate(Distance = start - 9950) %>% select(Distance, B_mean)
+c_obs_dat <- read_csv("/Users/jmarsh96/Desktop/Bcalc/Figures/data/40kb_f0.9_h0.5_all_mean.pi") %>% mutate(B_mean = pi_mean / 0.00631579) %>% mutate(Distance = start - 9950) %>% select(Distance, B_mean) # Needs / 0.00631579 instead of / 0.012
+d_obs_dat <- read_csv("/Users/jmarsh96/Desktop/Bcalc/Figures/data/OBS_Expand_5N_1T.csv") %>% mutate(pi_mean=pi) %>% select(start,pi_mean)  %>% mutate(B_mean = pi_mean / 0.012) %>% mutate(Distance = start - 9950) %>% select(Distance, B_mean)
+
+b_unc_dat <- read_csv("/Users/jmarsh96/Desktop/Bcalc/Figures/data/nogcBasicParams.B")
+c_unc_dat <- read_csv("/Users/jmarsh96/Desktop/Bcalc/Figures/data/nogcBasicParams.B")
+d_unc_dat <- read_csv("/Users/jmarsh96/Desktop/Bcalc/Figures/data/nogcBasicParams.B")
+
+a_calc_dat <- read_csv("/Users/jmarsh96/Desktop/Bcalc/Figures/data/nogcBasicParams.B")
+b_calc_dat <- read_csv("/Users/jmarsh96/Desktop/Bcalc/Figures/data/gcBasicParams.B")
+c_calc_dat <- read_csv("/Users/jmarsh96/Desktop/Bcalc/Figures/data/SelfParams_0.9S_0.5h.B")
+d_calc_dat <- read_csv("/Users/jmarsh96/Desktop/Bcalc/Figures/data/ExpandParams_5N_1T.B")
+```
+
+## Generate Figure
+
+```{r Figure}
+
+b_obs_dat
+b_unc_dat
+b_calc_dat
+
+figa <- ggplot() +
+  # model (uncorrected / baseline) as a soft gray line (optional)
+  geom_line(data = a_unc_dat, aes(Distance, B), color = "grey30", linewidth = 1.6) +
+  
+  # model (your calc) as the primary blue line
+  geom_line(data = a_calc_dat, aes(Distance, B), color = "blue", linewidth = 1.6) +
+  
+  # observations as points
+  geom_point(data = a_obs_dat, aes(Distance, B_mean),
+             color = "darkorange", size = 1.8, alpha = 0.7) +
+
+  theme_classic(base_size = 13) +
+  theme(
+    axis.line = element_line(color = "black"),
+    axis.ticks = element_line(color = "black")
+  ) +
+  scale_x_continuous(
+  limits = c(0, 20200),
+  breaks  = seq(0, 20000, by = 10000),
+  expand  = c(0, 0)) +
+  scale_y_continuous(
+  limits = c(0.8,1),
+  breaks  = seq(0.8, 1, by = 0.05),
+  expand = c(0.01, 0)) +
+  ylab("B") +
+  theme(axis.title.x = element_blank()) +
+  theme(axis.title.y = element_text(angle = 0, vjust = 0.5))
+  #xlab("Distance from 10 kb conserved element (bp)")
+
+figb <- ggplot() +
+  # model (uncorrected / baseline) as a soft gray line (optional)
+  geom_line(data = b_unc_dat, aes(Distance, B), color = "grey30", linewidth = 1.6) +
+  
+  # model (your calc) as the primary blue line
+  geom_line(data = b_calc_dat, aes(Distance, B), color = "blue", linewidth = 1.6) +
+  
+  # observations as points
+  geom_point(data = b_obs_dat, aes(Distance, B_mean),
+             color = "darkorange", size = 1.8, alpha = 0.7) +
+
+  theme_classic(base_size = 13) +
+  theme(
+    axis.line = element_line(color = "black"),
+    axis.ticks = element_line(color = "black")
+  ) +
+  scale_x_continuous(
+  limits = c(0, 20200),
+  breaks  = seq(0, 20000, by = 10000),
+  expand  = c(0, 0)) +
+  scale_y_continuous(
+  limits = c(0.8,1),
+  breaks  = seq(0.8, 1, by = 0.05),
+  expand = c(0.01, 0)) +
+  ylab("B") +
+  theme(axis.title.x = element_blank()) +
+  theme(axis.title.y = element_text(angle = 0, vjust = 0.5))
+  #xlab("Distance from 10 kb conserved element (bp)")
+
+figd <- ggplot() +
+  # model (uncorrected / baseline) as a soft gray line (optional)
+  geom_line(data = d_unc_dat, aes(Distance, B), color = "grey30", linewidth = 1.6) +
+  
+  # model (your calc) as the primary blue line
+  geom_line(data = d_calc_dat, aes(Distance, B), color = "blue", linewidth = 1.6) +
+  
+  # observations as points
+  geom_point(data = d_obs_dat, aes(Distance, B_mean),
+             color = "darkorange", size = 1.8, alpha = 0.7) +
+
+  theme_classic(base_size = 13) +
+  theme(
+    axis.line = element_line(color = "black"),
+    axis.ticks = element_line(color = "black")
+  ) +
+  scale_x_continuous(
+  limits = c(0, 20200),
+  breaks  = seq(0, 20000, by = 10000),
+  expand  = c(0, 0)) +
+  scale_y_continuous(
+  limits = c(0.8,1),
+  breaks  = seq(0.8, 1, by = 0.05),
+  expand = c(0.01, 0)) +
+  ylab("B") +
+  xlab("Distance from 10 kb conserved element (bp)") +
+  theme(axis.title.y = element_text(angle = 0, vjust = 0.5))
+
+figc <- ggplot() +
+  # model (uncorrected / baseline) as a soft gray line (optional)
+  geom_line(data = c_unc_dat, aes(Distance, B), color = "grey30", linewidth = 1.6) +
+  
+  # model (your calc) as the primary blue line
+  geom_line(data = c_calc_dat, aes(Distance, B), color = "blue", linewidth = 1.6) +
+  
+  # observations as points
+  geom_point(data = c_obs_dat, aes(Distance, B_mean),
+             color = "darkorange", size = 1.8, alpha = 0.6) +
+
+  theme_classic(base_size = 13) +
+  theme(
+    axis.line = element_line(color = "black"),
+    axis.ticks = element_line(color = "black")
+  ) +
+  scale_x_continuous(
+  limits = c(0, 40200),
+  breaks  = seq(0, 40000, by = 10000),
+  expand  = c(0, 0)) +
+  scale_y_continuous(
+  limits = c(0.55,1),
+  breaks  = seq(0.6, 1, by = 0.1),
+  expand = c(0.01, 0)) +
+  ylab("B") +
+  xlab("Distance from 10 kb conserved element (bp)") +
+  theme(axis.title.y = element_text(angle = 0, vjust = 0.5))
+
+
+allfigB <- figa +
+figb +
+figd +
+figc
+
+ggsave("allfigB2.pdf", allfigB, device = "pdf", dpi = 600, height = 6 * (5.2/8), width = 5.2, units = "in")
+```
+
