@@ -14,9 +14,6 @@ k = 113 # Gene conversion tract length (bp) [3]
 f0 = 0.58 # Proportion of effectively neutral mutations with 0 <= |2Ns| < 1 (Note that 2Ns<5 does not contribute to BGS) [5]
 f1 = 0.17 # Proportion of weakly deleterious mutations with 1 <= |2Ns| < 10 [5]
 f2 = 0.19 # Proportion of moderately deleterious mutations with 10 <= |2Ns| < 100 [5]
-f0 = 0.58 # Proportion of effectively neutral mutations with 0 <= |2Ns| < 1 (Note that 2Ns<5 does not contribute to BGS) [5]
-f1 = 0.17 # Proportion of weakly deleterious mutations with 1 <= |2Ns| < 10 [5]
-f2 = 0.19 # Proportion of moderately deleterious mutations with 10 <= |2Ns| < 100 [5]
 f3 = 0.06 # Proportion of strongly deleterious mutations with |2Ns| >= 100 [5]
 ## Demography parameters
 Ncur = 14474 # Current population size (!Requires --pop_change) [1]
@@ -29,5 +26,4 @@ mean, shape, proportion_synonymous = 16, 0.1165, 0 # Gamma distribution of DFE t
 # [2] Kong et al 2012 doi: 10.1038/nature11396
 # [3] Palsson 2025 doi: 10.1038/s41586-024-08450-5
 # [4] Huber et al 2017 doi: 10.1073/pnas.1619508114
-# [5] Di et al 2025 doi: 10.1101/2025.05.14.654124
 # [5] Di et al 2025 doi: 10.1101/2025.05.14.654124
