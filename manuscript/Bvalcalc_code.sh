@@ -41,18 +41,19 @@ Bvalcalc --region chr_neutral:1-1 --params tests/testparams/UnlinkedParams.py --
 Bvalcalc --region chr_neutral:1-1 --params tests/testparams/UnlinkedParams.py --bedgff tests/testfiles/200kb_unlinked.csv --constant_dfe
 ##
 
-## Table SA.1
+## Table SA.1 B' with constant DFE
 # Note that this was done using the Python REPL to access the API functions
+# Note that I dynamically changed the HriParams.py DFE and re-ran the following command for each condition
 from Bvalcalc import get_params, calculateB_unlinked, calculateB_linear, calculateB_hri
-params = get_params("tests/testparams/InterfParams.py", constant_dfe = True)
+params = get_params("tests/testparams/HriParams.py", constant_dfe = True)
 calculateB_linear(distance_to_element = 0, length_of_element = 10000, params = params)
 calculateB_hri(distant_B = 1, interfering_L = 10000, params = params)
 ##
 
-## Table SA.2
+## Table SA.2 B' with variable DFE
 # Note that this was done using the Python REPL to access the API functions
 from Bvalcalc import get_params, calculateB_unlinked, calculateB_linear, calculateB_hri
-params = get_params("tests/testparams/nogcBasicParams.py")
-calculateB_linear(distance_to_element = 500, length_of_element = 10000, params = params)
+params = get_params("tests/testparams/HriParams.py")
+calculateB_linear(distance_to_element = 0, length_of_element = 10000, params = params)
 calculateB_hri(distant_B = 1, interfering_L = 10000, params = params)
 ##

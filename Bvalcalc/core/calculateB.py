@@ -297,7 +297,7 @@ def calculateB_hri(distant_B, interfering_L, params: dict | None = None):
     if params is None:
         params = get_params()
 
-    Nanc, u, f1, f2 = params["Nanc"], params["u"], params["f1"], params["f2"]
+    Nanc, u, f1, f2, t_constant = params["Nanc"], params["u"], params["f1"], params["f2"], params["t_constant"]
 
     distant_B = np.atleast_1d(distant_B).astype(float)
     interfering_L = np.atleast_1d(interfering_L).astype(float)
@@ -321,6 +321,10 @@ def calculateB_hri(distant_B, interfering_L, params: dict | None = None):
     t_sq1 = (h**2 * E_X2_f1) / (4 * N0**2)
     t_sq2 = (h**2 * E_X2_f2) / (4 * N0**2)
     t = np.sqrt((u1 * t_sq1 + u2 * t_sq2) / u_total)
+
+    if t_constant:
+        t = t_constant
+        u_total = u
 
     gamma = 2 * N0 * t
     U = u_total * interfering_L
