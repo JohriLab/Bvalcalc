@@ -35,3 +35,4 @@ t3 = h*(100/(2*Nanc))
 t4 = h*1.0
 
 mean, shape, proportion_synonymous = 500, 0.5, 0.3 # Gamma distribution of DFE to discretize and replace f0-f3 [mean (2Ns), shape] (!Requires --gamma_dfe)
+s, proportion_synonymous = 0.1 , 0.3 # Constant DFE to replace f0-f3 [s, proportion_synonymous] (!Requires --constant_dfe)
