@@ -67,8 +67,5 @@ exampleData/
 trash/
 examples/
 
-# Shell scripts
-*.sh
-
 # Conda-forge submission checklist (local only)
 CONDA_FORGE_CHECKLIST.md
