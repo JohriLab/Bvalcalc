@@ -184,4 +184,64 @@ class TestApiIntegration:
         # Test calculateB_hri
         result3a = calculateB_hri(distant_B=0.95, interfering_L=50000, params=params)
         result3b = calculateB_hri(distant_B=0.95, interfering_L=50000, params=params)
-        assert np.allclose(result3a, result3b), "calculateB_hri should give consistent results" 
+        assert np.allclose(result3a, result3b), "calculateB_hri should give consistent results"
+
+
+class TestExtendedOutput:
+    """Test suite for extended output functionality from manuscript Table 1 and SA.1/SA.2."""
+    
+    def test_unlinked_constant_dfe(self):
+        """Test calculateB_unlinked with constant DFE (Table 1 scenario)."""
+        # Load UnlinkedParams with constant DFE
+        params = get_params(str(Path(__file__).parent / "testparams" / "UnlinkedParams.py"), constant_dfe=True)
+        
+        # Test with the scenario from Table 1
+        result = calculateB_unlinked(unlinked_L=200000, params=params)
+        
+        # Verify the exact expected value from manuscript
+        expected = 0.9166085033148563
+        assert np.allclose(result, expected, rtol=1e-10), f"Expected {expected}, got {result}"
+    
+    def test_unlinked_variable_dfe(self):
+        """Test calculateB_unlinked with variable DFE (Table 1 scenario)."""
+        # Load UnlinkedParams with variable DFE
+        params = get_params(str(Path(__file__).parent / "testparams" / "UnlinkedParams.py"), constant_dfe=False)
+        
+        # Test with the scenario from Table 1
+        result = calculateB_unlinked(unlinked_L=200000, params=params)
+        
+        # Verify the exact expected value from manuscript
+        expected = 0.7570197890708311
+        assert np.allclose(result, expected, rtol=1e-10), f"Expected {expected}, got {result}"
+    
+    def test_hri_constant_dfe(self):
+        """Test calculateB_hri with constant DFE (Table SA.1 scenario)."""
+        # Load HriParams with constant DFE
+        params = get_params(str(Path(__file__).parent / "testparams" / "HriParams.py"), constant_dfe=True)
+        
+        # Test with the scenario from Table SA.1
+        result_linear = calculateB_linear(distance_to_element=0, length_of_element=10000, params=params)
+        result_hri = calculateB_hri(distant_B=1.0, interfering_L=10000, params=params)
+        
+        # Verify the exact expected values from manuscript
+        expected_linear = 0.4723665527410146
+        expected_hri = 0.4793601357930167
+        
+        assert np.allclose(result_linear, expected_linear, rtol=1e-10), f"Expected linear {expected_linear}, got {result_linear}"
+        assert np.allclose(result_hri, expected_hri, rtol=1e-10), f"Expected hri {expected_hri}, got {result_hri}"
+    
+    def test_hri_variable_dfe(self):
+        """Test calculateB_hri with variable DFE (Table SA.2 scenario)."""
+        # Load HriParams with variable DFE
+        params = get_params(str(Path(__file__).parent / "testparams" / "HriParams.py"), constant_dfe=False)
+        
+        # Test with the scenario from Table SA.2
+        result_linear = calculateB_linear(distance_to_element=0, length_of_element=10000, params=params)
+        result_hri = calculateB_hri(distant_B=1.0, interfering_L=10000, params=params)
+        
+        # Verify the exact expected values from manuscript
+        expected_linear = 0.06190177776976752
+        expected_hri = 0.310727648509544
+        
+        assert np.allclose(result_linear, expected_linear, rtol=1e-10), f"Expected linear {expected_linear}, got {result_linear}"
+        assert np.allclose(result_hri, expected_hri, rtol=1e-10), f"Expected hri {expected_hri}, got {result_hri}" 
