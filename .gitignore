@@ -19,7 +19,6 @@ __pycache__/
 !tests/testfiles/*.map
 
 # Parameter files (user-specific)
-*Params.py
 !Bvalcalc/templates/*.py
 
 # Image files (but allow docs)
