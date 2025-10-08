@@ -61,3 +61,33 @@ params = get_params("tests/testparams/HriParams.py")
 calculateB_linear(distance_to_element = 0, length_of_element = 10000, params = params)
 calculateB_hri(distant_B = 1, interfering_L = 10000, params = params)
 ##
+
+## Bmap code
+# See the manuscript for how the bedgffs and recmaps were sourced
+# HomSap
+Bvalcalc --genome --params ./HomSap_Cds_Params.py --bedgff ../bedgffs/HomSap_cds.bed --rec_map ../recmaps/HomSap_recmap.csv --gc_map ../recmaps/HomSap_gcmap.csv --pop_change --out ./homsap_cds_bmap.csv --out_binsize 1000 --verbose  --chr_sizes ./chromsizes.txt
+Bvalcalc --genome --params ./HomSap_Phastcons_Params.py --bedgff ../bedgffs/HomSap_phastcons.bed --rec_map ../recmaps/HomSap_recmap.csv --gc_map ../recmaps/HomSap_gcmap.csv --pop_change --prior_Bmap ./homsap_cds_bmap.csv --out ./homsap_cdsphastcons_bmap.csv --out_binsize 1000 --verbose --chr_sizes ./chromsizes.txt
+#
+# DroMel
+Bvalcalc --genome --gamma_dfe \
+    --pop_params DroMel_Cds_Params.py \
+    --bedgff_path ../bedgffs/DroMel_cds.bed \
+    --out dromel_cds_bmap.csv \
+    --out_binsize 1000 --rec_map ../recmaps/DroMel_recmap.csv
+Bvalcalc --genome --gamma_dfe \
+    --pop_params DroMel_Phastcons_Params.py \
+    --bedgff_path ../bedgffs/DroMel_phastcons.bed \
+    --prior_Bmap dromel_cds_bmap.csv \
+    --out bmaps/highmutrate/phastcons_CDS_B.csv \
+    --out_binsize 1000 --rec_map ../recmaps/DroMel_recmap.csv
+Bvalcalc --genome --gamma_dfe \
+    --pop_params DroMel_Utr_Params.py \
+    --bedgff_path ../bedgffs/DroMel_utr.bed \
+    --prior_Bmap dromel_cds_phastcons_bmap.csv \
+    --out dromel_cds_phastcons_utr_bmap.csv \
+    --out_binsize 1000 --rec_map ../recmaps/DroMel_recmap.csv
+#
+# AraTha
+Bvalcalc --genome --params ./AraTha_Cds_Params.py --bedgff ../bedgffs/AraTha_cds.gff3 --rec_map ../recmaps/AraTha_recmap.csv --pop_change --out ./aratha_cds_bmap.csv --out_binsize 1000 --verbose
+#
+/proj/johrilab/projects/Bmaps/dromel
