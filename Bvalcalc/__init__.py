@@ -2,7 +2,7 @@
 bvalcalc: calculate relative diversity (B) under background selection.
 """
 
-__version__ = "1.2.0"
+__version__ = "1.3.0"
 
 # Expose main entry point
 from .cli import main
