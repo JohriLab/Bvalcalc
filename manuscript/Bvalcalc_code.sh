@@ -1,5 +1,6 @@
-## All results are using Bvalcalc v1.0.0
+## All results are using Bvalcalc v1.0.0 CLI and Python API
 ## We have these results as unit and end to end tests so compatibility should be maintained going forward
+## Executed from root directory of Bvalcalc repository
 
 ## Figure 2
 # 2a Basic model
@@ -42,8 +43,9 @@ Bvalcalc --region chr_neutral:1-1 --params tests/testparams/UnlinkedParams.py --
 ##
 
 ## Table SA.1 B' with constant DFE
-# Note that this was done using the Python REPL to access the API functions
+# This was done using the Python REPL to access the API functions
 # Note that I dynamically changed the HriParams.py DFE and re-ran the following command for each condition
+# Currently need to flush the cache each time to get the correct results
 from Bvalcalc import get_params, calculateB_unlinked, calculateB_linear, calculateB_hri
 params = get_params("tests/testparams/HriParams.py", constant_dfe = True)
 calculateB_linear(distance_to_element = 0, length_of_element = 10000, params = params)
@@ -51,7 +53,9 @@ calculateB_hri(distant_B = 1, interfering_L = 10000, params = params)
 ##
 
 ## Table SA.2 B' with variable DFE
-# Note that this was done using the Python REPL to access the API functions
+# This was done using the Python REPL to access the API functions
+# Note that I dynamically changed the HriParams.py DFE and re-ran the following command for each condition
+# Currently need to flush the cache each time to get the correct results
 from Bvalcalc import get_params, calculateB_unlinked, calculateB_linear, calculateB_hri
 params = get_params("tests/testparams/HriParams.py")
 calculateB_linear(distance_to_element = 0, length_of_element = 10000, params = params)
