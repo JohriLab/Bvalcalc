@@ -2,5 +2,5 @@
 
 See documentation for details: https://JohriLab.github.io/Bvalcalc/
 
-Jacob Marsh and Parul Johri
+Jacob Marsh, Austin Daigle, Parul Johri
 UNC Chapel Hill, NC
