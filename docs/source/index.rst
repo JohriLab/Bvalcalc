@@ -5,7 +5,7 @@ Welcome to the documentation for **Bvalcalc**, a CLI tool for easily calculating
 
 Background selection (BGS) is the process by which diversity is reduced at neutral sites linked to conserved regions such as exons that experience direct purifying selection, and across the genome. **Bvalcalc** allows users to easily calculate the relative reduction of diversity due to BGS (B) using several different modes. Calculating B-values is important for understanding the linked effects of selection, can be used to establish an evolutionary null model for inference, and can aid in selecting the most neutrally evolving sites, see :doc:`Demographic Inference with B-map <guides/demography>`. 
 
-To learn more about background selection, see :doc:`About BGS and B-values <prebuilt_maps/learn>`. To access pre-built B-maps for select species, see :doc:`Query Species B-maps <prebuilt_maps/query>`. To calculate B-values for yourself, install **Bvalcalc** and explore the docs, we recommend getting started with the :doc:`Quickstart Tutorial <guides/quickstart>`.
+To learn more about background selection, see :doc:`About BGS and B-values <prebuilt_maps/learn>`. To access pre-built B-maps for select species, see :doc:`Download B-maps <prebuilt_maps/bmaps>`. To calculate B-values for yourself, install **Bvalcalc** and explore the docs, we recommend getting started with the :doc:`Quickstart Tutorial <guides/quickstart>`.
 
 .. code-block:: console
 
@@ -68,7 +68,7 @@ B-values at 1 Mb of sites under BGS from coding sequences in D. melanogaster, ca
 
 .. toctree::
    :hidden:
-   :caption: Query species B-maps
+   :caption: Download B-value maps
    :maxdepth: 1
 
-   prebuilt_maps/query
+   prebuilt_maps/bmaps
