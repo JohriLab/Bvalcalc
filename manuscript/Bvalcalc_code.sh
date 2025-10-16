@@ -90,4 +90,3 @@ Bvalcalc --genome --gamma_dfe \
 # AraTha
 Bvalcalc --genome --params ./AraTha_Cds_Params.py --bedgff ../bedgffs/AraTha_cds.gff3 --rec_map ../recmaps/AraTha_recmap.csv --pop_change --out ./aratha_cds_bmap.csv --out_binsize 1000 --verbose
 #
-/proj/johrilab/projects/Bmaps/dromel
