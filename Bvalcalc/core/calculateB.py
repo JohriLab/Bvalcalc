@@ -234,23 +234,23 @@ def get_a_b_with_GC(C, y, l, params=None):
             if params is None:
                 params = get_params()
             r, u, g, k, t1, t1half, t2, t3, t4, f1, f2, f3, f0 = params["r"], params["u"], params["g"], params["k"], params["t1"], params["t1half"], params["t2"], params["t3"], params["t4"], params["f1"], params["f2"], params["f3"], params["f0"]
-            proportion_nogc_a = np.where(k < y + l, # When GC includes neutral site, this is proportion of the gene it includes
-                                        np.maximum((0.5*(k-y)/l), 0),
-                                        1-(y + l)/(2 * k)
+            proportion_nogc_a = np.where(k <= y + l, # When GC includes neutral site, proportion_nogc_a is the proportion of the gene it includes
+                                        np.maximum((((k-y)/l) * (((k-y) / k) + (1 / k)) / 2), 0),
+                                        (((k-y) / k) + ((k - y - l) / k)) / 2
                                         )
 
-            proportion_nogc_b = np.where(k < y + l, # When GC includes gene site, this is probability the tract includes neutral site of interest 
-                                    1/(2*k) * np.maximum(k-y+1,0) * np.maximum(k - y, 0) / l, # When overshooting not possible
+            proportion_nogc_b = np.where(k <= y + l, # When GC includes gene site, proportion_nogc_b is the probability the tract includes neutral site of interest 
+                                    np.maximum((((k-y)/k) + (1/k))/2,0) * (k-y)/(l), # When overshooting not possible
                                     (k - y - 0.5 * l) / k) # When overshooting possible
             
         
         a = np.where(k < y, 
-            C + (2 * g * k), # Probability of GC on neutral site, where overlap with element not possible
-            C + (2 * g * (y) + # When overlap possible this is probability gc is in neutral but doesn't include any of element
+            C + (1 * g * k), # Probability of GC on neutral site, where overlap with element not possible
+            C + (1 * g * (y) + # When overlap possible this is probability gc is in neutral but doesn't include any of element
                 g * (k - y) * # Probability gc is in neutral and includes some element (remaining probability from above)
                 (1 - proportion_nogc_a) # Proportion of gene that gc breaks linkage with when it includes some element
         ))
-        b = C + (r * l) + (2 * g * k) * (1 - (1-proportion_nogc_a)*proportion_nogc_b) #* prop k out
+        b = C + (r * l) + (1 * g * k) * (1 - (1-proportion_nogc_a)*proportion_nogc_b) #* prop k out
 
         return a, b
 
