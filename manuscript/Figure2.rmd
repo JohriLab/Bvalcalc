@@ -18,12 +18,14 @@ b_obs_dat <- read_csv("/Users/jmarsh96/Desktop/Bcalc/Figures/data/40kb_gc_all_me
 c_obs_dat <- read_csv("/Users/jmarsh96/Desktop/Bcalc/Figures/data/40kb_f0.9_h0.5_all_mean.pi") %>% mutate(B_mean = pi_mean / 0.00631579) %>% mutate(Distance = start - 9950) %>% select(Distance, B_mean) # Needs / 0.00631579 instead of / 0.012
 d_obs_dat <- read_csv("/Users/jmarsh96/Desktop/Bcalc/Figures/data/OBS_Expand_5N_1T.csv") %>% mutate(pi_mean=pi) %>% select(start,pi_mean)  %>% mutate(B_mean = pi_mean / 0.012) %>% mutate(Distance = start - 9950) %>% select(Distance, B_mean)
 
+a_unc_dat <- read_csv("/Users/jmarsh96/Desktop/Bcalc/Figures/data/nogcBasicParams.B")
 b_unc_dat <- read_csv("/Users/jmarsh96/Desktop/Bcalc/Figures/data/nogcBasicParams.B")
 c_unc_dat <- read_csv("/Users/jmarsh96/Desktop/Bcalc/Figures/data/nogcBasicParams.B")
 d_unc_dat <- read_csv("/Users/jmarsh96/Desktop/Bcalc/Figures/data/nogcBasicParams.B")
 
 a_calc_dat <- read_csv("/Users/jmarsh96/Desktop/Bcalc/Figures/data/nogcBasicParams.B")
 b_calc_dat <- read_csv("/Users/jmarsh96/Desktop/Bcalc/Figures/data/gcBasicParams.B")
+b_calc_dat <- read_csv("/Users/jmarsh96/Desktop/Bcalc/Figures/data/gc_halfg.B")
 c_calc_dat <- read_csv("/Users/jmarsh96/Desktop/Bcalc/Figures/data/SelfParams_0.9S_0.5h.B")
 d_calc_dat <- read_csv("/Users/jmarsh96/Desktop/Bcalc/Figures/data/ExpandParams_5N_1T.B")
 ```
@@ -156,6 +158,6 @@ figb +
 figd +
 figc
 
-ggsave("allfigB2.pdf", allfigB, device = "pdf", dpi = 600, height = 6 * (5.2/8), width = 5.2, units = "in")
+ggsave("/Users/jmarsh96/Desktop/Bcalc/Figures/allfigB2_newgc_preai.pdf", allfigB, device = "pdf", dpi = 600, height = 6 * (5.2/8), width = 5.2, units = "in")
 ```
 
