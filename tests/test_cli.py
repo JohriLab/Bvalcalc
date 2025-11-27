@@ -54,7 +54,11 @@ def test_cli_gene_gcparams(tmp_path):
 
     assert result.returncode == 0, f"CLI failed:\n{result.stderr}"
     assert "B for adjacent site: 0.8847195569581615" in out
-    assert "Mean B for flanking region: 0.9791620863790824" in out
+    match = re.search(r"Mean B for flanking region: ([0-9.]+)", out)
+    assert match, "Could not find mean B for flanking region in CLI output"
+    mean_b = float(match.group(1))
+    expected = 0.9791620863790824
+    assert abs(mean_b - expected) < 1e-10, f"Expected {expected}, got {mean_b}"
     assert "B at start and end of the neutral region" in out
     assert "====== P L O T T I N G . . . =======================" in out
     assert f"Plot saved to {plot_path}" in out
