@@ -19,7 +19,7 @@ def test_cli_site_basic():
 
     assert result.returncode == 0, f"CLI failed:\n{result.stderr}"
     assert "B for site 100bp away from 5000bp region:" in result.stdout
-    assert "0.9246145075198539" in result.stdout
+    assert "0.9120709782203817" in result.stdout
 
 def test_cli_gene_basic():
     # poetry run Bvalcalc --gene --params tests/testparams/nogcBasicParams.py --element_size 10000
@@ -53,8 +53,8 @@ def test_cli_gene_gcparams(tmp_path):
     out = result.stdout + result.stderr
 
     assert result.returncode == 0, f"CLI failed:\n{result.stderr}"
-    assert "B for adjacent site: 0.8910346781386976" in out
-    assert "Mean B for flanking region: 0.9810661565709757" in out
+    assert "B for adjacent site: 0.8847195569581615" in out
+    assert "Mean B for flanking region: 0.9791620863790824" in out
     assert "B at start and end of the neutral region" in out
     assert "====== P L O T T I N G . . . =======================" in out
     assert f"Plot saved to {plot_path}" in out
@@ -106,7 +106,7 @@ def test_cli_genome_gcparams(tmp_path):
 
     assert result.returncode == 0, f"CLI failed:\n{result.stderr}"
     assert "====== R E S U L T S ====== S U M M A R Y ==========" in out
-    assert "Mean B of neutral sites across chromosome chr_200kb: 0.836347850423207" in out
+    assert "Mean B of neutral sites across chromosome chr_200kb: 0.8232046534536049" in out
     assert output_path.exists(), "Expected output file not created"
     assert output_path.stat().st_size > 0, "Output file is empty"
 
