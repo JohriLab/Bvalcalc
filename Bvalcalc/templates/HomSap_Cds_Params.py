@@ -17,7 +17,7 @@ f2 = 0.14 # Proportion of moderately deleterious mutations with 10 <= |2Ns| < 10
 f3 = 0.21 # Proportion of strongly deleterious mutations with |2Ns| >= 100 [4]
 ## Demography parameters
 Ncur = 14474 # Current population size (!Requires --pop_change) [1]
-time_of_change = 0.81 # Time in generations ago that effective population size went from Nanc to Ncur (!Requires --pop_change) [1]
+time_of_change = 0.81 * Nanc # Time in generations ago that effective population size went from Nanc to Ncur (!Requires --pop_change) [1]
 ## Advanced DFE parameters 
 h = 0.5 # Dominance coefficient of selected alleles [Naive value]
 mean, shape = 500, 0.5 # Gamma distribution of DFE to discretize and replace f0-f3 [mean (2Ns), shape] (!Requires --gamma_dfe) [Naive value]
