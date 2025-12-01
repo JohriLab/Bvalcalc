@@ -1,4 +1,4 @@
-# The B-value calculator: map expected diversity under background selection
+# The B-value calculator: expected diversity under background selection
 
 See documentation for details: https://JohriLab.github.io/Bvalcalc/
 
