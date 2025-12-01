@@ -63,7 +63,7 @@ Historical population size change as a single step-function can be accounted for
     Current population size, i.e. in the current epoch.
 
 ``time_of_change`` 
-    Time in ``Nanc`` generations ago that effective population size went from ``Nanc`` to ``Ncur``.
+    Time in generations ago that effective population size went from ``Nanc`` to ``Ncur``. For example, if the time of change was 0.4*Nanc generations ago, and Nanc was 10000, put ``time_of_change = 4000`` or ``time_of_change = 0.4 * Nanc``.
 
 Selfing species
 ---------------
