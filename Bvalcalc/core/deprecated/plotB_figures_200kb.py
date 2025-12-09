@@ -20,13 +20,13 @@ def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=
 
     # chr_200kb AKA 200kb Genome
     # poetry run Bvalcalc --region chr_200kb:1-200000 --params tests/testparams/nogcBasicParams.py --bedgff tests/testfiles/200kb_slimtest.csv --plot /Users/jmarsh96/Desktop/Bcalc/Figures/chr_200kb.png
-    B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/200kb_all.pi"
-    title_name = 'B for 200 kb genome with 10 selected elements'
+    # B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/200kb_all.pi"
+    # title_name = 'B for 200 kb genome with 10 selected elements'
 
     # chr_200kb_recmap AKA 200kb Rec Map
-    # poetry run Bvalcalc --region chr_200kb:1-200000 --params tests/testparams/nogcBasicParams.py --bedgff tests/testfiles/200kb_slimtest.csv --plot /Users/jmarsh96/Desktop/Bcalc/Figures/chr_200kb_recmap.png
-    # B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/200kb_recmap_all.pi"
-    # title_name = 'B for 200 kb genome with recombination map'
+    # poetry run Bvalcalc --region chr_200kb:1-200000 --params tests/testparams/nogcBasicParams.py --bedgff tests/testfiles/200kb_slimtest.csv --rec_map tests/testfiles/200kb.map --plot /Users/jmarsh96/Desktop/Bcalc/Figures/chr_200kb_recmap.png
+    B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/200kb_recmap_all.pi"
+    title_name = 'B for 200 kb genome with recombination map'
     Genome = True
 
     if B_uncorrected is not None:
@@ -84,9 +84,9 @@ def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=
     if caller == "chromosome":
         # ax.set_title(f'{title_name}', fontsize=15, fontweight='bold')
         if rec_rates is not None:
-            ax.set_xlabel('Chromosomal position (bp)', fontsize=13, labelpad=40)
+            ax.set_xlabel('Chromosomal position (bp)', fontsize=13, labelpad=35)
         else:
-            ax.set_xlabel('Chromosomal position (bp)', fontsize=13)
+            ax.set_xlabel('Chromosomal position (bp)', fontsize=13, labelpad=5)
     else:
         ax.set_xlabel('Distance from single selected element of size 10 kb', fontsize=13)
         # ax.set_title(title_name, fontsize=15, fontweight='bold')
@@ -172,7 +172,20 @@ def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=
     if rec_rates is None:
         plt.tight_layout()
     else:
-        fig.subplots_adjust(hspace=0.01, bottom=0.12)
+        # First, do tight_layout to optimize the layout
+        plt.tight_layout()
+        fig.canvas.draw()
+        # Measure the gap between x-axis and xlabel where rec strip should fit
+        xlabel_bbox = ax.xaxis.label.get_window_extent().transformed(fig.transFigure.inverted())
+        ax_pos = ax.get_position()
+        # Calculate the gap available for rec strip
+        gap_size = xlabel_bbox.y0 - ax_pos.y0
+        # Adjust bottom margin so rec strip fits in this gap
+        # rec_strip is in gs[1], we want it to fit in the gap
+        rec_strip_pos = gs[1].get_position(fig)
+        # Set bottom to position rec strip in the gap
+        bottom_value = max(0.05, xlabel_bbox.y0 - rec_strip_pos.height - 0.005)
+        fig.subplots_adjust(bottom=bottom_value, hspace=0.01)
 
     ax.legend(loc="lower right", bbox_to_anchor=(1, 0.04), fontsize=10, frameon=True)
 
