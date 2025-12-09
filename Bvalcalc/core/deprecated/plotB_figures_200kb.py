@@ -20,12 +20,12 @@ def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=
 
     # chr_200kb AKA 200kb Genome
     # poetry run Bvalcalc --region chr_200kb:1-200000 --params tests/testparams/nogcBasicParams.py --bedgff tests/testfiles/200kb_slimtest.csv --plot /Users/jmarsh96/Desktop/Bcalc/Figures/chr_200kb.png
-    B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/200kb_all.pi"
+    # B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/200kb_all.pi"
     # title_name = 'B for 200 kb genome with 10 selected elements'
 
     # chr_200kb_recmap AKA 200kb Rec Map
     # poetry run Bvalcalc --region chr_200kb:1-200000 --params tests/testparams/nogcBasicParams.py --bedgff tests/testfiles/200kb_slimtest.csv --rec_map tests/testfiles/200kb.map --plot /Users/jmarsh96/Desktop/Bcalc/Figures/chr_200kb_recmap.png
-    # B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/200kb_recmap_all.pi"
+    B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/200kb_recmap_all.pi"
     # title_name = 'B for 200 kb genome with recombination map'
     Genome = True
 
@@ -45,12 +45,14 @@ def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=
         mpl.rcParams['grid.color'] = 'grey'
         mpl.rcParams['grid.linestyle'] = '--'
         mpl.rcParams['grid.linewidth'] = 0.5
-    mpl.rcParams['axes.edgecolor'] = 'black'
-    # Set all text to black
-    mpl.rcParams['text.color'] = 'black'
-    mpl.rcParams['axes.labelcolor'] = 'black'
-    mpl.rcParams['xtick.color'] = 'black'
-    mpl.rcParams['ytick.color'] = 'black'
+    # Set all text and axes to black
+    mpl.rcParams.update({
+        'axes.edgecolor': 'black',
+        'text.color': 'black',
+        'axes.labelcolor': 'black',
+        'xtick.color': 'black',
+        'ytick.color': 'black'
+    })
 
     if rec_rates is None:
         fig, ax = plt.subplots(figsize=(10, 6))
@@ -108,15 +110,11 @@ def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=
                 label=legend_name_orange
             )
 
-    if Genome is True:
-        if B_observed is not None:
-            print(f"Add code")
-            observed_data = load_B_observed(B_observed)
+    observed_data = None
+    if B_observed is not None:
+        observed_data = load_B_observed(B_observed)
+        if Genome:
             observed_data = observed_data[observed_data["B"] > 0.001]
-
-    else:
-        if B_observed is not None:
-            observed_data = load_B_observed(B_observed)
 
     if observed_data is not None and len(observed_data) > 0:
         ax.scatter(
@@ -177,53 +175,39 @@ def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=
     if rec_rates is None:
         plt.tight_layout()
     else:
-        # First, do tight_layout to optimize the layout
+        # Optimize layout and fit rec strip in gap between x-axis and xlabel
         plt.tight_layout()
         fig.canvas.draw()
-        # Measure the gap between x-axis and xlabel where rec strip should fit
+        
+        # Calculate bottom margin to fit rec strip and colorbar
         xlabel_bbox = ax.xaxis.label.get_window_extent().transformed(fig.transFigure.inverted())
-        ax_pos = ax.get_position()
-        # Calculate the gap available for rec strip
-        gap_size = xlabel_bbox.y0 - ax_pos.y0
-        # Adjust bottom margin so rec strip fits in this gap
-        # rec_strip is in gs[1], we want it to fit in the gap
         rec_strip_pos = gs[1].get_position(fig)
-        # Set bottom to position rec strip in the gap
-        bottom_value = max(0.05, xlabel_bbox.y0 - rec_strip_pos.height - 0.005)
-        # Add extra bottom space for colorbar legend (increase bottom margin to create space)
-        # Calculate space needed for colorbar + padding (colorbar matches rec strip height)
-        # Need extra space for tick labels and "CO rate" text below
-        colorbar_space = rec_strip_pos.height + 0.10  # height of colorbar plus more padding for labels
-        # Ensure bottom margin is large enough to accommodate colorbar and labels
-        bottom_value = max(bottom_value, colorbar_space)
+        bottom_for_strip = max(0.05, xlabel_bbox.y0 - rec_strip_pos.height - 0.005)
+        bottom_for_colorbar = rec_strip_pos.height + 0.10  # Space for colorbar + labels
+        bottom_value = max(bottom_for_strip, bottom_for_colorbar)
         fig.subplots_adjust(bottom=bottom_value, hspace=0.01)
-        # Add colorbar legend in top-right within the main plot after layout is finalized
-        fig.canvas.draw()  # Ensure positions are updated
+        
+        # Add colorbar at bottom
+        fig.canvas.draw()
         ax_pos = ax.get_position()
         rec_pos = ax_rec.get_position()
-        # Create colorbar axes manually, positioned at bottom of figure
-        # Match height to rec strip height
-        cbar_width = 0.12 * 1.2  # 20% wider (0.144)
-        cbar_height = rec_pos.height  # Same height as rec strip
-        cbar_x = ax_pos.x1 - cbar_width  # Align right edge with plot right edge
-        cbar_y = 0.06  # Position higher up with space for labels
+        
+        cbar_width = 0.144  # 20% wider than original 0.12
+        cbar_height = rec_pos.height
+        cbar_x = ax_pos.x1 - cbar_width
+        cbar_y = 0.06
+        
         cax = fig.add_axes([cbar_x, cbar_y, cbar_width, cbar_height])
         cbar = fig.colorbar(im, cax=cax, orientation='horizontal')
-        # Remove black border
         cbar.outline.set_visible(False)
-        # Set ticks and labels at bottom with visible tick marks
         cbar.set_ticks([0, np.max(rec_rates)])
         cbar.set_ticklabels(['0', f'{np.max(rec_rates):.2g} x $\\boldsymbol{{r}}$'])
-        cbar.ax.tick_params(bottom=True, labelbottom=True, labelsize=11, color='black', labelcolor='black', 
-                           length=4, width=1)
-        # Add "CO rate" label below
+        cbar.ax.tick_params(bottom=True, labelbottom=True, labelsize=11, 
+                           color='black', labelcolor='black', length=4, width=1)
         cbar.ax.text(0.5, -0.3, 'CO rate', fontsize=12, ha='center', va='top', 
                     transform=cbar.ax.transAxes, color='black')
 
     ax.legend(loc="lower right", bbox_to_anchor=(1, 0.04), fontsize=10, frameon=True)
-
-    print("Observed dot at:", observed_data)
-    print("Calculated B at 19999 and 20000:", b_values_input[19997:20101])
 
     plt.savefig(output_path, dpi=300)
     print(f"Plot saved to {output_path}")
