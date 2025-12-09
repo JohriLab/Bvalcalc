@@ -85,15 +85,15 @@ def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=
         ax.set_xlim(x.min() - 1, x.max())
         ax.set_ylim(0.4, 1.0)
 
-    ax.set_ylabel(r'$\boldsymbol{B}$', fontsize=16, rotation=0, ha='right')
+    ax.set_ylabel(r'$\boldsymbol{B}$', fontsize=17, rotation=0, ha='right')
     if caller == "chromosome":
         # ax.set_title(f'{title_name}', fontsize=15, fontweight='bold')
         if rec_rates is not None:
-            ax.set_xlabel('Chromosomal position (bp)', fontsize=13, labelpad=35)
+            ax.set_xlabel('Chromosomal position (bp)', fontsize=14, labelpad=38)
         else:
-            ax.set_xlabel('Chromosomal position (bp)', fontsize=13, labelpad=5)
+            ax.set_xlabel('Chromosomal position (bp)', fontsize=14, labelpad=5)
     else:
-        ax.set_xlabel('Distance from single selected element of size 10 kb', fontsize=13)
+        ax.set_xlabel('Distance from single selected element of size 10 kb', fontsize=14)
         # ax.set_title(title_name, fontsize=15, fontweight='bold')
 
     if B_uncorrected is not None:
@@ -129,7 +129,7 @@ def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=
             zorder=3
         )
 
-    ax.tick_params(axis='both', which='major', labelsize=10)
+    ax.tick_params(axis='both', which='major', labelsize=11)
 
     if gene_ranges is not None and len(gene_ranges) > 0:
         ymin, ymax = ax.get_ylim()
@@ -166,7 +166,7 @@ def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=
     if rec_rates is not None and caller == "chromosome":
         ax_rec = fig.add_subplot(gs[1], sharex=ax)
         ax_rec.set_yticks([])
-        ax_rec.tick_params(axis='x', which='major', labelsize=9)
+        ax_rec.tick_params(axis='x', which='major', labelsize=11)
         rec_img = np.expand_dims(rec_rates, axis=0)
         min_pos = positions.min()
         extent = [min_pos, min_pos + len(rec_rates) * 20000, 0, 1]
@@ -214,10 +214,10 @@ def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=
         # Set ticks and labels at bottom with visible tick marks
         cbar.set_ticks([0, np.max(rec_rates)])
         cbar.set_ticklabels(['0', f'{np.max(rec_rates):.2g} x $\\boldsymbol{{r}}$'])
-        cbar.ax.tick_params(bottom=True, labelbottom=True, labelsize=9, color='black', labelcolor='black', 
+        cbar.ax.tick_params(bottom=True, labelbottom=True, labelsize=11, color='black', labelcolor='black', 
                            length=4, width=1)
         # Add "CO rate" label below
-        cbar.ax.text(0.5, -0.23, 'CO rate', fontsize=11, ha='center', va='top', 
+        cbar.ax.text(0.5, -0.3, 'CO rate', fontsize=12, ha='center', va='top', 
                     transform=cbar.ax.transAxes, color='black')
 
     ax.legend(loc="lower right", bbox_to_anchor=(1, 0.04), fontsize=10, frameon=True)
