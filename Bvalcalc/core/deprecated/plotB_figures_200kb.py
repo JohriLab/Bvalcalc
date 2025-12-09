@@ -13,10 +13,10 @@ def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=
 
     B_uncorrected = None
     B_observed = None
-    legend_name_blue = "Calculated B (intergenic)"
-    legend_name_orange = "Uncorrected B"
+    legend_name_blue = "Calculated (intergenic)"
+    legend_name_orange = "Uncorrected"
     legend_name_dot = "Observed (simulations)"
-    legend_name_black = "Calculated B (synonymous)"
+    legend_name_black = "Calculated (synonymous)"
 
     # chr_200kb AKA 200kb Genome
     # poetry run Bvalcalc --region chr_200kb:1-200000 --params tests/testparams/nogcBasicParams.py --bedgff tests/testfiles/200kb_slimtest.csv --plot /Users/jmarsh96/Desktop/Bcalc/Figures/chr_200kb.png
@@ -80,16 +80,16 @@ def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=
         ax.set_xlim(x.min() - 1, x.max())
         ax.set_ylim(0.4, 1.0)
 
-    ax.set_ylabel('Expected diversity relative to neutral evolution (B)', fontsize=13)
+    ax.set_ylabel(r'$\boldsymbol{B}$', fontsize=16, rotation=0, ha='right')
     if caller == "chromosome":
-        ax.set_title(f'{title_name}', fontsize=15, fontweight='bold')
+        # ax.set_title(f'{title_name}', fontsize=15, fontweight='bold')
         if rec_rates is not None:
             ax.set_xlabel('Chromosomal position (bp)', fontsize=13, labelpad=40)
         else:
             ax.set_xlabel('Chromosomal position (bp)', fontsize=13)
     else:
         ax.set_xlabel('Distance from single selected element of size 10 kb', fontsize=13)
-        ax.set_title(title_name, fontsize=15, fontweight='bold')
+        # ax.set_title(title_name, fontsize=15, fontweight='bold')
 
     if B_uncorrected is not None:
         uncorrected_data = load_B_uncorrected(B_uncorrected)
