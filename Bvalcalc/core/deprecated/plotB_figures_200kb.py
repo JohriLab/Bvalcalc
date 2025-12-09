@@ -20,13 +20,13 @@ def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=
 
     # chr_200kb AKA 200kb Genome
     # poetry run Bvalcalc --region chr_200kb:1-200000 --params tests/testparams/nogcBasicParams.py --bedgff tests/testfiles/200kb_slimtest.csv --plot /Users/jmarsh96/Desktop/Bcalc/Figures/chr_200kb.png
-    # B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/200kb_all.pi"
+    B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/200kb_all.pi"
     # title_name = 'B for 200 kb genome with 10 selected elements'
 
     # chr_200kb_recmap AKA 200kb Rec Map
     # poetry run Bvalcalc --region chr_200kb:1-200000 --params tests/testparams/nogcBasicParams.py --bedgff tests/testfiles/200kb_slimtest.csv --rec_map tests/testfiles/200kb.map --plot /Users/jmarsh96/Desktop/Bcalc/Figures/chr_200kb_recmap.png
-    B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/200kb_recmap_all.pi"
-    title_name = 'B for 200 kb genome with recombination map'
+    # B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/200kb_recmap_all.pi"
+    # title_name = 'B for 200 kb genome with recombination map'
     Genome = True
 
     if B_uncorrected is not None:
@@ -46,6 +46,11 @@ def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=
         mpl.rcParams['grid.linestyle'] = '--'
         mpl.rcParams['grid.linewidth'] = 0.5
     mpl.rcParams['axes.edgecolor'] = 'black'
+    # Set all text to black
+    mpl.rcParams['text.color'] = 'black'
+    mpl.rcParams['axes.labelcolor'] = 'black'
+    mpl.rcParams['xtick.color'] = 'black'
+    mpl.rcParams['ytick.color'] = 'black'
 
     if rec_rates is None:
         fig, ax = plt.subplots(figsize=(10, 6))
@@ -165,7 +170,7 @@ def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=
         rec_img = np.expand_dims(rec_rates, axis=0)
         min_pos = positions.min()
         extent = [min_pos, min_pos + len(rec_rates) * 20000, 0, 1]
-        ax_rec.imshow(rec_img, aspect='auto', extent=extent, cmap=magenta_map, origin='lower', zorder=2, vmin=0, vmax=np.max(rec_rates))
+        im = ax_rec.imshow(rec_img, aspect='auto', extent=extent, cmap=magenta_map, origin='lower', zorder=2, vmin=0, vmax=np.max(rec_rates))
         ax_rec.set_frame_on(False)
         plt.setp(ax.get_xticklabels(), visible=False)
 
@@ -185,7 +190,35 @@ def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=
         rec_strip_pos = gs[1].get_position(fig)
         # Set bottom to position rec strip in the gap
         bottom_value = max(0.05, xlabel_bbox.y0 - rec_strip_pos.height - 0.005)
+        # Add extra bottom space for colorbar legend (increase bottom margin to create space)
+        # Calculate space needed for colorbar + padding (colorbar matches rec strip height)
+        # Need extra space for tick labels and "CO rate" text below
+        colorbar_space = rec_strip_pos.height + 0.10  # height of colorbar plus more padding for labels
+        # Ensure bottom margin is large enough to accommodate colorbar and labels
+        bottom_value = max(bottom_value, colorbar_space)
         fig.subplots_adjust(bottom=bottom_value, hspace=0.01)
+        # Add colorbar legend in top-right within the main plot after layout is finalized
+        fig.canvas.draw()  # Ensure positions are updated
+        ax_pos = ax.get_position()
+        rec_pos = ax_rec.get_position()
+        # Create colorbar axes manually, positioned at bottom of figure
+        # Match height to rec strip height
+        cbar_width = 0.12 * 1.2  # 20% wider (0.144)
+        cbar_height = rec_pos.height  # Same height as rec strip
+        cbar_x = ax_pos.x1 - cbar_width  # Align right edge with plot right edge
+        cbar_y = 0.06  # Position higher up with space for labels
+        cax = fig.add_axes([cbar_x, cbar_y, cbar_width, cbar_height])
+        cbar = fig.colorbar(im, cax=cax, orientation='horizontal')
+        # Remove black border
+        cbar.outline.set_visible(False)
+        # Set ticks and labels at bottom with visible tick marks
+        cbar.set_ticks([0, np.max(rec_rates)])
+        cbar.set_ticklabels(['0', f'{np.max(rec_rates):.2g} x $\\boldsymbol{{r}}$'])
+        cbar.ax.tick_params(bottom=True, labelbottom=True, labelsize=9, color='black', labelcolor='black', 
+                           length=4, width=1)
+        # Add "CO rate" label below
+        cbar.ax.text(0.5, -0.23, 'CO rate', fontsize=11, ha='center', va='top', 
+                    transform=cbar.ax.transAxes, color='black')
 
     ax.legend(loc="lower right", bbox_to_anchor=(1, 0.04), fontsize=10, frameon=True)
 
