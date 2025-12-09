@@ -7,7 +7,7 @@ from matplotlib import gridspec  # for rec rate strip
 import sys
 from matplotlib.lines import Line2D
 
-def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_only=False, rec_rates=None):
+def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_only=False, rec_rates=None, chunk_size=None):
     if not quiet:
         print('====== P L O T T I N G . . . =======================ss')
 
@@ -56,7 +56,7 @@ def plotB_figures_200kb(b_values_input, caller, output_path, quiet, gene_ranges=
         ax = fig.add_subplot(gs[0])
 
     if caller == "chromosome":
-        positions = b_values_input['Position']
+        positions = b_values_input['Start']
         b_vals = b_values_input['B']
         chrom = b_values_input['Chromosome'][0] if 'Chromosome' in b_values_input.dtype.names else 'unknown'
 
