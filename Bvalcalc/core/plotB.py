@@ -4,6 +4,7 @@ import matplotlib.ticker as ticker
 import numpy as np
 from matplotlib.collections import LineCollection
 from matplotlib import gridspec  # for rec rate strip
+from matplotlib.cm import ScalarMappable
 
 def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_only=False, rec_rates=None, chunk_size=None):
     if not quiet:
@@ -190,16 +191,35 @@ def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_
             ax_pos = ax.get_position()
             rec_pos = ax_rec.get_position()
             
+            # Calculate max rec rate within the plotted region
+            xlim = ax.get_xlim()
+            # Find which rec_rates chunks fall within the visible xlim
+            chunk_starts = np.arange(min_pos, min_pos + len(rec_rates) * chunk_size, chunk_size)
+            chunk_ends = chunk_starts + chunk_size
+            # Chunks that overlap with visible region
+            visible_mask = (chunk_ends > xlim[0]) & (chunk_starts < xlim[1])
+            max_rec_rate = np.max(rec_rates[visible_mask]) if visible_mask.any() else np.max(rec_rates)
+            max_all_rec_rates = np.max(rec_rates)
+            
             cbar_width = 0.144  # 20% wider than original 0.12
             cbar_height = rec_pos.height
             cbar_x = ax_pos.x1 - cbar_width
             cbar_y = 0.06
             
             cax = fig.add_axes([cbar_x, cbar_y, cbar_width, cbar_height])
-            cbar = fig.colorbar(im, cax=cax, orientation='horizontal')
+            # Create a truncated colormap that only uses the portion from 0 to max_rec_rate
+            # This fraction of the colormap will be stretched to fill the full colorbar
+            colormap_fraction = max_rec_rate / max_all_rec_rates if max_all_rec_rates > 0 else 1.0
+            # Create a colormap that samples only the first portion of the original
+            truncated_colors = magenta_map(np.linspace(0, colormap_fraction, 256))
+            truncated_cmap = mpl.colors.LinearSegmentedColormap.from_list('truncated', truncated_colors, N=256)
+            # Create a new mappable with the visible range limits for the colorbar
+            sm = ScalarMappable(cmap=truncated_cmap, norm=mpl.colors.Normalize(vmin=0, vmax=max_rec_rate))
+            sm.set_array([])
+            cbar = fig.colorbar(sm, cax=cax, orientation='horizontal')
             cbar.outline.set_visible(False)
-            cbar.set_ticks([0, np.max(rec_rates)])
-            cbar.set_ticklabels(['0', f'{np.max(rec_rates):.2g} x $\\boldsymbol{{r}}$'])
+            cbar.set_ticks([0, max_rec_rate])
+            cbar.set_ticklabels(['0', f'{max_rec_rate:.2g} x $\\boldsymbol{{r}}$'])
             cbar.ax.tick_params(bottom=True, labelbottom=True, labelsize=11, 
                                color='black', labelcolor='black', length=4, width=1)
             cbar.ax.text(0.5, -0.3, 'CO rate', fontsize=12, ha='center', va='top', 
