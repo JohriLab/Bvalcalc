@@ -17,10 +17,10 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
 
     # nogcBasicParams AKA Normal
     # poetry run Bvalcalc --gene --params ./tests/testparams/nogcBasicParams.py --plot /Users/jmarsh96/Desktop/Bcalc/Figures/nogcBasicParams.png
-    B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/all.pi"
-    legend_name_blue = "Calculated"
-    legend_name_dot = "Observed (simulations)"
-    title_name = 'B recovery from single element with DFE'
+    # B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/all.pi"
+    # legend_name_blue = "Calculated"
+    # legend_name_dot = "Observed (simulations)"
+    # title_name = 'B recovery from single element with DFE'
 
     # gcBasicParams AKA with GC
     # poetry run Bvalcalc --gene --params ./tests/testparams/gcBasicParams.py --plot /Users/jmarsh96/Desktop/Bcalc/Figures/gcBasicParams.png
@@ -39,6 +39,33 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
     # legend_name_orange = "Calculated (no demography)"
     # legend_name_dot = "Observed (simulations)"
     # title_name = 'B recovery from single element (5X Expansion 1N_anc generations ago)'
+
+    # expand_5N_0.2T AKA Demography
+    # poetry run Bvalcalc --gene --params tests/testparams/ExpandParams_5N_0.2T.py --pop_change --plot /Users/jmarsh96/Desktop/Bcalc/Figures/expand_5N_0.2T.png
+    # B_uncorrected = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/c40kb_expand_5N_0.2T.bvals"
+    # B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/OBS_Expand_5N_0.2T.csv"
+    # legend_name_blue = "Calculated (with demography)"
+    # legend_name_orange = "Calculated (no demography)"
+    # legend_name_dot = "Observed (simulations)"
+    # title_name = 'B recovery from single element (5X Expansion 0.2N_anc generations ago)'
+
+    # contract_5N_1T AKA Demography
+    # poetry run Bvalcalc --gene --params tests/testparams/ContractParams_5N_1T.py --pop_change --plot /Users/jmarsh96/Desktop/Bcalc/Figures/contract_5N_1T.png
+    # B_uncorrected = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/c40kb_contract_5N_1T.bvals"
+    # B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/OBS_Contract_5N_1T.csv"
+    # legend_name_blue = "Calculated (with demography)"
+    # legend_name_orange = "Calculated (no demography)"
+    # legend_name_dot = "Observed (simulations)"
+    # title_name = 'B recovery from single element (5X Contraction 1N_anc generations ago)'
+
+    # contract_5N_0.2T AKA Demography
+    # poetry run Bvalcalc --gene --params tests/testparams/ContractParams_5N_0.2T.py --pop_change --plot /Users/jmarsh96/Desktop/Bcalc/Figures/contract_5N_0.2T.png
+    B_uncorrected = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/c40kb_contract_5N_0.2T.bvals"
+    B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/OBS_Contract_5N_0.2T.csv"
+    legend_name_blue = "Calculated (with demography)"
+    legend_name_orange = "Calculated (no demography)"
+    legend_name_dot = "Observed (simulations)"
+    title_name = 'B recovery from single element (5X Contraction 0.2N_anc generations ago)'
 
     # SelfParams_0.9S_0.5h AKA Selfing
     # poetry run Bvalcalc --gene --params tests/testparams/SelfParams_0.9S_0.5h.py --plot /Users/jmarsh96/Desktop/Bcalc/Figures/SelfParams_0.9S_0.5h.png
@@ -66,7 +93,14 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
         mpl.rcParams['grid.color'] = 'grey'
         mpl.rcParams['grid.linestyle'] = '--'
         mpl.rcParams['grid.linewidth'] = 0.5
-    mpl.rcParams['axes.edgecolor'] = 'black'
+    # Set all text and axes to black
+    mpl.rcParams.update({
+        'axes.edgecolor': 'black',
+        'text.color': 'black',
+        'axes.labelcolor': 'black',
+        'xtick.color': 'black',
+        'ytick.color': 'black'
+    })
 
     # Create figure and axis based on rec_rates
     if rec_rates is None:
@@ -124,16 +158,16 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
         ax.set_xlim(x.min() - 1, x.max())
 
     # Labels and title
-    ax.set_ylabel('Expected diversity relative to neutral evolution (B)', fontsize=13)
+    ax.set_ylabel(r'$\boldsymbol{B}$', fontsize=17, rotation=0, ha='right')
     if caller == "chromosome":
-        ax.set_title(f'B for chromosome {chrom} ({positions.min()}–{positions.max()} bp)', fontsize=15, fontweight='bold')
+        # ax.set_title(f'B for chromosome {chrom} ({positions.min()}–{positions.max()} bp)', fontsize=15, fontweight='bold')
         if rec_rates is not None:
-            ax.set_xlabel('Chromosomal position (bp)', fontsize=13, labelpad=40)
+            ax.set_xlabel('Chromosomal position (bp)', fontsize=14, labelpad=38)
         else:
-            ax.set_xlabel('Chromosomal position (bp)', fontsize=13)
+            ax.set_xlabel('Chromosomal position (bp)', fontsize=14, labelpad=5)
     else:
-        ax.set_xlabel('Distance from single selected element of size 10 kb', fontsize=13)
-        ax.set_title(title_name, fontsize=15, fontweight='bold')
+        ax.set_xlabel('Distance from single selected element of size 10 kb', fontsize=14)
+        # ax.set_title(title_name, fontsize=15, fontweight='bold')
 
         # Plot B_uncorrected if provided
     if B_uncorrected is not None:
@@ -161,7 +195,7 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
             )
 
 
-    ax.tick_params(axis='both', which='major', labelsize=10)
+    ax.tick_params(axis='both', which='major', labelsize=11)
 
     # Gene-range bars
     if gene_ranges is not None and len(gene_ranges) > 0:
@@ -195,15 +229,20 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
         )
     )
 
+    from matplotlib.colors import LinearSegmentedColormap
+    magenta_map = LinearSegmentedColormap.from_list("custom_magenta", ["white", "#C54B8C"])
+
     # Recombination rate strip
+    im = None
     if rec_rates is not None and caller == "chromosome":
         ax_rec = fig.add_subplot(gs[1], sharex=ax)
         ax_rec.set_yticks([])
-        ax_rec.tick_params(axis='x', which='major', labelsize=9)
+        ax_rec.tick_params(axis='x', which='major', labelsize=11)
         rec_img = np.expand_dims(rec_rates, axis=0)
         min_pos = positions.min()
-        extent = [min_pos, min_pos + len(rec_rates) * 20000, 0, 1]
-        ax_rec.imshow(rec_img, aspect='auto', extent=extent, cmap='Purples', origin='lower')
+        chunk_size = 20000
+        extent = [min_pos, min_pos + len(rec_rates) * chunk_size, 0, 1]
+        im = ax_rec.imshow(rec_img, aspect='auto', extent=extent, cmap=magenta_map, origin='lower', zorder=2, vmin=0, vmax=np.max(rec_rates))
         ax_rec.set_frame_on(False)
         plt.setp(ax.get_xticklabels(), visible=False)
 
@@ -211,8 +250,40 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
     if rec_rates is None:
         plt.tight_layout()
     else:
-        fig.subplots_adjust(hspace=0.01, bottom=0.12)
-    ax.legend(loc="lower right", fontsize=10, frameon=True)
+        # Optimize layout and fit rec strip in gap between x-axis and xlabel
+        plt.tight_layout()
+        fig.canvas.draw()
+
+        # Calculate bottom margin to fit rec strip and colorbar
+        xlabel_bbox = ax.xaxis.label.get_window_extent().transformed(fig.transFigure.inverted())
+        rec_strip_pos = gs[1].get_position(fig)
+        bottom_for_strip = max(0.05, xlabel_bbox.y0 - rec_strip_pos.height - 0.005)
+        bottom_for_colorbar = rec_strip_pos.height + 0.10  # Space for colorbar + labels
+        bottom_value = max(bottom_for_strip, bottom_for_colorbar)
+        fig.subplots_adjust(bottom=bottom_value, hspace=0.01)
+
+        # Add colorbar at bottom
+        if im is not None:
+            fig.canvas.draw()
+            ax_pos = ax.get_position()
+            rec_pos = ax_rec.get_position()
+
+            cbar_width = 0.144  # 20% wider than original 0.12
+            cbar_height = rec_pos.height
+            cbar_x = ax_pos.x1 - cbar_width
+            cbar_y = 0.06
+
+            cax = fig.add_axes([cbar_x, cbar_y, cbar_width, cbar_height])
+            cbar = fig.colorbar(im, cax=cax, orientation='horizontal')
+            cbar.outline.set_visible(False)
+            cbar.set_ticks([0, np.max(rec_rates)])
+            cbar.set_ticklabels(['0', f'{np.max(rec_rates):.2g} x $\\boldsymbol{{r}}$'])
+            cbar.ax.tick_params(bottom=True, labelbottom=True, labelsize=11,
+                               color='black', labelcolor='black', length=4, width=1)
+            cbar.ax.text(0.5, -0.3, 'CO rate', fontsize=12, ha='center', va='top',
+                        transform=cbar.ax.transAxes, color='black')
+
+    ax.legend(loc="lower right", bbox_to_anchor=(1, 0.04), fontsize=10, frameon=True)
 
 
     plt.savefig(output_path, dpi=300)
