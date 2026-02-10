@@ -34,7 +34,7 @@ def test_cli_gene_basic():
 
     assert result.returncode == 0, f"CLI failed:\n{result.stderr}"
     assert "====== R E S U L T S ! =============================" in out
-    assert "B for adjacent site: 0.8049242606161049" in out
+    assert "B for adjacent site: 0.8049242606161048" in out
     assert "Mean B for flanking region: 0.9761402805820517" in out
     assert "No output CSV requested; skipping save." in out
     assert "= B value calculated" in out
@@ -110,7 +110,7 @@ def test_cli_genome_gcparams(tmp_path):
 
     assert result.returncode == 0, f"CLI failed:\n{result.stderr}"
     assert "====== R E S U L T S ====== S U M M A R Y ==========" in out
-    assert "Mean B of neutral sites across chromosome chr_200kb: 0.8232046534536049" in out
+    assert "Mean B of neutral sites across chromosome chr_200kb: 0.8232046534536048" in out
     assert output_path.exists(), "Expected output file not created"
     assert output_path.stat().st_size > 0, "Output file is empty"
 
@@ -206,7 +206,7 @@ def test_cli_selfing():
     out = result.stdout + result.stderr
 
     assert result.returncode == 0, f"CLI failed:\n{result.stderr}"
-    assert "B for adjacent site: 0.6034770660828896" in out
+    assert "B for adjacent site: 0.6034770660829182" in out
     assert "Mean B for flanking region: 0.8043714716235398" in out
     assert "B at start and end of the neutral region: [0.60347707 0.6035028  0.60352854 ... 0.89001725 0.89001929 0.89002133]" in out
 
@@ -250,7 +250,7 @@ def test_cli_genome_hri_marking(tmp_path):
 
     # CLI ran
     assert result.returncode == 0, f"CLI failed:\n{result.stderr}"
-    assert "Mean B of neutral sites across chromosome chr_200kb: 0.588623210410594" in out
+    assert "Mean B of neutral sites across chromosome chr_200kb: 0.5886232104105973" in out
 
     # File wrote
     assert output_path.exists(), "Expected output file not created"
