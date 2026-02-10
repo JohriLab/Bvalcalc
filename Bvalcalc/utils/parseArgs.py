@@ -72,6 +72,7 @@ def parseRegionArgs(argv=None):
     parser.add_argument('--verbose', action='store_true', help="If set, will give per-chunk summaries")
     parser.add_argument('--quiet', action='store_true', help="If set, silence print statements.")
     parser.add_argument('--no_header', action='store_true', help="If set, skip writing comment headers to output file (version, command, etc.)")
+    parser.add_argument('--no_title', action='store_true', help="If set, hide the chromosome name title on the plot.")
     
     raw = argv if argv is not None else sys.argv[1:]
     args = parser.parse_args(argv)

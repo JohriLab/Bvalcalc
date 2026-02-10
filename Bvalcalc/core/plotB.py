@@ -6,7 +6,7 @@ from matplotlib.collections import LineCollection
 from matplotlib import gridspec  # for rec rate strip
 from matplotlib.cm import ScalarMappable
 
-def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_only=False, rec_rates=None, chunk_size=None):
+def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_only=False, rec_rates=None, chunk_size=None, no_title=False):
     if not quiet:
         print('====== P L O T T I N G . . . =======================')
 
@@ -89,7 +89,8 @@ def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_
     # Labels and title
     ax.set_ylabel(r'$\boldsymbol{B}$', fontsize=17, rotation=0, ha='right')
     if caller == "chromosome":
-        # ax.set_title(f'B for chromosome {chrom} ({positions.min()}–{positions.max()} bp)', fontsize=15, fontweight='bold')
+        if not no_title:
+            ax.set_title(chrom, fontsize=15, fontweight='bold')
         if rec_rates is not None:
             ax.set_xlabel('Chromosomal position (bp)', fontsize=14, labelpad=38)
         else:
@@ -226,4 +227,6 @@ def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_
                         transform=cbar.ax.transAxes, color='black')
 
     plt.savefig(output_path, dpi=300)
+    if caller == "chromosome" and not no_title and not quiet:
+        print("To hide plot title, add --no_title.")
     print(f"Plot saved to {output_path}")
