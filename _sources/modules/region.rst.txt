@@ -87,9 +87,9 @@ Example
       --out_binsize 1000 \
       --plot B_chr21_region.png
 
-    # Cumulative length of calculated region under selection: 724516bp (11.35%)
-    # Cumulative length of chromosome under selection: 3279253bp (7.02%)
-    # Mean B of neutral sites across specified region: 0.9192038071047087
+    # Cumulative length of calculated region under selection: 445100bp (6.97%)
+    # Cumulative length of chromosome under selection: 2067328bp (4.43%)
+    # Mean B of neutral sites across specified region: 0.9468804060949135
 
 Calculates a B-map for the specified ~6 Mb region on human chromosome 21 considering BGS from exons across the accessible region, plotting the output. Output of B values in 1 kb bins for the region will be saved. In this case, unlinked B will not be applied because only the chromosome 21 exons were provided.
 
