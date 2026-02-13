@@ -32,7 +32,8 @@ Bvalcalc \
 --params ./DroMel_Cds_Params.py \
 --bedgff ./cds_noX.bed \
 --rec_map ./dmel_comeron_recmap.csv \
---plot 1Mb_B.png
+--plot 1Mb_B.png \ 
+--no_title
 ##
 
 ## Table 1

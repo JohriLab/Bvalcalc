@@ -90,7 +90,7 @@ def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_
     ax.set_ylabel(r'$\boldsymbol{B}$', fontsize=17, rotation=0, ha='right')
     if caller == "chromosome":
         if not no_title:
-            ax.set_title(chrom, fontsize=15, fontweight='bold')
+            ax.set_title(f"{chrom}:{positions[0]}-{positions[-1]}", fontsize=15, fontweight='bold')
         if rec_rates is not None:
             ax.set_xlabel('Chromosomal position (bp)', fontsize=14, labelpad=38)
         else:
