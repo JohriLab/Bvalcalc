@@ -50,9 +50,9 @@ A conserved element is an annotated part of the genome that experiences direct p
    --element_size 5000 \
    --distance 1000
 
-   # B for site 1000bp away from 5000bp region: 0.9868859634102181
+   # B for site 1000bp away from 5000bp region: 0.9828006501299477
 
-The B-value for this site should be printed in the console as ~0.987, which indicates diversity at your focal site is reduced ~1.3% by BGS from the 5kb conserved element.
+The B-value for this site should be printed in the console as ~0.983, which indicates diversity at your focal site is reduced ~1.7% by BGS from the 5kb conserved element.
 
 B recovery from one element
 -----------------------------
@@ -67,8 +67,8 @@ Now, let's calculate the recovery of B as a function of distance from the 5kb el
    --params ./DroMel_Cds_Params.py \
    --plot gene_B.png
 
-   # B for adjacent site: 0.9554782496927732
-   # Mean B for flanking region: 0.9982138514437486
+   # B for adjacent site: 0.9522440815225898
+   # Mean B for flanking region: 0.9978879032114935
 
 Have a look at the plot and the results printed to the console, you'll notice B decays with distance from the selected element. It's a modest reduction, but remember, across a genome ALL selected elements will contribute to B at any given site.
 
@@ -100,7 +100,7 @@ Let's calculate B for a 1 Mb region in a relatively low recombination region in 
    --rec_map ./dmel_comeron_recmap.csv \
    --plot 1Mb_B.png
 
-   # Mean B of neutral sites across specified region: 0.8925140916007113
+   # Mean B of neutral sites across specified region: 0.892465497056335
    # Plot saved to 1Mb_B.png
    # = B value calculated in 6.67 seconds. = = =
 
