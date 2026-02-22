@@ -6,7 +6,7 @@ from matplotlib.collections import LineCollection
 from matplotlib import gridspec  # for rec rate strip
 from matplotlib.cm import ScalarMappable
 
-def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_only=False, rec_rates=None, chunk_size=None, no_title=False):
+def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_only=False, rec_rates=None, chunk_size=None, no_title=False, gene_size=None):
     if not quiet:
         print('====== P L O T T I N G . . . =======================')
 
@@ -96,7 +96,7 @@ def plotB(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_
         else:
             ax.set_xlabel('Chromosomal position (bp)', fontsize=14, labelpad=5)
     else:
-        ax.set_xlabel('Distance from single selected element of size 10 kb', fontsize=14)
+        ax.set_xlabel(f'Distance from single selected element of size {gene_size}', fontsize=14)
         # ax.set_title('B recovery from single element', fontsize=15, fontweight='bold')
 
     ax.tick_params(axis='both', which='major', labelsize=11)
