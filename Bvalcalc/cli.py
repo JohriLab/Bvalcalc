@@ -12,7 +12,7 @@ from Bvalcalc.core.positionsBstats import positionsBstats
 from Bvalcalc.core.plotChromB import plotChromB
 from Bvalcalc.utils.sample_data import download_sample_data
 
-__version__ = "1.4.0"
+__version__ = "1.4.1"
 
 def main():
     start_time = time.time()
