@@ -12,7 +12,7 @@ from Bvalcalc.core.positionsBstats import positionsBstats
 from Bvalcalc.core.plotChromB import plotChromB
 from Bvalcalc.utils.sample_data import download_sample_data
 
-__version__ = "1.4.1"
+__version__ = "1.4.2"
 
 def main():
     start_time = time.time()
@@ -58,9 +58,9 @@ def main():
         args = parseGeneArgs(remaining_args)
         os.environ["BCALC_params"] = args.params  # Save params to global
         from Bvalcalc.core.geneBcalc import geneBcalc
-        output_data = geneBcalc(args) # Capture the output from geneBcalc
+        output_data, gene_size = geneBcalc(args) # Capture the output from geneBcalc
         if getattr(args, 'plot', False): # If the --plot flag was provided, call plotB with geneBcalc's output.
-            plotB(b_values_input=output_data, caller="gene", output_path=args.plot, quiet=args.quiet, gene_size=10000)
+            plotB(b_values_input=output_data, caller="gene", output_path=args.plot, quiet=args.quiet, gene_size=gene_size)
 
     elif known_args.site: # Run single site Bcalc
         args = parseSiteArgs(remaining_args)

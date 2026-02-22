@@ -70,4 +70,4 @@ def geneBcalc(args):
 
         # print("Kaizo", output_data, with_gene_output_data)
 
-    return output_data
+    return output_data, element_size
