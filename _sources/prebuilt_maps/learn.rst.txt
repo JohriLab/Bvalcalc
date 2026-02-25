@@ -11,7 +11,8 @@ See link above or thumbnail below for a 20 minute video covering what background
      <a href="https://youtu.be/w2dH1IvtWjo?si=uELWdolFay9v-geo" target="_blank" class="bgs-thumbnail-wrapper">
        <img src="../_static/Bvalcalc_thumbnail.png"
             alt="Watch the Bvalcalc background selection tutorial on YouTube"
-            class="bgs-thumbnail">
+             class="bgs-thumbnail"
+             onload="this.parentElement.classList.add('bgs-loaded')">
        <span class="bgs-play-overlay"></span>
      </a>
    </p>
