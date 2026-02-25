@@ -7,7 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'Bvalcalc'
-copyright = '2025, Jacob Marsh, Parul Johri'
+copyright = '2026, Jacob Marsh, Parul Johri'
 author = 'Jacob Marsh, Parul Johri'
 release = '1.4.3'
 
@@ -52,8 +52,7 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
-    "myst_parser",
-    "sphinxcontrib.youtube",
+    "myst_parser"
 ]
 
 myst_enable_extensions = [
