@@ -228,7 +228,12 @@ def test_cli_selfing():
     expected_adj_b = 0.6034770660828896
     assert abs(adj_b - expected_adj_b) < 1e-10, f"Expected {expected_adj_b}, got {adj_b}"
 
-    assert "Mean B for flanking region: 0.8043714716235398" in out
+    # Allow for tiny floating-point differences in mean B under selfing
+    match_mean = re.search(r"Mean B for flanking region: ([0-9.]+)", out)
+    assert match_mean, "Could not find mean B for flanking region in CLI output"
+    mean_b = float(match_mean.group(1))
+    expected_mean_b = 0.8043714716235398
+    assert abs(mean_b - expected_mean_b) < 1e-10, f"Expected {expected_mean_b}, got {mean_b}"
     assert "B at start and end of the neutral region: [0.60347707 0.6035028  0.60352854 ... 0.89001725 0.89001929 0.89002133]" in out
 
 def test_cli_positions_minimum_filter():
