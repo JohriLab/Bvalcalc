@@ -85,11 +85,12 @@ a.icon.icon-home {
   display: block;
   max-width: 100%;
   height: auto;
-  transition: filter 0.2s ease-in-out;
+  transition: filter 0.2s ease-in-out, -webkit-filter 0.2s ease-in-out;
 }
 
 .bgs-thumbnail-wrapper:hover .bgs-thumbnail {
-  filter: brightness(80%);  /* darken by ~20% on hover */
+  filter: brightness(80%);          /* modern browsers */
+  -webkit-filter: brightness(80%);  /* Safari/WebKit */
 }
 
 .bgs-play-overlay {
@@ -104,7 +105,7 @@ a.icon.icon-home {
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0.25;  /* ~25% visible when idle */
+  opacity: 0;  /* hidden until image has loaded */
   transition: opacity 0.2s ease-in-out;
 }
 
@@ -118,6 +119,15 @@ a.icon.icon-home {
 }
 
 .bgs-thumbnail-wrapper:hover .bgs-play-overlay {
+  /* no-op until wrapper is marked as loaded */
+}
+
+/* When image has loaded, show play button at 25% opacity, then darken on hover */
+.bgs-thumbnail-wrapper.bgs-loaded .bgs-play-overlay {
+  opacity: 0.25;  /* ~25% visible when idle */
+}
+
+.bgs-thumbnail-wrapper.bgs-loaded:hover .bgs-play-overlay {
   opacity: 1;  /* fully dark on hover */
 }
 
