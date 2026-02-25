@@ -53,6 +53,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
     "myst_parser",
+    "sphinxcontrib.youtube",
 ]
 
 myst_enable_extensions = [
