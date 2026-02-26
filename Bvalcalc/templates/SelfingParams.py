@@ -20,7 +20,7 @@ f3 = 0.25 # Proportion of strongly deleterious mutations with |2Ns| >= 100 [Naiv
 Ncur = Nanc # Current population size (!Requires --pop_change) [Naive value] 
 time_of_change = 1 * Nanc # Time in generations ago that effective population size went from Nanc to Ncur (!Requires --pop_change) [Naive value]
 ## Advanced DFE parameters 
-h = 0.5 + (f-0.5*f) # Dominance coefficient of selected alleles [Naive value]
+h = 0.5 + (f-0.5*f) # Dominance coefficient of selected alleles, NOTE: this is h_eff for h=0.5, replace BOTH 0.5's with your dominance coefficient [Naive value]
 mean, shape, proportion_synonymous = 100, 1, 0.3 # Gamma distribution of DFE to discretize and replace f0-f3 [mean (2Ns), shape, proportion synonymous] (!Requires --gamma_dfe) [Naive value]
 ## Literature cited
 # [1]
