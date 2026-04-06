@@ -71,18 +71,18 @@ Bvalcalc --genome --params ./HomSap_Phastcons_Params.py --bedgff ../bedgffs/HomS
 #
 # DroMel
 Bvalcalc --genome --gamma_dfe \
-    --pop_params DroMel_Cds_Params.py \
+    --params DroMel_Cds_Params.py \
     --bedgff_path ../bedgffs/DroMel_cds.bed \
     --out dromel_cds_bmap.csv \
     --out_binsize 1000 --rec_map ../recmaps/DroMel_recmap.csv
 Bvalcalc --genome --gamma_dfe \
-    --pop_params DroMel_Phastcons_Params.py \
+    --params DroMel_Phastcons_Params.py \
     --bedgff_path ../bedgffs/DroMel_phastcons.bed \
     --prior_Bmap dromel_cds_bmap.csv \
     --out bmaps/highmutrate/phastcons_CDS_B.csv \
     --out_binsize 1000 --rec_map ../recmaps/DroMel_recmap.csv
 Bvalcalc --genome --gamma_dfe \
-    --pop_params DroMel_Utr_Params.py \
+    --params DroMel_Utr_Params.py \
     --bedgff_path ../bedgffs/DroMel_utr.bed \
     --prior_Bmap dromel_cds_phastcons_bmap.csv \
     --out dromel_cds_phastcons_utr_bmap.csv \
