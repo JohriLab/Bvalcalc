@@ -128,7 +128,7 @@
 </section>
 <section id="bvalcalc-to-sf2-format">
 <h2>Bvalcalc to SF2 format<a class="headerlink" href="#bvalcalc-to-sf2-format" title="Link to this heading"></a></h2>
-<p>First, assuming you have a B-map from <strong>Bvalcalc</strong> you’ll need to get the B-values for your variant positions (the <strong>SF2</strong> grid file).</p>
+<p>First, assuming you have a B-map from <strong>Bvalcalc</strong> you’ll need to get the B-values for the variant positions you’re interested in finding sweeps at (the <strong>SF2</strong> grid file).</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add a chromosome column to your grid file and save to a new file</span>
 sed<span class="w"> </span><span class="s1">&#39;s/^/chr1,/&#39;</span><span class="w"> </span>chr1_grid.txt<span class="w"> </span>&gt;<span class="w"> </span>chr1_positions.csv
 
@@ -138,7 +138,7 @@ Bvalcalc<span class="w"> </span>--Bmap<span class="w"> </span>B_map.csv<span cla
 <span class="w">    </span>--out<span class="w"> </span>chr1_bvalues.csv
 </pre></div>
 </div>
-<p>This will save the B-values for the provided chromosome 1 positions to <code class="docutils literal notranslate"><span class="pre">chr1_bvalues.csv</span></code>.</p>
+<p>This will save the B-values for the provided chromosome 1 (chr1) positions to <code class="docutils literal notranslate"><span class="pre">chr1_bvalues.csv</span></code>.</p>
 <p>Now, using awk we can pull out positions for a single chromosome and reformat it to the <strong>SF2</strong> B-value format</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add a header to a new file</span>
 <span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;position\tbvalue&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>chr1_bvalues.tsv
