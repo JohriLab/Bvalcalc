@@ -40,7 +40,7 @@ Calculating a B value
 
 Let's start by calculating B at a site 1kb from the edge of a single conserved element (CDS) 5kb in length.
 
-A conserved element is an annotated part of the genome that experiences direct purifying selection. It will introduce BGS (reduction in B) at sites within and outside the element.
+A conserved element is an annotated part of the genome that experiences direct purifying selection. It will introduce BGS (reduction in diversity/B) at sites within and outside the element.
 
 .. code-block:: bash
 
