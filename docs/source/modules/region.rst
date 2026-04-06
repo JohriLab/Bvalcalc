@@ -42,6 +42,9 @@ Optional Arguments
 **-\-plot [path]**  
     Output path for a genome-wide or region B-value plot (default: `genome_plot.png`)
 
+**-\-no_title**  
+    Hide the chromosome name title on the plot.
+
 **-\-neutral_only**  
     If used with ``--plot``, only neutral sites will be shown in the plot
 
