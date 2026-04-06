@@ -10,7 +10,7 @@ Core parameters
 ``x`` 
     Scaling factor that modifies ``N``, ``u``, ``r``, and ``g``. Keep as 1 for empirical analysis, only relevant for calculating B to compare against rescaled simulations. See `Marsh, Kaushik and Johri 2025 <https://doi.org/10.1101/2025.04.24.650500>`_.
 ``Nanc``
-    Ancestral population size, often reported in literature. Can be roughly estimated from nucleotide diversity at neutrally evolving sites, given a mutation rate and no demography (`Nanc = pi/4u`).
+    Ancestral population size, often reported in literature. This is the population size value that scales the strength of selection. Can be roughly estimated from nucleotide diversity at neutrally evolving sites, given a mutation rate and no demography (`Nanc = pi/4u`).
 ``r``
     Recombination (crossover) mean rate per bp, per generation (sex-averaged), often reported in literature from direct measurement (recombination in pedigrees) or inferred from sequence data. Note you can add a crossover rate map that can modify ``r`` across the genome with ``--rec_map``. 
 ``u``   
@@ -34,7 +34,7 @@ To specify a DFE, provide ``f0``, ``f1``, ``f2``, ``f3`` proportions that repres
 ``f0`` 
     Proportion of effectively neutral mutations with `0 <= | 2*Nanc*s | < 1`.
     
-    Note that `2*Nanc*s < 5` does not contribute to BGS, see `Johri et al. 2020 <https://doi.org/10.1534/genetics.119.303002>`_, **Bvalcalc** will exclude the f0 proportion from BGS calculations.
+    Note that `2*Nanc*s < 5` does not substantially contribute to BGS where HRI is not pervasive, see `Johri et al. 2020 <https://doi.org/10.1534/genetics.119.303002>`_, **Bvalcalc** will exclude the f0 proportion from BGS calculations.
 ``f1``
     Proportion of weakly deleterious mutations with `1 <= | 2*Nanc*s | < 10`
 ``f2`` 
@@ -72,7 +72,7 @@ Self-fertilizing (selfing) species have different evolutionary dynamics from obl
 
 The parameters file can be modified for selfing populations by altering population size (``Nanc/Ncur``), crossover rate (``r``), gene conversion rate (``g``) and dominance coefficient by an additional parameter: ``f``, which is Wright's inbreeding coefficient (F). F can be calculated from the selfing rate (F = S/(2-S)), see `Nordborg 2000 <https://doi.org/10.1093/genetics/154.2.923>`_. Note that the ``arabidopsis`` and ``pfalciparum`` default templates have the inbreeding parameter included.
 
-For analysis of selfing populations, we recommend tailoring parameters from the ``selfing`` template.
+For analysis of selfing populations, we recommend tailoring parameters from the ``selfing`` template. Note that the adjustments with ``f`` are coded into the template. 
 
 .. code-block:: bash
 
