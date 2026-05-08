@@ -69,6 +69,8 @@ def get_DFE_params(params_path: str | None = None, gamma_dfe: bool = False, cons
     params["t3"] = h * (100.0 / (2.0 * Nanc))
     params["t4"] = h * 1.0
 
+    
+
 
     if CUSTOM_DFE or custom_dfe is not False: # The CUSTOM_DFE is prop injected by CLI, custom_dfe is provided by API
         print("Custom running XXXXXX")

@@ -77,16 +77,39 @@ def calculateB_linear(distance_to_element: int, length_of_element: int, params: 
             B = np.exp(-1.0 * E_constant)
             return np.where(length_of_element == 0, 1.0, B)
         
-        E_f1 = calculate_exponent(t1half, t2, U, a, b)
-        E_f2 = calculate_exponent(t2, t3, U, a, b)
-        E_f3 = calculate_exponent(t3, t4, U, a, b)
 
-        E_bar = ( # Sum over the DFE
-            f0 * 0.0
-            + f1 * ((t1half - t1) / (t2 - t1)) * 0.0
-            + f1 * ((t2 - t1half) / (t2 - t1)) * E_f1
-            + f2 * E_f2
-            + f3 * E_f3)
+        f1_selected = f1 * ((t2 - t1half) / (t2 - t1))
+
+        params["f_x"] = np.array([
+            f1_selected,
+            f2,
+            f3
+        ], dtype=float)
+
+        params["t_edges"] = np.array([
+            t1half,
+            t2,
+            t3,
+            t4
+        ], dtype=float)
+        # E_f1 = calculate_exponent(t1half, t2, U, a, b)
+        # E_f2 = calculate_exponent(t2, t3, U, a, b)
+        # E_f3 = calculate_exponent(t3, t4, U, a, b)
+
+        # E_bar = ( # Sum over the DFE
+        #     f0 * 0.0
+        #     + f1 * ((t1half - t1) / (t2 - t1)) * 0.0
+        #     + f1 * ((t2 - t1half) / (t2 - t1)) * E_f1
+        #     + f2 * E_f2
+        #     + f3 * E_f3)
+        t_edges = params["t_edges"]
+        f_x = params["f_x"]
+        print(t_edges)
+
+        E_bar = 0.0 # Initialise E_bar
+        calc_exp = calculate_exponent # Cache function locally for speed in loop
+        for i in range(len(f_x)): # Iterate over bins to sum over DFE, adding BGS effect to E_bar
+            E_bar += f_x[i] * calc_exp(t_edges[i], t_edges[i + 1], U, a, b)
 
         B = np.exp(-1.0 * E_bar)
         
