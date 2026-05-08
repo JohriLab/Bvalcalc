@@ -99,7 +99,7 @@ def calculateB_recmap(distance_to_element, length_of_element,
     with np.errstate(divide='ignore', invalid='ignore'):
         if params is None:
             params = get_params()
-        r, u, g, k, t1, t1half, t2, t3, t4, f1, f2, f3, f0, t_constant = params["r"], params["u"], params["g"], params["k"], params["t1"], params["t1half"], params["t2"], params["t3"], params["t4"], params["f1"], params["f2"], params["f3"], params["f0"], params["t_constant"]
+        r, u, g, t_constant = params["r"], params["u"], params["g"], params["t_constant"]
         # rec_distances is the length of the element * rec rate in each spanned region. 
         
         if rec_distances is not None:
@@ -128,54 +128,85 @@ def calculateB_recmap(distance_to_element, length_of_element,
             B = np.exp(-1.0 * E_constant)
             return np.where(length_of_element == 0, 1.0, B)
         
-        E_f1 = calculate_exponent(t1half, t2, U, a, b)
-        E_f2 = calculate_exponent(t2, t3, U, a, b)
-        E_f3 = calculate_exponent(t3, t4, U, a, b)
+        t_edges = params["t_edges"]
+        f_x = params["f_x"]
 
-        E_bar = ( # Sum over the DFE
-            f0 * 0.0
-            + f1 * ((t1half - t1) / (t2 - t1)) * 0.0
-            + f1 * ((t2 - t1half) / (t2 - t1)) * E_f1
-            + f2 * E_f2
-            + f3 * E_f3)    
+        E_bar = 0.0 # Initialise E_bar
+        calc_exp = calculate_exponent # Cache function locally for speed in loop
+        for i in range(len(f_x)): # Iterate over bins to sum over DFE, adding BGS effect to E_bar
+            E_bar += f_x[i] * calc_exp(t_edges[i], t_edges[i + 1], U, a, b)
+
 
         B = np.exp(-1.0 * E_bar)
         
     return np.where(length_of_element == 0, 1.0, B)
 
-def calculateB_unlinked(unlinked_L: int, params: dict | None = None):
-    """
-    Calculate B due to purifying selection at unlinked sites.
+# def calculateB_unlinked(unlinked_L: int, params: dict | None = None):
+    # """
+    # Calculate B due to purifying selection at unlinked sites.
 
-    Parameters
-    ----------
-    unlinked_L : float
-        Cumulative count of selected sites in unlinked regions.
-    params : dict
-        Required parameters from ``get_params()``, only kept as default (None) when being called by CLI,
-        in which case parameters are sourced from the params file directly.
-    """
+    # Parameters
+    # ----------
+    # unlinked_L : float
+    #     Cumulative count of selected sites in unlinked regions.
+    # params : dict
+    #     Required parameters from ``get_params()``, only kept as default (None) when being called by CLI,
+    #     in which case parameters are sourced from the params file directly.
+    # """
+    # if params is None:
+    #     params = get_params()
+
+    # u, t_edges, f_x, t_constant = params["u"], params["t_edges"], params["f_x"], params["t_constant"]
+    
+    # if t_constant: #If --constant_dfe is active    
+
+    #     unlinked_B  = np.exp(-8 * u * 1.0 * unlinked_L * (t_constant/(1 + t_constant)**2))
+    #     # unlinked_B  = np.exp(-8 * u * 1.0 * unlinked_L * t_constant) ## THIS IS EQ. XX APPROXIMATION IN THE MANUSCRIPT
+    #     return unlinked_B    
+
+    # def bin_exponent(t_start, t_end):
+    #     return (np.log((1 + t_end) / (1 + t_start))
+    #             + (1 / (1 + t_end))
+    #             - (1 / (1 + t_start)))
+
+    # sum_exponent = 0.0
+    # for i, f in enumerate(f_x):
+    #     sum_exponent += f * bin_exponent(t_edges[i], t_edges[i + 1])
+    
+    # unlinked_B  = np.exp(-8 * u * sum_exponent)
+
+    # return unlinked_B
+def calculateB_unlinked(unlinked_L: int, params: dict | None = None):
     if params is None:
         params = get_params()
 
-    u, t1, t1half, t2, t3, t4, f0, f1, f2, f3, t_constant = params["u"], params["t1"], params["t1half"], params["t2"], params["t3"], params["t4"], params["f0"], params["f1"], params["f2"], params["f3"], params["t_constant"]
-    
-    if t_constant: #If --constant_dfe is active    
+    u = params["u"]
+    t_edges = params["t_edges"]
+    f_x = params["f_x"]
+    t_constant = params["t_constant"]
 
-        unlinked_B  = np.exp(-8 * u * 1.0 * unlinked_L * (t_constant/(1 + t_constant)**2))
-        # unlinked_B  = np.exp(-8 * u * 1.0 * unlinked_L * t_constant) ## THIS IS EQ. XX APPROXIMATION IN THE MANUSCRIPT
-        return unlinked_B    
+    # Force stable array handling
+    unlinked_L = np.asarray(unlinked_L, dtype=float)
+    scalar_input = unlinked_L.ndim == 0
+    unlinked_L = np.atleast_1d(unlinked_L)
 
-    f1_above_cutoff = f1 * ((t1half - t1) / (t2 - t1))
+    if t_constant:
+        unlinked_B = np.exp(-8 * u * unlinked_L * (t_constant / (1 + t_constant)**2))
+             # unlinked_B  = np.exp(-8 * u * 1.0 * unlinked_L * t_constant) ## THIS IS OLD APPROXIMATION IN THE MANUSCRIPT
 
-    sum_f1 = (f1_above_cutoff / (t2 - t1half)) * (np.log((1 + t2) /(1 + t1half)) + (1 / (1 + t2)) - (1 / (1 + t1half)))
-    sum_f2 = (f2 / (t3 - t2)) * (np.log((1 + t3) /(1 + t2)) + (1 / (1 + t3)) - (1 / (1 + t2)))
-    sum_f3 = (f3 / (t4 - t3)) * (np.log((1 + t4) /(1 + t3)) + (1 / (1 + t4)) - (1 / (1 + t3)))
-    
-    unlinked_B  = np.exp(-8 * u * 1.0 * unlinked_L * (sum_f1 + sum_f2 + sum_f3))
+        return unlinked_B[0] if scalar_input else unlinked_B
 
-    return unlinked_B
+    def bin_exponent(t_start, t_end):
+        return (np.log((1 + t_end) / (1 + t_start))
+            + (1 / (1 + t_end)) - (1 / (1 + t_start)))
 
+    sum_exponent = 0.0
+    for i in range(len(f_x)):
+        sum_exponent += (f_x[i] / (t_edges[i+1] - t_edges[i])) * bin_exponent(t_edges[i], t_edges[i + 1])
+
+    unlinked_B = np.exp(-8 * u * unlinked_L * sum_exponent)
+
+    return unlinked_B[0] if scalar_input else unlinked_B
 
 ##
 
@@ -243,7 +274,7 @@ def get_a_b_with_GC(C, y, l, params=None):
         with np.errstate(divide='ignore', invalid='ignore'):
             if params is None:
                 params = get_params()
-            r, u, g, k, t1, t1half, t2, t3, t4, f1, f2, f3, f0 = params["r"], params["u"], params["g"], params["k"], params["t1"], params["t1half"], params["t2"], params["t3"], params["t4"], params["f1"], params["f2"], params["f3"], params["f0"]
+            r, g, k = params["r"], params["g"], params["k"]
             proportion_nogc_a = np.where(k <= y + l, # When GC includes neutral site, proportion_nogc_a is the proportion of the gene it includes
                                         np.maximum((((k-y)/l) * (((k-y) / k) + (1 / k)) / 2), 0),
                                         (((k-y) / k) + ((k - y - l) / k)) / 2
@@ -267,7 +298,7 @@ def get_a_b_with_GC(C, y, l, params=None):
 def get_a_b_with_GC_andMaps(C, y, l, rec_l, local_g, params=None):
         if params is None:
             params = get_params()
-        r, u, g, k, t1, t1half, t2, t3, t4, f1, f2, f3, f0 = params["r"], params["u"], params["g"], params["k"], params["t1"], params["t1half"], params["t2"], params["t3"], params["t4"], params["f1"], params["f2"], params["f3"], params["f0"]
+        r, k = params["r"], params["k"]
         with np.errstate(divide='ignore', invalid='ignore'):
             proportion_nogc_a = np.where(k < y + l, # When GC includes neutral site, this is proportion of the gene it includes
                                         np.maximum((0.5*(k-y)/l), 0),
