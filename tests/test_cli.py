@@ -301,3 +301,40 @@ def test_cli_genome_hri_marking(tmp_path):
     # Final line check
     assert lines[-1] == "chr_200kb,199901,0.327636'", f"Unexpected final line: {lines[-1]}"
 
+def test_cli_unlinked_custom_dfe():
+    """Test CLI output for unlinked B-value under custom DFE."""
+
+    import subprocess
+    import sys
+
+    cmd = [
+        "poetry", "run", "Bvalcalc",
+        "--region", "chr_neutral:1-1",
+        "--params", "tests/testparams/CustomDfeParams.py",
+        "--bedgff", "tests/testfiles/200kb_unlinked.csv",
+        "--custom_dfe",
+    ]
+
+    result = subprocess.run(cmd, capture_output=True, text=True)
+
+    assert result.returncode == 0, f"CLI failed:\n{result.stderr}"
+
+    output = result.stdout.strip()
+
+    # extract the line containing unlinked result
+    target_line = None
+    for line in output.split("\n"):
+        if "B from unlinked sites calculated for chromosome chr_neutral" in line:
+            target_line = line
+            break
+
+    assert target_line is not None, "Missing unlinked B output line"
+
+    expected = 0.9996430895513589
+
+    # extract numeric value at end of line
+    value = float(target_line.split(":")[-1].strip())
+
+    assert abs(value - expected) < 1e-12, f"Expected {expected}, got {value}"
+
+    

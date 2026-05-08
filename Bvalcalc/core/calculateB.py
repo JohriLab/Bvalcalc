@@ -30,20 +30,8 @@ def get_params(
     key = (actual_params_path, gamma_dfe or GAMMA_DFE, constant_dfe or CONSTANT_DFE, custom_dfe or CUSTOM_DFE)
     if _cache_args != key:
         _params_cache = get_DFE_params(params_path, gamma_dfe, constant_dfe, custom_dfe)
-        print(_params_cache)
         _cache_args = key
     return _params_cache
-
-
-
-
-
-
-
-
-
-
-
 
 def calculateB_linear(distance_to_element: int, length_of_element: int, params: dict | None = None):
     """
@@ -141,41 +129,7 @@ def calculateB_recmap(distance_to_element, length_of_element,
         
     return np.where(length_of_element == 0, 1.0, B)
 
-# def calculateB_unlinked(unlinked_L: int, params: dict | None = None):
-    # """
-    # Calculate B due to purifying selection at unlinked sites.
 
-    # Parameters
-    # ----------
-    # unlinked_L : float
-    #     Cumulative count of selected sites in unlinked regions.
-    # params : dict
-    #     Required parameters from ``get_params()``, only kept as default (None) when being called by CLI,
-    #     in which case parameters are sourced from the params file directly.
-    # """
-    # if params is None:
-    #     params = get_params()
-
-    # u, t_edges, f_x, t_constant = params["u"], params["t_edges"], params["f_x"], params["t_constant"]
-    
-    # if t_constant: #If --constant_dfe is active    
-
-    #     unlinked_B  = np.exp(-8 * u * 1.0 * unlinked_L * (t_constant/(1 + t_constant)**2))
-    #     # unlinked_B  = np.exp(-8 * u * 1.0 * unlinked_L * t_constant) ## THIS IS EQ. XX APPROXIMATION IN THE MANUSCRIPT
-    #     return unlinked_B    
-
-    # def bin_exponent(t_start, t_end):
-    #     return (np.log((1 + t_end) / (1 + t_start))
-    #             + (1 / (1 + t_end))
-    #             - (1 / (1 + t_start)))
-
-    # sum_exponent = 0.0
-    # for i, f in enumerate(f_x):
-    #     sum_exponent += f * bin_exponent(t_edges[i], t_edges[i + 1])
-    
-    # unlinked_B  = np.exp(-8 * u * sum_exponent)
-
-    # return unlinked_B
 def calculateB_unlinked(unlinked_L: int, params: dict | None = None):
     if params is None:
         params = get_params()
