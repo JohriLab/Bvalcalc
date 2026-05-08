@@ -62,7 +62,7 @@ def calculateB_linear(distance_to_element: int, length_of_element: int, params: 
     with np.errstate(divide='ignore', invalid='ignore'):
         if params is None:
             params = get_params()
-        r, u, g, k, t1, t1half, t2, t3, t4, f1, f2, f3, f0, t_constant = params["r"], params["u"], params["g"], params["k"], params["t1"], params["t1half"], params["t2"], params["t3"], params["t4"], params["f1"], params["f2"], params["f3"], params["f0"], params["t_constant"]
+        r, u, g, t_constant = params["r"], params["u"], params["g"], params["t_constant"]
 
         C = (1.0 - np.exp(-2.0 * r * distance_to_element)) / 2.0 # cM
         U = length_of_element * u
@@ -77,34 +77,8 @@ def calculateB_linear(distance_to_element: int, length_of_element: int, params: 
             B = np.exp(-1.0 * E_constant)
             return np.where(length_of_element == 0, 1.0, B)
         
-
-        f1_selected = f1 * ((t2 - t1half) / (t2 - t1))
-
-        params["f_x"] = np.array([
-            f1_selected,
-            f2,
-            f3
-        ], dtype=float)
-
-        params["t_edges"] = np.array([
-            t1half,
-            t2,
-            t3,
-            t4
-        ], dtype=float)
-        # E_f1 = calculate_exponent(t1half, t2, U, a, b)
-        # E_f2 = calculate_exponent(t2, t3, U, a, b)
-        # E_f3 = calculate_exponent(t3, t4, U, a, b)
-
-        # E_bar = ( # Sum over the DFE
-        #     f0 * 0.0
-        #     + f1 * ((t1half - t1) / (t2 - t1)) * 0.0
-        #     + f1 * ((t2 - t1half) / (t2 - t1)) * E_f1
-        #     + f2 * E_f2
-        #     + f3 * E_f3)
         t_edges = params["t_edges"]
         f_x = params["f_x"]
-        print(t_edges)
 
         E_bar = 0.0 # Initialise E_bar
         calc_exp = calculate_exponent # Cache function locally for speed in loop

@@ -3,7 +3,6 @@ import os
 import importlib.util
 import numpy as np
 from typing import Dict, Any
-from functools import lru_cache
 
 GAMMA_DFE = False  # Default, instead of prop injected
 CONSTANT_DFE = False # Default, instead of prop injected
@@ -69,9 +68,6 @@ def get_DFE_params(params_path: str | None = None, gamma_dfe: bool = False, cons
     params["t3"] = h * (100.0 / (2.0 * Nanc))
     params["t4"] = h * 1.0
 
-    
-
-
     if CUSTOM_DFE or custom_dfe is not False: # The CUSTOM_DFE is prop injected by CLI, custom_dfe is provided by API
         print("Custom running XXXXXX")
         s_breaks = getattr(pop, 's_breaks', None)
@@ -88,7 +84,7 @@ def get_DFE_params(params_path: str | None = None, gamma_dfe: bool = False, cons
             raise ValueError(
                 "s_breaks defines deleterious DFE values, for simplicity here, positive values provided to s_breaks represent the strength of purifying selection (a value of 1 is homozygous lethal, equal to s = -1)."
             )
-        if sum(bin_props) != 1:
+        if not np.isclose(sum(bin_props), 1.0):
             raise ValueError(
                 "bin_proportions must sum to 1 when --custom_dfe is active. These define the proportion of mutations in each bin defined by s_breaks."
             )
@@ -101,8 +97,9 @@ def get_DFE_params(params_path: str | None = None, gamma_dfe: bool = False, cons
         params["f_x"] = bin_props
         params["t_edges"] = h * s_breaks
     
-    else: 
-        params["t_edges"] = None; params["f_x"] = None
+    else:
+        from .dfe_helper import legacyDFE_to_bins
+        params = legacyDFE_to_bins(params)
 
     if CONSTANT_DFE or constant_dfe is not False: # The CONSTANT_DFE is prop injected by CLI, constant_dfe is provided by API
         s = getattr(pop, "s", None)
@@ -206,3 +203,38 @@ def customDFE_getf0(s_breaks, bin_props, s_cutoff):
         np.array(new_breaks, dtype=float),
         np.array(new_props, dtype=float),
     )
+
+
+def legacyDFE_to_bins(params):
+    """
+    Convert legacy f1/f2/f3 discretized DFE into
+    unified f_x / t_edges representation.
+    """
+
+    t1 = params["t1"]
+    t1half = params["t1half"]
+    t2 = params["t2"]
+    t3 = params["t3"]
+    t4 = params["t4"]
+
+    f1 = params["f1"]
+    f2 = params["f2"]
+    f3 = params["f3"]
+
+    # remove effectively-neutral portion of f1
+    f1_selected = f1 * ((t2 - t1half) / (t2 - t1))
+
+    params["f_x"] = np.array([
+        f1_selected,
+        f2,
+        f3
+    ], dtype=float)
+
+    params["t_edges"] = np.array([
+        t1half,
+        t2,
+        t3,
+        t4
+    ], dtype=float)
+
+    return params
