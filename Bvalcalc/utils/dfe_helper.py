@@ -6,8 +6,9 @@ from functools import lru_cache
 
 GAMMA_DFE = False  # Default, instead of prop injected
 CONSTANT_DFE = False # Default, instead of prop injected
+CUSTOM_DFE = False # Default, instead of prop injected
 
-def get_DFE_params(params_path: str | None = None, gamma_dfe: bool = False, constant_dfe: bool = False) -> Dict[str, Any]:
+def get_DFE_params(params_path: str | None = None, gamma_dfe: bool = False, constant_dfe: bool = False, custom_dfe: bool = False) -> Dict[str, Any]:
     """
     Load and validate population parameters from the file pointed to by
     `params_path` or, if None, by the BCALC_params env var.
@@ -65,6 +66,27 @@ def get_DFE_params(params_path: str | None = None, gamma_dfe: bool = False, cons
     params["t2"] = h * (10.0 / (2.0 * Nanc))
     params["t3"] = h * (100.0 / (2.0 * Nanc))
     params["t4"] = h * 1.0
+
+
+    if CUSTOM_DFE or custom_dfe is not False: # The CUSTOM_DFE is prop injected by CLI, custom_dfe is provided by API
+        print("Custom running XXXXXX")
+        s_breaks = getattr(pop, 's_breaks', None)
+        bin_props = getattr(pop, 'bin_proportions', None)
+        if len(s_breaks) != len(bin_props) + 1:
+            raise ValueError(
+                "Length of s_breaks must be one more than length of bin_proportions when --custom_dfe is active. Breaks define the edges of the bins, so there must be one more break than bin."
+            )
+        if s_breaks[0] != 0 or s_breaks[-1] != 1:
+            raise ValueError(
+                "s_breaks must start with 0 and end with 1 when --custom_dfe is active. This defines the full range of selection coefficients from neutral (0) to fully homozygous lethal (1)."
+            )
+        if any((x < 0 or x > 1) for x in s_breaks):
+            raise ValueError(
+                "s_breaks defines deleterious DFE values, for simplicity here, positive values provided to s_breaks represent the strength of purifying selection (a value of 1 is homozygous lethal, equal to s = -1)."
+            )
+        print("Finished")
+        import sys
+        sys.exit()
 
     if CONSTANT_DFE or constant_dfe is not False: # The CONSTANT_DFE is prop injected by CLI, constant_dfe is provided by API
         s = getattr(pop, "s", None)
