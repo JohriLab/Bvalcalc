@@ -22,7 +22,7 @@ time_of_change = 0.45 * Nanc # Time in generations ago that effective population
 h = 0.5 # Dominance coefficient of selected alleles [Naive value]
 mean, shape, proportion_synonymous = 811, 0.347, 0.3 # Gamma distribution of DFE to discretize and replace f0-f3 [mean (2Ns), shape, proportion synonymous] (!Requires --gamma_dfe) [Naive value]## Literature cited
 
-s_breaks = 0, 0.001, 0.001, 0.01, 0.1, 1           # 6 breaks to give 5 bins
+s_breaks = 0, 0.000000001, 0.00000001, 0.01, 0.1, 1           # 6 breaks to give 5 bins
 bin_proportions = 0.2, 0.2, 0.2, 0.2, 0.2        # proportions of f_i, where i is from 0 to 4 (in this case)
 
 mean, shape, proportion_synonymous = 811, 0.347, 0.3 # Gamma distribution of DFE to discretize and replace f0-f3 [mean (2Ns), shape, proportion synonymous] (!Requires --gamma_dfe) [Naive value]## Literature cited

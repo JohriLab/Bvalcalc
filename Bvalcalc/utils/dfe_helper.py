@@ -58,6 +58,7 @@ def get_DFE_params(params_path: str | None = None, gamma_dfe: bool = False, cons
 
     # 5. Set derived parameters and thresholds
     params["gamma_cutoff"] = 5
+    s_cutoff = params["gamma_cutoff"] / (2.0 * params["Nanc"]) # Convert 2Ns cutoff to s cutoff
     params["t0"] = 0.0
     Nanc = params["Nanc"]
     h = params["h"]
@@ -90,16 +91,16 @@ def get_DFE_params(params_path: str | None = None, gamma_dfe: bool = False, cons
                 "bin_proportions must sum to 1 when --custom_dfe is active. These define the proportion of mutations in each bin defined by s_breaks."
             )
         
-        params["t_edges"] = h * np.array(s_breaks, dtype = float) # Set parameter to be exported to calculateB
-        params["f_x"] = np.array(bin_props, dtype = float)
+        ## Here we collapse all proportions below s_cutoff to a single f0 proportion.
+        from .dfe_helper import customDFE_getf0
+        f0, s_breaks, bin_props = customDFE_getf0(s_breaks, bin_props, s_cutoff)
+
+        params["f0"] = f0
+        params["f_x"] = bin_props
+        params["t_edges"] = h * s_breaks
     
     else: 
         params["t_edges"] = None; params["f_x"] = None
-
-        # from .dfe_helper import gammaDFE_to_discretized
-        # f0, f1, f2, f3 = gammaDFE_to_discretized(mean, shape, prop_syn)
-        # params.update({"f0": f0, "f1": f1, "f2": f2, "f3": f3})
-
 
     if CONSTANT_DFE or constant_dfe is not False: # The CONSTANT_DFE is prop injected by CLI, constant_dfe is provided by API
         s = getattr(pop, "s", None)
@@ -150,3 +151,56 @@ def gammaDFE_to_discretized(mean: float, shape: float, proportion_synonymous: fl
     print(f"Inferred f0, f1, f2, f3 = ", f0, f1, f2, f3)
 
     return f0, f1, f2, f3
+
+def customDFE_getf0(s_breaks, bin_props, s_cutoff):
+    """
+    Collapse all DFE mass below s_cutoff into f0, while preserving
+    the remaining bins above the cutoff.
+
+    Returns
+    -------
+    f0 : float
+        Total proportion below cutoff.
+    new_breaks : np.ndarray
+        Bin edges from s_cutoff upward.
+    new_props : np.ndarray
+        Bin proportions corresponding to new_breaks.
+    """
+    s_breaks = np.array(s_breaks, dtype=float)
+    bin_props = np.array(bin_props, dtype=float)
+
+    new_breaks = [s_cutoff]
+    new_props = []
+
+    f0 = 0.0
+
+    for i, prop in enumerate(bin_props):
+
+        left = s_breaks[i]
+        right = s_breaks[i + 1]
+
+        # Entire bin below cutoff
+        if right <= s_cutoff:
+            f0 += prop
+
+        # Bin crosses cutoff
+        elif left < s_cutoff < right:
+
+            below_fraction = (s_cutoff - left) / (right - left)
+            above_fraction = 1.0 - below_fraction
+
+            f0 += prop * below_fraction
+            new_props.append(prop * above_fraction)
+
+            new_breaks.append(right)
+
+        # Entire bin above cutoff
+        else:
+            new_props.append(prop)
+            new_breaks.append(right)
+
+    return ( # Return s clean arrays for exporting to calcB
+        f0,
+        np.array(new_breaks, dtype=float),
+        np.array(new_props, dtype=float),
+    )
