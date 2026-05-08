@@ -10,6 +10,7 @@ def get_params(
     params_path: str | None = None,
     gamma_dfe: bool = False,
     constant_dfe: bool = False,
+    custom_dfe: bool = False,
 ):
     """
     Loads DFE parameters from the provided population genetic parameters file.
@@ -17,7 +18,7 @@ def get_params(
     any of those three inputs change.
     """
     global _params_cache, _cache_args
-    from Bvalcalc.utils.dfe_helper import GAMMA_DFE, CONSTANT_DFE
+    from Bvalcalc.utils.dfe_helper import GAMMA_DFE, CONSTANT_DFE, CUSTOM_DFE
     
     # Get the actual params path that will be used
     actual_params_path = params_path
@@ -26,11 +27,23 @@ def get_params(
         actual_params_path = os.environ.get("BCALC_params")
     
     # Include global DFE state in cache key
-    key = (actual_params_path, gamma_dfe or GAMMA_DFE, constant_dfe or CONSTANT_DFE)
+    key = (actual_params_path, gamma_dfe or GAMMA_DFE, constant_dfe or CONSTANT_DFE, custom_dfe or CUSTOM_DFE)
     if _cache_args != key:
-        _params_cache = get_DFE_params(params_path, gamma_dfe, constant_dfe)
+        _params_cache = get_DFE_params(params_path, gamma_dfe, constant_dfe, custom_dfe)
+        print(_params_cache)
         _cache_args = key
     return _params_cache
+
+
+
+
+
+
+
+
+
+
+
 
 def calculateB_linear(distance_to_element: int, length_of_element: int, params: dict | None = None):
     """

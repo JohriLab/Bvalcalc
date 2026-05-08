@@ -96,10 +96,6 @@ def get_DFE_params(params_path: str | None = None, gamma_dfe: bool = False, cons
     else: 
         params["t_edges"] = None; params["f_x"] = None
 
-    print("Finished")
-    import sys
-    sys.exit()
-
         # from .dfe_helper import gammaDFE_to_discretized
         # f0, f1, f2, f3 = gammaDFE_to_discretized(mean, shape, prop_syn)
         # params.update({"f0": f0, "f1": f1, "f2": f2, "f3": f3})
