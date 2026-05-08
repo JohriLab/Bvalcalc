@@ -1,6 +1,7 @@
 import scipy.stats as st
 import os
 import importlib.util
+import numpy as np
 from typing import Dict, Any
 from functools import lru_cache
 
@@ -84,9 +85,25 @@ def get_DFE_params(params_path: str | None = None, gamma_dfe: bool = False, cons
             raise ValueError(
                 "s_breaks defines deleterious DFE values, for simplicity here, positive values provided to s_breaks represent the strength of purifying selection (a value of 1 is homozygous lethal, equal to s = -1)."
             )
-        print("Finished")
-        import sys
-        sys.exit()
+        if sum(bin_props) != 1:
+            raise ValueError(
+                "bin_proportions must sum to 1 when --custom_dfe is active. These define the proportion of mutations in each bin defined by s_breaks."
+            )
+        
+        params["t_edges"] = h * np.array(s_breaks, dtype = float) # Set parameter to be exported to calculateB
+        params["f_x"] = np.array(bin_props, dtype = float)
+    
+    else: 
+        params["t_edges"] = None; params["f_x"] = None
+
+    print("Finished")
+    import sys
+    sys.exit()
+
+        # from .dfe_helper import gammaDFE_to_discretized
+        # f0, f1, f2, f3 = gammaDFE_to_discretized(mean, shape, prop_syn)
+        # params.update({"f0": f0, "f1": f1, "f2": f2, "f3": f3})
+
 
     if CONSTANT_DFE or constant_dfe is not False: # The CONSTANT_DFE is prop injected by CLI, constant_dfe is provided by API
         s = getattr(pop, "s", None)
