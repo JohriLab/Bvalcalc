@@ -11,7 +11,7 @@ r = 7.465e-8 * (1-f) * x # Recombination (crossover) rate per bp, per generation
 u = 6.95e-9 * x # Mutation rate (all types) per bp, per generation [4]
 g = r * 50 * (1-f) * x # Gene conversion initiation rate per bp, per generation [5]
 k = 553 # Gene conversion tract length (bp) [5]
-## DFE parameters for ALL sites in annotated regions (Sum must equal 1)
+## Basic DFE parameters for ALL sites in annotated regions (Sum must equal 1), can overwrite with other --*_dfe flags
 f0 = 0.28 # Proportion of effectively neutral mutations with 0 <= |2Ns| < 1 (Note that 2Ns<5 does not contribute to BGS) [6*]
 f1 = 0.33 # Proportion of weakly deleterious mutations with 1 <= |2Ns| < 10 [6*]
 f2 = 0.35 # Proportion of moderately deleterious mutations with 10 <= |2Ns| < 100 [6*]
@@ -21,7 +21,10 @@ Ncur = 0.5 * Nanc # Current population size (!Requires --pop_change) [2]
 time_of_change = 1 * Nanc # Time in generations ago that effective population size went from Nanc to Ncur (!Requires --pop_change) [2]
 ## Advanced DFE parameters 
 h = 0.5 + (f-0.5*f) # Dominance coefficient of selected alleles, NOTE: this is h_eff for h=0.5, replace BOTH 0.5's with your dominance coefficient [Naive value]
-mean, shape, proportion_synonymous = 500, 0.5, 0.3 # Gamma distribution of DFE to discretize and replace f0-f3 [mean (2Ns), shape, proportion synonymous] (!Requires --gamma_dfe) [Naive value]## Literature cited
+mean, shape, proportion_synonymous = 500 / (2*Nanc), 0.5, 0.3 # Gamma distribution of DFE to discretize into 9 bins  [mean (s), shape, strictly neutral proportion] (!Requires --gamma_dfe) [Naive value]
+s_breaks = 0, 1/(2*Nanc), 10/(2*Nanc), 100/(2*Nanc), 1 # Custom DFE parameter controlling the homozygous selection coefficient (s) breakpoints (!Requires --custom_dfe) [Naive value]
+bin_proportions = 0.25, 0.25, 0.25, 0.25 # Custom DFE parameter controlling the proportion of mutations between each bin by s_breaks, overwriting the f1-f3 values above (!Requires --custom_dfe) [Naive value]
+## Literature cited
 # [1] Platt et al. 2010 doi: 10.1371/journal.pgen.1000843
 # [2] Durvasula et al. 2017 doi: 10.1073/pnas.1616736114
 # [3] Rowan et al. 2019 doi: 10.1534/genetics.119.302406

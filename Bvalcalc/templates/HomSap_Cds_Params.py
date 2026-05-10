@@ -10,7 +10,7 @@ r = 1e-8 * x # Recombination (crossover) rate per bp, per generation (sex-averag
 u = 1.25e-8 * x # Mutation rate (all types) per bp, per generation [2]
 g = 3.27e-8 * x # Gene conversion initiation rate per bp, per generation [3]
 k = 113 # Gene conversion tract length (bp) [3]
-## DFE parameters for ALL sites in annotated regions (Sum must equal 1)
+## Basic DFE parameters for ALL sites in annotated regions (Sum must equal 1), can overwrite with other --*_dfe flags
 f0 = 0.51 # Proportion of effectively neutral mutations with 0 <= |2Ns| < 1 (Note that 2Ns<5 does not contribute to BGS) [4]
 f1 = 0.14 # Proportion of weakly deleterious mutations with 1 <= |2Ns| < 10 [4]
 f2 = 0.14 # Proportion of moderately deleterious mutations with 10 <= |2Ns| < 100 [4]
@@ -20,7 +20,9 @@ Ncur = 14474 # Current population size (!Requires --pop_change) [1]
 time_of_change = 0.81 * Nanc # Time in generations ago that effective population size went from Nanc to Ncur (!Requires --pop_change) [1]
 ## Advanced DFE parameters 
 h = 0.5 # Dominance coefficient of selected alleles [Naive value]
-mean, shape = 500, 0.5 # Gamma distribution of DFE to discretize and replace f0-f3 [mean (2Ns), shape] (!Requires --gamma_dfe) [Naive value]
+mean, shape, proportion_synonymous = 100 / (2*Nanc), 1, 0.3 # Gamma distribution of DFE to discretize into 9 bins  [mean (s), shape, strictly neutral proportion] (!Requires --gamma_dfe) [Naive value]
+s_breaks = 0, 1/(2*Nanc), 10/(2*Nanc), 100/(2*Nanc), 1 # Custom DFE parameter controlling the homozygous selection coefficient (s) breakpoints (!Requires --custom_dfe) [Naive value]
+bin_proportions = 0.25, 0.25, 0.25, 0.25 # Custom DFE parameter controlling the proportion of mutations between each bin by s_breaks, overwriting the f1-f3 values above (!Requires --custom_dfe) [Naive value]
 ## Literature cited
 # [1] Gutenkunst et al 2009 doi: 10.1371/journal.pgen.1000695
 # [2] Kong et al 2012 doi: 10.1038/nature11396

@@ -221,6 +221,7 @@ def customDFE_getf0(s_breaks, bin_props, s_cutoff):
     new_props : np.ndarray
         Bin proportions corresponding to new_breaks.
     """
+
     s_breaks = np.array(s_breaks, dtype=float)
     bin_props = np.array(bin_props, dtype=float)
 
@@ -253,6 +254,12 @@ def customDFE_getf0(s_breaks, bin_props, s_cutoff):
         else:
             new_props.append(prop)
             new_breaks.append(right)
+    
+    print(f"Custom DFE parameters active (overwriting f1-f3)")
+    print(f"s_edges, homozygous selection coefficient breakpoint for each bin =", np.array2string(np.array(new_breaks, dtype=float),precision=3))
+    print(f"s_cutoff, minimum selection coefficient for which BGS is calculated (below added to f0) = {s_cutoff:.6f}")
+    print(f"f0, effectively neutral proportion in selected region = {f0:.6f} which is not used in BGS calculations")
+    print(f"f_x, proportion in each remaining bin, excluding f0 =", np.array2string(np.array(new_props, dtype=float),formatter={'float_kind': lambda x: f'{x:.6f}'}))
 
     return ( # Return s clean arrays for exporting to calcB
         f0,
@@ -292,5 +299,7 @@ def legacyDFE_to_bins(params):
         t3,
         t4
     ], dtype=float)
+
+    print(f"Basic DFE parameters active by default (see --constant_dfe, --gamma_dfe, --custom_dfe)")
 
     return params

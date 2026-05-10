@@ -11,7 +11,7 @@ r = 1e-8 * (1-f) * x # Recombination (crossover) rate per bp, per generation (se
 u = 1e-8 * x # Mutation rate (all types) per bp, per generation [Naive value]
 g = 1e-8 * (1-f) * x # Gene conversion initiation rate per bp, per generation [Naive value]
 k = 500 # Gene conversion tract length (bp) [Naive value]
-## DFE parameters for ALL sites in annotated regions (Sum must equal 1)
+## Basic DFE parameters for ALL sites in annotated regions (Sum must equal 1), can overwrite with other --*_dfe flags
 f0 = 0.25 # Proportion of effectively neutral mutations with 0 <= |2Ns| < 1 (Note that 2Ns<5 does not contribute to BGS) [Naive value]
 f1 = 0.25 # Proportion of weakly deleterious mutations with 1 <= |2Ns| < 10 [Naive value]
 f2 = 0.25 # Proportion of moderately deleterious mutations with 10 <= |2Ns| < 100 [Naive value]
@@ -21,7 +21,9 @@ Ncur = Nanc # Current population size (!Requires --pop_change) [Naive value]
 time_of_change = 1 * Nanc # Time in generations ago that effective population size went from Nanc to Ncur (!Requires --pop_change) [Naive value]
 ## Advanced DFE parameters 
 h = 0.5 + (f-0.5*f) # Dominance coefficient of selected alleles, NOTE: this is h_eff for h=0.5, replace BOTH 0.5's with your dominance coefficient [Naive value]
-mean, shape, proportion_synonymous = 100, 1, 0.3 # Gamma distribution of DFE to discretize and replace f0-f3 [mean (2Ns), shape, proportion synonymous] (!Requires --gamma_dfe) [Naive value]
+mean, shape, proportion_synonymous = 100 / (2*Nanc), 1, 0.3 # Gamma distribution of DFE to discretize into 9 bins  [mean (s), shape, strictly neutral proportion] (!Requires --gamma_dfe) [Naive value]
+s_breaks = 0, 1/(2*Nanc), 10/(2*Nanc), 100/(2*Nanc), 1 # Custom DFE parameter controlling the homozygous selection coefficient (s) breakpoints (!Requires --custom_dfe) [Naive value]
+bin_proportions = 0.25, 0.25, 0.25, 0.25 # Custom DFE parameter controlling the proportion of mutations between each bin by s_breaks, overwriting the f1-f3 values above (!Requires --custom_dfe) [Naive value]
 ## Literature cited
 # [1]
 # [2]
