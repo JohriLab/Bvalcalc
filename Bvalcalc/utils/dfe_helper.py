@@ -41,20 +41,6 @@ def get_DFE_params(params_path: str | None = None, gamma_dfe: bool = False, cons
             raise AttributeError(f"params parameter '{name}' is None; must be a numeric value")
         params[name] = float(val)
 
-    # 4. Optional gamma-DFE override
-    if GAMMA_DFE or gamma_dfe is not False: # The GAMMA_DFE is prop injected by CLI, gamma_dfe is provided by API
-        mean = getattr(pop, 'mean', None)
-        shape = getattr(pop, 'shape', None)
-        prop_syn = getattr(pop, 'proportion_synonymous', None)
-        if mean is None or shape is None or prop_syn is None:
-            raise AttributeError(
-                "params must define 'mean', 'shape' and 'proportion_synonymous' when --gamma_dfe is active"
-            )
-        from .dfe_helper import gammaDFE_to_discretized
-        f0, f1, f2, f3 = gammaDFE_to_discretized(mean, shape, prop_syn)
-        params.update({"f0": f0, "f1": f1, "f2": f2, "f3": f3})
-
-
     # 5. Set derived parameters and thresholds
     params["gamma_cutoff"] = 5
     s_cutoff = params["gamma_cutoff"] / (2.0 * params["Nanc"]) # Convert 2Ns cutoff to s cutoff
@@ -68,8 +54,33 @@ def get_DFE_params(params_path: str | None = None, gamma_dfe: bool = False, cons
     params["t3"] = h * (100.0 / (2.0 * Nanc))
     params["t4"] = h * 1.0
 
+
+
+    # 4. Optional gamma-DFE override
+    if GAMMA_DFE or gamma_dfe is not False: # The GAMMA_DFE is prop injected by CLI, gamma_dfe is provided by API
+        mean = getattr(pop, 'mean', None)
+        shape = getattr(pop, 'shape', None)
+        prop_syn = getattr(pop, 'proportion_synonymous', None)
+        if mean is None or shape is None or prop_syn is None:
+            raise AttributeError(
+                "params must define 'mean', 'shape' and 'proportion_synonymous' when --gamma_dfe is active"
+            )
+        from .dfe_helper import gammaDFE_to_discretized
+
+        f0, f_x, s_edges = gammaDFE_to_discretized(
+            mean,
+            shape,
+            prop_syn,
+            s_cutoff=s_cutoff,
+        )
+
+        params["f0"] = f0
+        params["f_x"] = f_x
+        params["t_edges"] = h * s_edges
+
+
+
     if CUSTOM_DFE or custom_dfe is not False: # The CUSTOM_DFE is prop injected by CLI, custom_dfe is provided by API
-        print("Custom running XXXXXX")
         s_breaks = getattr(pop, 's_breaks', None)
         bin_props = getattr(pop, 'bin_proportions', None)
         if len(s_breaks) != len(bin_props) + 1:
@@ -78,7 +89,7 @@ def get_DFE_params(params_path: str | None = None, gamma_dfe: bool = False, cons
             )
         if s_breaks[0] != 0 or s_breaks[-1] != 1:
             raise ValueError(
-                "s_breaks must start with 0 and end with 1 when --custom_dfe is active. This defines the full range of selection coefficients from neutral (0) to fully homozygous lethal (1)."
+                "s_breaks must start with 0 and end with 1 when --custom_dfe is active. This defines the full range of selection coefficients from neutral (0) to fully homozygous lethal (1). If your distribution does not include neutral or fully lethal mutations, set the edge proportions to 0"
             )
         if any((x < 0 or x > 1) for x in s_breaks):
             raise ValueError(
@@ -115,41 +126,86 @@ def get_DFE_params(params_path: str | None = None, gamma_dfe: bool = False, cons
     return params
 
 
-def gammaDFE_to_discretized(mean: float, shape: float, proportion_synonymous: float):
+def gammaDFE_to_discretized(mean, shape, proportion_synonymous,
+                            s_cutoff=None):
+
     if mean <= 0 or shape <= 0:
         raise ValueError("`mean` and `shape` must be positive.")
+
     if not (0 <= proportion_synonymous < 1):
         raise ValueError("`proportion_synonymous` must be in [0, 1).")
 
-    theta = mean / shape               # scale parameter
-    dist  = st.gamma(a=shape, scale=theta)
+    theta = mean / shape
+    dist = st.gamma(a=shape, scale=theta)
 
-    # cumulative probabilities at the cut‑points
-    c1   = dist.cdf(1.0)
-    c10  = dist.cdf(10.0)
-    c100 = dist.cdf(100.0)
+    # ------------------------------------------------------------------
+    # fixed log-spaced bins in `s` space from 0 (neutral) to 1 (homozygous lethal)
+    # ------------------------------------------------------------------
 
+    s_edges = np.array([
+        0.0,
+        1e-8,
+        1e-7,
+        1e-6,
+        1e-5,
+        1e-4,
+        1e-3,
+        1e-2,
+        1e-1,
+        1.0,
+    ], dtype=float)
 
-    f0 = c1                      # (0, 1]
-    f1 = c10  - c1               # (1,10]
-    f2 = c100 - c10              # (10,100]
-    f3 = 1.0   - c100            # >100
+    # discretized proportions
+    f_x = np.zeros(len(s_edges) - 1, dtype=float)
 
-    # 4) scale to sum to (1 - p_syn)
+    for i in range(len(f_x)):
+
+        left = s_edges[i]
+        right = s_edges[i + 1]
+
+        f_x[i] = dist.cdf(right) - dist.cdf(left)
+
+    # fold tail mass (>1) into final bin
+    f_x[-1] += 1.0 - dist.cdf(s_edges[-1])
+
+    # scale to nonsynonymous fraction
     scale = 1.0 - proportion_synonymous
-    f0, f1, f2, f3 = (f0 * scale,
-                      f1 * scale,
-                      f2 * scale,
-                      f3 * scale)
+    f_x *= scale
 
-    # 5) add synonymous fraction back into f0
-    f0 += proportion_synonymous
+    # collapse effectively-neutral mass into f0
+    f0 = proportion_synonymous
+
+    if s_cutoff is not None:
+        gamma_f0 = dist.cdf(s_cutoff) * scale
+        f0 += gamma_f0
+
+        for i, prop in enumerate(f_x):
+            left = s_edges[i]
+            right = s_edges[i + 1]
+
+            # Entire bin below cutoff
+            if right <= s_cutoff:
+                f_x[i] = 0.0
+
+            # Bin crosses cutoff
+            elif left < s_cutoff < right:
+                above_fraction = ((right - s_cutoff) / (right - left))
+                f_x[i] *= above_fraction
+
+        # renormalize remaining selected mass
+        remaining = f_x.sum()
+
+        if remaining > 0:
+            f_x *= (scale - gamma_f0) / remaining
 
     print(f"Converting gamma distribution to discretized DFE")
-    print(f"Gamma params: mean = {mean}, shape = {shape}, scale = {theta}")
-    print(f"Inferred f0, f1, f2, f3 = ", f0, f1, f2, f3)
+    print(f"Gamma params: mean s = {mean:.8f}, shape = {shape}, scale = {theta:.8f}")
+    print(f"s_edges, selection coefficient breakpoint for each bin = {s_edges}")
+    print(f"s_cutoff, minimum selection coefficient for which BGS is calculated (below added to f0) = {s_cutoff:.6f}")
+    print(f"f0, effectively neutral proportion in selected region = {f0:.6f}, of which {gamma_f0 if s_cutoff is not None else 0.0:.6f} is from the gamma distribution below cutoff")
+    print(f"f_x, proportion in each remaining bin, excluding f0 = {np.array2string(f_x, formatter={'float_kind': lambda x: f'{x:.6f}'})}")
 
-    return f0, f1, f2, f3
+    return (f0, np.array(f_x, dtype=float), np.array(s_edges, dtype=float))
 
 def customDFE_getf0(s_breaks, bin_props, s_cutoff):
     """
