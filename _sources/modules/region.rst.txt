@@ -49,13 +49,17 @@ Optional Arguments
     If used with ``--plot``, only neutral sites will be shown in the plot
 
 **-\-gamma_dfe**
-  If included, use a gamma distribution to define the DFE (instead of fixed ``f0``, ``f1``, ``f2``, ``f3``). 
+  If included, use a gamma distribution to define the DFE using a grid of selection coefficients from 1 to 1e-8 in 10-fold steps (instead of the basic DFE parameters set by ``f0``, ``f1``, ``f2``, ``f3``). Adding this flag overrides the basic DFE parameters set by ``f0``, ``f1``, ``f2``, ``f3``). 
   Note that ``mean``, ``shape`` and ``proportion_synonymous`` should be set in the parameters file when active.
 
 **-\-constant_dfe**
-  If included, use a constant fixed ``s`` value as the DFE of selected sites (instead of fixed ``f0``, ``f1``, ``f2``, ``f3``). 
+  If included, use a constant fixed ``s`` value as the DFE of selected sites (instead of the basic DFE parameters set by ``f0``, ``f1``, ``f2``, ``f3``). Adding this flag overrides the basic DFE parameters set by ``f0``, ``f1``, ``f2``, ``f3``). 
   Note that ``s`` and ``proportion_synonymous`` should be set in the parameters file when active.
 
+**-\-custom_dfe**
+  If included, set the discrete breakpoints for homozygous selection coefficients ``s_breaks`` within which uniform distributions are modelled with proportions set by ``bin_proportions``. Setting this overrides the basic DFE parameters set by ``f0``, ``f1``, ``f2``, ``f3``). 
+  Note that ``s_breaks`` and ``bin_proportions`` should be set in the parameters file when active.
+  
 **-\-hri**
     If included, will enable post-hoc calculation of B under HRI (B'; Becher and Charlesworth 2025), for low recombination regions. Note that this is experimental and largely untested, see supplement in the manuscript.
 
