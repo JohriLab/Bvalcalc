@@ -40,6 +40,7 @@ def genomeBcalc(args):
     import Bvalcalc.utils.dfe_helper as dfe_helper
     dfe_helper.GAMMA_DFE = args.gamma_dfe # Update DFE if --gamma_dfe
     dfe_helper.CONSTANT_DFE = args.constant_dfe # Update DFE if --constant_dfe
+    dfe_helper.CUSTOM_DFE = args.custom_dfe # Update DFE if --custom_dfe
 
     print("Chromosomes loaded:", unique_chromosomes) ## Now, loop over each chromosome and save B output
 

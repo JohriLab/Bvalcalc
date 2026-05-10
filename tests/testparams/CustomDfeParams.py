@@ -1,7 +1,7 @@
 ## Population genetic parameters for the simulated or empirical population
 ## Accurate estimation requires accurate and appropriate parameters
 ##
-## e.g. Bvalcalc --params path/to/ExampleParams.py
+## e.g. Bvalcalc --pop_params path/to/ExampleParams.py
 ##
 ## Core parameters
 x = 1 # Scaling factor (N,u,r), keep as 1 unless calculating for rescaled simulations
@@ -20,12 +20,15 @@ Ncur = 2 * Nanc # Current population size (!Requires --pop_change) [5]
 time_of_change = 0.45 * Nanc # Time in generations ago that effective population size went from Nanc to Ncur (!Requires --pop_change) [6]
 ## Advanced DFE parameters 
 h = 0.5 # Dominance coefficient of selected alleles [Naive value]
-mean, shape, proportion_synonymous = 811/(2*Nanc), 0.347, 0.3 # Gamma distribution of DFE to discretize and replace f0-f3 [mean (s), shape, proportion synonymous] (!Requires --gamma_dfe) [7]
-## Literature cited
+mean, shape, proportion_synonymous = 811, 0.347, 0.3 # Gamma distribution of DFE to discretize and replace f0-f3 [mean (2Ns), shape, proportion synonymous] (!Requires --gamma_dfe) [Naive value]## Literature cited
+
+s_breaks = 0, 0.000000001, 0.000005, 0.01, 0.1, 1           # 6 breaks to give 5 bins
+bin_proportions = 0.2, 0.2, 0.2, 0.2, 0.2        # proportions of f_i, where i is from 0 to 4 (in this case)
+
+mean, shape, proportion_synonymous = 811, 0.347, 0.3 # Gamma distribution of DFE to discretize and replace f0-f3 [mean (2Ns), shape, proportion synonymous] (!Requires --gamma_dfe) [Naive value]## Literature cited
 # [1] Keightley et al 2014  doi: 10.1534/genetics.113.158758
 # [2] Comeron et al 2012 doi: 10.1371/journal.pgen.1002905
 # [3] Miller et al 2016 doi: 10.1534/genetics.115.186486
 # [4] Johri et al 2020 doi: 10.1534/genetics.119.303002
 # [5] Laurent et al 2011 doi: 10.1093/molbev/msr031
 # [6] Kapopoulou et al 2018 doi: 10.1093/gbe/evy185
-# [7] Huber et al 2017 doi: 10.1073/pnas.1619508114

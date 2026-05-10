@@ -12,6 +12,7 @@ def regionBcalc(args, region):
     import Bvalcalc.utils.dfe_helper as dfe_helper
     dfe_helper.GAMMA_DFE = args.gamma_dfe # Update DFE if --gamma_dfe
     dfe_helper.CONSTANT_DFE = args.constant_dfe # Update DFE if --constant_dfe
+    dfe_helper.CUSTOM_DFE = args.custom_dfe # Update DFE if --custom_dfe
 
     calc_chrom, calc_start, calc_end = parse_region(region)
 

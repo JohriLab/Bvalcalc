@@ -6,6 +6,7 @@ def siteBcalc(args):
     import Bvalcalc.utils.dfe_helper as dfe_helper
     dfe_helper.GAMMA_DFE = args.gamma_dfe # Update DFE if --gamma_dfe
     dfe_helper.CONSTANT_DFE = args.constant_dfe # Update DFE if --constant_dfe
+    dfe_helper.CUSTOM_DFE = args.custom_dfe # Update DFE if --custom_dfe
     from Bvalcalc.core.calculateB import calculateB_linear
 
     b_values = calculateB_linear(distance, element_size)

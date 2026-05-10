@@ -20,10 +20,12 @@ Ncur = 2 * Nanc # Current population size (!Requires --pop_change) [5]
 time_of_change = 0.45 * Nanc # Time in generations ago that effective population size went from Nanc to Ncur (!Requires --pop_change) [6]
 ## Advanced DFE parameters 
 h = 0.5 # Dominance coefficient of selected alleles [Naive value]
-mean, shape, proportion_synonymous = 93.3, 0.24, 0.0 # Gamma distribution of DFE to discretize and replace f0-f3 [mean (2Ns), shape, proportion synonymous] (!Requires --gamma_dfe) [Naive value]## Literature cited
+mean, shape, proportion_synonymous = 93.3/(2*Nanc), 0.24, 0.0 # Gamma distribution of DFE to discretize and replace f0-f3 [mean (s), shape, proportion synonymous] (!Requires --gamma_dfe) [7]
+## Literature cited
 # [1] Keightley et al 2014  doi: 10.1534/genetics.113.158758
 # [2] Comeron et al 2012 doi: 10.1371/journal.pgen.1002905
 # [3] Miller et al 2016 doi: 10.1534/genetics.115.186486
 # [4] Johri et al 2020 doi: 10.1534/genetics.119.303002
 # [5] Laurent et al 2011 doi: 10.1093/molbev/msr031
 # [6] Kapopoulou et al 2018 doi: 10.1093/gbe/evy185
+# [7] Daigle et al. 2026 doi: 10.64898/2026.03.01.708907v1
