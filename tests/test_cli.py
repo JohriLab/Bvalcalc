@@ -337,4 +337,56 @@ def test_cli_unlinked_custom_dfe():
 
     assert abs(value - expected) < 1e-12, f"Expected {expected}, got {value}"
 
-    
+
+def test_cli_gamma_dfe_output():
+    """Test CLI output for gamma DFE parameterisation and binning consistency."""
+
+    import subprocess
+    import sys
+
+    cmd = [
+        "poetry", "run", "Bvalcalc",
+        "--params", "./Bvalcalc/templates/DroMel_Cds_Params.py",
+        "--gene",
+        "--gamma_dfe",
+    ]
+
+    result = subprocess.run(cmd, capture_output=True, text=True)
+
+    assert result.returncode == 0, f"CLI failed:\n{result.stderr}"
+
+    output = result.stdout.strip()
+
+    # expected diagnostic lines
+    expected_lines = {
+        "Gamma params": "Gamma params: mean s = 0.00030489, shape = 0.347, scale = 0.00087864",
+        "s_edges": "s_edges, selection coefficient breakpoint for each bin = [0.e+00 1.e-08 1.e-07 1.e-06 1.e-05 1.e-04 1.e-03 1.e-02 1.e-01 1.e+00]",
+        "f0": "f0, effectively neutral proportion in selected region = 0.392974",
+        "f_x": "f_x, proportion in each remaining bin, excluding f0 = [0.000000 0.000000 0.000000 0.080816 0.190310 0.278848 0.057051 0.000001 0.000000]",
+    }
+
+    matched = {k: None for k in expected_lines}
+
+    for line in output.split("\n"):
+        for key, target in expected_lines.items():
+            if target.split("=")[0].strip() in line:
+                matched[key] = line.strip()
+
+    # ensure all diagnostic lines exist
+    for k, v in matched.items():
+        assert v is not None, f"Missing CLI output line for {k}"
+
+    # validate final B output block exists
+    target_line = None
+    for line in output.split("\n"):
+        if "B for adjacent site:" in line:
+            target_line = line
+            break
+
+    assert target_line is not None, "Missing B output line"
+
+    expected = 0.9495081285538933
+
+    value = float(target_line.split(":")[-1].strip())
+
+    assert abs(value - expected) < 1e-12, f"Expected {expected}, got {value}"
