@@ -308,7 +308,7 @@ def test_cli_unlinked_custom_dfe():
     import sys
 
     cmd = [
-        "poetry", "run", "Bvalcalc",
+        sys.executable, "-m", "Bvalcalc",
         "--region", "chr_neutral:1-1",
         "--params", "tests/testparams/CustomDfeParams.py",
         "--bedgff", "tests/testfiles/200kb_unlinked.csv",
@@ -321,7 +321,6 @@ def test_cli_unlinked_custom_dfe():
 
     output = result.stdout.strip()
 
-    # extract the line containing unlinked result
     target_line = None
     for line in output.split("\n"):
         if "B from unlinked sites calculated for chromosome chr_neutral" in line:
@@ -332,11 +331,9 @@ def test_cli_unlinked_custom_dfe():
 
     expected = 0.9996430895513589
 
-    # extract numeric value at end of line
     value = float(target_line.split(":")[-1].strip())
 
     assert abs(value - expected) < 1e-12, f"Expected {expected}, got {value}"
-
 
 def test_cli_gamma_dfe_output():
     """Test CLI output for gamma DFE parameterisation and binning consistency."""
@@ -345,7 +342,7 @@ def test_cli_gamma_dfe_output():
     import sys
 
     cmd = [
-        "poetry", "run", "Bvalcalc",
+        sys.executable, "-m", "Bvalcalc",
         "--params", "./Bvalcalc/templates/DroMel_Cds_Params.py",
         "--gene",
         "--gamma_dfe",
@@ -357,7 +354,6 @@ def test_cli_gamma_dfe_output():
 
     output = result.stdout.strip()
 
-    # expected diagnostic lines
     expected_lines = {
         "Gamma params": "Gamma params: mean s = 0.00030489, shape = 0.347, scale = 0.00087864",
         "s_edges": "s_edges, selection coefficient breakpoint for each bin = [0.e+00 1.e-08 1.e-07 1.e-06 1.e-05 1.e-04 1.e-03 1.e-02 1.e-01 1.e+00]",
@@ -372,11 +368,9 @@ def test_cli_gamma_dfe_output():
             if target.split("=")[0].strip() in line:
                 matched[key] = line.strip()
 
-    # ensure all diagnostic lines exist
     for k, v in matched.items():
         assert v is not None, f"Missing CLI output line for {k}"
 
-    # validate final B output block exists
     target_line = None
     for line in output.split("\n"):
         if "B for adjacent site:" in line:
