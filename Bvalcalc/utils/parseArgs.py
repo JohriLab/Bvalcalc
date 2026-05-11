@@ -7,8 +7,8 @@ def parseSiteArgs(argv=None):
     parser.add_argument('--element_size', type=int, default=10000, help="Length of single region (e.g. gene) under selection. [5000]")
     parser.add_argument('--distance', type=int, default=1, help="Length of single region (e.g. gene) under selection. [5000]")
     parser.add_argument('--pop_change', action='store_true', help="If set, B will reflect the current B after a step change in population size, rather than ancestral B.")
-    parser.add_argument('--gamma_dfe', action='store_true', help="If set, gamma distribution parameters will be used to define DFE's discretized f0-f3 proportions")
-    parser.add_argument('--constant_dfe', action='store_true', help="If set, the constant `s` and `neu_prop` parameters in the params file will be used for all conserved regions instead of discretized f0-f3 proportions")   
+    parser.add_argument('--gamma_dfe', action='store_true', help="If set, gamma distribution parameters `mean, shape` will be discretized into 9 bins of selection coefficients along with `proportion_synonymous` to replace f0-f3 proportions")   
+    parser.add_argument('--constant_dfe', action='store_true', help="If set, the constant `s` and `proportion_synonymous` parameters in the params file will be used for all conserved regions instead of discretized f0-f3 proportions")   
     parser.add_argument('--custom_dfe', action='store_true', help="If set, the `s_breaks` and `bin_proportions` parameters in the params file will be used to define discretized DFE break points with defined proportions to replace f0-f3")   
     parser.add_argument('--quiet', action='store_true', help="If set, silence print statements.")
     return parser.parse_args(argv)
@@ -19,8 +19,8 @@ def parseGeneArgs(argv=None):
     parser.add_argument('--element_size', type=int, default=10000, help="Length of single region (e.g. gene) under selection. [5000]")
     parser.add_argument('--flank_len', type=int, default=40000, help="Length of flanking neutral region for which to calcuate recovery of B. [25000]")
     parser.add_argument('--pop_change', action='store_true', help="If set, B will reflect the current B after a step change in population size, rather than ancestral B.")
-    parser.add_argument('--gamma_dfe', action='store_true', help="If set, gamma distribution parameters will be used to define DFE's discretized f0-f3 proportions")
-    parser.add_argument('--constant_dfe', action='store_true', help="If set, the constant `s` and `neu_prop` parameters in the params file will be used for all conserved regions instead of discretized f0-f3 proportions")   
+    parser.add_argument('--gamma_dfe', action='store_true', help="If set, gamma distribution parameters `mean, shape` will be discretized into 9 bins of selection coefficients along with `proportion_synonymous` to replace f0-f3 proportions")   
+    parser.add_argument('--constant_dfe', action='store_true', help="If set, the constant `s` and `proportion_synonymous` parameters in the params file will be used for all conserved regions instead of discretized f0-f3 proportions")   
     parser.add_argument('--custom_dfe', action='store_true', help="If set, the `s_breaks` and `bin_proportions` parameters in the params file will be used to define discretized DFE break points with defined proportions to replace f0-f3")   
     parser.add_argument('--plot', nargs='?', const='Bplot.png', default=None, 
                         help="Generate a B recovery slope output"
@@ -58,8 +58,8 @@ def parseRegionArgs(argv=None):
                         help="Optional gene conversion (non-crossover) map input. Usage: --gc_map your.map, "
                              "Format should be a two column csv with the header: 'start,rate'. "
                              "Note that gene conversion rates will be averaged within each chunk.")    
-    parser.add_argument('--gamma_dfe', action='store_true', help="If set, gamma distribution parameters will be used to define DFE's discretized f0-f3 proportions")
-    parser.add_argument('--constant_dfe', action='store_true', help="If set, the constant `s` and `neu_prop` parameters in the params file will be used for all conserved regions instead of discretized f0-f3 proportions")   
+    parser.add_argument('--gamma_dfe', action='store_true', help="If set, gamma distribution parameters `mean, shape` will be discretized into 9 bins of selection coefficients along with `proportion_synonymous` to replace f0-f3 proportions")   
+    parser.add_argument('--constant_dfe', action='store_true', help="If set, the constant `s` and `proportion_synonymous` parameters in the params file will be used for all conserved regions instead of discretized f0-f3 proportions")   
     parser.add_argument('--custom_dfe', action='store_true', help="If set, the `s_breaks` and `bin_proportions` parameters in the params file will be used to define discretized DFE break points with defined proportions to replace f0-f3")   
     parser.add_argument('--plot', nargs='?', const='genome_plot.png', default=None, 
                         help="Generate a basic plot using `Bvalcalc --genome` output"
@@ -109,8 +109,8 @@ def parseGenomeArgs(argv=None):
                         help="Optional gene conversion (non-crossover) map input. Usage: --gc_map your.map, "
                              "Format should be a two column csv with the header: 'start,rate'. "
                              "Note that gene conversion rates will be averaged within each chunk.") 
-    parser.add_argument('--gamma_dfe', action='store_true', help="If set, gamma distribution parameters will be used to define DFE's discretized f0-f3 proportions")   
-    parser.add_argument('--constant_dfe', action='store_true', help="If set, the constant `s` and `neu_prop` parameters in the params file will be used for all conserved regions instead of discretized f0-f3 proportions")   
+    parser.add_argument('--gamma_dfe', action='store_true', help="If set, gamma distribution parameters `mean, shape` will be discretized into 9 bins of selection coefficients along with `proportion_synonymous` to replace f0-f3 proportions")   
+    parser.add_argument('--constant_dfe', action='store_true', help="If set, the constant `s` and `proportion_synonymous` parameters in the params file will be used for all conserved regions instead of discretized f0-f3 proportions")   
     parser.add_argument('--custom_dfe', action='store_true', help="If set, the `s_breaks` and `bin_proportions` parameters in the params file will be used to define discretized DFE break points with defined proportions to replace f0-f3")   
     parser.add_argument('--hri', action='store_true', help="If set, will enable post-hoc calculation of B under HRI (B'; Becher and Charlesworth 2025), for low recombination regions")   
     parser.add_argument('--neutral_only', action='store_true', help="If set, plot will only show neutral sites.")
