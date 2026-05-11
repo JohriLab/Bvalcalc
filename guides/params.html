@@ -125,12 +125,25 @@
 </dd>
 </dl>
 </section>
-<section id="dfe-parameters">
-<h2>DFE parameters<a class="headerlink" href="#dfe-parameters" title="Link to this heading"></a></h2>
+<section id="distribution-of-fitness-effects">
+<h2>Distribution of fitness effects<a class="headerlink" href="#distribution-of-fitness-effects" title="Link to this heading"></a></h2>
 <p>A distribution of fitness effects (DFE) describes the probability of different selective effects for new mutations when they arise.
-<strong>Bvalcalc</strong> models a discretized deleterious DFE consisting of four uniform distributions ranging from effectively neutral (<code class="docutils literal notranslate"><span class="pre">f0</span></code>), to strongly deleterious (<code class="docutils literal notranslate"><span class="pre">f3</span></code>); beneficial mutations are currently not supported.</p>
-<p>See Figure 1 in <a class="reference external" href="https://doi.org/10.1534/genetics.119.303002">Johri et al. 2020</a> for a more detailed explanation of the discretized DFE.</p>
-<p>To specify a DFE, provide <code class="docutils literal notranslate"><span class="pre">f0</span></code>, <code class="docutils literal notranslate"><span class="pre">f1</span></code>, <code class="docutils literal notranslate"><span class="pre">f2</span></code>, <code class="docutils literal notranslate"><span class="pre">f3</span></code> proportions that represent the DFE for all annotated regions in the <a class="reference internal" href="../introduction/bedgff_input.html"><span class="doc">BED/GFF input</span></a>. Note that the proportions must sum to 1, i.e. <code class="docutils literal notranslate"><span class="pre">f0+f1+f2+f3</span> <span class="pre">=</span> <span class="pre">1</span></code>.</p>
+Selection coefficients are quantified as <code class="docutils literal notranslate"><span class="pre">s</span></code>, the fitness effect of a mutation in homozygous state, where <code class="docutils literal notranslate"><span class="pre">s</span> <span class="pre">=</span> <span class="pre">0</span></code> for a neutral allele and <code class="docutils literal notranslate"><span class="pre">|s|</span> <span class="pre">=</span> <span class="pre">1</span></code> for a homozygous lethal allele.
+The effect of selection is often scaled by the effective population size (<code class="docutils literal notranslate"><span class="pre">Nanc</span></code>) as <code class="docutils literal notranslate"><span class="pre">2*Nanc*s</span></code>. The dominance coefficient, <code class="docutils literal notranslate"><span class="pre">h</span></code> scales the effect of selection in heterozygous state, where <code class="docutils literal notranslate"><span class="pre">h</span> <span class="pre">=</span> <span class="pre">0</span></code> for a fully recessive allele and <code class="docutils literal notranslate"><span class="pre">h</span> <span class="pre">=</span> <span class="pre">1</span></code> for a fully dominant allele.</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">h</span></code></dt><dd><p>Dominance coefficient of selected alleles. Keep at 0.5 (additive effects) unless literature suggests otherwise</p>
+</dd>
+</dl>
+<p>When you specify a DFE in <strong>Bvalcalc</strong>, you are describing the probability of new deleterious mutations of a given strength arising in conserved regions (provided by e.g. the input GFF). Beneficial mutations are currently not supported.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>Bvalcalc</strong> typically models a deleterious DFE consisting of non-overlapping uniform distributions between defined selection coefficient break points ranging from 0 to 1 (where 1 reflects homozygous lethal).</p>
+</div>
+<section id="basic-dfe">
+<h3>Basic DFE<a class="headerlink" href="#basic-dfe" title="Link to this heading"></a></h3>
+<p>The basic default discretized DFE contains four categories of deleterious mutations, ranging from effectively neutral (proportion described by <code class="docutils literal notranslate"><span class="pre">f0</span></code>), to strongly deleterious (<code class="docutils literal notranslate"><span class="pre">f3</span></code>);</p>
+<p>See Figure 1 in <a class="reference external" href="https://doi.org/10.1534/genetics.119.303002">Johri et al. 2020</a> for a more detailed explanation of this discretized DFE.</p>
+<p>To specify a basic DFE, provide <code class="docutils literal notranslate"><span class="pre">f0</span></code>, <code class="docutils literal notranslate"><span class="pre">f1</span></code>, <code class="docutils literal notranslate"><span class="pre">f2</span></code>, <code class="docutils literal notranslate"><span class="pre">f3</span></code> proportions that represent the DFE for all annotated regions in the <a class="reference internal" href="../introduction/bedgff_input.html"><span class="doc">BED/GFF input</span></a>. Note that the proportions must sum to 1, i.e. <code class="docutils literal notranslate"><span class="pre">f0+f1+f2+f3</span> <span class="pre">=</span> <span class="pre">1</span></code>.</p>
 <dl>
 <dt><code class="docutils literal notranslate"><span class="pre">f0</span></code></dt><dd><p>Proportion of effectively neutral mutations with <cite>0 &lt;= | 2*Nanc*s | &lt; 1</cite>.</p>
 <p>Note that <cite>2*Nanc*s &lt; 5</cite> does not substantially contribute to BGS where HRI is not pervasive, see <a class="reference external" href="https://doi.org/10.1534/genetics.119.303002">Johri et al. 2020</a>, <strong>Bvalcalc</strong> will exclude the f0 proportion from BGS calculations.</p>
@@ -141,19 +154,38 @@
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">f3</span></code></dt><dd><p>Proportion of strongly deleterious mutations with <cite>100 &lt;= | 2*Nanc*s |</cite></p>
 </dd>
-<dt><code class="docutils literal notranslate"><span class="pre">h</span></code></dt><dd><p>Dominance coefficient of selected alleles. Keep at 0.5 (additive effects) unless literature suggests otherwise</p>
-</dd>
 </dl>
-<p>DFE parameters may be reported in the literature as a gamma distribution. <strong>Bvalcalc</strong> can take gamma distribution parameters which is converted to a discretized DFE to overwrite <code class="docutils literal notranslate"><span class="pre">f0</span></code>, <code class="docutils literal notranslate"><span class="pre">f1</span></code>, <code class="docutils literal notranslate"><span class="pre">f2</span></code>, <code class="docutils literal notranslate"><span class="pre">f3</span></code> when <code class="docutils literal notranslate"><span class="pre">--gamma_dfe</span></code> is specified:</p>
+</section>
+<section id="single-constant-dfe">
+<h3>Single constant DFE<a class="headerlink" href="#single-constant-dfe" title="Link to this heading"></a></h3>
+<p>A fixed constant selective strength may be used for all selected sites, replacing the discretized DFE when <code class="docutils literal notranslate"><span class="pre">--constant_dfe</span></code> is active:</p>
 <dl class="simple">
-<dt><code class="docutils literal notranslate"><span class="pre">mean,</span> <span class="pre">shape,</span> <span class="pre">proportion_synonymous</span></code></dt><dd><p>The mean and shape parameters of the gamma DFE, and the proportion of strictly neutral sites in the annotated regions (e.g. synonymous in exon regions).</p>
+<dt><code class="docutils literal notranslate"><span class="pre">s,</span> <span class="pre">proportion_synonymous</span></code></dt><dd><p>A single homozygous selective strength to use for all selected mutations, and the proportion of strictly neutral sites in annotated regions (e.g. synonymous).</p>
 </dd>
 </dl>
-<p>Similarly, a fixed constant selective strength may be used for all selected sites, replacing the discretized DFE when <code class="docutils literal notranslate"><span class="pre">--constant_dfe</span></code> is active:</p>
+</section>
+<section id="gamma-dfe">
+<h3>Gamma DFE<a class="headerlink" href="#gamma-dfe" title="Link to this heading"></a></h3>
+<p>DFE parameters may be reported in the literature as a gamma distribution. <strong>Bvalcalc</strong> can take gamma distribution parameters which is converted to a discretized DFE to overwrite <code class="docutils literal notranslate"><span class="pre">f0</span></code>, <code class="docutils literal notranslate"><span class="pre">f1</span></code>, <code class="docutils literal notranslate"><span class="pre">f2</span></code>, <code class="docutils literal notranslate"><span class="pre">f3</span></code> when <code class="docutils literal notranslate"><span class="pre">--gamma_dfe</span></code> is active.
+The gamma DFE is discretized into 9 bins with 10 break points of <code class="docutils literal notranslate"><span class="pre">s</span> <span class="pre">=</span> <span class="pre">1,</span> <span class="pre">1e-1,</span> <span class="pre">1e-2,</span> <span class="pre">1e-3,</span> <span class="pre">1e-4,</span> <span class="pre">1e-5,</span> <span class="pre">1e-6,</span> <span class="pre">1e-7,</span> <span class="pre">1e-8,</span> <span class="pre">0</span></code>.</p>
 <dl class="simple">
-<dt><code class="docutils literal notranslate"><span class="pre">s,</span> <span class="pre">proportion_synonymous</span></code></dt><dd><p>A single selective strength to use for all selected mutations, and the proportion of strictly neutral sites in annotated regions (e.g. synonymous).</p>
+<dt><code class="docutils literal notranslate"><span class="pre">mean,</span> <span class="pre">shape,</span> <span class="pre">proportion_synonymous</span></code></dt><dd><p>The mean and shape parameters of the gamma DFE, and the proportion of strictly neutral sites in the annotated regions (e.g. ~0.3 for synonymous sites in coding sequence annotations).</p>
 </dd>
 </dl>
+<p>If additional granularity is needed beyond the 9 bins, consider developing code to discretize your gamma distribution into additional bins which can be provided as input with <code class="docutils literal notranslate"><span class="pre">--custom_dfe</span></code> as described below.</p>
+</section>
+<section id="custom-dfe">
+<h3>Custom DFE<a class="headerlink" href="#custom-dfe" title="Link to this heading"></a></h3>
+<p>The discretized DFE can be customized with any arbitrary set of break points and proportions when <code class="docutils literal notranslate"><span class="pre">--custom_dfe</span></code> is active, which will overwrite the basic DFE parameters (<code class="docutils literal notranslate"><span class="pre">f0</span></code>, <code class="docutils literal notranslate"><span class="pre">f1</span></code>, <code class="docutils literal notranslate"><span class="pre">f2</span></code>, <code class="docutils literal notranslate"><span class="pre">f3</span></code>).
+Note that there should be one more break point than the number of bins, the proportions should sum to 1.</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">s_breaks</span></code></dt><dd><p>A list of selection coefficient break points to define the bins of the discretized DFE, ranging from 0 to 1 (where 1 reflects homozygous lethal).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">bin_proportions</span></code></dt><dd><p>A list of proportions of new mutations in each of the bins defined as between each value in <code class="docutils literal notranslate"><span class="pre">s_breaks</span></code>.</p>
+</dd>
+</dl>
+<p>For example, if you wanted to model a DFE with 5 bins with break points at <cite>s = 1, 1e-2, 1e-4, 1e-6, 0</cite> and proportions <cite>0.1, 0.2, 0.4, 0.2, 0.1</cite>, you would set <code class="docutils literal notranslate"><span class="pre">s_breaks</span> <span class="pre">=</span> <span class="pre">0,</span> <span class="pre">1e-6,</span> <span class="pre">1e-4,</span> <span class="pre">1e-2,</span> <span class="pre">1</span></code> and <code class="docutils literal notranslate"><span class="pre">bin_proportions</span> <span class="pre">=</span> <span class="pre">0.1,</span> <span class="pre">0.2,</span> <span class="pre">0.4,</span> <span class="pre">0.2,</span> <span class="pre">0.1</span></code> in the parameters file, and add the <code class="docutils literal notranslate"><span class="pre">--custom_dfe</span></code> flag to your CLI command.</p>
+</section>
 </section>
 <section id="demography">
 <h2>Demography<a class="headerlink" href="#demography" title="Link to this heading"></a></h2>
@@ -215,7 +247,13 @@
         <ul>
 <li><a class="reference internal" href="#">Tailoring Parameters</a><ul>
 <li><a class="reference internal" href="#core-parameters">Core parameters</a></li>
-<li><a class="reference internal" href="#dfe-parameters">DFE parameters</a></li>
+<li><a class="reference internal" href="#distribution-of-fitness-effects">Distribution of fitness effects</a><ul>
+<li><a class="reference internal" href="#basic-dfe">Basic DFE</a></li>
+<li><a class="reference internal" href="#single-constant-dfe">Single constant DFE</a></li>
+<li><a class="reference internal" href="#gamma-dfe">Gamma DFE</a></li>
+<li><a class="reference internal" href="#custom-dfe">Custom DFE</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#demography">Demography</a></li>
 <li><a class="reference internal" href="#selfing-species">Selfing species</a></li>
 </ul>
