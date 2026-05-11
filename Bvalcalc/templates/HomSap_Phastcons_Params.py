@@ -20,7 +20,7 @@ Ncur = 14474 # Current population size (!Requires --pop_change) [1]
 time_of_change = 0.81 * Nanc # Time in generations ago that effective population size went from Nanc to Ncur (!Requires --pop_change) [1]
 ## Advanced DFE parameters 
 h = 0.5 # Dominance coefficient of selected alleles [Naive value]
-mean, shape, proportion_synonymous = 16 / (2*Nanc), 0.1165, 0 # Gamma distribution of DFE to discretize into 9 bins  [mean (s), shape, strictly neutral proportion] (!Requires --gamma_dfe) [5]
+mean, shape, proportion_synonymous = 16 / (2*Nanc), 0.1165, 0 # Gamma distribution of DFE to discretize into 9 bins [mean (s), shape, strictly neutral proportion] (!Requires --gamma_dfe) [5]
 s_breaks = 0, 1/(2*Nanc), 10/(2*Nanc), 100/(2*Nanc), 1 # Custom DFE parameter controlling the homozygous selection coefficient (s) breakpoints (!Requires --custom_dfe) [Naive value]
 bin_proportions = 0.25, 0.25, 0.25, 0.25 # Custom DFE parameter controlling the proportion of mutations between each bin by s_breaks, overwriting the f1-f3 values above (!Requires --custom_dfe) [Naive value]
 ## Literature cited
