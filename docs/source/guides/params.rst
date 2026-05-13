@@ -10,9 +10,9 @@ Core parameters
 ``x`` 
     Scaling factor that modifies ``N``, ``u``, ``r``, and ``g``. Keep as 1 for empirical analysis, only relevant for calculating B to compare against rescaled simulations. See `Marsh, Kaushik and Johri 2025 <https://doi.org/10.1101/2025.04.24.650500>`_.
 ``Nanc``
-    Ancestral population size, often reported in literature. This is the population size value that scales the strength of selection. Can be roughly estimated from nucleotide diversity at neutrally evolving sites, given a mutation rate and no demography (`Nanc = pi/4u`).
+    Ancestral population size. This is the population size value that scales the strength of selection. Can be roughly estimated from nucleotide diversity at neutrally evolving sites, given a mutation rate and no demography (`Nanc = pi/4u`).
 ``r``
-    Recombination (crossover) mean rate per bp, per generation (sex-averaged), often reported in literature from direct measurement (recombination in pedigrees) or inferred from sequence data. Note you can add a crossover rate map that can modify ``r`` across the genome with ``--rec_map``. 
+    Crossover initiation (mean) rate per bp, per generation (sex-averaged). Note you can add a crossover rate map that can modify ``r`` across the genome with ``--rec_map``. 
 ``u``   
     Mutation mean rate per bp, per generation, often reported in literature from mutation accumulation experiments. Note that the point mutation rate is typically used, though all mutation types with selective effects may contribute to BGS similarly, if considering different mutation types with different DFEs, see :doc:`Multiple DFEs <../guides/multiple_dfes>`.  
 ``g`` 
@@ -25,7 +25,7 @@ Distribution of fitness effects
 
 A distribution of fitness effects (DFE) describes the probability of different selective effects for new mutations when they arise. 
 Selection coefficients are quantified as ``s``, the fitness effect of a mutation in homozygous state, where ``s = 0`` for a neutral allele and ``|s| = 1`` for a homozygous lethal allele. 
-The effect of selection is often scaled by the effective population size (``Nanc``) as ``2*Nanc*s``. The dominance coefficient, ``h`` scales the effect of selection in heterozygous state, where ``h = 0`` for a fully recessive allele and ``h = 1`` for a fully dominant allele.
+The effect of selection is often scaled by the effective population size (``Nanc``) as ``2*Nanc*s``. The dominance coefficient, ``h``, scales the effect of selection in heterozygous state, where ``h = 0`` for a fully recessive allele and ``h = 1`` for a fully dominant allele.
 
 ``h``
     Dominance coefficient of selected alleles. Keep at 0.5 (additive effects) unless literature suggests otherwise
@@ -53,7 +53,7 @@ To specify a basic DFE, provide ``f0``, ``f1``, ``f2``, ``f3`` proportions that 
 ``f2`` 
     Proportion of moderately deleterious mutations with `10 <= | 2*Nanc*s | < 100`
 ``f3``
-    Proportion of strongly deleterious mutations with `100 <= | 2*Nanc*s |` 
+    Proportion of strongly deleterious mutations with `100 <= | 2*Nanc*s | <= 2Nanc` 
 
 Single constant DFE 
 ~~~~~~~~~~~~~~~~~~~~
@@ -83,7 +83,7 @@ Note that there should be one more break point than the number of bins, the prop
 ``bin_proportions``
     A list of proportions of new mutations in each of the bins defined as between each value in ``s_breaks``. 
     
-For example, if you wanted to model a DFE with 5 bins with break points at `s = 1, 1e-2, 1e-4, 1e-6, 0` and proportions `0.1, 0.2, 0.4, 0.2, 0.1`, you would set ``s_breaks = 0, 1e-6, 1e-4, 1e-2, 1`` and ``bin_proportions = 0.1, 0.2, 0.4, 0.2, 0.1`` in the parameters file, and add the ``--custom_dfe`` flag to your CLI command.
+For example, if you wanted to model a DFE with 5 bins with 6 break points at `s = 0, 1e-8, 1e-6, 1e-4, 1e-2, 1` and proportions `0.1, 0.2, 0.4, 0.2, 0.1`, you would set ``s_breaks = 0, 1e-8, 1e-6, 1e-4, 1e-2, 1`` and ``bin_proportions = 0.1, 0.2, 0.4, 0.2, 0.1`` in the parameters file, and add the ``--custom_dfe`` flag to your CLI command.
 
 Demography
 -----------
