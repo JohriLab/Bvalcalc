@@ -80,7 +80,7 @@ def get_DFE_params(params_path: str | None = None, gamma_dfe: bool = False, cons
 
 
 
-    if CUSTOM_DFE or custom_dfe is not False: # The CUSTOM_DFE is prop injected by CLI, custom_dfe is provided by API
+    elif CUSTOM_DFE or custom_dfe is not False: # The CUSTOM_DFE is prop injected by CLI, custom_dfe is provided by API
         s_breaks = getattr(pop, 's_breaks', None)
         bin_props = getattr(pop, 'bin_proportions', None)
         if len(s_breaks) != len(bin_props) + 1:
