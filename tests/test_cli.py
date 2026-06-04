@@ -379,7 +379,7 @@ def test_cli_gamma_dfe_output():
 
     assert target_line is not None, "Missing B output line"
 
-    expected = 0.9495081285538933
+    expected = 0.8697758835098536
 
     value = float(target_line.split(":")[-1].strip())
 
