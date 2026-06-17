@@ -5,12 +5,13 @@ import numpy as np
 from matplotlib.collections import LineCollection
 from matplotlib import gridspec  # for rec rate strip
 
-def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_only=False, rec_rates=None):
+def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, neutral_only=False, rec_rates=None, gene_size=None):
     if not quiet:
         print('====== P L O T T I N G . . . =======================ss')
 
     B_uncorrected = None
     B_observed = None
+    Demog = False
     legend_name_blue = "Calculated B"
     legend_name_orange = "Uncorrected B"
     legend_name_dot = "Observed B"
@@ -60,12 +61,11 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
 
     # contract_5N_0.2T AKA Demography
     # poetry run Bvalcalc --gene --params tests/testparams/ContractParams_5N_0.2T.py --pop_change --plot /Users/jmarsh96/Desktop/Bcalc/Figures/contract_5N_0.2T.png
-    B_uncorrected = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/c40kb_contract_5N_0.2T.bvals"
-    B_observed = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/OBS_Contract_5N_0.2T.csv"
-    legend_name_blue = "Calculated (with demography)"
-    legend_name_orange = "Calculated (no demography)"
-    legend_name_dot = "Observed (simulations)"
-    title_name = 'B recovery from single element (5X Contraction 0.2N_anc generations ago)'
+    # B_uncorrected = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/c40kb_contract_5N_0.2T.bvals"
+    # legend_name_blue = "Calculated (with demography)"
+    # legend_name_orange = "Calculated (no demography)"
+    # legend_name_dot = "Observed (simulations)"
+    # title_name = 'B recovery from single element (5X Contraction 0.2N_anc generations ago)'
 
     # SelfParams_0.9S_0.5h AKA Selfing
     # poetry run Bvalcalc --gene --params tests/testparams/SelfParams_0.9S_0.5h.py --plot /Users/jmarsh96/Desktop/Bcalc/Figures/SelfParams_0.9S_0.5h.png
@@ -76,8 +76,36 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
     # legend_name_dot = "Observed (simulations)"
     # title_name = 'B recovery from single element with selfing (S = 0.9)'
 
-    # Rename to reflect the actual parameter change
 
+    #### REVISIONS ####
+
+
+    # contract_5N_2T AKA Demography
+    # poetry run Bvalcalc --gene --params tests/testparams/ContractParams_5N_0.2T.py --pop_change --plot /Users/jmarsh96/Desktop/Bcalc/revision_results/figures/temp/rev_WEAKcontract_5N_1T.png
+    # Note that requires changing Params to match temporarily
+    # Demog = True
+    # B_uncorrected = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/c40kb_contract_5N_0.2T.bvals"
+    # B_uncorrected = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/c40kb_WEAKcontract_5N_1T.bvals"
+    # B_observed = "/Users/jmarsh96/Desktop/Bcalc/revision_results/sim_results/rev_weakcontract_5N_1T_all.B"
+    # legend_name_blue = "Calculated (with demography)"
+    # legend_name_orange = "Calculated (no demography)"
+    # legend_name_dot = "Observed (simulations)"
+    # title_name = 'B recovery from single element (5X Contraction 2N_anc generations ago)'
+
+    # contract_5N_2T AKA Demography
+    # poetry run Bvalcalc --gene --params /Users/jmarsh96/Desktop/Bcalc/BvalueCalculator/tests/testparams/GammaDfeParams.py --gamma_dfe --plot /Users/jmarsh96/Desktop/Bcalc/revision_results/figures/temp/GAMMA.png
+    # B_uncorrected = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/c40kb_contract_5N_0.2T.bvals"
+    B_observed = "/Users/jmarsh96/Desktop/Bcalc/revision_results/sim_results/Bcalc_40kb_Dmelgamma_all.pi"
+    legend_name_blue = "Calculated with --gamma_dfe"
+    legend_name_orange = "Calculated (no demography)"
+    legend_name_dot = "Observed (simulations)"
+    title_name = 'B recovery from single element (5X Contraction 2N_anc generations ago)'
+
+
+
+    #### REVISIONS ####
+
+    # Rename to reflect the actual parameter change
     if B_uncorrected is not None: load_B_uncorrected(B_uncorrected)
     if B_observed is not None: load_B_observed(B_observed)
 
@@ -342,3 +370,4 @@ def load_B_observed(file_path):
     except Exception as e:
         print(f"Error reading B_uncorrected file: {file_path}")
         raise e
+    

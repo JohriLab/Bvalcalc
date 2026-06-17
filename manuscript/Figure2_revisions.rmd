@@ -75,6 +75,41 @@ b_calc_dat <- read_csv("/Users/jmarsh96/Desktop/Bcalc/Figures/data/gcBasicParams
 b_calc_dat <- read_csv("/Users/jmarsh96/Desktop/Bcalc/Figures/data/gc_halfg.B")
 c_calc_dat <- read_csv("/Users/jmarsh96/Desktop/Bcalc/Figures/data/SelfParams_0.9S_0.5h.B")
 d_calc_dat <- read_csv("/Users/jmarsh96/Desktop/Bcalc/Figures/data/ExpandParams_5N_1T.B")
+
+
+OBS_EARLY <- read_csv("/Users/jmarsh96/Desktop/Bcalc/revision_results/sim_results/1N_earlyBcalc_40kb_contract_5N_2T_all.pi") %>% mutate(B_mean = pi / 0.012) %>%
+  mutate(Distance = start - 9950) %>%
+  group_by(Distance) %>%
+  summarise(
+    B_mean = mean(B_mean, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+library(tidyverse)
+
+obs_raw <- read_csv("/Users/jmarsh96/Desktop/Bcalc/revision_results/sim_results/1N_earlyBcalc_40kb_contract_5N_2T_all.pi") %>%
+  mutate(
+    B = pi / 0.012,
+    Distance = start - 9950,
+    group = "obs"
+  )
+
+
+exp_raw <- read_csv("/Users/jmarsh96/Desktop/Bcalc/Figures/data/all_mean.pi") %>%
+  mutate(
+    B = pi_mean / 0.012,
+    Distance = start - 9950,
+    group = "exp"
+  )
+
+
+all_dat <- bind_rows(obs_raw, exp_raw)
+
+t.test(B ~ group, data = all_dat)
+
+
+OBS_EARLY
+a_obs_dat
 ```
 
 ## Generate Figure
