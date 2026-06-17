@@ -60,8 +60,7 @@ def main():
         from Bvalcalc.core.geneBcalc import geneBcalc
         output_data, gene_size = geneBcalc(args) # Capture the output from geneBcalc
         if getattr(args, 'plot', False): # If the --plot flag was provided, call plotB with geneBcalc's output.
-            # plotB(b_values_input=output_data, caller="gene", output_path=args.plot, quiet=args.quiet, gene_size=gene_size)
-            plotB_figures(b_values_input=output_data, caller="gene", output_path=args.plot, quiet=args.quiet, gene_size=gene_size)
+            plotB(b_values_input=output_data, caller="gene", output_path=args.plot, quiet=args.quiet, gene_size=gene_size)
 
     elif known_args.site: # Run single site Bcalc
         args = parseSiteArgs(remaining_args)
