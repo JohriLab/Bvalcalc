@@ -92,24 +92,94 @@ obs_raw <- read_csv("/Users/jmarsh96/Desktop/Bcalc/revision_results/sim_results/
     B = pi / 0.012,
     Distance = start - 9950,
     group = "obs"
-  )
+  )%>%
+  distinct(replicate, start, .keep_all = TRUE) # Dedup
 
 
-exp_raw <- read_csv("/Users/jmarsh96/Desktop/Bcalc/Figures/data/all_mean.pi") %>%
+exp_raw <- read_csv("/Users/jmarsh96/Desktop/Bcalc/sim_testing/all.pi") %>%
   mutate(
-    B = pi_mean / 0.012,
+    B = pi / 0.012,
     Distance = start - 9950,
     group = "exp"
   )
+obs_summary <- obs_raw %>%
+  group_by(Distance) %>%
+  summarise(
+    mean_B = mean(B),
+    var_B = var(B),
+    sd_B = sd(B),
+    n = n(),
+    se_B = sd_B / sqrt(n),
+    .groups = "drop"
+  )
+
+exp_summary <- exp_raw %>%
+  group_by(Distance) %>%
+  summarise(
+    mean_B = mean(B),
+    var_B = var(B),
+    sd_B = sd(B),
+    n = n(),
+    se_B = sd_B / sqrt(n),
+    .groups = "drop"
+  )
+
+comparison <- inner_join(
+  obs_summary,
+  exp_summary,
+  by = "Distance",
+  suffix = c("_obs", "_exp")
+)
 
 
-all_dat <- bind_rows(obs_raw, exp_raw)
+burnin_plot <- ggplot(comparison) +
+  geom_point(aes(Distance, mean_B_obs, colour = "13N")) +
+  geom_point(aes(Distance, mean_B_exp, colour = "14N")) +
+  labs(y = "B", colour = "Burn-in", x = "Distance from 10 kb selected element") +
+  theme_minimal()
+sqrt(mean((comparison$mean_B_obs - comparison$mean_B_exp)^2))
 
-t.test(B ~ group, data = all_dat)
+comparison$resid <- comparison$mean_B_obs - comparison$mean_B_exp
 
+burnin_resid_plot<- ggplot(comparison, aes(Distance, resid)) +
+  geom_hline(yintercept = 0, linetype = 2) +
+  geom_line() +
+  theme_bw() +
+  ylab("ΔB (13N - 14N)")
 
-OBS_EARLY
-a_obs_dat
+ggsave("/Users/jmarsh96/Desktop/Bcalc/revision_results/figures/burnin_plot.pdf", burnin_plot, device = "pdf", dpi = 200, height = 6 * (5.2/8), width = 5.2, units = "in")
+ggsave("/Users/jmarsh96/Desktop/Bcalc/revision_results/figures/burnin_residplot.pdf", burnin_resid_plot, device = "pdf", dpi = 200, height = 3 * (5.2/8), width = 5.2, units = "in")
+
+# 
+# comparison <- comparison %>%
+#   mutate(diff_mean = mean_B_obs - mean_B_exp)
+# 
+# ggplot(comparison) +
+#   geom_hline(yintercept = 0, linetype = 2) +
+#   geom_line(aes(Distance, diff_mean)) +
+#   theme_bw() +
+#   ylab("Observed - Expected mean B")
+# 
+# 
+# comparison <- comparison %>%
+#   mutate(
+#     se_diff = sqrt(se_B_obs^2 + se_B_exp^2),
+#     lower = diff_mean - 1.96 * se_diff,
+#     upper = diff_mean + 1.96 * se_diff
+#   )
+# ggplot(comparison, aes(Distance, diff_mean)) +
+#   geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2) +
+#   geom_line() +
+#   geom_hline(yintercept = 0, linetype = 2) +
+#   theme_bw()
+# 
+# all_dat <- bind_rows(obs_raw, exp_raw)
+# 
+# t.test(B ~ group, data = all_dat)
+# 
+# 
+# OBS_EARLY
+# a_obs_dat
 ```
 
 ## Generate Figure
@@ -340,6 +410,14 @@ OBS_nContract_5N_1T <- read_csv("/Users/jmarsh96/Desktop/Bcalc/sim_testing/demog
 EXP_Contract_5N_1T <- read_csv("/Users/jmarsh96/Desktop/Bcalc/sim_testing/calculatedBfiles/40kb_contract_5N_1T.bvals")
 cEXP_Contract_5N_1T <- read_csv("/Users/jmarsh96/Desktop/Bcalc/sim_testing/calculatedBfiles/c40kb_contract_5N_1T.bvals")
 DEMOGplotobsexp(OBS = OBS_Contract_5N_1T, nOBS = OBS_nContract_5N_1T, EXP = EXP_Contract_5N_1T, cEXP = cEXP_Contract_5N_1T)
+
+# THE 2Ns = -100 CONTRACTION
+# poetry run Bvalcalc --gene --params tests/testparams/ContractParams_5N_1T.py --plot /Users/jmarsh96/Desktop/Bcalc/revision_results/sim_results/temp.png --pop_change --out /Users/jmarsh96/Desktop/Bcalc/revision_results/sim_results/ContractParams_5N_1T_2Ns100.bvals --out_binsize 1 --constant_dfe
+OBS100_Contract_5N_1T <- read_csv("/Users/jmarsh96/Desktop/Bcalc/revision_results/sim_results/rev_100contract_5N_1T_all.pi")
+OBS_nContract_5N_1T <- read_csv("/Users/jmarsh96/Desktop/Bcalc/sim_testing/demogsims/40kb_contract_neutral_5N_1T_all.pi")
+EXP_Contract_5N_1T <- read_csv("/Users/jmarsh96/Desktop/Bcalc/revision_results/sim_results/ContractParams_5N_1T_2Ns100.bvals")
+cEXP_Contract_5N_1T <- read_csv("/Users/jmarsh96/Desktop/Bcalc/sim_testing/calculatedBfiles/c40kb_contract_5N_1T.bvals")
+DEMOGplotobsexp(OBS = OBS100_Contract_5N_1T, nOBS = OBS_nContract_5N_1T, EXP = EXP_Contract_5N_1T, cEXP = cEXP_Contract_5N_1T)
 ```
 
 
