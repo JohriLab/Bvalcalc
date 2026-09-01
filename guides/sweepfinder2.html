@@ -130,7 +130,7 @@
 <h2>Bvalcalc to SF2 format<a class="headerlink" href="#bvalcalc-to-sf2-format" title="Link to this heading"></a></h2>
 <p>First, assuming you have a B-map from <strong>Bvalcalc</strong> you’ll need to get the B-values for the variant positions you’re interested in finding sweeps at (the <strong>SF2</strong> grid file).</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add a chromosome column to your grid file and save to a new file</span>
-sed<span class="w"> </span><span class="s1">&#39;s/^/chr1,/&#39;</span><span class="w"> </span>chr1_grid.txt<span class="w"> </span>&gt;<span class="w"> </span>chr1_positions.csv
+sed<span class="w"> </span><span class="s1">'s/^/chr1,/'</span><span class="w"> </span>chr1_grid.txt<span class="w"> </span>&gt;<span class="w"> </span>chr1_positions.csv
 
 <span class="c1"># Then get their B-values from the B-map</span>
 Bvalcalc<span class="w"> </span>--Bmap<span class="w"> </span>B_map.csv<span class="w"> </span><span class="se">\</span>
@@ -141,11 +141,11 @@ Bvalcalc<span class="w"> </span>--Bmap<span class="w"> </span>B_map.csv<span cla
 <p>This will save the B-values for the provided chromosome 1 (chr1) positions to <code class="docutils literal notranslate"><span class="pre">chr1_bvalues.csv</span></code>.</p>
 <p>Now, using awk we can pull out positions for a single chromosome and reformat it to the <strong>SF2</strong> B-value format</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add a header to a new file</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;position\tbvalue&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>chr1_bvalues.tsv
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"position\tbvalue"</span><span class="w"> </span>&gt;<span class="w"> </span>chr1_bvalues.tsv
 
 <span class="c1"># Reformat for SF2-format and append</span>
-awk<span class="w"> </span>-F,<span class="w"> </span><span class="s1">&#39;BEGIN { OFS=&quot;\t&quot; } \</span>
-<span class="s1"> $1==&quot;chr1&quot; { print $2,$3 }&#39;</span><span class="w"> </span>chr1_bvalues.csv<span class="w"> </span>&gt;&gt;<span class="w"> </span>chr1_bvalues.tsv
+awk<span class="w"> </span>-F,<span class="w"> </span><span class="s1">'BEGIN { OFS="\t" } \</span>
+<span class="s1"> $1=="chr1" { print $2,$3 }'</span><span class="w"> </span>chr1_bvalues.csv<span class="w"> </span>&gt;&gt;<span class="w"> </span>chr1_bvalues.tsv
 </pre></div>
 </div>
 <p>Now you have chr1_bvalues.tsv ready as input to <strong>SF2</strong>!</p>

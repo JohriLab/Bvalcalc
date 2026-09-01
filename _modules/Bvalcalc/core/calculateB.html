@@ -119,11 +119,11 @@
     <span class="n">constant_dfe</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">custom_dfe</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Loads DFE parameters from the provided population genetic parameters file.</span>
 <span class="sd">    Caches on (params_path, gamma_dfe, constant_dfe) and rebuilds whenever</span>
 <span class="sd">    any of those three inputs change.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">global</span> <span class="n">_params_cache</span><span class="p">,</span> <span class="n">_cache_args</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">Bvalcalc.utils.dfe_helper</span><span class="w"> </span><span class="kn">import</span> <span class="n">GAMMA_DFE</span><span class="p">,</span> <span class="n">CONSTANT_DFE</span><span class="p">,</span> <span class="n">CUSTOM_DFE</span>
     
@@ -131,7 +131,7 @@
     <span class="n">actual_params_path</span> <span class="o">=</span> <span class="n">params_path</span>
     <span class="k">if</span> <span class="n">actual_params_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-        <span class="n">actual_params_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;BCALC_params&quot;</span><span class="p">)</span>
+        <span class="n">actual_params_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"BCALC_params"</span><span class="p">)</span>
     
     <span class="c1"># Include global DFE state in cache key</span>
     <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">actual_params_path</span><span class="p">,</span> <span class="n">gamma_dfe</span> <span class="ow">or</span> <span class="n">GAMMA_DFE</span><span class="p">,</span> <span class="n">constant_dfe</span> <span class="ow">or</span> <span class="n">CONSTANT_DFE</span><span class="p">,</span> <span class="n">custom_dfe</span> <span class="ow">or</span> <span class="n">CUSTOM_DFE</span><span class="p">)</span>
@@ -144,7 +144,7 @@
 <div class="viewcode-block" id="calculateB_linear">
 <a class="viewcode-back" href="../../../api/calculateB.html#Bvalcalc.calculateB_linear">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">calculateB_linear</span><span class="p">(</span><span class="n">distance_to_element</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">length_of_element</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Calculate B due to purifying selection acting on a linked selected element of arbitrary length, assuming a constant crossover and gene conversion rate (analytical solution).</span>
 <span class="sd"> </span>
 <span class="sd">    Parameters </span>
@@ -156,11 +156,11 @@
 <span class="sd">    params : dict</span>
 <span class="sd">        Required parameters from ``get_params()``, only kept as default (None) when being called by CLI,</span>
 <span class="sd">        in which case parameters are sourced from the params file directly.</span>
-<span class="sd">    &quot;&quot;&quot;</span>    
-    <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">):</span>
+<span class="sd">    """</span>    
+    <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">'ignore'</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s1">'ignore'</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span> <span class="o">=</span> <span class="n">get_params</span><span class="p">()</span>
-        <span class="n">r</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">t_constant</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;r&quot;</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;u&quot;</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;g&quot;</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;t_constant&quot;</span><span class="p">]</span>
+        <span class="n">r</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">t_constant</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">"r"</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s2">"u"</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s2">"g"</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s2">"t_constant"</span><span class="p">]</span>
 
         <span class="n">C</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">r</span> <span class="o">*</span> <span class="n">distance_to_element</span><span class="p">))</span> <span class="o">/</span> <span class="mf">2.0</span> <span class="c1"># cM</span>
         <span class="n">U</span> <span class="o">=</span> <span class="n">length_of_element</span> <span class="o">*</span> <span class="n">u</span>
@@ -175,8 +175,8 @@
             <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span> <span class="o">*</span> <span class="n">E_constant</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">length_of_element</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>
         
-        <span class="n">t_edges</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;t_edges&quot;</span><span class="p">]</span>
-        <span class="n">f_x</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;f_x&quot;</span><span class="p">]</span>
+        <span class="n">t_edges</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">"t_edges"</span><span class="p">]</span>
+        <span class="n">f_x</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">"f_x"</span><span class="p">]</span>
 
         <span class="n">E_bar</span> <span class="o">=</span> <span class="mf">0.0</span> <span class="c1"># Initialise E_bar</span>
         <span class="n">calc_exp</span> <span class="o">=</span> <span class="n">calculate_exponent</span> <span class="c1"># Cache function locally for speed in loop</span>
@@ -191,14 +191,14 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">calculateB_recmap</span><span class="p">(</span><span class="n">distance_to_element</span><span class="p">,</span> <span class="n">length_of_element</span><span class="p">,</span> 
                       <span class="n">rec_distances</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">rec_lengths</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
                       <span class="n">gc_distances</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">gc_lengths</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Calculate the B value WITH REC MAP for a single functional element at the focal site,</span>
 <span class="sd">    summing over the DFE while consolidating the intermediate calculations.</span>
-<span class="sd">    &quot;&quot;&quot;</span>    
-    <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">):</span>
+<span class="sd">    """</span>    
+    <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">'ignore'</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s1">'ignore'</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span> <span class="o">=</span> <span class="n">get_params</span><span class="p">()</span>
-        <span class="n">r</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">t_constant</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;r&quot;</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;u&quot;</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;g&quot;</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;t_constant&quot;</span><span class="p">]</span>
+        <span class="n">r</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">t_constant</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">"r"</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s2">"u"</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s2">"g"</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s2">"t_constant"</span><span class="p">]</span>
         <span class="c1"># rec_distances is the length of the element * rec rate in each spanned region. </span>
         
         <span class="k">if</span> <span class="n">rec_distances</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -227,8 +227,8 @@
             <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span> <span class="o">*</span> <span class="n">E_constant</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">length_of_element</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>
         
-        <span class="n">t_edges</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;t_edges&quot;</span><span class="p">]</span>
-        <span class="n">f_x</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;f_x&quot;</span><span class="p">]</span>
+        <span class="n">t_edges</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">"t_edges"</span><span class="p">]</span>
+        <span class="n">f_x</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">"f_x"</span><span class="p">]</span>
 
         <span class="n">E_bar</span> <span class="o">=</span> <span class="mf">0.0</span> <span class="c1"># Initialise E_bar</span>
         <span class="n">calc_exp</span> <span class="o">=</span> <span class="n">calculate_exponent</span> <span class="c1"># Cache function locally for speed in loop</span>
@@ -247,10 +247,10 @@
     <span class="k">if</span> <span class="n">params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">params</span> <span class="o">=</span> <span class="n">get_params</span><span class="p">()</span>
 
-    <span class="n">u</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;u&quot;</span><span class="p">]</span>
-    <span class="n">t_edges</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;t_edges&quot;</span><span class="p">]</span>
-    <span class="n">f_x</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;f_x&quot;</span><span class="p">]</span>
-    <span class="n">t_constant</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;t_constant&quot;</span><span class="p">]</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">"u"</span><span class="p">]</span>
+    <span class="n">t_edges</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">"t_edges"</span><span class="p">]</span>
+    <span class="n">f_x</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">"f_x"</span><span class="p">]</span>
+    <span class="n">t_constant</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">"t_constant"</span><span class="p">]</span>
 
     <span class="c1"># Force stable array handling</span>
     <span class="n">unlinked_L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">unlinked_L</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
@@ -283,9 +283,9 @@
 <span class="c1">## Helper functions</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">calculate_exponent</span><span class="p">(</span><span class="n">t_start</span><span class="p">,</span> <span class="n">t_end</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;&quot;</span>
-<span class="sd">    Helper to calculate the exponent using &quot;a&quot; and &quot;b&quot;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">""""</span>
+<span class="sd">    Helper to calculate the exponent using "a" and "b"</span>
+<span class="sd">    """</span>
     <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">U</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">U</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="k">return</span> <span class="mi">0</span> <span class="c1"># If e.g. f1 proportion is 0, no need to calculate exponent</span>
@@ -317,7 +317,7 @@
                 <span class="n">limit_factor</span> <span class="o">=</span> <span class="n">t_start</span> <span class="o">/</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">t_start</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="c1"># If --constant_dfe</span>
                 <span class="k">return</span> <span class="n">U</span> <span class="o">*</span> <span class="n">limit_factor</span> <span class="c1"># E is numpy scalar when t_constant and a = b</span>
             <span class="c1"># Broadcast scalar limit_factor to all masked positions</span>
-            <span class="n">E</span><span class="p">[</span><span class="n">rec_0_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">U</span><span class="p">[</span><span class="n">rec_0_mask</span><span class="p">]</span> <span class="o">*</span> <span class="n">limit_factor</span>  <span class="c1"># Get corresponding U for the numerator and plug back into E array to replace nan&#39;s</span>
+            <span class="n">E</span><span class="p">[</span><span class="n">rec_0_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">U</span><span class="p">[</span><span class="n">rec_0_mask</span><span class="p">]</span> <span class="o">*</span> <span class="n">limit_factor</span>  <span class="c1"># Get corresponding U for the numerator and plug back into E array to replace nan's</span>
 
         <span class="k">else</span><span class="p">:</span> <span class="c1"># 4b) If a_arr is array, compute limit for each masked element</span>
             <span class="n">ae</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">rec_0_mask</span><span class="p">]</span>  <span class="c1"># array of a_i where a_i ≈ b_i</span>
@@ -329,20 +329,20 @@
             <span class="k">if</span> <span class="n">t_start</span> <span class="o">==</span> <span class="n">t_end</span><span class="p">:</span> <span class="n">limit_factor</span> <span class="o">=</span> <span class="n">t_start</span> <span class="o">/</span> <span class="p">(</span><span class="n">ae</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">ae</span><span class="p">)</span> <span class="o">*</span> <span class="n">t_start</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="c1"># If --constant_dfe</span>
             <span class="c1">## REPLACED BELOW WITH THE NEW LINE TO FIX FAR GENE ISSUE, MAY NEED TO REVERT</span>
             <span class="n">E</span><span class="p">[</span><span class="n">rec_0_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">U</span><span class="p">[</span><span class="n">rec_0_mask</span><span class="p">]</span> <span class="o">*</span> <span class="n">limit_factor</span>
-            <span class="c1"># Match array of limit_factor to corresponding positions in E (where rec_0_mask has True);&#39;l;&#39;l&#39;&#39;</span>
+            <span class="c1"># Match array of limit_factor to corresponding positions in E (where rec_0_mask has True);'l;'l''</span>
             <span class="c1"># if len(rec_0_mask[False]) == 0:</span>
-            <span class="c1">#     # print(f&quot;Need to fix --gene when r = 0, see calculateB ~line 176&quot;) Fixed??</span>
+            <span class="c1">#     # print(f"Need to fix --gene when r = 0, see calculateB ~line 176") Fixed??</span>
             <span class="c1">#     E[rec_0_mask] = U * limit_factor</span>
             <span class="c1"># else:</span>
-            <span class="c1">#     E[rec_0_mask] = U[rec_0_mask] * limit_factor  # Get corresponding U for the numerator and plug back into E array to replace nan&#39;s</span>
+            <span class="c1">#     E[rec_0_mask] = U[rec_0_mask] * limit_factor  # Get corresponding U for the numerator and plug back into E array to replace nan's</span>
 
     <span class="k">return</span> <span class="n">E</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">get_a_b_with_GC</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">'ignore'</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s1">'ignore'</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">params</span> <span class="o">=</span> <span class="n">get_params</span><span class="p">()</span>
-            <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;r&quot;</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;g&quot;</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;k&quot;</span><span class="p">]</span>
+            <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">"r"</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s2">"g"</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s2">"k"</span><span class="p">]</span>
             <span class="n">proportion_nogc_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">k</span> <span class="o">&lt;=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">l</span><span class="p">,</span> <span class="c1"># When GC includes neutral site, proportion_nogc_a is the proportion of the gene it includes</span>
                                         <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">((((</span><span class="n">k</span><span class="o">-</span><span class="n">y</span><span class="p">)</span><span class="o">/</span><span class="n">l</span><span class="p">)</span> <span class="o">*</span> <span class="p">(((</span><span class="n">k</span><span class="o">-</span><span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">k</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="mi">0</span><span class="p">),</span>
                                         <span class="p">(((</span><span class="n">k</span><span class="o">-</span><span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="n">k</span> <span class="o">-</span> <span class="n">y</span> <span class="o">-</span> <span class="n">l</span><span class="p">)</span> <span class="o">/</span> <span class="n">k</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span>
@@ -355,7 +355,7 @@
         
         <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">k</span> <span class="o">&lt;</span> <span class="n">y</span><span class="p">,</span> 
             <span class="n">C</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="n">g</span> <span class="o">*</span> <span class="n">k</span><span class="p">),</span> <span class="c1"># Probability of GC on neutral site, where overlap with element not possible</span>
-            <span class="n">C</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="n">g</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="c1"># When overlap possible this is probability gc is in neutral but doesn&#39;t include any of element</span>
+            <span class="n">C</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="n">g</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="c1"># When overlap possible this is probability gc is in neutral but doesn't include any of element</span>
                 <span class="n">g</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="c1"># Probability gc is in neutral and includes some element (remaining probability from above)</span>
                 <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">proportion_nogc_a</span><span class="p">)</span> <span class="c1"># Proportion of gene that gc breaks linkage with when it includes some element</span>
         <span class="p">))</span>
@@ -366,8 +366,8 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">get_a_b_with_GC_andMaps</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">rec_l</span><span class="p">,</span> <span class="n">local_g</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span> <span class="o">=</span> <span class="n">get_params</span><span class="p">()</span>
-        <span class="n">r</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;r&quot;</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;k&quot;</span><span class="p">]</span>
-        <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">):</span>
+        <span class="n">r</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">"r"</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s2">"k"</span><span class="p">]</span>
+        <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">'ignore'</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s1">'ignore'</span><span class="p">):</span>
             <span class="n">proportion_nogc_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">k</span> <span class="o">&lt;</span> <span class="n">y</span> <span class="o">+</span> <span class="n">l</span><span class="p">,</span> <span class="c1"># When GC includes neutral site, this is proportion of the gene it includes</span>
                                         <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">((</span><span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="n">y</span><span class="p">)</span><span class="o">/</span><span class="n">l</span><span class="p">),</span> <span class="mi">0</span><span class="p">),</span>
                                         <span class="p">((</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">k</span> <span class="o">-</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="n">l</span><span class="p">)))</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">k</span> <span class="o">*</span> <span class="n">y</span><span class="p">)</span>
@@ -379,7 +379,7 @@
         
         <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">k</span> <span class="o">&lt;</span> <span class="n">y</span><span class="p">,</span> 
             <span class="n">C</span> <span class="o">+</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">local_g</span> <span class="o">*</span> <span class="n">k</span><span class="p">),</span> <span class="c1"># Probability of GC on neutral site, where overlap with element not possible</span>
-            <span class="n">C</span> <span class="o">+</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">local_g</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="c1"># When overlap possible this is probability gc is in neutral but doesn&#39;t include any of element</span>
+            <span class="n">C</span> <span class="o">+</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">local_g</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="c1"># When overlap possible this is probability gc is in neutral but doesn't include any of element</span>
                 <span class="n">local_g</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="c1"># Probability gc is in neutral and includes some element (remaining probability from above)</span>
                 <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">proportion_nogc_a</span><span class="p">)</span> <span class="c1"># Proportion of gene that gc breaks linkage with when it includes some element</span>
         <span class="p">))</span>
@@ -390,8 +390,8 @@
 <div class="viewcode-block" id="calculateB_hri">
 <a class="viewcode-back" href="../../../api/calculateB.html#Bvalcalc.calculateB_hri">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">calculateB_hri</span><span class="p">(</span><span class="n">distant_B</span><span class="p">,</span> <span class="n">interfering_L</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Calculate B&#39; (B accounting for Hill-Robertson interference effects) for a non-recombining region containing selected sites. </span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Calculate B' (B accounting for Hill-Robertson interference effects) for a non-recombining region containing selected sites. </span>
 
 <span class="sd">    This is a diploid implementation of Eq. 12 from Becher and Charlesworth (2025), see the relevant supplement in the B-value calculator manuscript.</span>
 
@@ -404,18 +404,18 @@
 <span class="sd">    params : dict</span>
 <span class="sd">        Required parameters from ``get_params()``, only kept as default (None) when being called by CLI,</span>
 <span class="sd">        in which case parameters are sourced from the params file directly.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">params</span> <span class="o">=</span> <span class="n">get_params</span><span class="p">()</span>
 
-    <span class="n">Nanc</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">,</span> <span class="n">t_constant</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;Nanc&quot;</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;u&quot;</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;f1&quot;</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;f2&quot;</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;t_constant&quot;</span><span class="p">]</span>
+    <span class="n">Nanc</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">,</span> <span class="n">t_constant</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">"Nanc"</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s2">"u"</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s2">"f1"</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s2">"f2"</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s2">"t_constant"</span><span class="p">]</span>
 
     <span class="n">distant_B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">distant_B</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">interfering_L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">interfering_L</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
 
     <span class="n">scalar_input</span> <span class="o">=</span> <span class="n">distant_B</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">()</span> <span class="ow">or</span> <span class="n">distant_B</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,)</span>
 
-    <span class="c1"># Early return: if no interfering L in inputs, B&#39; = distant_B</span>
+    <span class="c1"># Early return: if no interfering L in inputs, B' = distant_B</span>
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">interfering_L</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">distant_B</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">scalar_input</span> <span class="k">else</span> <span class="n">distant_B</span>
 
