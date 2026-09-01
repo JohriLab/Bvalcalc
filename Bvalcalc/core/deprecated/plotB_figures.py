@@ -23,6 +23,19 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
     # legend_name_dot = "Observed (simulations)"
     # title_name = 'B recovery from single element with DFE'
 
+    # nogcBasicParams AKA Normal
+    # poetry run Bvalcalc --gene --params ./tests/testparams/nogcBasicParams.py --plot /Users/jmarsh96/Desktop/Bcalc/Figures/f1_BasicParams.png
+    B_observed = "/Users/jmarsh96/Desktop/Bcalc/revision_results/sim_results/weak_all.pi"
+    legend_name_blue = "Calculated"
+    legend_name_dot = "Observed (simulations)"
+    title_name = 'B recovery from single element with f1 only'
+
+    # Gamma
+    B_observed = "/Users/jmarsh96/Desktop/Bcalc/revision_results/sim_results/Bcalc_40kb_Dmelgamma_all.pi"
+    legend_name_blue = "Calculated"
+    legend_name_dot = "Observed (simulations)"
+    title_name = 'B recovery from single element gamma with 4 bins'
+
     # gcBasicParams AKA with GC
     # poetry run Bvalcalc --gene --params ./tests/testparams/gcBasicParams.py --plot /Users/jmarsh96/Desktop/Bcalc/Figures/gcBasicParams.png
     # B_uncorrected = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/nogcBasicParams.B"
@@ -95,11 +108,11 @@ def plotB_figures(b_values_input, caller, output_path, quiet, gene_ranges=None, 
     # contract_5N_2T AKA Demography
     # poetry run Bvalcalc --gene --params /Users/jmarsh96/Desktop/Bcalc/BvalueCalculator/tests/testparams/GammaDfeParams.py --gamma_dfe --plot /Users/jmarsh96/Desktop/Bcalc/revision_results/figures/temp/GAMMA.png
     # B_uncorrected = "/Users/jmarsh96/Desktop/Bcalc/Figures/data/c40kb_contract_5N_0.2T.bvals"
-    B_observed = "/Users/jmarsh96/Desktop/Bcalc/revision_results/sim_results/Bcalc_40kb_Dmelgamma_all.pi"
-    legend_name_blue = "Calculated with --gamma_dfe"
-    legend_name_orange = "Calculated (no demography)"
-    legend_name_dot = "Observed (simulations)"
-    title_name = 'B recovery from single element (5X Contraction 2N_anc generations ago)'
+    # B_observed = "/Users/jmarsh96/Desktop/Bcalc/revision_results/sim_results/Bcalc_40kb_Dmelgamma_all.pi"
+    # legend_name_blue = "Calculated with --gamma_dfe"
+    # legend_name_orange = "Calculated (no demography)"
+    # legend_name_dot = "Observed (simulations)"
+    # title_name = 'B recovery from single element (5X Contraction 2N_anc generations ago)'
 
 
 
