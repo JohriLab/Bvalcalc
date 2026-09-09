@@ -42,4 +42,10 @@ def get_Bcur(Banc: np.ndarray) -> np.ndarray:
     numerator = Banc * (1 + (R - 1) * exp_term_num)
     denominator = 1 + (R - 1) * exp_term_den
 
+    if Ncur < Nanc:
+        print(f"WARNING: Calculating BGS under a population contraction with factor Ncur/Nanc = {1/R}. This will typically increase genetic drift and lead to weaker BGS effects for mutations with selection coefficients that fall below 2*Ncur*s ~ 5. The --pop_change option does not currently account for the shift in these mutation's BGS effects toward more neutral dynamics, so calculated B-values may be lower than expected near conserved regions. Check the proportion of mutations that will transition from -2Ns > 5 to -2Ns < 5 in the contracted population to assess the severity of BGS overestimation.")
+
+    if Nanc > Ncur:
+        print(f"WARNING: Calculating BGS under a population expansion with factor Ncur/Nanc = {1/R}. For mutations with selection coefficients with -2*Nanc*s < 5 but -2*Ncur*s > 5, the --pop_change option does not currently account for the shift in these mutation's BGS effects toward more strongly selected dynamics, so calculated B-values may be higher than expected near conserved regions. This is typically a small proportion of the DFE and is unlikely to have strong effects on most analyses unless a large proportion of selected mutations transition from -2Ns < ~5 to -2Ns > ~5.")
+
     return numerator / denominator
