@@ -65,6 +65,7 @@ docs/_build/
 exampleData/
 trash/
 examples/
+manuscript/
 
 # Conda-forge submission checklist (local only)
 CONDA_FORGE_CHECKLIST.md
