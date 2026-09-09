@@ -12,10 +12,10 @@ u = 6.95e-9 * x # Mutation rate (all types) per bp, per generation [4]
 g = r * 50 * (1-f) * x # Gene conversion initiation rate per bp, per generation [5]
 k = 553 # Gene conversion tract length (bp) [5]
 ## Basic DFE parameters for ALL sites in annotated regions (Sum must equal 1), can overwrite with other --*_dfe flags
-f0 = 0.2 # Proportion of effectively neutral mutations with 0 <= |2Ns| < 1 (Note that 2Ns<5 does not contribute to BGS) [6]
-f1 = 0.14 # Proportion of weakly deleterious mutations with 1 <= |2Ns| < 10 [6]
-f2 = 0.44 # Proportion of moderately deleterious mutations with 10 <= |2Ns| < 100 [6]
-f3 = 0.22 # Proportion of strongly deleterious mutations with |2Ns| >= 100 [6]
+f0 = 0.429 # Proportion of effectively neutral mutations with 0 <= |2Ns| < 1 (Note that 2Ns<5 does not contribute to BGS) [6]
+f1 = 0.065 # Proportion of weakly deleterious mutations with 1 <= |2Ns| < 10 [6]
+f2 = 0.097 # Proportion of moderately deleterious mutations with 10 <= |2Ns| < 100 [6]
+f3 = 0.410 # Proportion of strongly deleterious mutations with |2Ns| >= 100 [6]
 ## Demography parameters
 Ncur = 0.5 * Nanc # Current population size (!Requires --pop_change) [2]
 time_of_change = 1 * Nanc # Time in generations ago that effective population size went from Nanc to Ncur (!Requires --pop_change) [2]
@@ -30,4 +30,4 @@ bin_proportions = 0.25, 0.25, 0.25, 0.25 # Custom DFE parameter controlling the 
 # [3] Rowan et al. 2019 doi: 10.1534/genetics.119.302406
 # [4] Weng et al. 2018 doi: 10.1534/genetics.118.301721
 # [5] Yang et al. 2012 doi: 10.1073/pnas.1211827110
-# [6] Hämälä and Tiffin 2020 doi: 10.1534/genetics.120.303335
+# [6] Gossman et al. 2010 doi: 10.1093/molbev/msq079
