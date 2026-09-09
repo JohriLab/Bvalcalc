@@ -21,7 +21,7 @@ Core Arguments
   Distance from the focal neutral site to the edge of the selected element in bp (default: `1`). Note that this assumes recombinant distance increases linearly with physical distance.
 
 Optional Arguments
-------------------
+-------------------
 
 **-\-pop_change**
   If included, compute current B (``Bcur``) under a step population size change, as described in `Johri et al. (2021) <https://doi.org/10.1093/molbev/msab050>`_. 
@@ -40,11 +40,12 @@ Optional Arguments
   Note that ``s_breaks`` and ``bin_proportions`` should be set in the parameters file when active.
 
 If set, the `s_breaks` and `bin_proportions` parameters in the params file will be used to define discretized DFE break points with defined proportions to replace f0-f3")   
+
 **-\-quiet**
   Suppress console output
 
 Example
--------
+--------
 .. code-block:: bash
 
     Bvalcalc --site --params HomSap_Cds_Params.py --distance 1500 --element_size 10000
