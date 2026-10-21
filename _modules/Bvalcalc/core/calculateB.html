@@ -244,6 +244,18 @@
 <div class="viewcode-block" id="calculateB_unlinked">
 <a class="viewcode-back" href="../../../api/calculateB.html#Bvalcalc.calculateB_unlinked">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">calculateB_unlinked</span><span class="p">(</span><span class="n">unlinked_L</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Calculate B due to purifying selection acting on all unlinked selected elements present on other chromosomes.</span>
+<span class="sd"> </span>
+<span class="sd">    Parameters </span>
+<span class="sd">    ----------</span>
+<span class="sd">    unlinked_L: int</span>
+<span class="sd">        Length (bp) sum of all unlinked selected elements (all other chromosomes). E.g., If there were 3 chromosomes, </span>
+<span class="sd">        ``unlinked_L`` for one chromosome typically refers to the sum of the lengths of selected elements the other two.</span>
+<span class="sd">    params : dict</span>
+<span class="sd">        Required parameters from ``get_params()``, only kept as default (None) when being called by CLI,</span>
+<span class="sd">        in which case parameters are sourced from the params file directly.</span>
+<span class="sd">    """</span>    
     <span class="k">if</span> <span class="n">params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">params</span> <span class="o">=</span> <span class="n">get_params</span><span class="p">()</span>
 

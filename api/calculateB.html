@@ -136,7 +136,18 @@ in which case parameters are sourced from the params file directly.</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="Bvalcalc.calculateB_unlinked">
 <span class="sig-prename descclassname"><span class="pre">Bvalcalc.</span></span><span class="sig-name descname"><span class="pre">calculateB_unlinked</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unlinked_L</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Bvalcalc/core/calculateB.html#calculateB_unlinked"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Bvalcalc.calculateB_unlinked" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Calculate B due to purifying selection acting on all unlinked selected elements present on other chromosomes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>unlinked_L</strong> (<em>int</em>) – Length (bp) sum of all unlinked selected elements (all other chromosomes). E.g., If there were 3 chromosomes,
+<code class="docutils literal notranslate"><span class="pre">unlinked_L</span></code> for one chromosome typically refers to the sum of the lengths of selected elements the other two.</p></li>
+<li><p><strong>params</strong> (<em>dict</em>) – Required parameters from <code class="docutils literal notranslate"><span class="pre">get_params()</span></code>, only kept as default (None) when being called by CLI,
+in which case parameters are sourced from the params file directly.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="Bvalcalc.calculateB_hri">
