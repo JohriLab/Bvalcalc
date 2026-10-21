@@ -185,6 +185,10 @@ Note that there should be one more break point than the number of bins, the prop
 </dd>
 </dl>
 <p>For example, if you wanted to model a DFE with 5 bins with 6 break points at <cite>s = 0, 1e-8, 1e-6, 1e-4, 1e-2, 1</cite> and proportions <cite>0.1, 0.2, 0.4, 0.2, 0.1</cite>, you would set <code class="docutils literal notranslate"><span class="pre">s_breaks</span> <span class="pre">=</span> <span class="pre">0,</span> <span class="pre">1e-8,</span> <span class="pre">1e-6,</span> <span class="pre">1e-4,</span> <span class="pre">1e-2,</span> <span class="pre">1</span></code> and <code class="docutils literal notranslate"><span class="pre">bin_proportions</span> <span class="pre">=</span> <span class="pre">0.1,</span> <span class="pre">0.2,</span> <span class="pre">0.4,</span> <span class="pre">0.2,</span> <span class="pre">0.1</span></code> in the parameters file, and add the <code class="docutils literal notranslate"><span class="pre">--custom_dfe</span></code> flag to your CLI command.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When specifying a custom DFE, note that the proportions of the DFE will be calculated assuming uniform distributions between break points. Therefore, it’s important to consider the density of break points which determines the granularity of the DFE. This is relevant for all selective strengths from |s| = 0 to 1, including the strongly deleterious end of the DFE which contributes significantly to unlinked effects of BGS between chromosomes.</p>
+</div>
 </section>
 </section>
 <section id="demography">
