@@ -85,6 +85,9 @@ Note that there should be one more break point than the number of bins, the prop
     
 For example, if you wanted to model a DFE with 5 bins with 6 break points at `s = 0, 1e-8, 1e-6, 1e-4, 1e-2, 1` and proportions `0.1, 0.2, 0.4, 0.2, 0.1`, you would set ``s_breaks = 0, 1e-8, 1e-6, 1e-4, 1e-2, 1`` and ``bin_proportions = 0.1, 0.2, 0.4, 0.2, 0.1`` in the parameters file, and add the ``--custom_dfe`` flag to your CLI command.
 
+.. note::
+   When specifying a custom DFE, note that the proportions of the DFE will be calculated assuming uniform distributions between break points. Therefore, it's important to consider the density of break points which determines the granularity of the DFE. This is relevant for all selective strengths from \|s\| = 0 to 1, including the strongly deleterious end of the DFE which contributes significantly to unlinked effects of BGS between chromosomes.
+
 Demography
 -----------
 
