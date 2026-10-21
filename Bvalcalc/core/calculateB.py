@@ -131,6 +131,18 @@ def calculateB_recmap(distance_to_element, length_of_element,
 
 
 def calculateB_unlinked(unlinked_L: int, params: dict | None = None):
+    """
+    Calculate B due to purifying selection acting on all unlinked selected elements present on other chromosomes.
+ 
+    Parameters 
+    ----------
+    unlinked_L: int
+        Length (bp) sum of all unlinked selected elements (all other chromosomes). E.g., If there were 3 chromosomes, 
+        ``unlinked_L`` for one chromosome typically refers to the sum of the lengths of selected elements the other two.
+    params : dict
+        Required parameters from ``get_params()``, only kept as default (None) when being called by CLI,
+        in which case parameters are sourced from the params file directly.
+    """    
     if params is None:
         params = get_params()
 
